@@ -1,4 +1,7 @@
-.PHONY: format
+.PHONY: dev format
+
+dev:
+	pnpm dev
 
 format:
 	pnpm --filter @gocanto/web exec oxlint . --fix

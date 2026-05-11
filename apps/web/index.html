@@ -19,6 +19,82 @@
     <meta name="twitter:image" content="https://gocanto.sh/avatar.jpg" />
     <meta name="twitter:image:alt" content="Gus Ocanto portrait" />
     <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
+    <script>
+      ;(function () {
+        const storageKey = "gocanto-sh-theme"
+        const accentStorageKey = "gocanto-sh-accent"
+        const accentPalette = {
+          blue: { hue: 259.8 },
+          green: { hue: 142.5, chroma: 0.16 },
+          red: { hue: 25.3 },
+          yellow: { hue: 95.7, chroma: 0.13, darkChroma: 0.13, lightForeground: "oklch(0.145 0 0)" },
+          amber: { hue: 70.1, chroma: 0.14, darkChroma: 0.13, lightForeground: "oklch(0.145 0 0)" },
+          orange: { hue: 47.6, chroma: 0.17 },
+          rose: { hue: 12.2 },
+          pink: { hue: 0.7 },
+          purple: { hue: 305.8 },
+          violet: { hue: 293.4 },
+          fuchsia: { hue: 322.2 },
+          indigo: { hue: 277.1 },
+          teal: { hue: 181.9, chroma: 0.14 },
+          cyan: { hue: 224.3, chroma: 0.13 },
+          emerald: { hue: 162.5, chroma: 0.15 },
+          slate: { hue: 257.4, chroma: 0.04, darkChroma: 0.04 },
+          zinc: { hue: 286.1, chroma: 0.02, darkChroma: 0.02 },
+          neutral: {},
+        }
+        let storedTheme
+        let storedAccent
+
+        try {
+          storedTheme = localStorage.getItem(storageKey)
+          storedAccent = localStorage.getItem(accentStorageKey)
+        } catch {
+          storedTheme = "system"
+          storedAccent = "neutral"
+        }
+
+        const preference = storedTheme === "dark" || storedTheme === "light" || storedTheme === "system" ? storedTheme : "system"
+        const accent = Object.prototype.hasOwnProperty.call(accentPalette, storedAccent) ? storedAccent : "neutral"
+        const resolvedTheme =
+          preference === "system"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+            : preference
+
+        document.documentElement.classList.toggle("dark", resolvedTheme === "dark")
+        document.documentElement.style.colorScheme = resolvedTheme
+        document.documentElement.dataset.accent = accent
+
+        const selectedPalette = accentPalette[accent]
+        if (selectedPalette.hue) {
+          const chroma = selectedPalette.chroma || 0.18
+          const darkChroma = selectedPalette.darkChroma || 0.16
+          const primary =
+            resolvedTheme === "dark"
+              ? `oklch(0.72 ${darkChroma} ${selectedPalette.hue})`
+              : `oklch(0.58 ${chroma} ${selectedPalette.hue})`
+          const mutedAccent =
+            resolvedTheme === "dark"
+              ? `oklch(0.31 ${darkChroma * 0.52} ${selectedPalette.hue})`
+              : `oklch(0.95 ${chroma * 0.2} ${selectedPalette.hue})`
+          const foreground =
+            resolvedTheme === "dark" ? "oklch(0.145 0 0)" : selectedPalette.lightForeground || "oklch(0.985 0 0)"
+
+          document.documentElement.style.setProperty("--primary", primary)
+          document.documentElement.style.setProperty("--primary-foreground", foreground)
+          document.documentElement.style.setProperty("--accent", mutedAccent)
+          document.documentElement.style.setProperty(
+            "--accent-foreground",
+            resolvedTheme === "dark" ? "oklch(0.985 0 0)" : "oklch(0.205 0 0)",
+          )
+          document.documentElement.style.setProperty("--ring", primary)
+        }
+
+        document.querySelector("meta[name='theme-color']").setAttribute("content", resolvedTheme === "dark" ? "#09090b" : "#ffffff")
+      })()
+    </script>
     <title>Gus Ocanto</title>
   </head>
   <body>

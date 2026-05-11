@@ -5,6 +5,8 @@ import ProfileCard from "@components/ProfileCard.vue"
 import ProofLinks from "@components/ProofLinks.vue"
 import SectionHeader from "@components/SectionHeader.vue"
 import { profile, proofLinks, skills, technologySkillsLabel } from "@data"
+import { Badge } from "@ui/badge"
+import { Card } from "@ui/card"
 </script>
 
 <template>
@@ -29,28 +31,29 @@ import { profile, proofLinks, skills, technologySkillsLabel } from "@data"
     <ProofLinks :items="proofLinks" />
 
     <div class="page-container mt-8 flex flex-wrap justify-center gap-2 px-6">
-      <span
+      <Badge
         v-for="skill in skills"
         :key="skill"
-        class="rounded-md border bg-background px-3 py-1 text-xs uppercase text-muted-foreground"
+        variant="outline"
+        class="bg-background px-3 py-1 font-normal uppercase text-muted-foreground"
       >
         {{ skill }}
-      </span>
+      </Badge>
     </div>
 
     <div class="page-container mt-8 grid gap-3 px-6 text-sm text-muted-foreground md:grid-cols-2">
-      <div class="flex items-center justify-center gap-2 rounded-md border border-dashed p-3">
+      <Card class="flex items-center justify-center gap-2 border-dashed p-3 shadow-none">
         <MapPin class="size-4" aria-hidden="true" />
         {{ profile.location }}
-      </div>
-      <div class="flex items-center justify-center gap-2 rounded-md border border-dashed p-3">
+      </Card>
+      <Card class="flex items-center justify-center gap-2 border-dashed p-3 shadow-none">
         <ShieldCheck class="size-4" aria-hidden="true" />
         Production-grade architecture
-      </div>
-      <div class="flex items-center justify-center gap-2 rounded-md border border-dashed p-3 md:col-span-2">
+      </Card>
+      <Card class="flex items-center justify-center gap-2 border-dashed p-3 shadow-none md:col-span-2">
         <Code2 class="size-4" aria-hidden="true" />
         {{ technologySkillsLabel }}
-      </div>
+      </Card>
     </div>
   </div>
 </template>

@@ -7,11 +7,11 @@ import { profile } from "@data"
   <section class="relative page-container">
     <div class="border-x border-b pb-20">
       <SectionHeader title="My Engineering Journey" />
-      <div class="flex flex-col items-center justify-center space-y-6 px-4">
+      <div class="rich-text mx-auto max-w-3xl px-4 text-center text-muted-foreground [&>p]:my-0 [&>p+p]:mt-6">
         <p
           v-for="paragraph in profile.journey"
           :key="paragraph"
-          class="max-w-3xl text-center text-sm leading-7 text-muted-foreground xl:text-base"
+          class="text-sm leading-7 xl:text-base"
         >
           {{ paragraph }}
         </p>
