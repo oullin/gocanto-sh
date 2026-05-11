@@ -29,7 +29,7 @@ function handleAccentChange(value: AcceptableValue) {
 <template>
   <div class="relative z-50 flex justify-end border-b bg-background/95 px-4 py-3 backdrop-blur">
     <div class="page-container flex flex-wrap justify-end gap-2">
-      <div class="inline-flex rounded-md border bg-background p-1" aria-label="Theme">
+      <div class="inline-flex gap-1 rounded-md border bg-background p-1" aria-label="Theme">
         <Button
           v-for="option in options"
           :key="option.value"
@@ -40,7 +40,7 @@ function handleAccentChange(value: AcceptableValue) {
           :title="`${option.label} theme`"
           :class="
             cn(
-              'h-9 min-w-9 rounded-sm px-3 text-xs text-muted-foreground',
+              'h-9 min-w-9 rounded-sm px-3 text-xs text-muted-foreground sm:w-28',
               preference === option.value && 'bg-primary text-primary-foreground',
             )
           "

@@ -1,4 +1,4 @@
-import type { ProofLink } from "./types"
+import type { ProofLink } from "@data/types"
 
 const avatarUrl = `${import.meta.env.BASE_URL}avatar.jpg`
 

@@ -1,4 +1,4 @@
-import type { ProfileLink } from "./types"
+import type { ProfileLink } from "@data/types"
 
 export const links: ProfileLink[] = [
   {

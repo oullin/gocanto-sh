@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { links, profile, proofLinks, skills, technologySkills, technologySkillsLabel } from "."
+import { links, profile, proofLinks, skills, technologySkills, technologySkillsLabel } from "@data"
 
 describe("profile content", () => {
   it("keeps the primary identity and required public links in place", () => {

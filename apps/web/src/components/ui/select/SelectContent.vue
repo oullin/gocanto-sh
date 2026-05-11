@@ -5,7 +5,7 @@ import { reactiveOmit } from "@vueuse/core"
 import { SelectContent, SelectPortal, SelectViewport, useForwardPropsEmits } from "reka-ui"
 
 import { cn } from "@lib/utils"
-import { SelectScrollDownButton, SelectScrollUpButton } from "."
+import { SelectScrollDownButton, SelectScrollUpButton } from "@ui/select"
 
 defineOptions({
   inheritAttrs: false,

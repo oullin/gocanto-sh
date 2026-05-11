@@ -1,4 +1,4 @@
-export { profile, proofLinks } from "./identity"
-export { links } from "./links"
-export { domainSkills, skills, technologySkills, technologySkillsLabel } from "./skills"
-export type { IconName, ProfileLink, ProofLink } from "./types"
+export { profile, proofLinks } from "@data/identity"
+export { links } from "@data/links"
+export { domainSkills, skills, technologySkills, technologySkillsLabel } from "@data/skills"
+export type { IconName, ProfileLink, ProofLink } from "@data/types"
