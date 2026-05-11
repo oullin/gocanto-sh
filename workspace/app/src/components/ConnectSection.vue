@@ -8,6 +8,7 @@ import { connectChannels, connectHeading } from "@data"
 <template>
   <section id="connect">
     <span class="corner-r" aria-hidden="true"></span>
+    <span class="corner-l" aria-hidden="true"></span>
     <div class="section-inner">
       <div class="section-head center">
         <span class="section-eyebrow">{{ connectHeading.eyebrow }}</span>

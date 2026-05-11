@@ -5,6 +5,7 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   base: process.env.GITHUB_ACTIONS ? "/gocanto-sh/" : "/",
+  cacheDir: "../../storage/.cache/vite/app",
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {

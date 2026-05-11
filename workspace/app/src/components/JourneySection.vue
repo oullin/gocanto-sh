@@ -15,6 +15,7 @@ const activeTab = computed(
 <template>
   <section id="journey">
     <span class="corner-r" aria-hidden="true"></span>
+    <span class="corner-l" aria-hidden="true"></span>
     <div class="section-inner">
       <div class="split">
         <div class="split-copy">

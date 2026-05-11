@@ -5,6 +5,7 @@ import { industries } from "@data"
 <template>
   <section class="strip">
     <span class="corner-r" aria-hidden="true"></span>
+    <span class="corner-l" aria-hidden="true"></span>
     <div class="strip-inner">
       <div class="strip-label">Shipped production systems across</div>
       <div class="strip-row">

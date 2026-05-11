@@ -1,5 +1,5 @@
 {
-  "name": "@gocanto/web",
+  "name": "@gocanto/app",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,12 +7,12 @@
     "#config/vite": "./vite.config.ts"
   },
   "scripts": {
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build --configLoader runner",
     "dev": "portless",
-    "dev:app": "vite --host 0.0.0.0 --port ${PORT:-5173}",
+    "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
     "lint": "oxlint .",
-    "preview": "vite preview --host 0.0.0.0",
-    "test": "vitest run",
+    "preview": "vite preview --configLoader runner --host 0.0.0.0",
+    "test": "vitest run --configLoader runner",
     "typecheck": "vue-tsc -b"
   },
   "portless": {

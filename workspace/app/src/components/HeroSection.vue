@@ -5,8 +5,11 @@ import { heroCopy } from "@data"
 
 <template>
   <header class="hero">
-    <div class="hero-glow"></div>
+    <div class="hero-glow-clip">
+      <div class="hero-glow"></div>
+    </div>
     <span class="corner-r" aria-hidden="true"></span>
+    <span class="corner-l" aria-hidden="true"></span>
     <div class="hero-inner">
       <span class="eyebrow">
         <span class="eyebrow-dot"></span>

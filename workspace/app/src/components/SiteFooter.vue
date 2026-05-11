@@ -6,7 +6,7 @@ import { footerCopy, profile } from "@data"
   <footer>
     <div class="foot-top">
       <div class="brand">
-        <span class="brand-logo">G</span>
+        <img class="brand-logo" :src="profile.avatarUrl" :alt="profile.name" />
         <span>{{ profile.handle }}</span>
       </div>
       <div class="foot-status">

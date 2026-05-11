@@ -5,7 +5,10 @@ import { ctaCopy } from "@data"
 <template>
   <section id="cta" class="cta">
     <span class="corner-r" aria-hidden="true"></span>
-    <div class="cta-glow"></div>
+    <span class="corner-l" aria-hidden="true"></span>
+    <div class="cta-glow-clip">
+      <div class="cta-glow"></div>
+    </div>
     <div class="cta-inner">
       <h2 class="cta-title">{{ ctaCopy.title }}</h2>
       <p class="cta-sub">{{ ctaCopy.subtitle }}</p>

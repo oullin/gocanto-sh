@@ -6,10 +6,8 @@ import { navLinks, profile } from "@data"
   <nav class="nav">
     <div class="nav-inner">
       <a class="brand" href="#">
-        <span class="brand-logo">G</span>
+        <img class="brand-logo" :src="profile.avatarUrl" :alt="profile.name" />
         <span>{{ profile.handle }}</span>
-        <span class="brand-sep">/</span>
-        <span class="brand-sub">portfolio</span>
       </a>
       <div class="nav-links">
         <a v-for="link in navLinks" :key="link.href" class="nav-link" :href="link.href">

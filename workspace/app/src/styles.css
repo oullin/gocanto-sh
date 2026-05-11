@@ -74,9 +74,18 @@ a {
 }
 
 /* ===================== GRID RAILS ===================== */
+.grid-rails-extension {
+  position: absolute;
+  top: 132px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border);
+  pointer-events: none;
+  z-index: 3;
+}
 .grid-rails {
   position: absolute;
-  top: 96px;
+  top: 132px;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -87,11 +96,27 @@ a {
   border-right: 1px solid var(--border);
   z-index: 4;
 }
-.grid-rails::before,
 .grid-rails::after {
   content: "";
   position: absolute;
   top: 0;
+  right: 0;
+  width: 11px;
+  height: 11px;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-size: 11px 1px, 1px 11px;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  color: var(--fg-3);
+  transform: translate(50%, -50%);
+}
+.grid-rails::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 11px;
   height: 11px;
   background-image:
@@ -103,38 +128,10 @@ a {
   color: var(--fg-3);
   transform: translate(-50%, -50%);
 }
-.grid-rails::before {
-  left: 0;
-}
-.grid-rails::after {
-  right: 0;
-}
 
 section,
 header.hero {
   position: relative;
-}
-section + section::before,
-section::after,
-header.hero::after {
-  content: "";
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  background-image:
-    linear-gradient(var(--fg-3), var(--fg-3)),
-    linear-gradient(var(--fg-3), var(--fg-3));
-  background-size: 11px 1px, 1px 11px;
-  background-position: center, center;
-  background-repeat: no-repeat;
-  z-index: 5;
-  pointer-events: none;
-}
-section::after,
-header.hero::after {
-  bottom: 0;
-  left: calc(50% - min(100%, var(--maxw)) / 2);
-  transform: translate(-50%, 50%);
 }
 .corner-r {
   position: absolute;
@@ -152,14 +149,30 @@ header.hero::after {
   z-index: 5;
   pointer-events: none;
 }
+.corner-l {
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - min(100%, var(--maxw)) / 2);
+  width: 11px;
+  height: 11px;
+  background-image:
+    linear-gradient(var(--fg-3), var(--fg-3)),
+    linear-gradient(var(--fg-3), var(--fg-3));
+  background-size: 11px 1px, 1px 11px;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  transform: translate(-50%, 50%);
+  z-index: 5;
+  pointer-events: none;
+}
 
 @media (max-width: 1148px) {
-  .grid-rails {
+  .grid-rails,
+  .grid-rails-extension {
     display: none;
   }
-  section::after,
-  header.hero::after,
-  .corner-r {
+  .corner-r,
+  .corner-l {
     display: none;
   }
 }
@@ -193,20 +206,8 @@ header.hero::after {
   width: 22px;
   height: 22px;
   border-radius: 5px;
+  object-fit: cover;
   background: #fff;
-  color: #000;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-}
-.brand-sep {
-  color: var(--fg-4);
-}
-.brand-sub {
-  color: var(--fg-2);
-  font-weight: 400;
 }
 .nav-links {
   display: flex;
@@ -247,8 +248,14 @@ header.hero::after {
 .hero {
   position: relative;
   border-bottom: 1px solid var(--border);
+  margin-top: 72px;
+}
+.hero-glow-clip {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  margin-top: 36px;
+  pointer-events: none;
+  z-index: 0;
 }
 .hero-glow {
   position: absolute;
@@ -787,7 +794,13 @@ section {
 .cta {
   border-bottom: 1px solid var(--border);
   position: relative;
+}
+.cta-glow-clip {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
 }
 .cta-inner {
   max-width: var(--maxw);

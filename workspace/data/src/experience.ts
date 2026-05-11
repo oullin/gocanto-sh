@@ -1,0 +1,111 @@
+import type { ExperienceFixture } from "./types"
+
+export const experience = {
+  "version": "1.0.3",
+  "data": [
+    {
+      "uuid": "73c68950-5a10-43bc-a5b2-e45544e140e6",
+      "company": "Silverlake",
+      "employment_type": "Contract",
+      "location_type": "On-Site",
+      "position": "Technical Lead",
+      "start_date": "June, 2025",
+      "end_date": "November, 2025",
+      "summary": "I led a five-engineer squad modernising legacy core banking applications into a React, TypeScript, Go, Python and Kafka stack while keeping services running, and designed real-time Kafka+Go pipelines to consolidate ATM streams, account transactions and cross-border payments with robust back-pressure and exactly-once guarantees.<br/><br/>I built an end-to-end monitoring console for ATM and core systems, established solid delivery practices with Docker-based zero-downtime deployments, and improved developer and CI efficiency by moving the banking dashboard to Vite.<br/><br/>I also secured critical integrations through a Go reverse proxy and multi-protocol ingress layer, defined the UI strategy for a Vue/TypeScript real-time data system with a tree-based exploration model and modular widget SDK, and drove healthy stakeholder cadence and team growth through clear communication, coaching, and structured reviews.",
+      "country": "Singapore",
+      "city": "Singapore",
+      "skills": "Software Architecture, Leadership, GO (Programming Language), PostgreSQL, C (Programming Language), Python (Programming Language), AI, RAG, Apache Kafka."
+    },
+    {
+      "uuid": "c17a68bc-8832-4d44-b2ed-f9587cf14cd1",
+      "company": "Perx Technologies",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Head of Engineering",
+      "start_date": "June, 2024",
+      "end_date": "April, 2025",
+      "summary": "Led and integrated cross-functional engineering teams (DevOps, Infrastructure, Data, Frontend, Backend, Support) across time zones, fostering open communication and accountability.<br/><br/>Scaled team growth and operations from Singapore, optimised performance (database queries from 3 s to 800 ms; API calls from 2 s to 100 ms), implemented cloud cost savings, and partnered with C-level leaders to expand engineering initiatives.",
+      "country": "Singapore",
+      "city": "Singapore",
+      "skills": "Executive Leadership, Strategic Planning, Engineering Management, Cross-functional Team Leadership, Technical Architecture."
+    },
+    {
+      "uuid": "99db1ca0-948e-40b1-984f-e3b157a5d336",
+      "company": "Aspire",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Senior Software Engineer & Manager",
+      "start_date": "January, 2022",
+      "end_date": "April, 2024",
+      "summary": "Led a 12-person APAC team overseeing the software development lifecycle, mentorship, technical direction, and system architecture design.<br/><br/>Engineered critical financial systems, prioritised payment request queues and automated credit schemas, and spearheaded SEA wallets from architecture through integration, unifying payment workflows and ledger synchronisation.<br/><br/>Improved debit account balance queries for real-time access and boosted API response times. Resolved data inconsistencies, refactored code for reliability, designed flexible scheduled payment solutions, and directed the transition from a monolithic to microservices architecture, significantly enhancing platform scalability and maintainability.",
+      "country": "Singapore",
+      "city": "Singapore",
+      "skills": "Leadership, Strategic Planning, Engineering Management, Cross-functional Team Leadership, Technical Architecture."
+    },
+    {
+      "uuid": "01e33400-6957-4d16-8edb-0802a49e445e",
+      "company": "BeMyGuest - Tours & Activities",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Engineering Lead",
+      "start_date": "September, 2017",
+      "end_date": "November, 2021",
+      "summary": "Developed and maintained inventory systems with availability calculations and time-slot capacity management.<br/><br/>Led the SaaS platform development for auto-recurring subscription payments and invoicing.<br/><br/>Owned integration of Adyen, Stripe, and PayPal gateways for new white-label e-commerce accounts, and implemented third-party booking supplier APIs across B2B, B2C, and white-label channels, supporting mission-critical operations in Southeast Asian markets.",
+      "country": "Singapore",
+      "city": "Singapore",
+      "skills": "Leadership, Strategic Planning, Cross-functional Team Leadership, Engineering Management, Technical Architecture."
+    },
+    {
+      "uuid": "1ba5d878-3c48-4d94-aded-4a4294c26e12",
+      "company": "Freelance",
+      "employment_type": "Contractor",
+      "location_type": "Remote",
+      "position": "Web Developer",
+      "start_date": "June, 2014",
+      "end_date": "September, 2017",
+      "summary": "Built diverse web applications for SMEs, including e-commerce, POS, medical history, and neighbourhood feedback platforms, using PHP, Laravel, VueJS, and MySQL.<br/><br/>I also designed and delivered a multi-city drop-shipment warehouse management system, enabling real-time inventory control linked to financial reporting and distribution across multiple locations.",
+      "country": "United States",
+      "city": "Oklahoma City",
+      "skills": "Leadership, Strategic Planning, Strategy Alignment, Cross-functional Team Leadership, Complexity Management"
+    },
+    {
+      "uuid": "8501d986-144d-4f4d-bd3f-7fb066028142",
+      "company": "Websarrollo",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Founder & Software Engineer",
+      "start_date": "February, 2011",
+      "end_date": "May, 2014",
+      "summary": "Led a team of designers and PHP developers, managing nationwide client projects and overseeing the full app development lifecycle, including iOS and Android social networking apps.<br/><br/>I built CMS, shipping-tracking, e-commerce, web portfolio, college enrolment, and university survey systems, plus a City Hall Administrative System covering accounts payable, HR, payroll, treasury, and tax modules. My work leveraged PHP, jQuery (and jQuery Mobile), Cordova-JS, MySQL, HTML5, AngularJS, and Laravel 5, integrating third-party APIs and Facebook and Twitter logins within a SCRUM framework.",
+      "country": "Venezuela",
+      "city": "Valencia",
+      "skills": "Leadership, Strategic Planning, Strategy Alignment, Team Development, Complexity Management."
+    },
+    {
+      "uuid": "82076e4e-6099-457f-8ed5-b10585125ce5",
+      "company": "Encava",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Web Developer",
+      "start_date": "May, 2009",
+      "end_date": "February, 2011",
+      "summary": "Maintained the company’s AS400 administrative system and spearheaded development of department-specific applications—an e-commerce inventory control for retail, web reporting for production-line quality control, an online appointment system for the medical department, and a visitor registration/management tool.<br/><br/>I leveraged PHP, jQuery, MySQL, HTML5, and AS400 within a SCRUM framework.",
+      "country": "Venezuela",
+      "city": "Valencia",
+      "skills": "Creative Problem Solving, Analytical Skills, Strategy Alignment, Strategic Planning, Complexity Management."
+    },
+    {
+      "uuid": "d8c3957c-99dd-401a-9d95-f2b6b1dc021a",
+      "company": "Forja Centro",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Web Developer",
+      "start_date": "March, 2008",
+      "end_date": "April, 2009",
+      "summary": "Maintained a Visual Basic administrative system and built internal applications to streamline operations—mail management, mechanical design support, sales-report automation, and web-based customer invoicing.<br/><br/>I trained staff on these tools and provided technical support for Windows 8 and PC servers using PHP, jQuery, MySQL, HTML, and SQL Server.",
+      "country": "Venezuela",
+      "city": "Valencia",
+      "skills": "Creative Problem Solving, Analytical Skills, Strategy Alignment, Strategic Planning, Complexity Management."
+    }
+  ]
+} as const satisfies ExperienceFixture

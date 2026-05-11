@@ -4,11 +4,11 @@
   "private": true,
   "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "typecheck": "turbo typecheck"
+    "build": "turbo run build --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
+    "dev": "turbo run dev --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
+    "lint": "turbo run lint --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
+    "test": "turbo run test --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
+    "typecheck": "turbo run typecheck --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status"
   },
   "devDependencies": {
     "turbo": "^2.9.12"

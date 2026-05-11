@@ -25,6 +25,7 @@ const iconMap: Record<FeatureIcon, LucideIcon> = {
 <template>
   <section id="work">
     <span class="corner-r" aria-hidden="true"></span>
+    <span class="corner-l" aria-hidden="true"></span>
     <div class="section-inner">
       <div class="section-head center">
         <span class="section-eyebrow">What I do</span>

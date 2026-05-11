@@ -2,7 +2,10 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/web"
+      "path": "./workspace/data"
+    },
+    {
+      "path": "./workspace/app"
     }
   ]
 }
