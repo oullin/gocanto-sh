@@ -76,16 +76,39 @@ a {
 /* ===================== GRID RAILS ===================== */
 .grid-rails-extension {
   position: absolute;
-  top: 132px;
+  top: 0;
   left: 0;
   right: 0;
   border-top: 1px solid var(--border);
   pointer-events: none;
   z-index: 3;
 }
+.grid-rails-extension::before,
+.grid-rails-extension::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-size: 11px 1px, 1px 11px;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  color: var(--fg-3);
+}
+.grid-rails-extension::before {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+.grid-rails-extension::after {
+  right: 0;
+  transform: translate(50%, -50%);
+}
 .grid-rails {
   position: absolute;
-  top: 132px;
+  top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -94,41 +117,8 @@ a {
   border-top: 1px solid var(--border);
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  z-index: 4;
+  z-index: 60;
 }
-.grid-rails::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 11px;
-  height: 11px;
-  background-image:
-    linear-gradient(currentColor, currentColor),
-    linear-gradient(currentColor, currentColor);
-  background-size: 11px 1px, 1px 11px;
-  background-position: center, center;
-  background-repeat: no-repeat;
-  color: var(--fg-3);
-  transform: translate(50%, -50%);
-}
-.grid-rails::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 11px;
-  height: 11px;
-  background-image:
-    linear-gradient(currentColor, currentColor),
-    linear-gradient(currentColor, currentColor);
-  background-size: 11px 1px, 1px 11px;
-  background-position: center, center;
-  background-repeat: no-repeat;
-  color: var(--fg-3);
-  transform: translate(-50%, -50%);
-}
-
 section,
 header.hero {
   position: relative;
@@ -182,6 +172,8 @@ header.hero {
   position: sticky;
   top: 0;
   z-index: 50;
+  max-width: var(--maxw);
+  margin: 0 auto;
   background: rgba(0, 0, 0, 0.72);
   backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--border);
