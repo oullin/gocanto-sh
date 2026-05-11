@@ -1,59 +1,46 @@
 <script setup lang="ts">
-import { ExternalLink } from "lucide-vue-next"
+import { ArrowUpRight } from "lucide-vue-next"
 
-import BrandIcon from "@components/BrandIcon.vue"
-import SectionHeader from "@components/SectionHeader.vue"
-import { links, profile } from "@data"
-import Button from "@ui/Button.vue"
-import { Card } from "@ui/card"
+import ChannelIcon from "@components/ChannelIcon.vue"
+import { connectChannels, connectHeading } from "@data"
 </script>
 
 <template>
-  <section class="page-container border-b">
-    <div class="border-x pb-20">
-      <SectionHeader
-        title="Connect"
-        :description="`You can find me around the web with the handle @${profile.handle}.`"
-      />
+  <section id="connect">
+    <span class="corner-r" aria-hidden="true"></span>
+    <div class="section-inner">
+      <div class="section-head center">
+        <span class="section-eyebrow">{{ connectHeading.eyebrow }}</span>
+        <h2 class="section-title">
+          {{ connectHeading.title }}
+          <span style="color: var(--accent)">{{ connectHeading.highlight }}</span>{{ connectHeading.trailing }}
+        </h2>
+        <p class="section-sub">{{ connectHeading.subtitle }}</p>
+      </div>
 
-      <div class="mx-auto mt-8 w-full max-w-5xl">
-        <div class="[mask-image:radial-gradient(ellipse_100%_100%_at_50%_0%,#000_70%,transparent_100%)]">
-          <Card class="grid gap-x-6 rounded-md bg-background px-6 pb-10 pt-6 shadow-none md:grid-cols-2">
-            <Button
-              v-for="link in links"
-              :key="link.href"
-              as="a"
-              variant="ghost"
-              :href="link.href"
-              target="_blank"
-              rel="noreferrer"
-              class="grid h-auto grid-cols-[auto_1fr_auto] items-center justify-normal gap-3 rounded-md border-b border-dashed p-3 text-left normal-case hover:bg-secondary"
-            >
-              <span class="flex size-12 items-center justify-center rounded-md border border-foreground/5 bg-muted">
-                <BrandIcon :name="link.icon" />
-              </span>
-              <span class="space-y-0.5 overflow-hidden">
-                <span class="block text-sm font-medium">{{ link.label }}</span>
-                <span class="block truncate text-sm text-muted-foreground">{{ link.description }}</span>
-              </span>
-              <ExternalLink class="size-4 text-muted-foreground" aria-hidden="true" />
-            </Button>
-          </Card>
-        </div>
-
-        <p class="mx-auto max-w-lg px-4 text-center text-sm font-light text-muted-foreground md:text-base">
-          {{ profile.contact }}
-          <Button
-            as="a"
-            variant="link"
-            class="inline h-auto p-0 align-baseline font-semibold normal-case"
-            :href="profile.cta.primary.href"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {{ profile.cta.primary.label }}
-          </Button>
-        </p>
+      <div class="connect-grid">
+        <a
+          v-for="channel in connectChannels"
+          :key="channel.name"
+          class="connect-card"
+          :href="channel.href"
+          :target="channel.icon === 'mail' ? undefined : '_blank'"
+          :rel="channel.icon === 'mail' ? undefined : 'noreferrer'"
+        >
+          <div class="connect-head">
+            <div class="connect-icon">
+              <ChannelIcon :name="channel.icon" />
+            </div>
+            <span class="connect-arrow">
+              <ArrowUpRight :size="14" :stroke-width="1.5" aria-hidden="true" />
+            </span>
+          </div>
+          <div>
+            <div class="connect-name">{{ channel.name }}</div>
+            <div class="connect-handle">{{ channel.handle }}</div>
+          </div>
+          <div class="connect-desc">{{ channel.description }}</div>
+        </a>
       </div>
     </div>
   </section>

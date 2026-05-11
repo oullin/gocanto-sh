@@ -7,8 +7,8 @@
       name="description"
       content="Gustavo Gus Ocanto is a software architect and engineering leader based in Singapore."
     />
-    <meta name="theme-color" content="#ffffff" />
-    <meta property="og:title" content="Gus Ocanto" />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:title" content="Gus — Software Architect & Engineering Leader" />
     <meta
       property="og:description"
       content="Software architect and engineering leader building production-grade systems."
@@ -19,63 +19,13 @@
     <meta name="twitter:image" content="https://gocanto.sh/avatar.jpg" />
     <meta name="twitter:image:alt" content="Gus Ocanto portrait" />
     <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
-    <script>
-      ;(function () {
-        const storageKey = "gocanto-sh-theme"
-        const accentStorageKey = "gocanto-sh-accent"
-        const accentValues = [
-          "blue",
-          "green",
-          "red",
-          "yellow",
-          "amber",
-          "orange",
-          "rose",
-          "pink",
-          "purple",
-          "violet",
-          "fuchsia",
-          "indigo",
-          "teal",
-          "cyan",
-          "emerald",
-          "slate",
-          "zinc",
-          "neutral",
-        ]
-        let storedTheme = "system"
-        let storedAccent = "rose"
-
-        try {
-          storedTheme = localStorage.getItem(storageKey)
-          storedAccent = localStorage.getItem(accentStorageKey)
-        } catch {}
-
-        const preference = storedTheme === "dark" || storedTheme === "light" || storedTheme === "system" ? storedTheme : "system"
-        const accent = accentValues.includes(storedAccent) ? storedAccent : "rose"
-        const resolvedTheme =
-          preference === "system"
-            ? window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light"
-            : preference
-
-        document.documentElement.classList.toggle("dark", resolvedTheme === "dark")
-        document.documentElement.style.colorScheme = resolvedTheme
-        document.documentElement.dataset.accent = accent
-        document.documentElement.style.backgroundColor = resolvedTheme === "dark" ? "#09090b" : "#ffffff"
-        document.documentElement.style.color = resolvedTheme === "dark" ? "#fafafa" : "#18181b"
-        document.querySelector("meta[name='theme-color']").setAttribute("content", resolvedTheme === "dark" ? "#09090b" : "#ffffff")
-      })()
-    </script>
-    <title>Gus Ocanto</title>
+    <title>Gus — Software Architect &amp; Engineering Leader</title>
   </head>
   <body>
     <div id="app">
       <div class="app-loading-shell" aria-hidden="true">
         <div class="app-loading-bar"></div>
         <main class="app-loading-main">
-          <div class="app-loading-avatar"></div>
           <div class="app-loading-line"></div>
           <div class="app-loading-line"></div>
           <div class="app-loading-line"></div>

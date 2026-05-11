@@ -1,17 +1,27 @@
 <script setup lang="ts">
 import ConnectSection from "@components/ConnectSection.vue"
-import CreateSection from "@components/CreateSection.vue"
+import CtaSection from "@components/CtaSection.vue"
+import FaqSection from "@components/FaqSection.vue"
+import FeaturesSection from "@components/FeaturesSection.vue"
+import GridRails from "@components/GridRails.vue"
+import HeroSection from "@components/HeroSection.vue"
+import IndustryStrip from "@components/IndustryStrip.vue"
 import JourneySection from "@components/JourneySection.vue"
-import MeSection from "@components/MeSection.vue"
-import ThemeToggle from "@components/ThemeToggle.vue"
+import NavBar from "@components/NavBar.vue"
+import SiteFooter from "@components/SiteFooter.vue"
 </script>
 
 <template>
-  <ThemeToggle />
+  <GridRails />
+  <NavBar />
   <main>
-    <MeSection />
+    <HeroSection />
+    <IndustryStrip />
+    <FeaturesSection />
     <JourneySection />
-    <CreateSection />
+    <FaqSection />
     <ConnectSection />
+    <CtaSection />
   </main>
+  <SiteFooter />
 </template>

@@ -1,40 +1,46 @@
-import type { ProfileLink } from "@data/types"
+import type { ConnectChannel } from "@data/types"
 
-export const links: ProfileLink[] = [
+export const connectChannels: ConnectChannel[] = [
   {
-    label: "LinkedIn",
+    name: "LinkedIn",
+    handle: "linkedin.com/in/gocanto",
+    description: "Best for engagement inquiries, fractional roles, and direct conversations.",
     href: "https://www.linkedin.com/in/gocanto/",
     icon: "linkedin",
-    description: "Connect professionally and view my career profile.",
   },
   {
-    label: "GitHub",
+    name: "GitHub",
+    handle: "github.com/gocanto",
+    description: "Open-source work, code samples, and public technical writing.",
     href: "https://github.com/gocanto",
     icon: "github",
-    description: "Explore public code, projects, and open-source activity.",
   },
   {
-    label: "Website",
+    name: "Website",
+    handle: "gocanto.dev",
+    description: "Personal web presence with technical notes and project context.",
     href: "https://gocanto.dev",
     icon: "globe",
-    description: "Visit my personal web presence and technical profile.",
   },
   {
-    label: "Gravatar",
-    href: "https://gravatar.com/kocanto",
-    icon: "globe",
-    description: "See verified public profile links and profile metadata.",
+    name: "Gravatar",
+    handle: "gravatar.com/gocanto",
+    description: "Verified public profile links and identity metadata.",
+    href: "https://gravatar.com/gocanto",
+    icon: "gravatar",
   },
   {
-    label: "Threads",
-    href: "https://threads.net/gocanto",
-    icon: "threads",
-    description: "Follow shorter updates and conversations.",
-  },
-  {
-    label: "Bluesky",
+    name: "Bluesky",
+    handle: "@gocanto.bsky.social",
+    description: "Short-form thoughts on engineering, systems, and tradeoffs.",
     href: "https://bsky.app/profile/gocanto.bsky.social",
     icon: "bluesky",
-    description: "Find me on Bluesky as gocanto.",
+  },
+  {
+    name: "Email",
+    handle: "hi@gocanto.dev",
+    description: "Direct line for project briefs, intros, and detailed inquiries.",
+    href: "mailto:hi@gocanto.dev",
+    icon: "mail",
   },
 ]

@@ -27,9 +27,7 @@
       "@data": ["./src/data/index.ts"],
       "@data/*": ["./src/data/*"],
       "@lib": ["./src/lib"],
-      "@lib/*": ["./src/lib/*"],
-      "@ui": ["./src/components/ui"],
-      "@ui/*": ["./src/components/ui/*"]
+      "@lib/*": ["./src/lib/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts"]

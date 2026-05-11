@@ -1,4 +1,30 @@
-export { profile, proofLinks } from "@data/identity"
-export { links } from "@data/links"
-export { domainSkills, skills, technologySkills, technologySkillsLabel } from "@data/skills"
-export type { IconName, ProfileLink, ProofLink } from "@data/types"
+export { profile } from "@data/identity"
+export { connectChannels } from "@data/links"
+export {
+  connectHeading,
+  ctaCopy,
+  faqs,
+  features,
+  footerCopy,
+  heroCopy,
+  industries,
+  journeyHeading,
+  journeyTabs,
+  navLinks,
+} from "@data/portfolio"
+export type {
+  CodeLanguage,
+  CodeSnippet,
+  ConnectChannel,
+  CtaCopy,
+  FaqItem,
+  Feature,
+  FeatureIcon,
+  FooterCopy,
+  HeroCopy,
+  IconName,
+  JourneyEntry,
+  JourneyTab,
+  JourneyTabKey,
+  NavLink,
+} from "@data/types"
