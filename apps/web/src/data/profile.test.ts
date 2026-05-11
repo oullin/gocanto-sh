@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { links, profile, proofLinks, skills } from "."
+import { links, profile, proofLinks, skills, technologySkills, technologySkillsLabel } from "."
 
 describe("profile content", () => {
   it("keeps the primary identity and required public links in place", () => {
@@ -21,5 +21,6 @@ describe("profile content", () => {
     expect(skills).toEqual(
       expect.arrayContaining(["Go", "Node.js", "TypeScript", "PHP", "JavaScript", "Fintech", "Payments"]),
     )
+    expect(technologySkillsLabel).toBe(`${technologySkills.slice(0, -1).join(", ")}, and ${technologySkills.at(-1)}`)
   })
 })

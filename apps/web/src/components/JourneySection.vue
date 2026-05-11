@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { profile } from "@/data"
-import SectionHeader from "@/components/SectionHeader.vue"
+import SectionHeader from "@components/SectionHeader.vue"
+import { profile } from "@data"
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ExternalLink } from "lucide-vue-next"
 
-import { links, profile } from "@/data"
-import BrandIcon from "@/components/BrandIcon.vue"
-import SectionHeader from "@/components/SectionHeader.vue"
+import BrandIcon from "@components/BrandIcon.vue"
+import SectionHeader from "@components/SectionHeader.vue"
+import { links, profile } from "@data"
 </script>
 
 <template>
@@ -40,7 +40,7 @@ import SectionHeader from "@/components/SectionHeader.vue"
         <p class="mx-auto max-w-lg px-4 text-center text-sm font-light text-muted-foreground md:text-base">
           {{ profile.contact }}
           <a class="font-semibold text-primary hover:underline" :href="profile.cta.primary.href" target="_blank" rel="noreferrer">
-            LinkedIn
+            {{ profile.cta.primary.label }}
           </a>
         </p>
       </div>

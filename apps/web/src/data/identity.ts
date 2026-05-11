@@ -1,5 +1,7 @@
 import type { ProofLink } from "./types"
 
+const avatarUrl = `${import.meta.env.BASE_URL}avatar.jpg`
+
 export const profile = {
   name: "Gustavo Ocanto",
   shortName: "Gus Ocanto",
@@ -7,8 +9,7 @@ export const profile = {
   title: "Software Architect & Engineering Leader",
   location: "Singapore",
   pronouns: "he/him",
-  avatarUrl:
-    "https://2.gravatar.com/avatar/b34e71a1d77694dc7bd55865130048f36467f821dd74f63aefbedd097393964a?size=700",
+  avatarUrl,
   intro:
     "I build production-grade software with teams that need dependable architecture, pragmatic delivery, and systems that keep working when the easy part is over.",
   leftStatement: "I’m Gus, a software architect and engineering leader.",

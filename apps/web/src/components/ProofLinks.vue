@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ExternalLink } from "lucide-vue-next"
 
-import type { ProofLink } from "@/data"
+import type { ProofLink } from "@data"
 
 defineProps<{
   items: ProofLink[]
