@@ -60,7 +60,9 @@ function handleAccentChange(value: AcceptableValue) {
           <span class="hidden sm:inline">Color:</span>
           <SelectValue placeholder="Neutral" class="text-foreground" />
         </SelectTrigger>
-        <SelectContent class="max-h-56 w-[190px]">
+        <SelectContent
+          class="max-h-56 w-[190px] data-[state=closed]:animate-none data-[state=open]:animate-none data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 data-[side=bottom]:slide-in-from-top-0 data-[side=left]:slide-in-from-right-0 data-[side=right]:slide-in-from-left-0 data-[side=top]:slide-in-from-bottom-0"
+        >
           <SelectItem
             v-for="option in accentOptions"
             :key="option.value"
