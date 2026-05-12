@@ -1,12 +1,20 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue"
+import VertexRelaySkeleton from "@components/VertexRelaySkeleton.vue"
 import { navLinks, profile } from "@data"
+
+const VertexRelay = defineAsyncComponent({
+  loader: () => import("@components/VertexRelay.vue"),
+  loadingComponent: VertexRelaySkeleton,
+  delay: 0,
+})
 </script>
 
 <template>
   <nav class="nav">
     <div class="nav-inner">
       <a class="brand" href="#">
-        <img class="brand-logo" :src="profile.avatarUrl" :alt="profile.name" />
+        <VertexRelay class="brand-logo" />
         <span>{{ profile.handle }}</span>
       </a>
       <div class="nav-links">
