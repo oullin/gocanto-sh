@@ -65,7 +65,7 @@ const activeTab = computed(
             </button>
           </div>
           <div
-            class="overflow-hidden rounded-xl border border-border-strong bg-[#0a0a0a] font-mono text-[12.5px]"
+            class="overflow-hidden rounded-xl border border-border-strong bg-card font-mono text-[12.5px]"
           >
             <div
               class="flex items-center gap-2 border-b border-border px-3.5 py-2.5 text-[11.5px] text-fg-3"

@@ -1,6 +1,6 @@
 html {
   background: #000000;
-  color: #fafafa;
+  color: oklch(98.5% 0.002 247.839);
   color-scheme: dark;
 }
 
@@ -18,7 +18,7 @@ body {
 
 .app-loading-bar {
   height: 60px;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid oklch(27.8% 0.033 256.848);
 }
 
 .app-loading-main {
@@ -30,7 +30,7 @@ body {
 
 .app-loading-line {
   border-radius: 999px;
-  background: #1a1a1a;
+  background: oklch(27.8% 0.033 256.848);
   margin: 16px auto;
 }
 

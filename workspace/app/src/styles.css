@@ -1,5 +1,5 @@
-@import "@fontsource-variable/geist/wght.css";
-@import "@fontsource-variable/geist-mono/wght.css";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -31,25 +31,25 @@
   --color-bg-1: var(--bg-1);
   --color-bg-2: var(--bg-2);
   --color-green: var(--green);
-  --font-sans: "Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --container-page: 1100px;
   --breakpoint-mid: 1148px;
 }
 
 :root {
-  --bg: #000000;
-  --bg-1: #050505;
-  --bg-2: #0a0a0a;
-  --border: #1a1a1a;
-  --border-strong: #2a2a2a;
-  --fg: #fafafa;
-  --fg-2: #a1a1aa;
-  --fg-3: #71717a;
-  --fg-4: #52525b;
-  --accent: #ff6b1a;
-  --accent-soft: rgba(255, 107, 26, 0.10);
-  --green: #22c55e;
+  --bg:            #000000;
+  --bg-1:          oklch(17% 0.030 263.000);
+  --bg-2:          oklch(21% 0.034 264.665);
+  --border:        oklch(21% 0.034 264.665);
+  --border-strong: oklch(37.3% 0.034 259.733);
+  --fg:            oklch(98.5% 0.002 247.839);
+  --fg-2:          oklch(70.7% 0.022 261.325);
+  --fg-3:          oklch(55.1% 0.027 264.364);
+  --fg-4:          oklch(44.6% 0.030 256.802);
+  --accent:        oklch(74.6% 0.16  232.661);
+  --accent-soft:   color-mix(in oklch, oklch(74.6% 0.16 232.661) 12%, transparent);
+  --green:         oklch(72.3% 0.219 149.579);
   color-scheme: dark;
 }
 
@@ -59,11 +59,13 @@
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   body {
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 17px;
+    line-height: 1.6;
     letter-spacing: -0.011em;
     position: relative;
     overflow-x: hidden;
@@ -73,6 +75,13 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.025em;
+    font-weight: 600;
   }
 }
 

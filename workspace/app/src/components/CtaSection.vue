@@ -26,7 +26,7 @@ import { ctaCopy } from "@data"
           rel="noreferrer"
         >{{ ctaCopy.primary.label }}</a>
         <a
-          class="inline-flex cursor-pointer items-center gap-2 rounded-[7px] border border-border-strong bg-transparent px-[18px] py-2.5 font-sans text-sm font-medium text-foreground transition-all duration-150 hover:border-[#383838] hover:bg-bg-2"
+          class="inline-flex cursor-pointer items-center gap-2 rounded-[7px] border border-border-strong bg-transparent px-[18px] py-2.5 font-sans text-sm font-medium text-foreground transition-all duration-150 hover:border-border-strong hover:bg-bg-2"
           :href="ctaCopy.secondary.href"
           target="_blank"
           rel="noreferrer"
