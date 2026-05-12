@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 
+import SectionCorners from "@components/SectionCorners.vue"
 import { aboutCopy } from "@data"
 import type { AboutLink, AboutParagraph } from "@data"
 
@@ -39,12 +40,13 @@ const paragraphs = computed(() => aboutCopy.paragraphs.map(tokenize))
 </script>
 
 <template>
-  <section class="about" id="about">
-    <span class="corner-r" aria-hidden="true"></span>
-    <span class="corner-l" aria-hidden="true"></span>
-    <div class="about-inner">
-      <div class="about-card">
-        <p v-for="(tokens, i) in paragraphs" :key="i" class="about-p">
+  <section id="about" class="relative border-b border-border px-6 py-14">
+    <SectionCorners />
+    <div class="mx-auto flex max-w-page flex-col items-center gap-7">
+      <div
+        class="w-full max-w-[640px] border border-dashed border-border-strong bg-background px-[26px] py-[22px] font-mono text-[13.5px] leading-[1.65] text-fg-2 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.7)] [&>p+p]:mt-3 [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-[3px] [&_a:hover]:text-foreground"
+      >
+        <p v-for="(tokens, i) in paragraphs" :key="i">
           <template v-for="(token, j) in tokens" :key="j">
             <a
               v-if="token.kind === 'link'"
@@ -57,7 +59,7 @@ const paragraphs = computed(() => aboutCopy.paragraphs.map(tokenize))
         </p>
       </div>
       <a
-        class="btn btn-primary about-cta"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-[7px] border border-transparent bg-foreground px-[18px] py-2.5 font-mono text-xs font-medium uppercase tracking-[0.06em] text-black transition-all duration-150 hover:bg-white"
         :href="aboutCopy.cta.href"
         :target="aboutCopy.cta.external ? '_blank' : undefined"
         :rel="aboutCopy.cta.external ? 'noreferrer' : undefined"

@@ -9,6 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-vue-next"
 
+import SectionCorners from "@components/SectionCorners.vue"
 import { features } from "@data"
 import type { FeatureIcon } from "@data"
 
@@ -23,28 +24,35 @@ const iconMap: Record<FeatureIcon, LucideIcon> = {
 </script>
 
 <template>
-  <section id="work">
-    <span class="corner-r" aria-hidden="true"></span>
-    <span class="corner-l" aria-hidden="true"></span>
-    <div class="section-inner">
-      <div class="section-head center">
-        <span class="section-eyebrow">What I do</span>
-        <h2 class="section-title">
-          Engineering that survives <span class="muted">contact with production.</span>
+  <section id="work" class="relative border-b border-border">
+    <SectionCorners />
+    <div class="mx-auto max-w-page px-6 py-[120px]">
+      <div class="mx-auto mb-16 max-w-[720px] text-center">
+        <span class="font-mono text-xs tracking-[0.02em] text-fg-3">What I do</span>
+        <h2
+          class="mt-3.5 text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.04em]"
+        >
+          Engineering that survives <span class="text-fg-3">contact with production.</span>
         </h2>
-        <p class="section-sub">
+        <p class="mx-auto mt-[18px] max-w-[580px] text-[16.5px] leading-[1.55] text-fg-2">
           Architecture, backend systems, reliability, and the technical tradeoffs that decide whether a
           system survives its first real load.
         </p>
       </div>
 
-      <div class="features">
-        <div v-for="feature in features" :key="feature.title" class="feature">
-          <div class="feature-icon">
+      <div
+        class="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-border bg-border max-[900px]:grid-cols-1"
+      >
+        <div
+          v-for="feature in features"
+          :key="feature.title"
+          class="relative flex min-h-[220px] flex-col bg-background px-7 pb-9 pt-8"
+        >
+          <div class="mb-5 grid size-8 place-items-center text-foreground">
             <component :is="iconMap[feature.icon]" :size="20" :stroke-width="1.6" aria-hidden="true" />
           </div>
-          <div class="feature-title">{{ feature.title }}</div>
-          <p class="feature-desc">{{ feature.description }}</p>
+          <div class="text-base font-semibold tracking-[-0.02em]">{{ feature.title }}</div>
+          <p class="mt-2.5 text-[14.5px] leading-[1.55] text-fg-2">{{ feature.description }}</p>
         </div>
       </div>
     </div>

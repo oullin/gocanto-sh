@@ -4,7 +4,6 @@ import type {
   FaqItem,
   Feature,
   FooterCopy,
-  HeroCopy,
   JourneyTab,
   NavLink,
   ProfileCardCopy,
@@ -16,19 +15,6 @@ export const navLinks: NavLink[] = [
   { label: "FAQ", href: "#faq" },
   { label: "Connect", href: "#connect" },
 ]
-
-export const heroCopy: HeroCopy = {
-  eyebrow: "Engineering Portfolio",
-  title: "One engineer for production-grade systems.",
-  subtitle:
-    "Architecture, backend, and engineering leadership for banking, fintech, and payment systems built to keep working when the easy part is over.",
-  primary: { label: "Get in touch", href: "#connect" },
-  secondary: {
-    label: "Read GitHub",
-    href: "https://github.com/gocanto",
-    external: true,
-  },
-}
 
 export const profileCardCopy: ProfileCardCopy = {
   role: "Software Architect",

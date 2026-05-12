@@ -5,7 +5,6 @@ import CtaSection from "@components/CtaSection.vue"
 import FaqSection from "@components/FaqSection.vue"
 import FeaturesSection from "@components/FeaturesSection.vue"
 import GridRails from "@components/GridRails.vue"
-import HeroSection from "@components/HeroSection.vue"
 import IndustryStrip from "@components/IndustryStrip.vue"
 import JourneySection from "@components/JourneySection.vue"
 import NavBar from "@components/NavBar.vue"
@@ -17,7 +16,6 @@ import SiteFooter from "@components/SiteFooter.vue"
   <GridRails />
   <NavBar />
   <main>
-    <HeroSection />
     <ProfileCardSection />
     <AboutSection />
     <IndustryStrip />

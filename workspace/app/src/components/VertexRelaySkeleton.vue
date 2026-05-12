@@ -1,54 +1,50 @@
 <script setup lang="ts">
-const ROW_COUNTS = [3, 4, 5, 4, 3] as const
+const SIZE = 5
+const CENTER = 2
 </script>
 
 <template>
-  <div class="vertex-relay-skeleton" role="img" aria-label="Loading">
-    <div
-      v-for="(count, row) in ROW_COUNTS"
-      :key="row"
-      class="vertex-relay-skeleton__row"
-    >
+  <div class="twin-orbit-skeleton" role="img" aria-label="Loading">
+    <template v-for="row in SIZE" :key="row">
       <span
-        v-for="col in count"
-        :key="col"
-        class="vertex-relay-skeleton__dot"
+        v-for="col in SIZE"
+        :key="`${row}-${col}`"
+        class="twin-orbit-skeleton__dot"
+        :class="{ 'twin-orbit-skeleton__dot--center': row - 1 === CENTER && col - 1 === CENTER }"
       />
-    </div>
+    </template>
   </div>
 </template>
 
 <style scoped>
-.vertex-relay-skeleton {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.twin-orbit-skeleton {
+  display: grid;
+  grid-template-columns: repeat(5, 4px);
+  grid-auto-rows: 4px;
   gap: 2px;
+  color: currentColor;
 }
 
-.vertex-relay-skeleton__row {
-  display: flex;
-  justify-content: center;
-  gap: 3px;
-}
-
-.vertex-relay-skeleton__dot {
+.twin-orbit-skeleton__dot {
   width: 4px;
   height: 4px;
-  border-radius: 50%;
   background: currentColor;
+  border-radius: 50%;
   opacity: 0.18;
-  animation: vertex-relay-skeleton-pulse 1.83s ease-in-out infinite;
+  animation: twin-orbit-skeleton-pulse 1.83s ease-in-out infinite;
 }
 
-@keyframes vertex-relay-skeleton-pulse {
+.twin-orbit-skeleton__dot--center {
+  visibility: hidden;
+}
+
+@keyframes twin-orbit-skeleton-pulse {
   0%, 100% { opacity: 0.1; }
   50% { opacity: 0.4; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vertex-relay-skeleton__dot {
+  .twin-orbit-skeleton__dot {
     animation: none;
     opacity: 0.25;
   }

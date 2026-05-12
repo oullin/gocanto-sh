@@ -53,14 +53,6 @@ export type NavLink = {
   external?: boolean
 }
 
-export type HeroCopy = {
-  eyebrow: string
-  title: string
-  subtitle: string
-  primary: { label: string; href: string }
-  secondary: { label: string; href: string; external?: boolean }
-}
-
 export type ProfileCardCopy = {
   role: string
   flag: { emoji: string; label: string }
@@ -96,9 +88,3 @@ export type FooterCopy = {
   tagline: string
 }
 
-export type CodeLanguage = "go" | "ts" | "php"
-
-export type CodeSnippet = {
-  key: CodeLanguage
-  label: string
-}
