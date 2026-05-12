@@ -1,6 +1,7 @@
 export { profile } from "@data/identity"
 export { connectChannels } from "@data/links"
 export {
+  aboutCopy,
   connectHeading,
   ctaCopy,
   faqs,
@@ -11,8 +12,12 @@ export {
   journeyHeading,
   journeyTabs,
   navLinks,
+  profileCardCopy,
 } from "@data/portfolio"
 export type {
+  AboutCopy,
+  AboutLink,
+  AboutParagraph,
   CodeLanguage,
   CodeSnippet,
   ConnectChannel,
@@ -27,4 +32,5 @@ export type {
   JourneyTab,
   JourneyTabKey,
   NavLink,
+  ProfileCardCopy,
 } from "@data/types"

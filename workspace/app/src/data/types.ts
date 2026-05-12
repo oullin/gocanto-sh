@@ -61,6 +61,28 @@ export type HeroCopy = {
   secondary: { label: string; href: string; external?: boolean }
 }
 
+export type ProfileCardCopy = {
+  role: string
+  flag: { emoji: string; label: string }
+  knowMore: { label: string; href: string; external?: boolean }
+}
+
+export type AboutLink = {
+  match: string
+  href: string
+  external?: boolean
+}
+
+export type AboutParagraph = {
+  text: string
+  links?: AboutLink[]
+}
+
+export type AboutCopy = {
+  paragraphs: AboutParagraph[]
+  cta: { label: string; href: string; external?: boolean }
+}
+
 export type CtaCopy = {
   title: string
   subtitle: string

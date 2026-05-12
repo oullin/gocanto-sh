@@ -494,6 +494,187 @@ h1.hero-title .muted {
   opacity: 1;
 }
 
+/* ===================== PROFILE CARD ===================== */
+.profile-card-section {
+  padding: 56px 24px;
+  position: relative;
+}
+.profile-card-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.profile-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 28px;
+  align-items: stretch;
+  padding: 28px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  min-height: 220px;
+}
+.profile-corner {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  background-image:
+    linear-gradient(var(--fg-2), var(--fg-2)),
+    linear-gradient(var(--fg-2), var(--fg-2));
+  background-size: 13px 1px, 1px 13px;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+.profile-corner-tl { top: 0; left: 0; transform: translate(-50%, -50%); }
+.profile-corner-tr { top: 0; right: 0; transform: translate(50%, -50%); }
+.profile-corner-bl { bottom: 0; left: 0; transform: translate(-50%, 50%); }
+.profile-corner-br { bottom: 0; right: 0; transform: translate(50%, 50%); }
+
+.profile-avatar {
+  width: 188px;
+  height: 188px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-2);
+  align-self: center;
+  justify-self: center;
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(0.05);
+}
+
+.profile-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px 8px 8px;
+  border-left: 1px solid var(--border);
+}
+.profile-flag {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 18px;
+  line-height: 1;
+}
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.profile-name {
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.profile-role {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fg-2);
+  padding: 6px 10px;
+  display: inline-block;
+  align-self: flex-start;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+}
+.profile-knowmore {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.profile-knowmore:hover {
+  color: var(--fg);
+}
+
+@media (max-width: 720px) {
+  .profile-card {
+    grid-template-columns: 1fr;
+    padding: 22px;
+    gap: 18px;
+  }
+  .profile-avatar {
+    width: 140px;
+    height: 140px;
+  }
+  .profile-body {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding: 18px 4px 28px;
+    align-items: flex-start;
+  }
+  .profile-flag {
+    top: 14px;
+    right: 4px;
+  }
+  .profile-knowmore {
+    right: 4px;
+    bottom: 6px;
+  }
+}
+
+/* ===================== ABOUT ===================== */
+.about {
+  padding: 56px 24px;
+  position: relative;
+}
+.about-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.about-card {
+  width: 100%;
+  max-width: 640px;
+  padding: 22px 26px;
+  border: 1px dashed var(--border-strong);
+  background: var(--bg);
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.65;
+  box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.7);
+}
+.about-p + .about-p {
+  margin-top: 12px;
+}
+.about-card a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.about-card a:hover {
+  color: var(--fg);
+}
+.about-cta {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
 /* ===================== SECTIONS ===================== */
 section {
   border-bottom: 1px solid var(--border);

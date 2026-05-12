@@ -1,4 +1,5 @@
 import type {
+  AboutCopy,
   CtaCopy,
   FaqItem,
   Feature,
@@ -6,6 +7,7 @@ import type {
   HeroCopy,
   JourneyTab,
   NavLink,
+  ProfileCardCopy,
 } from "@data/types"
 
 export const navLinks: NavLink[] = [
@@ -26,6 +28,26 @@ export const heroCopy: HeroCopy = {
     href: "https://github.com/gocanto",
     external: true,
   },
+}
+
+export const profileCardCopy: ProfileCardCopy = {
+  role: "Software Architect",
+  flag: { emoji: "🇸🇬", label: "Singapore" },
+  knowMore: { label: "Know more", href: "#about" },
+}
+
+export const aboutCopy: AboutCopy = {
+  paragraphs: [
+    {
+      text:
+        "I'm a software architect and engineering leader based in Singapore. Two decades shipping production systems for banking, fintech, payments, e-commerce, healthtech, and cybersecurity — the kind of work that has to keep working at 3am.",
+    },
+    {
+      text:
+        "Currently working with teams as Head of Engineering, fractional engineering lead, and founding engineer — turning prototypes into production-grade software, and production-grade software into platforms that scale.",
+    },
+  ],
+  cta: { label: "See the journey", href: "#journey" },
 }
 
 export const industries = [
