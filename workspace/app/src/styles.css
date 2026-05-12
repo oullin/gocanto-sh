@@ -165,6 +165,10 @@ header.hero {
   .corner-l {
     display: none;
   }
+  .nav::before,
+  .nav::after {
+    display: none;
+  }
 }
 
 /* ===================== NAV ===================== */
@@ -177,6 +181,30 @@ header.hero {
   background: rgba(0, 0, 0, 0.72);
   backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--border);
+}
+.nav::before,
+.nav::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 11px;
+  height: 11px;
+  background-image:
+    linear-gradient(var(--fg-3), var(--fg-3)),
+    linear-gradient(var(--fg-3), var(--fg-3));
+  background-size: 11px 1px, 1px 11px;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 5;
+}
+.nav::before {
+  left: 0;
+  transform: translate(-50%, 50%);
+}
+.nav::after {
+  right: 0;
+  transform: translate(50%, 50%);
 }
 .nav-inner {
   max-width: var(--maxw);
