@@ -1,47 +1,50 @@
 {
-  "name": "@gocanto/app",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "imports": {
-    "#config/vite": "./vite.config.ts"
-  },
-  "scripts": {
-    "build": "vue-tsc -b && vite build --configLoader runner",
-    "dev": "portless",
-    "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
-    "lint": "oxlint .",
-    "preview": "vite preview --configLoader runner --host 0.0.0.0",
-    "test": "vitest run --configLoader runner",
-    "typecheck": "vue-tsc -b"
-  },
-  "portless": {
-    "name": "gocanto-sh",
-    "script": "dev:app"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.3.0",
-    "@vitejs/plugin-vue": "^6.0.6",
-    "@vueuse/core": "^14.3.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-vue-next": "^1.0.0",
-    "reka-ui": "^2.9.7",
-    "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.3.0",
-    "vue": "^3.5.34"
-  },
-  "devDependencies": {
-    "@fontsource-variable/inter": "^5.2.8",
-    "@fontsource-variable/jetbrains-mono": "^5.2.7",
-    "@tailwindcss/typography": "^0.5.19",
-    "@types/node": "^25.6.2",
-    "oxlint": "^1.31.0",
-    "portless": "^0.13.0",
-    "shadcn-vue": "^2.6.2",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.11",
-    "vitest": "^4.1.5",
-    "vue-tsc": "^3.1.8"
-  }
+    "name": "@gocanto/app",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "imports": {
+        "#config/vite": "./vite.config.ts"
+    },
+    "scripts": {
+        "build": "vue-tsc -b && vite build --configLoader runner",
+        "dev": "portless",
+        "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
+        "format": "oxfmt .",
+        "format:check": "oxfmt --check .",
+        "lint": "oxlint .",
+        "preview": "vite preview --configLoader runner --host 0.0.0.0",
+        "test": "vitest run --configLoader runner",
+        "typecheck": "vue-tsc -b"
+    },
+    "dependencies": {
+        "@tailwindcss/vite": "^4.3.0",
+        "@vitejs/plugin-vue": "^6.0.6",
+        "@vueuse/core": "^14.3.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-vue-next": "^1.0.0",
+        "reka-ui": "^2.9.7",
+        "tailwind-merge": "^3.4.0",
+        "tailwindcss": "^4.3.0",
+        "vue": "^3.5.34"
+    },
+    "devDependencies": {
+        "@fontsource-variable/inter": "^5.2.8",
+        "@fontsource-variable/jetbrains-mono": "^5.2.7",
+        "@tailwindcss/typography": "^0.5.19",
+        "@types/node": "^25.6.2",
+        "oxfmt": "latest",
+        "oxlint": "^1.31.0",
+        "portless": "^0.13.0",
+        "shadcn-vue": "^2.6.2",
+        "typescript": "^6.0.3",
+        "vite": "^8.0.11",
+        "vitest": "^4.1.5",
+        "vue-tsc": "^3.1.8"
+    },
+    "portless": {
+        "name": "gocanto-sh",
+        "script": "dev:app"
+    }
 }

@@ -4,100 +4,102 @@
 @plugin "@tailwindcss/typography";
 
 @theme inline {
-  --color-background: var(--bg);
-  --color-foreground: var(--fg);
-  --color-card: var(--bg-2);
-  --color-card-foreground: var(--fg);
-  --color-popover: var(--bg-2);
-  --color-popover-foreground: var(--fg);
-  --color-primary: var(--accent);
-  --color-primary-foreground: var(--bg);
-  --color-secondary: var(--bg-1);
-  --color-secondary-foreground: var(--fg);
-  --color-muted: var(--bg-1);
-  --color-muted-foreground: var(--fg-2);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--bg);
-  --color-accent-soft: var(--accent-soft);
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: var(--fg);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-  --color-input: var(--border-strong);
-  --color-ring: var(--accent);
-  --color-fg-2: var(--fg-2);
-  --color-fg-3: var(--fg-3);
-  --color-fg-4: var(--fg-4);
-  --color-bg-1: var(--bg-1);
-  --color-bg-2: var(--bg-2);
-  --color-green: var(--green);
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --container-page: 1100px;
-  --breakpoint-mid: 1148px;
+    --color-background: var(--bg);
+    --color-foreground: var(--fg);
+    --color-card: var(--bg-2);
+    --color-card-foreground: var(--fg);
+    --color-popover: var(--bg-2);
+    --color-popover-foreground: var(--fg);
+    --color-primary: var(--accent);
+    --color-primary-foreground: var(--bg);
+    --color-secondary: var(--bg-1);
+    --color-secondary-foreground: var(--fg);
+    --color-muted: var(--bg-1);
+    --color-muted-foreground: var(--fg-2);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--bg);
+    --color-accent-soft: var(--accent-soft);
+    --color-destructive: #ef4444;
+    --color-destructive-foreground: var(--fg);
+    --color-border: var(--border);
+    --color-border-strong: var(--border-strong);
+    --color-input: var(--border-strong);
+    --color-ring: var(--accent);
+    --color-fg-2: var(--fg-2);
+    --color-fg-3: var(--fg-3);
+    --color-fg-4: var(--fg-4);
+    --color-bg-1: var(--bg-1);
+    --color-bg-2: var(--bg-2);
+    --color-green: var(--green);
+    --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono:
+        "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --container-page: 1100px;
+    --breakpoint-mid: 1148px;
 }
 
 :root {
-  --bg:            #000000;
-  --bg-1:          oklch(17% 0.030 263.000);
-  --bg-2:          oklch(21% 0.034 264.665);
-  --border:        oklch(21% 0.034 264.665);
-  --border-strong: oklch(37.3% 0.034 259.733);
-  --fg:            oklch(98.5% 0.002 247.839);
-  --fg-2:          oklch(70.7% 0.022 261.325);
-  --fg-3:          oklch(55.1% 0.027 264.364);
-  --fg-4:          oklch(44.6% 0.030 256.802);
-  --accent:        oklch(74.6% 0.16  232.661);
-  --accent-soft:   color-mix(in oklch, oklch(74.6% 0.16 232.661) 12%, transparent);
-  --green:         oklch(72.3% 0.219 149.579);
-  color-scheme: dark;
+    --bg: #000000;
+    --bg-1: oklch(17% 0.03 263);
+    --bg-2: oklch(21% 0.034 264.665);
+    --border: oklch(21% 0.034 264.665);
+    --border-strong: oklch(37.3% 0.034 259.733);
+    --fg: oklch(98.5% 0.002 247.839);
+    --fg-2: oklch(70.7% 0.022 261.325);
+    --fg-3: oklch(55.1% 0.027 264.364);
+    --fg-4: oklch(44.6% 0.03 256.802);
+    --accent: oklch(74.6% 0.16 232.661);
+    --accent-soft: color-mix(in oklch, oklch(74.6% 0.16 232.661) 12%, transparent);
+    --green: oklch(72.3% 0.219 149.579);
+    color-scheme: dark;
 }
 
 @layer base {
-  html,
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-  body {
-    font-size: 17px;
-    line-height: 1.6;
-    letter-spacing: -0.011em;
-    position: relative;
-    overflow-x: hidden;
-    min-width: 320px;
-    overscroll-behavior: none;
-  }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  h1,
-  h2,
-  h3,
-  h4 {
-    letter-spacing: -0.025em;
-    font-weight: 600;
-  }
+    html,
+    body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--font-sans);
+        font-feature-settings: "cv11", "ss01", "ss03";
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+    body {
+        font-size: 17px;
+        line-height: 1.6;
+        letter-spacing: -0.011em;
+        position: relative;
+        overflow-x: hidden;
+        min-width: 320px;
+        overscroll-behavior: none;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+        letter-spacing: -0.025em;
+        font-weight: 600;
+    }
 }
 
 @utility cross-mark {
-  --cm-size: 11px;
-  width: var(--cm-size);
-  height: var(--cm-size);
-  background-image:
-    linear-gradient(currentColor, currentColor),
-    linear-gradient(currentColor, currentColor);
-  background-size: var(--cm-size) 1px, 1px var(--cm-size);
-  background-position: center, center;
-  background-repeat: no-repeat;
-  pointer-events: none;
+    --cm-size: 11px;
+    width: var(--cm-size);
+    height: var(--cm-size);
+    background-image:
+        linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+    background-size:
+        var(--cm-size) 1px,
+        1px var(--cm-size);
+    background-position: center, center;
+    background-repeat: no-repeat;
+    pointer-events: none;
 }
 
 @utility cta-glow {
-  background: radial-gradient(ellipse at center, var(--accent-soft) 0%, transparent 60%);
+    background: radial-gradient(ellipse at center, var(--accent-soft) 0%, transparent 60%);
 }

@@ -1,62 +1,62 @@
 html {
-  background: #000000;
-  color: oklch(98.5% 0.002 247.839);
-  color-scheme: dark;
+    background: #000000;
+    color: oklch(98.5% 0.002 247.839);
+    color-scheme: dark;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  background: inherit;
-  color: inherit;
+    margin: 0;
+    min-width: 320px;
+    background: inherit;
+    color: inherit;
 }
 
 .app-loading-shell {
-  min-height: 100vh;
-  background: inherit;
+    min-height: 100vh;
+    background: inherit;
 }
 
 .app-loading-bar {
-  height: 60px;
-  border-bottom: 1px solid oklch(27.8% 0.033 256.848);
+    height: 60px;
+    border-bottom: 1px solid oklch(27.8% 0.033 256.848);
 }
 
 .app-loading-main {
-  width: min(100% - 32px, 1100px);
-  margin-inline: auto;
-  padding-block: 140px;
-  text-align: center;
+    width: min(100% - 32px, 1100px);
+    margin-inline: auto;
+    padding-block: 140px;
+    text-align: center;
 }
 
 .app-loading-line {
-  border-radius: 999px;
-  background: oklch(27.8% 0.033 256.848);
-  margin: 16px auto;
+    border-radius: 999px;
+    background: oklch(27.8% 0.033 256.848);
+    margin: 16px auto;
 }
 
 .app-loading-line:first-of-type {
-  width: min(620px, 86%);
-  height: 56px;
+    width: min(620px, 86%);
+    height: 56px;
 }
 
 .app-loading-line:nth-of-type(2) {
-  width: min(520px, 78%);
-  height: 18px;
+    width: min(520px, 78%);
+    height: 18px;
 }
 
 .app-loading-line:nth-of-type(3) {
-  width: min(380px, 64%);
-  height: 18px;
+    width: min(380px, 64%);
+    height: 18px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .app-loading-line {
-    animation: app-loading-pulse 1.4s ease-in-out infinite;
-  }
+    .app-loading-line {
+        animation: app-loading-pulse 1.4s ease-in-out infinite;
+    }
 }
 
 @keyframes app-loading-pulse {
-  50% {
-    opacity: 0.48;
-  }
+    50% {
+        opacity: 0.48;
+    }
 }
