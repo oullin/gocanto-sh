@@ -48,7 +48,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: apps/web/dist
+          path: workspace/app/dist
 
   deploy:
     environment:
