@@ -1,13 +1,13 @@
 import type { ProfileFixture } from "./types"
 
 export const profile = {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "data": {
     "nickname": "gus",
     "handle": "gocanto",
     "name": "Gustavo Ocanto",
-    "email": "gus@oullin.io",
-    "profession": "Founder of Oullin",
+    "email": "gus@ollin.sh",
+    "profession": "Founder · Ollin Labs · Building Madora",
     "skills": [
       {
         "uuid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",

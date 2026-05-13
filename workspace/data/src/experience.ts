@@ -1,8 +1,21 @@
 import type { ExperienceFixture } from "./types"
 
 export const experience = {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "data": [
+    {
+      "uuid": "172a1fd4-49c1-4515-8731-feffc809d5d6",
+      "company": "Ollin Labs",
+      "employment_type": "Full-Time",
+      "location_type": "On-Site",
+      "position": "Founder & Principal Engineer",
+      "start_date": "December, 2025",
+      "end_date": "Present",
+      "summary": "Founded Ollin Labs to deliver production-grade backends for regulated industries — fintech, banking, and e-commerce — with agent-accelerated engineering and audit-trail-by-default architecture.<br/><br/>Architecting custom AI products and high-throughput data aggregation pipelines in Go, with low-latency delivery and idempotent processing at the core. Building an internal agent platform (oag) that powers fixed-scope, fixed-price service offerings: payment integrations (hara.sh), event pipelines (kuda.sh), and legacy modernization pilots (toku.sh).<br/><br/>Driving end-to-end product development hands-on across Go, PHP, Node.js, JavaScript, Vue, Vite, and Java (Spring Boot). Every shipped artifact is reproducible, signed, and reviewable — production hardening for high-stakes, regulated systems where strict security, data integrity, and operational continuity are non-negotiable.<br/><br/>Also building Madora — prompt-first hiring SaaS sealed by AI — applying the same immutable audit-trail discipline from payments to people decisions.",
+      "country": "Singapore",
+      "city": "Singapore",
+      "skills": "Founder, Software Architecture, Agentic AI, GO, TypeScript, Apache Kafka, PostgreSQL, Payment Systems, Audit-trail Systems, Regulated Industries."
+    },
     {
       "uuid": "73c68950-5a10-43bc-a5b2-e45544e140e6",
       "company": "Silverlake",
@@ -11,36 +24,36 @@ export const experience = {
       "position": "Technical Lead",
       "start_date": "June, 2025",
       "end_date": "November, 2025",
-      "summary": "I led a five-engineer squad modernising legacy core banking applications into a React, TypeScript, Go, Python and Kafka stack while keeping services running, and designed real-time Kafka+Go pipelines to consolidate ATM streams, account transactions and cross-border payments with robust back-pressure and exactly-once guarantees.<br/><br/>I built an end-to-end monitoring console for ATM and core systems, established solid delivery practices with Docker-based zero-downtime deployments, and improved developer and CI efficiency by moving the banking dashboard to Vite.<br/><br/>I also secured critical integrations through a Go reverse proxy and multi-protocol ingress layer, defined the UI strategy for a Vue/TypeScript real-time data system with a tree-based exploration model and modular widget SDK, and drove healthy stakeholder cadence and team growth through clear communication, coaching, and structured reviews.",
+      "summary": "Led a 5-engineer squad migrating legacy core banking apps (Java, C, AS400, MySQL) onto a modern stack of React, TypeScript, Go, Python and Kafka, de-risking cutover while maintaining service continuity. Designed real-time Kafka + Go pipelines consolidating ATM streams, account transactions and cross-border payments, with back-pressure handling and exactly-once consumer semantics.<br/><br/>Authored a Go reverse proxy to the VCOS (C, AS400) banking core, plus a multi-protocol ingress layer (HTTP, Kafka, Redis Streams, RabbitMQ) with caching and rate limiting to protect downstream services. Built an end-to-end monitoring console covering ATM low-level processes, CPU and daemon health, core configuration snapshots, channel/host interfaces and alerting.<br/><br/>Established delivery foundations — Docker multi-stage releases, automated rollouts/rollbacks, zero-downtime deploys across prod and staging — and cut CI minutes by ≈30% by moving the banking dashboard to Vite. Oversaw the UI strategy for a Vue/TypeScript real-time data system with a tree-based exploration model (TreeJS) and a modular widget SDK backed by Pinia, feature flags and design tokens for brandable deployments. Drove weekly stakeholder cadence, coaching and growth plans for the team.",
       "country": "Singapore",
       "city": "Singapore",
-      "skills": "Software Architecture, Leadership, GO (Programming Language), PostgreSQL, C (Programming Language), Python (Programming Language), AI, RAG, Apache Kafka."
+      "skills": "Software Architecture, Leadership, GO (Programming Language), PostgreSQL, C (Programming Language), Python (Programming Language), AS/400, Apache Kafka, Vue, TypeScript."
     },
     {
       "uuid": "c17a68bc-8832-4d44-b2ed-f9587cf14cd1",
       "company": "Perx Technologies",
       "employment_type": "Full-Time",
       "location_type": "On-Site",
-      "position": "Head of Engineering",
+      "position": "Engineering Head",
       "start_date": "June, 2024",
       "end_date": "April, 2025",
-      "summary": "Led and integrated cross-functional engineering teams (DevOps, Infrastructure, Data, Frontend, Backend, Support) across time zones, fostering open communication and accountability.<br/><br/>Scaled team growth and operations from Singapore, optimised performance (database queries from 3 s to 800 ms; API calls from 2 s to 100 ms), implemented cloud cost savings, and partnered with C-level leaders to expand engineering initiatives.",
+      "summary": "Architected a high-throughput priority rewards delivery service in Go, with idempotent orchestration, back-pressure control and SLA-driven retries for timely, accurate fulfillment. Led the Vue 3 + TypeScript migration of white-label microsites from Angular, introducing a design system and strict typing to lift performance, resilience and maintainability.<br/><br/>Built and operated scalable Node.js APIs for e-commerce and complex third-party integrations (points and rewards), adding circuit breakers, retries and observability for reliability at scale. Optimised cloud spend through rightsizing, autoscaling policies, storage tiering and egress reduction — lower costs without trading off performance.<br/><br/>Led cross-functional engineering teams (DevOps, Infrastructure, Data, Frontend, Backend, Support) across time zones with shared SLAs, clear working agreements, OKRs, runbooks and post-mortems. Partnered with the CEO and C-level leaders on expansion plans, team cohesion and scaling engineering in lockstep with growth.",
       "country": "Singapore",
       "city": "Singapore",
-      "skills": "Executive Leadership, Strategic Planning, Engineering Management, Cross-functional Team Leadership, Technical Architecture."
+      "skills": "Executive Leadership, Strategic Planning, Engineering Management, GO, Vue 3, TypeScript, Node.js, Cloud Cost Optimisation."
     },
     {
       "uuid": "99db1ca0-948e-40b1-984f-e3b157a5d336",
-      "company": "Aspire",
+      "company": "Aspire Financial Technologies",
       "employment_type": "Full-Time",
       "location_type": "On-Site",
       "position": "Senior Software Engineer & Manager",
       "start_date": "January, 2022",
-      "end_date": "April, 2024",
-      "summary": "Led a 12-person APAC team overseeing the software development lifecycle, mentorship, technical direction, and system architecture design.<br/><br/>Engineered critical financial systems, prioritised payment request queues and automated credit schemas, and spearheaded SEA wallets from architecture through integration, unifying payment workflows and ledger synchronisation.<br/><br/>Improved debit account balance queries for real-time access and boosted API response times. Resolved data inconsistencies, refactored code for reliability, designed flexible scheduled payment solutions, and directed the transition from a monolithic to microservices architecture, significantly enhancing platform scalability and maintainability.",
+      "end_date": "March, 2024",
+      "summary": "Cut DB queries from 3s to 800ms and API latency from 2s to 100ms by profiling hot paths, tuning queries and adding caching — then set SLOs and alerting to hold the gains. Scaled the engineering group from 10+ to 20+ with bar-raising hiring, onboarding playbooks and growth paths, running follow-the-sun operations from Singapore.<br/><br/>Launched SEA wallets and adjacent products end-to-end — from domain modelling and system design to provider API integrations. Built a payment request queue prioritisation system that lifted throughput and reduced contention during peaks. Automated credit schema actions (freeze/pay), unified payment flows behind a single orchestration layer, and synced local ledger events with external providers using idempotent, retryable workflows.<br/><br/>Drove the monolith-to-microservices migration to unlock independent scaling and clearer ownership boundaries, halving API latency (3s → 1.5s) on critical paths and centralising permissions behind a high-performance authorisation gateway. Defined the UI/UX architecture for a core banking platform and led 4 engineers across APAC on a shared TypeScript monorepo. Delivered a platform-agnostic design system with clear API contracts powering web (Vue 3) and mobile (React Native).",
       "country": "Singapore",
       "city": "Singapore",
-      "skills": "Leadership, Strategic Planning, Engineering Management, Cross-functional Team Leadership, Technical Architecture."
+      "skills": "Leadership, Engineering Management, Payment Systems, Microservices, SLO Engineering, TypeScript, Vue 3, React Native, Cross-Border Payments."
     },
     {
       "uuid": "01e33400-6957-4d16-8edb-0802a49e445e",
@@ -50,10 +63,10 @@ export const experience = {
       "position": "Engineering Lead",
       "start_date": "September, 2017",
       "end_date": "November, 2021",
-      "summary": "Developed and maintained inventory systems with availability calculations and time-slot capacity management.<br/><br/>Led the SaaS platform development for auto-recurring subscription payments and invoicing.<br/><br/>Owned integration of Adyen, Stripe, and PayPal gateways for new white-label e-commerce accounts, and implemented third-party booking supplier APIs across B2B, B2C, and white-label channels, supporting mission-critical operations in Southeast Asian markets.",
+      "summary": "Operated a multi-currency eWallet for partner payments with clear ledgering and finance reports for accurate reconciliation. Led multi-tenant integrations with 10+ payment gateways (Adyen, Stripe, PayPal, WeChat, PayDollar) for e-commerce and marketplace flows, standardising contracts and failover paths to keep checkout resilient. Built the inventory subsystem end-to-end — availability math, capacity management and time-slot handling for high-throughput scenarios — and designed the Capacity Calendar & Reservation Portal for real-time slot discovery, booking and capacity controls.<br/><br/>Published and maintained OpenAPI-driven endpoints so partners could sync catalogue, pricing, availability and payments with strict contract tests. Owned subscription billing with proration and upgrade/downgrade rules, status control for eTickets (issue, fulfill, refund, cancel) with audit trails, and retired tech debt across customer/supplier/agent bookings with immutability for critical records.<br/><br/>Integrated third-party supplier APIs across all channels (B2B, B2C, white-label, public API, supplier console) with contract tests and idempotent sync jobs, unblocking SEA market launches by completing mission-critical platform integrations and compliance checks. Enforced engineering standards with GitHub Actions for linting, testing and dependency health, and ran code reviews, CI pipelines and gated releases.",
       "country": "Singapore",
       "city": "Singapore",
-      "skills": "Leadership, Strategic Planning, Cross-functional Team Leadership, Engineering Management, Technical Architecture."
+      "skills": "Leadership, Payment Systems, Multi-Currency eWallet, OpenAPI, E-commerce Platforms, Vue.js, PHP, Laravel."
     },
     {
       "uuid": "1ba5d878-3c48-4d94-aded-4a4294c26e12",

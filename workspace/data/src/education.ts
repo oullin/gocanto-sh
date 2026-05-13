@@ -1,14 +1,14 @@
 import type { EducationFixture } from "./types"
 
 export const education = {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "data": [
     {
       "uuid": "a0fde63b-016b-4121-959f-18a950b8bc81",
       "icon": "education/uah_logo.jpeg",
       "school": "Universidad Alejandro de Humboldt",
-      "degree": "Bachelor's degree",
-      "field": "Computer Science",
+      "degree": "Bachelor of Science",
+      "field": "Systems Engineering",
       "description": "As a computer scientist, I see computer science as the study of computers and computational processes, covering their underlying principles, design, real‑world applications, and even their impact on society.<br/><br/>My work spans both the theoretical side—think algorithms and data structures—and the hands‑on side, like building software and exploring artificial intelligence. At its core, computer science is about understanding how computers operate and using that insight to solve problems and develop new technologies.",
       "graduated_at": "2012",
       "issuing_country": "Venezuela"

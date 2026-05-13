@@ -1,11 +1,6 @@
 html {
-    background: #0a0a0a;
-    color: #f2efe6;
-}
-
-html[data-theme="light"] {
-    background: #fafaf7;
-    color: #0a0a0a;
+    background: hsl(0 0% 4%);
+    color: hsl(0 0% 93%);
 }
 
 body {

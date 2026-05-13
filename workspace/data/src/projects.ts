@@ -1,11 +1,11 @@
 import type { ProjectsFixture } from "./types"
 
 export const projects = {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "data": [
     {
       "uuid": "538e5f1d-86f0-4071-b270-6aa61a156612",
-      "language": "GO / Docker",
+      "language": "Go / Docker",
       "title": "Oullin — REST API",
       "excerpt": "A purpose-built Go API powering content delivery and dynamic data for the Oullin platform. Structured around clean request routing, strict input validation, and a fixture-driven data layer that makes it trivial to swap persistence backends without touching application logic. Designed from the start for predictable latency under load, with no hidden allocations in the hot path. Ships as a single Docker image with zero external config requirements — pull, run, done.",
       "url": "https://github.com/oullin/api",
@@ -27,7 +27,7 @@ export const projects = {
     },
     {
       "uuid": "e8ed4398-eb4e-4c72-a647-c862e0aae784",
-      "language": "GO / Docker",
+      "language": "Go / Docker",
       "title": "Oullin — Infrastructure",
       "excerpt": "Docker-based deployment pipeline for the full Oullin stack — API, web client, and any future services. The core design principle is environment parity: if it works locally it works in production, with no special-casing at any layer. A composable Makefile wraps common operations so the cognitive overhead of managing multi-service deployments collapses to a handful of muscle-memory commands. Reproducible builds are enforced through pinned base images and explicit dependency resolution.",
       "url": "https://github.com/oullin/infra",
@@ -38,7 +38,7 @@ export const projects = {
     },
     {
       "uuid": "e00a72b2-211d-4650-b22d-88dbdcd49cb9",
-      "language": "GO",
+      "language": "Go",
       "title": "Oullin — Workflow",
       "excerpt": "A production-grade state machine and Petri Net workflow engine for Go, built to model complex domain object lifecycles without coupling state logic to business rules. Transitions are declared explicitly with guard conditions and side-effect hooks, making illegal state changes impossible by construction rather than by convention. The engine ships with a full audit trail, thread-safe concurrent state lookups, and Graphviz export for visualising transition graphs — useful both in debugging and in communicating system behaviour to non-technical stakeholders.",
       "url": "https://github.com/oullin/workflow",
@@ -71,7 +71,7 @@ export const projects = {
     },
     {
       "uuid": "dc67854e-c8bd-4461-baba-8972bee7bfb5",
-      "language": "GO",
+      "language": "Go",
       "title": "users-grpc-service",
       "excerpt": "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind — structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
       "url": "https://github.com/gocanto/users-grpc-service",
@@ -115,7 +115,7 @@ export const projects = {
     },
     {
       "uuid": "98b5d71a-1c78-4639-a9ed-343a8ba8c328",
-      "language": "GO",
+      "language": "Go",
       "title": "converter-go",
       "excerpt": "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library — intentionally, to validate that the interface held up across languages and runtime models.",
       "url": "https://github.com/gocanto/go-converter",
