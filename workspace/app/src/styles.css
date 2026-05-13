@@ -292,19 +292,19 @@
 
 /* ---------- Hero ---------- */
 
-.kb-hero {
+.profile-hero {
     padding: 112px 32px 56px;
     text-align: center;
 }
 
-.kb-hero h1 {
+.profile-hero h1 {
     font-size: clamp(40px, 5.5vw, 56px);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.05;
 }
 
-.kb-hero p {
+.profile-hero p {
     margin-top: 18px;
     font-size: 16px;
     color: var(--muted-foreground);
@@ -509,9 +509,9 @@
     line-height: 1.5;
 }
 
-/* ---------- Search row ---------- */
+/* ---------- Global search ---------- */
 
-.search-row {
+.global-search {
     padding: 48px;
     display: flex;
     justify-content: center;
@@ -1173,7 +1173,7 @@
         display: none;
     }
 
-    .kb-hero {
+    .profile-hero {
         padding: 56px 16px 48px;
     }
 
@@ -1190,7 +1190,7 @@
         border-bottom: 0;
     }
 
-    .search-row {
+    .global-search {
         padding: 16px;
     }
 

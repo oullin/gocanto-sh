@@ -19,9 +19,9 @@ import {
     CommandList,
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
-import SearchDetailSheet, {
+import SearchResultDetail, {
     type SearchPayload,
-} from "@components/SearchDetailSheet.vue";
+} from "@components/SearchResultDetail.vue";
 
 type Result = {
     key: string;
@@ -182,7 +182,7 @@ watch(sheetOpen, (v) => {
 </script>
 
 <template>
-    <section class="search-row frame-section">
+    <section class="global-search frame-section">
         <button class="search-button" type="button" @click="open = true">
             <span class="search-button__label">Search work, projects, skills, education, talks, and more</span>
             <kbd class="kbd">
@@ -296,5 +296,5 @@ watch(sheetOpen, (v) => {
         </CommandList>
     </CommandDialog>
 
-    <SearchDetailSheet v-model:open="sheetOpen" :payload="activePayload" />
+    <SearchResultDetail v-model:open="sheetOpen" :payload="activePayload" />
 </template>
