@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./workspace/data"
+    },
+    {
+      "path": "./workspace/app"
+    }
+  ]
+}

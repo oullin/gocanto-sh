@@ -1,0 +1,61 @@
+html {
+    background: hsl(0 0% 4%);
+    color: hsl(0 0% 93%);
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    background: inherit;
+    color: inherit;
+}
+
+.app-loading-shell {
+    min-height: 100vh;
+    background: inherit;
+    border: 2px solid currentColor;
+    margin: 24px;
+}
+
+.app-loading-bar {
+    height: 44px;
+    border-bottom: 2px solid currentColor;
+    background: currentColor;
+}
+
+.app-loading-main {
+    padding: 48px 32px;
+}
+
+.app-loading-line {
+    background: currentColor;
+    opacity: 0.18;
+    margin: 16px 0;
+}
+
+.app-loading-line:first-of-type {
+    width: min(620px, 86%);
+    height: 56px;
+}
+
+.app-loading-line:nth-of-type(2) {
+    width: min(520px, 78%);
+    height: 18px;
+}
+
+.app-loading-line:nth-of-type(3) {
+    width: min(380px, 64%);
+    height: 18px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .app-loading-line {
+        animation: app-loading-pulse 1.4s ease-in-out infinite;
+    }
+}
+
+@keyframes app-loading-pulse {
+    50% {
+        opacity: 0.36;
+    }
+}
