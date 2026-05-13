@@ -24,8 +24,6 @@
             "@/*": ["./src/*"],
             "@components": ["./src/components"],
             "@components/*": ["./src/components/*"],
-            "@data": ["./src/data/index.ts"],
-            "@data/*": ["./src/data/*"],
             "@lib": ["./src/lib"],
             "@lib/*": ["./src/lib/*"]
         }

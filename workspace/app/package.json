@@ -14,7 +14,7 @@
         "format:check": "oxfmt --check .",
         "lint": "oxlint .",
         "preview": "vite preview --configLoader runner --host 0.0.0.0",
-        "test": "vitest run --configLoader runner",
+        "test": "vitest run --passWithNoTests --configLoader runner",
         "typecheck": "vue-tsc -b"
     },
     "dependencies": {

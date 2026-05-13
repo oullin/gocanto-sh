@@ -1,7 +1,11 @@
 html {
-    background: #000000;
-    color: oklch(98.5% 0.002 247.839);
-    color-scheme: dark;
+    background: #0a0a0a;
+    color: #f2efe6;
+}
+
+html[data-theme="light"] {
+    background: #fafaf7;
+    color: #0a0a0a;
 }
 
 body {
@@ -14,24 +18,24 @@ body {
 .app-loading-shell {
     min-height: 100vh;
     background: inherit;
+    border: 2px solid currentColor;
+    margin: 24px;
 }
 
 .app-loading-bar {
-    height: 60px;
-    border-bottom: 1px solid oklch(27.8% 0.033 256.848);
+    height: 44px;
+    border-bottom: 2px solid currentColor;
+    background: currentColor;
 }
 
 .app-loading-main {
-    width: min(100% - 32px, 1100px);
-    margin-inline: auto;
-    padding-block: 140px;
-    text-align: center;
+    padding: 48px 32px;
 }
 
 .app-loading-line {
-    border-radius: 999px;
-    background: oklch(27.8% 0.033 256.848);
-    margin: 16px auto;
+    background: currentColor;
+    opacity: 0.18;
+    margin: 16px 0;
 }
 
 .app-loading-line:first-of-type {
@@ -57,6 +61,6 @@ body {
 
 @keyframes app-loading-pulse {
     50% {
-        opacity: 0.48;
+        opacity: 0.36;
     }
 }

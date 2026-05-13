@@ -7,7 +7,7 @@
             name="description"
             content="Gustavo Gus Ocanto is a software architect and engineering leader based in Singapore."
         />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#0a0a0a" />
         <meta property="og:title" content="Gus — Software Architect & Engineering Leader" />
         <meta
             property="og:description"
@@ -20,6 +20,23 @@
         <meta name="twitter:image:alt" content="Gus Ocanto portrait" />
         <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
         <title>Gus — Software Architect &amp; Engineering Leader</title>
+        <script>
+            (function () {
+                try {
+                    var t = localStorage.getItem("theme");
+                    if (t !== "light" && t !== "dark") {
+                        t = window.matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    }
+                    document.documentElement.dataset.theme = t;
+                    var meta = document.querySelector('meta[name="theme-color"]');
+                    if (meta) meta.content = t === "dark" ? "#0a0a0a" : "#fafaf7";
+                } catch (e) {
+                    document.documentElement.dataset.theme = "dark";
+                }
+            })();
+        </script>
     </head>
     <body>
         <div id="app">
