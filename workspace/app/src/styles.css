@@ -165,17 +165,17 @@
 .nav-brand {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: -0.01em;
     color: var(--foreground);
-    margin-right: 24px;
+    margin-right: 12px;
 }
 
 .nav-logo {
     display: block;
     color: var(--foreground);
+}
+
+:root[data-theme="light"] .nav-logo {
+    color: hsl(0 0% 35%);
 }
 
 .nav-avatar {
@@ -249,6 +249,8 @@
     transition:
         box-shadow 150ms ease,
         background 150ms ease;
+    position: relative;
+    isolation: isolate;
 }
 
 .nav-cta:hover {
@@ -1136,6 +1138,31 @@
     border-color: var(--btn-ghost-ring-hover);
 }
 
+.explore-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--background);
+    color: var(--muted-foreground);
+    margin-bottom: 4px;
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.explore-card__icon--loading {
+    border-color: transparent;
+    background: hsl(0 0% 100% / 0.08);
+    color: transparent;
+    animation: sk-pulse 2s ease-in-out infinite;
+}
+
+:root[data-theme="light"] .explore-card__icon--loading {
+    background: hsl(0 0% 0% / 0.08);
+}
+
 .explore-card h3 {
     font-size: 14px;
     font-weight: 500;
@@ -1148,79 +1175,6 @@
     color: var(--muted-foreground);
     line-height: 1.5;
     margin: 0;
-}
-
-/* ---------- Circuit board background (Signature skills) ---------- */
-
-.frame-section.has-circuit-bg {
-    position: relative;
-    overflow: hidden;
-}
-
-.frame-section.has-circuit-bg > .explore-head,
-.frame-section.has-circuit-bg > .explore-grid {
-    position: relative;
-    z-index: 1;
-}
-
-.circuit-board-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    color: var(--muted-foreground);
-    opacity: 0.12;
-}
-
-.circuit-board-bg .circuit-board__grid {
-    opacity: 0.45;
-}
-
-.circuit-board-bg .circuit-board__trace {
-    opacity: 0.4;
-}
-
-.circuit-board-bg .circuit-board__trace--animated {
-    stroke-dasharray: 4 8;
-    animation: circuit-pulse 3.5s linear infinite;
-}
-
-.circuit-board-bg .circuit-board__trace--bidir {
-    animation-direction: alternate;
-}
-
-.circuit-board-bg .circuit-board__node-halo {
-    display: none;
-}
-
-.circuit-board-bg .circuit-board__node-body {
-    fill: transparent;
-    stroke: currentColor;
-    stroke-width: 0.75;
-    opacity: 0.35;
-}
-
-.circuit-board-bg .circuit-board__node-icon {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted-foreground);
-}
-
-@keyframes circuit-pulse {
-    to {
-        stroke-dashoffset: -24;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .circuit-board-bg .circuit-board__trace--animated {
-        animation: none;
-    }
 }
 
 /* ---------- CTA band (two-col) ---------- */
@@ -1289,6 +1243,60 @@
 
 .btn.primary:hover {
     background: var(--btn-primary-bg-hover);
+}
+
+/* ---- Border beam (animated CTA accent) ---- */
+
+.border-beam-label {
+    position: relative;
+    z-index: 1;
+}
+
+.border-beam {
+    --bb-duration: 1.5s;
+    --bb-width: 1.5px;
+    --bb-from: var(--accent-amber);
+    --bb-to: var(--accent-purple);
+
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    border: var(--bb-width) solid transparent;
+    -webkit-mask:
+        linear-gradient(#000 0 0) padding-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) padding-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+.border-beam-trail {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 300%;
+    aspect-ratio: 1 / 1;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg 240deg,
+        var(--bb-to) 320deg,
+        var(--bb-from) 355deg,
+        transparent 360deg
+    );
+    transform: translate3d(-50%, -50%, 0) rotate(0);
+    animation: border-beam var(--bb-duration) linear infinite;
+    will-change: transform;
+}
+
+@keyframes border-beam {
+    to { transform: translate3d(-50%, -50%, 0) rotate(1turn); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .border-beam-trail { animation: none; }
 }
 
 .btn.ghost {

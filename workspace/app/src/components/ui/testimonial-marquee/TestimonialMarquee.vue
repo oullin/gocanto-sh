@@ -42,10 +42,10 @@ const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
 
 const cardBase =
     "tm-card group/card relative flex h-[260px] w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-2xl border p-6 text-left transition-all transform-gpu [backface-visibility:hidden]";
-const cardSurface = "border-border bg-black/5 dark:bg-white/5";
-const cardSurfaceFeatured = "tm-card--featured bg-amber-500/[0.06] dark:bg-amber-400/[0.06]";
+const cardSurface = "border-border bg-black/[0.02] dark:bg-white/5";
+const cardSurfaceFeatured = "tm-card--featured bg-amber-500/[0.03] dark:bg-amber-400/[0.04]";
 const cardInteractiveHover =
-    "hover:bg-black/10 dark:hover:bg-white/10 hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1";
+    "hover:bg-black/[0.04] dark:hover:bg-white/10 hover:-translate-y-1";
 const cardFocus = "focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40";
 
 function cardClass(item: Testimonial, opts: { interactive: boolean }) {
@@ -65,7 +65,7 @@ function onCardClick(item: Testimonial) {
 
 <template>
     <div class="tm-root flex flex-col gap-4 py-8 overflow-hidden" :aria-busy="loading || undefined">
-        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem]">
+        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]">
             <div
                 :class="cn('tm-track tm-left flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
                 :style="durationStyle"
@@ -79,7 +79,7 @@ function onCardClick(item: Testimonial) {
                     :aria-busy="loading || undefined"
                     @click="onCardClick(item)"
                 >
-                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/5 dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
+                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/[0.02] dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
                     <span v-if="item.featured && !loading" class="tm-featured-badge">
                         <Star class="size-3 fill-current" :stroke-width="0" />
                         <span>Featured</span>
@@ -156,7 +156,7 @@ function onCardClick(item: Testimonial) {
             </div>
         </div>
 
-        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem]">
+        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]">
             <div
                 :class="cn('tm-track tm-right flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
                 :style="durationStyle"
@@ -170,7 +170,7 @@ function onCardClick(item: Testimonial) {
                     :aria-busy="loading || undefined"
                     @click="onCardClick(item)"
                 >
-                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/5 dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
+                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/[0.02] dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
                     <span v-if="item.featured && !loading" class="tm-featured-badge">
                         <Star class="size-3 fill-current" :stroke-width="0" />
                         <span>Featured</span>
@@ -285,7 +285,9 @@ function onCardClick(item: Testimonial) {
 
 .tm-card--featured {
     border-color: var(--accent-amber);
-    box-shadow: inset 0 0 0 1px hsl(38 92% 50% / 0.25);
+}
+.tm-card--featured > div.flex-1 {
+    padding-top: 1.25rem;
 }
 
 .tm-featured-badge {
@@ -303,7 +305,8 @@ function onCardClick(item: Testimonial) {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
     line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 </style>

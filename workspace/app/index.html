@@ -20,6 +20,23 @@
         <meta name="twitter:image:alt" content="Gus Ocanto portrait" />
         <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
         <title>Gus Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems</title>
+        <script>
+            (function () {
+                try {
+                    var stored = localStorage.getItem("theme");
+                    var theme = stored === "light" || stored === "dark"
+                        ? stored
+                        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                    document.documentElement.dataset.theme = theme;
+                } catch (_) {
+                    document.documentElement.dataset.theme = "dark";
+                }
+            })();
+        </script>
+        <style>
+            :root { background: hsl(0 0% 4%); color: hsl(0 0% 93%); }
+            :root[data-theme="light"] { background: hsl(0 0% 100%); color: hsl(0 0% 9%); }
+        </style>
     </head>
     <body>
         <div id="app">
