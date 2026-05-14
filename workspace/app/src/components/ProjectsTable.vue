@@ -18,7 +18,7 @@ const EXCERPT_MAX = 140;
 
 const summarise = (text: string): string => {
     const trimmed = text.trim();
-    const sentenceEnd = trimmed.indexOf(". ");
+    const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
     const firstSentence =
         sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
     if (firstSentence.length <= EXCERPT_MAX) {return firstSentence;}
@@ -42,11 +42,7 @@ const allRows: Row[] = [...projects.data]
         ],
     }));
 
-const languages: string[] = (() => {
-    const seen = new Set<string>();
-    for (const r of allRows) {seen.add(r.language);}
-    return [...seen].sort();
-})();
+const languages: string[] = [...new Set(allRows.map((r) => r.language))].sort();
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);

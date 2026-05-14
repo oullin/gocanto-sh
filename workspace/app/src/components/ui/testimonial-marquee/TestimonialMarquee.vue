@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Star } from "lucide-vue-next";
 import { cn } from "@lib/utils";
+import TestimonialCard from "./TestimonialCard.vue";
+import type { Testimonial } from "./types";
 
-export type Testimonial = {
-    id: string;
-    name: string;
-    text: string;
-    avatar: string;
-    role?: string;
-    company?: string;
-    featured?: boolean;
-};
+export type { Testimonial };
 
 const props = withDefaults(
     defineProps<{
@@ -26,17 +19,27 @@ const emit = defineEmits<{
     (e: "select", item: Testimonial): void;
 }>();
 
+const sanitizeText = (html: string): string =>
+    html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+
 const itemsToDisplay = computed<Testimonial[]>(() => {
-    let result = [...props.items];
+    const sanitized = props.items.map((item) => ({
+        ...item,
+        text: sanitizeText(item.text),
+    }));
+    let result = [...sanitized];
     while (result.length > 0 && result.length < 10) {
-        result = [...result, ...props.items];
+        result = [...result, ...sanitized];
     }
     return result;
 });
 
 const half = computed(() => Math.ceil(itemsToDisplay.value.length / 2));
-const rowOne = computed(() => itemsToDisplay.value.slice(0, half.value));
-const rowTwo = computed(() => itemsToDisplay.value.slice(half.value));
+
+const rows = computed(() => [
+    { direction: "tm-left" as const, items: itemsToDisplay.value.slice(0, half.value), keyPrefix: "r1" },
+    { direction: "tm-right" as const, items: itemsToDisplay.value.slice(half.value), keyPrefix: "r2" },
+]);
 
 const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
 
@@ -57,193 +60,44 @@ function cardClass(item: Testimonial, opts: { interactive: boolean }) {
     );
 }
 
-function onCardClick(item: Testimonial) {
-    if (props.loading) {return;}
+const trackClass = (direction: "tm-left" | "tm-right") =>
+    cn(
+        "tm-track flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]",
+        direction,
+    );
+
+function onSelect(item: Testimonial) {
     emit("select", item);
 }
 </script>
 
 <template>
     <div class="tm-root flex flex-col gap-4 py-8 overflow-hidden" :aria-busy="loading || undefined">
-        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]">
-            <div
-                :class="cn('tm-track tm-left flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
-                :style="durationStyle"
-            >
-                <button
-                    v-for="(item, i) in rowOne"
-                    :key="`r1-${i}`"
-                    type="button"
-                    :class="cardClass(item, { interactive: true })"
-                    :disabled="loading"
-                    :aria-busy="loading || undefined"
-                    @click="onCardClick(item)"
-                >
-                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/[0.02] dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
-                    <span v-if="item.featured && !loading" class="tm-featured-badge">
-                        <Star class="size-3 fill-current" :stroke-width="0" />
-                        <span>Featured</span>
-                    </span>
-                    <div class="relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
-                        <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5">
-                            <span v-if="loading" class="sk-shimmer">{{ item.text.replace(/<[^>]+>/g, ' ') }}</span>
-                            <span v-else v-html="item.text" />
-                        </p>
-                    </div>
-                    <div class="relative z-10 flex items-center gap-3 pt-3">
-                        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
-                            <div v-if="loading" class="tm-avatar-skeleton h-full w-full" />
-                            <img
-                                v-else
-                                :src="item.avatar"
-                                :alt="item.name"
-                                class="h-full w-full object-cover"
-                                loading="lazy"
-                                referrerpolicy="no-referrer"
-                            />
-                        </div>
-                        <div class="flex min-w-0 flex-col gap-1">
-                            <span class="truncate text-sm font-medium text-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">{{ item.name }}</span>
-                            </span>
-                            <span v-if="item.role || item.company" class="truncate text-xs text-muted-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">
-                                    {{ item.role }}<template v-if="item.role && item.company"> · </template>{{ item.company }}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </button>
+        <div
+            v-for="row in rows"
+            :key="row.keyPrefix"
+            class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]"
+        >
+            <div :class="trackClass(row.direction)" :style="durationStyle">
+                <TestimonialCard
+                    v-for="(item, i) in row.items"
+                    :key="`${row.keyPrefix}-${i}`"
+                    :item="item"
+                    :interactive="true"
+                    :loading="loading"
+                    :card-class="cardClass(item, { interactive: true })"
+                    @select="onSelect"
+                />
             </div>
-            <div
-                aria-hidden="true"
-                :class="cn('tm-track tm-left flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
-                :style="durationStyle"
-            >
-                <div
-                    v-for="(item, i) in rowOne"
-                    :key="`r1d-${i}`"
-                    :class="cardClass(item, { interactive: false })"
-                    tabindex="-1"
-                >
-                    <span v-if="item.featured && !loading" class="tm-featured-badge">
-                        <Star class="size-3 fill-current" :stroke-width="0" />
-                        <span>Featured</span>
-                    </span>
-                    <div class="relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
-                        <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5">
-                            <span v-if="loading" class="sk-shimmer">{{ item.text.replace(/<[^>]+>/g, ' ') }}</span>
-                            <span v-else v-html="item.text" />
-                        </p>
-                    </div>
-                    <div class="relative z-10 flex items-center gap-3 pt-3">
-                        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
-                            <div v-if="loading" class="tm-avatar-skeleton h-full w-full" />
-                            <img v-else :src="item.avatar" alt="" class="h-full w-full object-cover" loading="lazy" referrerpolicy="no-referrer" />
-                        </div>
-                        <div class="flex min-w-0 flex-col gap-1">
-                            <span class="truncate text-sm font-medium text-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">{{ item.name }}</span>
-                            </span>
-                            <span v-if="item.role || item.company" class="truncate text-xs text-muted-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">
-                                    {{ item.role }}<template v-if="item.role && item.company"> · </template>{{ item.company }}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]">
-            <div
-                :class="cn('tm-track tm-right flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
-                :style="durationStyle"
-            >
-                <button
-                    v-for="(item, i) in rowTwo"
-                    :key="`r2-${i}`"
-                    type="button"
-                    :class="cardClass(item, { interactive: true })"
-                    :disabled="loading"
-                    :aria-busy="loading || undefined"
-                    @click="onCardClick(item)"
-                >
-                    <div v-if="!loading" class="absolute inset-0 bg-gradient-to-br from-black/[0.02] dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100" />
-                    <span v-if="item.featured && !loading" class="tm-featured-badge">
-                        <Star class="size-3 fill-current" :stroke-width="0" />
-                        <span>Featured</span>
-                    </span>
-                    <div class="relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
-                        <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5">
-                            <span v-if="loading" class="sk-shimmer">{{ item.text.replace(/<[^>]+>/g, ' ') }}</span>
-                            <span v-else v-html="item.text" />
-                        </p>
-                    </div>
-                    <div class="relative z-10 flex items-center gap-3 pt-3">
-                        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
-                            <div v-if="loading" class="tm-avatar-skeleton h-full w-full" />
-                            <img
-                                v-else
-                                :src="item.avatar"
-                                :alt="item.name"
-                                class="h-full w-full object-cover"
-                                loading="lazy"
-                                referrerpolicy="no-referrer"
-                            />
-                        </div>
-                        <div class="flex min-w-0 flex-col gap-1">
-                            <span class="truncate text-sm font-medium text-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">{{ item.name }}</span>
-                            </span>
-                            <span v-if="item.role || item.company" class="truncate text-xs text-muted-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">
-                                    {{ item.role }}<template v-if="item.role && item.company"> · </template>{{ item.company }}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </button>
-            </div>
-            <div
-                aria-hidden="true"
-                :class="cn('tm-track tm-right flex shrink-0 justify-start [gap:var(--gap)] min-w-full pr-[var(--gap)] will-change-transform [backface-visibility:hidden]')"
-                :style="durationStyle"
-            >
-                <div
-                    v-for="(item, i) in rowTwo"
-                    :key="`r2d-${i}`"
-                    :class="cardClass(item, { interactive: false })"
-                    tabindex="-1"
-                >
-                    <span v-if="item.featured && !loading" class="tm-featured-badge">
-                        <Star class="size-3 fill-current" :stroke-width="0" />
-                        <span>Featured</span>
-                    </span>
-                    <div class="relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
-                        <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5">
-                            <span v-if="loading" class="sk-shimmer">{{ item.text.replace(/<[^>]+>/g, ' ') }}</span>
-                            <span v-else v-html="item.text" />
-                        </p>
-                    </div>
-                    <div class="relative z-10 flex items-center gap-3 pt-3">
-                        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
-                            <div v-if="loading" class="tm-avatar-skeleton h-full w-full" />
-                            <img v-else :src="item.avatar" alt="" class="h-full w-full object-cover" loading="lazy" referrerpolicy="no-referrer" />
-                        </div>
-                        <div class="flex min-w-0 flex-col gap-1">
-                            <span class="truncate text-sm font-medium text-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">{{ item.name }}</span>
-                            </span>
-                            <span v-if="item.role || item.company" class="truncate text-xs text-muted-foreground">
-                                <span :class="{ 'sk-shimmer': loading }">
-                                    {{ item.role }}<template v-if="item.role && item.company"> · </template>{{ item.company }}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+            <div aria-hidden="true" :class="trackClass(row.direction)" :style="durationStyle">
+                <TestimonialCard
+                    v-for="(item, i) in row.items"
+                    :key="`${row.keyPrefix}d-${i}`"
+                    :item="item"
+                    :interactive="false"
+                    :loading="loading"
+                    :card-class="cardClass(item, { interactive: false })"
+                />
             </div>
         </div>
     </div>
