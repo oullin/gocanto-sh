@@ -396,10 +396,16 @@
     border-radius: 6px;
 }
 
-/* AI illo */
+/* Illo skeleton placeholder (pre-viewport) — reserves height, zero layout shift on ready */
+.topic-illo-skeleton {
+    width: 100%;
+    height: 100%;
+}
+
+/* ---------- Agentic AI illo: agent task flow ---------- */
 .topic-illo.ai .ai-avatar {
     position: absolute;
-    top: 36px;
+    top: 32px;
     left: 36px;
     width: 28px;
     height: 28px;
@@ -412,125 +418,330 @@
     color: var(--muted-foreground);
 }
 
-.topic-illo.ai .ai-bubble {
+.topic-illo.ai .ai-status-dot {
     position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--muted-foreground);
+    border: 2px solid var(--background, var(--card));
+    animation: sk-pulse 2s ease-in-out infinite;
+}
+
+.topic-illo.ai .ai-rail {
+    position: absolute;
+    top: 68px;
+    bottom: 56px;
+    left: 49px;
+    width: 0;
+    border-left: 1px dashed var(--border-strong);
+}
+
+.topic-illo.ai .ai-task {
+    position: absolute;
+    left: 36px;
+    right: 36px;
     height: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topic-illo.ai .ai-task-done    { top: 78px; }
+.topic-illo.ai .ai-task-progress { top: 108px; }
+.topic-illo.ai .ai-task-queued  { top: 138px; }
+
+.topic-illo.ai .ai-task-status {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+    flex: 0 0 16px;
+}
+
+.topic-illo.ai .ai-task-status-done {
+    background: var(--surface-2);
+}
+
+.topic-illo.ai .ai-task-status-progress :first-child {
+    animation: ai-spin 2s linear infinite;
+}
+
+.topic-illo.ai .ai-task-bar {
+    height: 8px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 999px;
 }
 
-.topic-illo.ai .ai-bubble-short {
-    top: 40px;
-    left: 76px;
-    width: 64px;
-}
+.topic-illo.ai .ai-task-bar-1 { width: 132px; }
+.topic-illo.ai .ai-task-bar-2 { width: 104px; }
+.topic-illo.ai .ai-task-bar-3 { width: 84px; }
 
-.topic-illo.ai .ai-bubble-long {
-    top: 70px;
-    left: 76px;
-    width: 128px;
-}
-
-.topic-illo.ai .ai-sparkle {
+.topic-illo.ai .ai-tool {
     position: absolute;
-    top: 64px;
     right: 36px;
-    width: 28px;
-    height: 28px;
+    bottom: 32px;
+    height: 22px;
+    padding: 0 8px;
     border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted-foreground);
+}
+
+.topic-illo.ai .ai-tool-bar {
+    width: 36px;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+@keyframes ai-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- Banking & Fintech illo: card + transactions ---------- */
+.topic-illo.fintech .fintech-chip {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
     background: var(--card);
     border: 1px solid var(--border-strong);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--muted-foreground);
+    z-index: 1;
 }
 
-.topic-illo.ai .ai-input {
+.topic-illo.fintech .fintech-txn {
     position: absolute;
-    left: 36px;
-    right: 36px;
-    bottom: 36px;
-    height: 32px;
+    right: 28px;
+    width: 132px;
+    height: 22px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    z-index: 0;
+}
+
+.topic-illo.fintech .fintech-txn-1 { top: 30px; }
+.topic-illo.fintech .fintech-txn-2 { top: 60px; }
+
+.topic-illo.fintech .fintech-txn-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    flex: 0 0 10px;
+}
+
+.topic-illo.fintech .fintech-txn-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+.topic-illo.fintech .fintech-txn-amt {
+    font-family: "Geist Mono Variable", "Geist Mono", monospace;
+    font-size: 10px;
+    color: var(--muted-foreground);
+}
+
+.topic-illo.fintech .fintech-card {
+    position: relative;
+    width: 168px;
+    height: 100px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    transform: rotate(-2deg) translateY(20px);
+    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.18);
+    z-index: 2;
+}
+
+.topic-illo.fintech .fintech-card-chip {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 18px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+}
+
+.topic-illo.fintech .fintech-card-digits {
+    position: absolute;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+.topic-illo.fintech .fintech-card-digits-1 {
+    top: 42px;
+    left: 14px;
+    width: 36px;
+}
+
+.topic-illo.fintech .fintech-card-digits-2 {
+    top: 42px;
+    left: 58px;
+    width: 36px;
+}
+
+.topic-illo.fintech .fintech-card-name {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    width: 56px;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+.topic-illo.fintech .fintech-card-brand {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+}
+
+/* ---------- E-Commerce illo: product card ---------- */
+.topic-illo.ecom .ecom-card {
+    position: relative;
+    width: 200px;
+    height: 124px;
     background: var(--card);
     border: 1px solid var(--border-strong);
     border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+}
+
+.topic-illo.ecom .ecom-image {
+    width: 80px;
+    height: 100%;
+    background: var(--surface-2);
+    border-right: 1px solid var(--border);
+    background-image:
+        repeating-linear-gradient(
+            45deg,
+            transparent 0 6px,
+            var(--border) 6px 7px
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+}
+
+.topic-illo.ecom .ecom-detail {
+    flex: 1;
+    padding: 14px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.topic-illo.ecom .ecom-title-bar {
+    width: 80px;
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+.topic-illo.ecom .ecom-sub-bar {
+    width: 56px;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+}
+
+.topic-illo.ecom .ecom-row {
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 8px;
 }
 
-.topic-illo.ai .ai-input-plus,
-.topic-illo.ai .ai-input-enter {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted-foreground);
-}
-
-/* Backend illo */
-.topic-illo.backend .backend-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 56px);
-    grid-template-rows: repeat(3, 56px);
-    gap: 6px;
-}
-
-.topic-illo.backend .backend-tile {
-    background: var(--card);
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Geist Mono Variable", "Geist Mono", monospace;
-    font-size: 12px;
-    color: var(--muted-foreground);
-    letter-spacing: -0.01em;
-}
-
-/* Security illo */
-.topic-illo.security .security-window {
-    width: 168px;
-    height: 124px;
-    background: var(--surface-2);
-    border: 1px solid var(--border-strong);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.topic-illo.security .security-titlebar {
+.topic-illo.ecom .ecom-price {
     height: 20px;
-    border-bottom: 1px solid var(--border);
+    min-width: 36px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    color: var(--muted-foreground);
+    font-family: "Geist Mono Variable", "Geist Mono", monospace;
+    font-size: 11px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 0 8px;
-    background: var(--card);
+    justify-content: center;
 }
 
-.topic-illo.security .security-titlebar span {
-    width: 6px;
-    height: 6px;
+.topic-illo.ecom .ecom-cart {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topic-illo.ecom .ecom-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
     border-radius: 999px;
-    background: var(--border-strong);
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.topic-illo.security .security-body {
-    flex: 1;
-    background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 18px 18px;
+.topic-illo.ecom .ecom-corner {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--card);
+    border: 1px solid var(--border-strong);
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .topic-body {
