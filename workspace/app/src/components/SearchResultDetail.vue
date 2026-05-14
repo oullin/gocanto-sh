@@ -87,7 +87,24 @@ const kindIcon = computed(() => {
                     <component :is="kindIcon" class="size-3.5" />
                     <span>{{ payload?.kind }}</span>
                 </div>
-                <SheetTitle class="text-2xl font-semibold tracking-tight">
+                <div
+                    v-if="payload?.kind === 'Recommendation'"
+                    class="flex items-center gap-3 pt-1"
+                >
+                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
+                        <img
+                            :src="`https://oullin.io/images/${payload.data.person.avatar}`"
+                            :alt="payload.data.person.full_name"
+                            class="h-full w-full object-cover"
+                            loading="lazy"
+                            referrerpolicy="no-referrer"
+                        />
+                    </div>
+                    <SheetTitle class="text-2xl font-semibold tracking-tight">
+                        {{ payload.data.person.full_name }}
+                    </SheetTitle>
+                </div>
+                <SheetTitle v-else class="text-2xl font-semibold tracking-tight">
                     <template v-if="payload?.kind === 'Work'">
                         {{ payload.data.position }} · {{ payload.data.company }}
                     </template>
@@ -102,9 +119,6 @@ const kindIcon = computed(() => {
                     </template>
                     <template v-else-if="payload?.kind === 'Talk'">
                         {{ payload.data.title }}
-                    </template>
-                    <template v-else-if="payload?.kind === 'Recommendation'">
-                        {{ payload.data.person.full_name }}
                     </template>
                     <template v-else-if="payload?.kind === 'Link'">
                         {{ payload.data.name }}

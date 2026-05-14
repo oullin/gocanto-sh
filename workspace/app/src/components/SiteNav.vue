@@ -11,6 +11,7 @@
                 <a href="#writing">Writing</a>
                 <a href="#work">Work</a>
                 <a href="#about">About</a>
+                <a href="#recommendations">Recommendations</a>
                 <a href="#contact">Contact</a>
             </nav>
             <div class="nav-right">

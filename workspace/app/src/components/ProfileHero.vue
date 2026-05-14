@@ -7,7 +7,7 @@ const section = ref<HTMLElement | null>(null);
 
 const name = profile.data.name;
 const profession = profile.data.profession;
-const paragraph = `${profession} — 17 years shipping regulated backends. Now architecting AI-agentic systems in Go, and founder of Oullin Labs (hara.sh · kuda.sh · toku.sh) for fintech, banking, and e-commerce.`;
+const paragraph = `${profession} — 20 years shipping regulated backends. Now architecting AI-agentic systems in Go, and founder of Oullin Labs (hara.sh · kuda.sh · toku.sh) for fintech, banking, and e-commerce.`;
 
 const ready = useInViewReady(section);
 </script>
