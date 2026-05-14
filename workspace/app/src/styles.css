@@ -1150,6 +1150,79 @@
     margin: 0;
 }
 
+/* ---------- Circuit board background (Signature skills) ---------- */
+
+.frame-section.has-circuit-bg {
+    position: relative;
+    overflow: hidden;
+}
+
+.frame-section.has-circuit-bg > .explore-head,
+.frame-section.has-circuit-bg > .explore-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.circuit-board-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    color: var(--muted-foreground);
+    opacity: 0.12;
+}
+
+.circuit-board-bg .circuit-board__grid {
+    opacity: 0.45;
+}
+
+.circuit-board-bg .circuit-board__trace {
+    opacity: 0.4;
+}
+
+.circuit-board-bg .circuit-board__trace--animated {
+    stroke-dasharray: 4 8;
+    animation: circuit-pulse 3.5s linear infinite;
+}
+
+.circuit-board-bg .circuit-board__trace--bidir {
+    animation-direction: alternate;
+}
+
+.circuit-board-bg .circuit-board__node-halo {
+    display: none;
+}
+
+.circuit-board-bg .circuit-board__node-body {
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 0.75;
+    opacity: 0.35;
+}
+
+.circuit-board-bg .circuit-board__node-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+}
+
+@keyframes circuit-pulse {
+    to {
+        stroke-dashoffset: -24;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .circuit-board-bg .circuit-board__trace--animated {
+        animation: none;
+    }
+}
+
 /* ---------- CTA band (two-col) ---------- */
 
 .cta-grid {
