@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { profile } from "@gocanto/data";
+import { profile, type ProfileSkillRecord } from "@gocanto/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAsyncInView } from "@lib/useAsyncInView";
 
@@ -14,9 +14,11 @@ const placeholders: Cell[] = Array.from({ length: PLACEHOLDER_COUNT }, () => ({
 
 const section = ref<HTMLElement | null>(null);
 
+const skills: readonly ProfileSkillRecord[] = profile.data.skills;
+
 const cells = useAsyncInView<Cell[]>(section, () =>
-    [...profile.data.skills]
-        .filter((s) => s.percentage >= 90)
+    skills
+        .filter((s) => s.signature === true)
         .slice(0, PLACEHOLDER_COUNT)
         .map((s) => ({ title: s.item, description: s.description })),
 );
@@ -26,7 +28,7 @@ const cells = useAsyncInView<Cell[]>(section, () =>
     <section ref="section" class="frame-section">
         <div class="explore-head">
             <h2>Signature skills</h2>
-            <p>The disciplines and tools I lean on across every engagement.</p>
+            <p>Hands-on craft I lean on across every engagement — agentic platforms, payment cores, streaming pipelines, banking legacy.</p>
         </div>
         <div class="explore-grid">
             <a

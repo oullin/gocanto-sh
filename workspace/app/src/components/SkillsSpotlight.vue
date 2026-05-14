@@ -20,19 +20,19 @@ const topics = useAsyncInView<Topic[]>(section, () => {
         profile.data.skills.find((s) => s.item === name);
     return [
         {
-            title: "AI",
-            description: findSkill("AI (Artificial Intelligence)")?.description ?? "",
+            title: "Agentic",
+            description: findSkill("Agentic Orchestration")?.description ?? "",
             illo: "ai",
         },
         {
-            title: "Backend",
-            description: findSkill("System Design")?.description ?? "",
-            illo: "backend",
+            title: "Payments",
+            description: findSkill("Payment Integration")?.description ?? "",
+            illo: "security",
         },
         {
-            title: "Integrations",
-            description: findSkill("Complex 3rd Party System Integrations")?.description ?? "",
-            illo: "security",
+            title: "Pipelines",
+            description: findSkill("Kafka Event Pipelines")?.description ?? "",
+            illo: "backend",
         },
     ];
 });

@@ -6,8 +6,8 @@ export const profile = {
     "nickname": "gus",
     "handle": "gocanto",
     "name": "Gustavo Ocanto",
-    "email": "gus@ollin.sh",
-    "profession": "Founder · Ollin Labs · Building Madora",
+    "email": "gus@oullin.io",
+    "profession": "Software Architect & Principal Engineer",
     "skills": [
       {
         "uuid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
@@ -37,7 +37,8 @@ export const profile = {
         "uuid": "e5f6a1b2-c3d4-1234-5678-90abcdef1234",
         "percentage": 95,
         "item": "Go (Programming Language)",
-        "description": "A statically typed, compiled language from Google designed for building efficient and reliable software."
+        "description": "Hands-on Go for production backends — reverse proxies, high-throughput pipelines, agent platforms, idempotent payment cores. The default for new work.",
+        "signature": true
       },
       {
         "uuid": "f6a1b2c3-d4e5-2345-6789-0abcdef12345",
@@ -53,9 +54,9 @@ export const profile = {
       },
       {
         "uuid": "e5f6a1b2-c3d4-7890-1234-901234567890",
-        "percentage": 90,
+        "percentage": 92,
         "item": "System Design",
-        "description": "The process of defining components, modules, interfaces, and data for a system to satisfy requirements."
+        "description": "Architecting regulated backends end-to-end: contracts, boundaries, data flow, failure modes. Designed for audit and operated under load."
       },
       {
         "uuid": "c3d4e5f6-a1b2-5678-9012-cdef12345678",
@@ -67,7 +68,7 @@ export const profile = {
         "uuid": "d4e5f6a1-b2c3-6789-0123-def123456789",
         "percentage": 95,
         "item": "Complex 3rd Party System Integrations",
-        "description": "Connecting disparate third-party software applications so that they function together as one system."
+        "description": "Stripe, Adyen, NETS, PayPal, WeChat, PayDollar, schema registries, banking cores. Contract tests, failover paths, idempotent sync jobs — checkout that doesn't fall over."
       },
       {
         "uuid": "e5f6a1b2-c3d4-7890-1234-ef1234567890",
@@ -197,9 +198,9 @@ export const profile = {
       },
       {
         "uuid": "f6a1b2c3-d4e5-6789-0123-890123456789",
-        "percentage": 75,
+        "percentage": 92,
         "item": "AI (Artificial Intelligence)",
-        "description": "The simulation of human intelligence in machines to perform tasks that typically require human intellect."
+        "description": "Hands-on agentic engineering: orchestrators, tool registries, prompt caching, structured output, knowledge bases. Shipping AI products in regulated contexts, not slideware."
       },
       {
         "uuid": "a1b2c3d4-e5f6-7890-1234-901234567890",
@@ -227,9 +228,10 @@ export const profile = {
       },
       {
         "uuid": "e5f6a1b2-c3d4-1234-5678-345678901234",
-        "percentage": 30,
-        "item": "AS400",
-        "description": "A family of midrange computers from IBM (now IBM Power Systems) used for business applications."
+        "percentage": 90,
+        "item": "AS/400 Modernisation",
+        "description": "Wrapping legacy banking cores (AS/400, VCOS, COBOL/RPG) with Go reverse proxies — auth, caching, rate limiting, circuit breakers, audit log on every call. Modernise the surface, leave the core.",
+        "signature": true
       },
       {
         "uuid": "f6a1b2c3-d4e5-2345-6789-456789012345",
@@ -239,15 +241,55 @@ export const profile = {
       },
       {
         "uuid": "a1b2c3d4-e5f6-3456-7890-567890123456",
-        "percentage": 40,
+        "percentage": 85,
         "item": "MCP (Model Context Protocol)",
-        "description": "A protocol designed to manage and transfer contextual information for processing models, ensuring data consistency and relevance."
+        "description": "Building MCP servers and clients that expose tools and resources to agents over a typed protocol. Provider abstraction so models swap without product changes."
       },
       {
         "uuid": "b2c3d4e5-f6a1-4567-8901-678901234567",
         "percentage": 90,
         "item": "360 Communication",
         "description": "A communication strategy involving feedback from all directions: supervisors, peers, and C-Level."
+      },
+      {
+        "uuid": "8f3a1c20-9e7b-4d52-b8a4-c1d2e3f405a1",
+        "percentage": 92,
+        "item": "Agentic Orchestration",
+        "description": "Internal agent platforms with orchestrators, tool registries, audit logs, and reproducible runs. Fail-closed validators, signed event chains, no silent failures.",
+        "signature": true
+      },
+      {
+        "uuid": "6b4d5e2c-71a8-4c39-9f02-d7e1a8b3c4d5",
+        "percentage": 95,
+        "item": "Payment Integration",
+        "description": "Production-grade Go modules with idempotency keys, webhook signature verification against provider test vectors, retry-with-backoff that respects Retry-After, and structured error taxonomies.",
+        "signature": true
+      },
+      {
+        "uuid": "2c9f1e3a-4b8d-4612-9a57-e3f4051627d8",
+        "percentage": 92,
+        "item": "Kafka Event Pipelines",
+        "description": "Kafka producer/consumer pairs with exactly-once consumer semantics, DLQ with replay tooling, transactional outbox patterns, and Helm + Grafana shipped together.",
+        "signature": true
+      },
+      {
+        "uuid": "5a1b7c9e-3f4d-4821-b5a6-c8d9e0f1a2b3",
+        "percentage": 95,
+        "item": "Audit-Trail Architecture",
+        "description": "Append-only event logs with cryptographic signatures and replay tooling. Compliance designed in at architecture stage, not retrofitted — every step reproducible, every record permanent.",
+        "signature": true
+      },
+      {
+        "uuid": "9d4e2f7a-8c1b-4530-a692-d3e4f50617c8",
+        "percentage": 93,
+        "item": "Idempotency & Retry Design",
+        "description": "Idempotency keys on every mutating call, retry policies with jitter and Retry-After respect, structured error taxonomies that pattern-match cleanly. Built for at-least-once worlds."
+      },
+      {
+        "uuid": "4f8a2c1e-5d6b-4739-9b8c-a0d1e2f30415",
+        "percentage": 88,
+        "item": "LLM Tooling",
+        "description": "MCP servers, tool calling, prompt caching, streaming responses, JSON-mode validation. Provider abstraction so models swap without product changes."
       }
     ]
   }

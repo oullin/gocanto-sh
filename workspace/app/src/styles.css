@@ -767,6 +767,14 @@
     font-weight: 600;
 }
 
+.guides-list .row .row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
 .guides-list .row .title {
     color: var(--foreground);
     transition: color 120ms ease;
@@ -775,6 +783,14 @@
 .guides-list .row:hover .title {
     text-decoration: underline;
     text-underline-offset: 3px;
+}
+
+.guides-list .row .row-excerpt {
+    color: var(--muted-foreground);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 64ch;
 }
 
 .guides-list .row .tags {
@@ -990,21 +1006,16 @@
 .status {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: hsl(217 91% 48%);
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
 }
 
-.status::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: hsl(217 91% 48%);
+.status .status-icon {
+    color: hsl(0 72% 56%);
 }
 
 .footer-socials {

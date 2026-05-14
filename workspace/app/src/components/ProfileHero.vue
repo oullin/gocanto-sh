@@ -22,7 +22,7 @@ const heroData = useAsyncInView(
             <Skeleton v-else class="profile-hero__h1-skeleton" />
         </h1>
         <p>
-            <template v-if="heroData">{{ heroData.profession }} — production-grade backends, agent-accelerated. For fintech, banking, and e-commerce.</template>
+            <template v-if="heroData">{{ heroData.profession }} — 17 years shipping regulated backends. Now architecting AI-agentic systems in Go, and founder of Oullin Labs (hara.sh · kuda.sh · toku.sh) for fintech, banking, and e-commerce.</template>
             <span v-else class="profile-hero__p-skeleton">
                 <Skeleton class="h-4 w-full mb-2" />
                 <Skeleton class="h-4 w-4/5 mx-auto" />

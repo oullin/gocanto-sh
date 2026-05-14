@@ -41,6 +41,7 @@ export type ProfileSkillRecord = {
   readonly percentage: number
   readonly item: string
   readonly description: string
+  readonly signature?: boolean
 }
 
 export type ProfileRecord = {

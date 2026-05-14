@@ -11,6 +11,7 @@ type Row = {
     title: string;
     url: string;
     language: string;
+    excerpt: string;
     tags: { label: string; color: string }[];
 };
 
@@ -19,8 +20,20 @@ const placeholders: Row[] = Array.from({ length: PLACEHOLDER_COUNT }, () => ({
     title: "",
     url: "#",
     language: "",
+    excerpt: "",
     tags: [],
 }));
+
+const EXCERPT_MAX = 140;
+
+const summarise = (text: string): string => {
+    const trimmed = text.trim();
+    const sentenceEnd = trimmed.indexOf(". ");
+    const firstSentence =
+        sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
+    if (firstSentence.length <= EXCERPT_MAX) {return firstSentence;}
+    return `${firstSentence.slice(0, EXCERPT_MAX - 1).trimEnd()}…`;
+};
 
 const section = ref<HTMLElement | null>(null);
 
@@ -31,6 +44,7 @@ const allRows = useAsyncInView<Row[]>(section, () =>
             title: p.title,
             url: p.url,
             language: p.language,
+            excerpt: summarise(p.excerpt),
             tags: [
                 { label: p.language, color: "blue" },
                 ...(p.is_open_source
@@ -160,7 +174,10 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
         <div class="guides-list">
             <template v-if="showSkeleton">
                 <div v-for="i in PLACEHOLDER_COUNT" :key="`sk-${i}`" class="row" aria-busy="true" aria-hidden="true">
-                    <Skeleton class="h-[25px] w-2/3" />
+                    <span class="row-text">
+                        <Skeleton class="h-[20px] w-2/5" />
+                        <Skeleton class="h-[14px] w-3/4 mt-2" />
+                    </span>
                     <span class="tags">
                         <Skeleton class="h-6 w-12 rounded-full" />
                         <Skeleton class="h-6 w-20 rounded-full" />
@@ -169,7 +186,10 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
             </template>
             <template v-else>
                 <a v-for="row in visibleRows" :key="row.title" :href="row.url" class="row" target="_blank" rel="noopener noreferrer">
-                    <span class="title">{{ row.title }}</span>
+                    <span class="row-text">
+                        <span class="title">{{ row.title }}</span>
+                        <span v-if="row.excerpt" class="row-excerpt">{{ row.excerpt }}</span>
+                    </span>
                     <span class="tags">
                         <span v-for="t in row.tags" :key="t.label" class="pill">
                             {{ t.label }}

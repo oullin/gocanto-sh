@@ -19,10 +19,17 @@ export const links = {
     },
     {
       "uuid": "b2a1c3d4-e5f6-4a7b-8c9d-1a2b3c4d5e6f",
-      "handle": "ollin-sh",
-      "url": "https://github.com/ollin-sh",
-      "description": "Explore Ollin Labs' open source projects on GitHub.",
+      "handle": "gocanto",
+      "url": "https://github.com/gocanto",
+      "description": "Gustavo's personal GitHub.",
       "name": "github"
+    },
+    {
+      "uuid": "c1a2b3d4-e5f6-4a7b-8c9d-2a3b4c5d6e7f",
+      "handle": "oullin",
+      "url": "https://github.com/oullin",
+      "description": "Explore Oullin Labs' open source projects on GitHub.",
+      "name": "github_oullin"
     }
   ]
 } as const satisfies LinksFixture
