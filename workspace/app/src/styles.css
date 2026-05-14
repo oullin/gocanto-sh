@@ -290,6 +290,48 @@
     height: 92px;
 }
 
+/* ---------- Skeleton shimmer ----------
+ * Wraps real content during loading. Because the wrapper is inline and uses
+ * box-decoration-break: clone, the background follows the natural text wrap,
+ * giving a pixel-exact match with the loaded state regardless of viewport.
+ */
+.sk-shimmer {
+    display: inline;
+    color: transparent !important;
+    background: hsl(0 0% 100% / 0.08);
+    border-radius: 4px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    animation: sk-pulse 2s ease-in-out infinite;
+    user-select: none;
+}
+
+.sk-shimmer * {
+    color: transparent !important;
+    background: transparent !important;
+}
+
+:root[data-theme="light"] .sk-shimmer {
+    background: hsl(0 0% 0% / 0.08);
+}
+
+.sk-shimmer-pill {
+    background: hsl(0 0% 100% / 0.08) !important;
+    color: transparent !important;
+    box-shadow: none !important;
+    animation: sk-pulse 2s ease-in-out infinite;
+    user-select: none;
+}
+
+:root[data-theme="light"] .sk-shimmer-pill {
+    background: hsl(0 0% 0% / 0.08) !important;
+}
+
+@keyframes sk-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+}
+
 /* ---------- Hero ---------- */
 
 .profile-hero {
@@ -746,6 +788,33 @@
 :root[data-theme="light"] .pill.amber {
     background: hsl(38 90% 92%);
     color: hsl(28 80% 32%);
+}
+
+/* ---------- Global search filter pills ---------- */
+
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-filters__pill {
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 120ms ease;
+}
+
+.search-filters__pill:hover,
+.search-filters__pill:focus-visible,
+.search-filters__pill.is-active {
+    opacity: 1;
+}
+
+.search-filters__pill:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
 }
 
 /* ---------- All Guides list ---------- */

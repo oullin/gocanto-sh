@@ -40,11 +40,31 @@ type Corpus = {
     links: Result[];
 };
 
+type KindKey = keyof Corpus;
+
+const KINDS: { key: KindKey; label: string }[] = [
+    { key: "work", label: "Work" },
+    { key: "projects", label: "Projects" },
+    { key: "skills", label: "Skills" },
+    { key: "education", label: "Education" },
+    { key: "talks", label: "Talks" },
+    { key: "recommendations", label: "Recommendations" },
+    { key: "links", label: "Links" },
+];
+
 const open = ref(false);
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 const corpus = shallowRef<Corpus | null>(null);
 const loading = ref(false);
+const selectedKind = ref<KindKey | null>(null);
+
+const isKindVisible = (k: KindKey) =>
+    selectedKind.value === null || selectedKind.value === k;
+
+const toggleKind = (k: KindKey) => {
+    selectedKind.value = selectedKind.value === k ? null : k;
+};
 
 // Strip HTML, then append an alphanumeric-only variant of the same text so
 // queries like "as400" match content that says "AS/400", "node.js" matches
@@ -142,7 +162,10 @@ async function buildCorpus(): Promise<Corpus> {
 const ready = computed(() => !loading.value && corpus.value !== null);
 
 watch(open, async (v) => {
-    if (!v) {return;}
+    if (!v) {
+        selectedKind.value = null;
+        return;
+    }
     if (corpus.value) {return;}
     loading.value = true;
     try {
@@ -198,6 +221,19 @@ watch(sheetOpen, (v) => {
         description="Search work, projects, skills, education, talks, recommendations, and links"
     >
         <CommandInput placeholder="What are you searching for?" />
+        <div class="search-filters" role="group" aria-label="Filter by kind">
+            <button
+                v-for="k in KINDS"
+                :key="k.key"
+                type="button"
+                class="pill search-filters__pill"
+                :class="{ 'is-active': selectedKind === k.key }"
+                :aria-pressed="selectedKind === k.key"
+                @click="toggleKind(k.key)"
+            >
+                {{ k.label }}
+            </button>
+        </div>
         <CommandList>
             <template v-if="!ready">
                 <div class="px-3 py-3" aria-busy="true">
@@ -208,7 +244,7 @@ watch(sheetOpen, (v) => {
                 <CommandEmpty class="px-5 py-8 text-center text-sm text-muted-foreground">
                     No matches found.
                 </CommandEmpty>
-                <CommandGroup heading="Work">
+                <CommandGroup v-if="isKindVisible('work')" heading="Work">
                     <CommandItem
                         v-for="r in corpus.work"
                         :key="r.key"
@@ -220,7 +256,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Projects">
+                <CommandGroup v-if="isKindVisible('projects')" heading="Projects">
                     <CommandItem
                         v-for="r in corpus.projects"
                         :key="r.key"
@@ -232,7 +268,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Skills">
+                <CommandGroup v-if="isKindVisible('skills')" heading="Skills">
                     <CommandItem
                         v-for="r in corpus.skills"
                         :key="r.key"
@@ -244,7 +280,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Education">
+                <CommandGroup v-if="isKindVisible('education')" heading="Education">
                     <CommandItem
                         v-for="r in corpus.education"
                         :key="r.key"
@@ -256,7 +292,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Talks">
+                <CommandGroup v-if="isKindVisible('talks')" heading="Talks">
                     <CommandItem
                         v-for="r in corpus.talks"
                         :key="r.key"
@@ -268,7 +304,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Recommendations">
+                <CommandGroup v-if="isKindVisible('recommendations')" heading="Recommendations">
                     <CommandItem
                         v-for="r in corpus.recommendations"
                         :key="r.key"
@@ -280,7 +316,7 @@ watch(sheetOpen, (v) => {
                         <span class="sr-only">{{ r.searchText }}</span>
                     </CommandItem>
                 </CommandGroup>
-                <CommandGroup heading="Links">
+                <CommandGroup v-if="isKindVisible('links')" heading="Links">
                     <CommandItem
                         v-for="r in corpus.links"
                         :key="r.key"

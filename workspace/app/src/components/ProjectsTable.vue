@@ -3,9 +3,8 @@ import { computed, ref, watch } from "vue";
 import { projects } from "@gocanto/data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { useAsyncInView } from "@lib/useAsyncInView";
+import { useInViewReady } from "@lib/useAsyncInView";
 
 type Row = {
     title: string;
@@ -14,15 +13,6 @@ type Row = {
     excerpt: string;
     tags: { label: string; color: string }[];
 };
-
-const PLACEHOLDER_COUNT = 10;
-const placeholders: Row[] = Array.from({ length: PLACEHOLDER_COUNT }, () => ({
-    title: "",
-    url: "#",
-    language: "",
-    excerpt: "",
-    tags: [],
-}));
 
 const EXCERPT_MAX = 140;
 
@@ -37,29 +27,26 @@ const summarise = (text: string): string => {
 
 const section = ref<HTMLElement | null>(null);
 
-const allRows = useAsyncInView<Row[]>(section, () =>
-    [...projects.data]
-        .sort((a, b) => a.sort - b.sort)
-        .map((p) => ({
-            title: p.title,
-            url: p.url,
-            language: p.language,
-            excerpt: summarise(p.excerpt),
-            tags: [
-                { label: p.language, color: "blue" },
-                ...(p.is_open_source
-                    ? [{ label: "Open Source", color: "green" }]
-                    : []),
-            ],
-        })),
-);
+const allRows: Row[] = [...projects.data]
+    .sort((a, b) => a.sort - b.sort)
+    .map((p) => ({
+        title: p.title,
+        url: p.url,
+        language: p.language,
+        excerpt: summarise(p.excerpt),
+        tags: [
+            { label: p.language, color: "blue" },
+            ...(p.is_open_source
+                ? [{ label: "Open Source", color: "green" }]
+                : []),
+        ],
+    }));
 
-const languages = computed<string[]>(() => {
-    if (!allRows.value) {return [];}
+const languages: string[] = (() => {
     const seen = new Set<string>();
-    for (const r of allRows.value) {seen.add(r.language);}
+    for (const r of allRows) {seen.add(r.language);}
     return [...seen].sort();
-});
+})();
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
@@ -67,12 +54,11 @@ const showMore = ref(false);
 const collapsedLimit = 10;
 const filtering = ref(false);
 
-const filteredRows = computed<Row[]>(() => {
-    if (!allRows.value) {return placeholders;}
-    return selected.value.size === 0
-        ? allRows.value
-        : allRows.value.filter((r) => selected.value.has(r.language));
-});
+const filteredRows = computed<Row[]>(() =>
+    selected.value.size === 0
+        ? allRows
+        : allRows.filter((r) => selected.value.has(r.language)),
+);
 
 const visibleRows = computed<Row[]>(() =>
     showMore.value ? filteredRows.value : filteredRows.value.slice(0, collapsedLimit),
@@ -106,8 +92,8 @@ watch(
     { deep: true },
 );
 
-const isLoaded = computed(() => allRows.value !== null);
-const showSkeleton = computed(() => !isLoaded.value || filtering.value);
+const ready = useInViewReady(section);
+const isLoading = computed(() => !ready.value || filtering.value);
 </script>
 
 <template>
@@ -121,7 +107,7 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
                         type="button"
                         aria-haspopup="listbox"
                         :aria-expanded="popoverOpen"
-                        :disabled="!isLoaded"
+                        :disabled="!ready"
                     >
                         <span class="filter-icon" aria-hidden="true">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -172,38 +158,41 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
             </Popover>
         </div>
         <div class="guides-list">
-            <template v-if="showSkeleton">
-                <div v-for="i in PLACEHOLDER_COUNT" :key="`sk-${i}`" class="row" aria-busy="true" aria-hidden="true">
-                    <span class="row-text">
-                        <Skeleton class="h-[20px] w-2/5" />
-                        <Skeleton class="h-[14px] w-3/4 mt-2" />
+            <a
+                v-for="row in visibleRows"
+                :key="row.title"
+                :href="isLoading ? undefined : row.url"
+                class="row"
+                :target="isLoading ? undefined : '_blank'"
+                rel="noopener noreferrer"
+                :aria-busy="isLoading || undefined"
+            >
+                <span class="row-text">
+                    <span class="title">
+                        <span :class="{ 'sk-shimmer': isLoading }">{{ row.title }}</span>
                     </span>
-                    <span class="tags">
-                        <Skeleton class="h-6 w-12 rounded-full" />
-                        <Skeleton class="h-6 w-20 rounded-full" />
+                    <span v-if="row.excerpt" class="row-excerpt">
+                        <span :class="{ 'sk-shimmer': isLoading }">{{ row.excerpt }}</span>
                     </span>
-                </div>
-            </template>
-            <template v-else>
-                <a v-for="row in visibleRows" :key="row.title" :href="row.url" class="row" target="_blank" rel="noopener noreferrer">
-                    <span class="row-text">
-                        <span class="title">{{ row.title }}</span>
-                        <span v-if="row.excerpt" class="row-excerpt">{{ row.excerpt }}</span>
+                </span>
+                <span class="tags">
+                    <span
+                        v-for="t in row.tags"
+                        :key="t.label"
+                        class="pill"
+                        :class="isLoading ? 'sk-shimmer-pill' : t.color"
+                    >
+                        {{ t.label }}
                     </span>
-                    <span class="tags">
-                        <span v-for="t in row.tags" :key="t.label" class="pill">
-                            {{ t.label }}
-                        </span>
-                    </span>
-                </a>
-                <p v-if="visibleRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
-                    No projects match the current filter.
-                </p>
-            </template>
+                </span>
+            </a>
+            <p v-if="visibleRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
+                No projects match the current filter.
+            </p>
         </div>
         <div class="show-more">
             <button
-                v-if="isLoaded && filteredRows.length > collapsedLimit"
+                v-if="ready && filteredRows.length > collapsedLimit"
                 class="btn ghost"
                 type="button"
                 @click="showMore = !showMore"

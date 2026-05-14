@@ -2,40 +2,34 @@
 import { ref } from "vue";
 import { profile } from "@gocanto/data";
 import { CornerDownLeft, Plus, Sparkles, User } from "lucide-vue-next";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useAsyncInView } from "@lib/useAsyncInView";
+import { useInViewReady } from "@lib/useAsyncInView";
 
 type Topic = { title: string; description: string; illo: "ai" | "backend" | "security" };
 
 const section = ref<HTMLElement | null>(null);
 
-const placeholders: Topic[] = [
-    { title: "", description: "", illo: "ai" },
-    { title: "", description: "", illo: "backend" },
-    { title: "", description: "", illo: "security" },
+const findSkill = (name: string) =>
+    profile.data.skills.find((s) => s.item === name);
+
+const topics: Topic[] = [
+    {
+        title: "Agentic",
+        description: findSkill("Agentic Orchestration")?.description ?? "",
+        illo: "ai",
+    },
+    {
+        title: "Payments",
+        description: findSkill("Payment Integration")?.description ?? "",
+        illo: "security",
+    },
+    {
+        title: "Pipelines",
+        description: findSkill("Kafka Event Pipelines")?.description ?? "",
+        illo: "backend",
+    },
 ];
 
-const topics = useAsyncInView<Topic[]>(section, () => {
-    const findSkill = (name: string) =>
-        profile.data.skills.find((s) => s.item === name);
-    return [
-        {
-            title: "Agentic",
-            description: findSkill("Agentic Orchestration")?.description ?? "",
-            illo: "ai",
-        },
-        {
-            title: "Payments",
-            description: findSkill("Payment Integration")?.description ?? "",
-            illo: "security",
-        },
-        {
-            title: "Pipelines",
-            description: findSkill("Kafka Event Pipelines")?.description ?? "",
-            illo: "backend",
-        },
-    ];
-});
+const ready = useInViewReady(section);
 
 const backendTiles = ["py", "ex", "fl", "ne", "el", "N", "so", "bn", "sl"];
 </script>
@@ -43,11 +37,11 @@ const backendTiles = ["py", "ex", "fl", "ne", "el", "N", "so", "bn", "sl"];
 <template>
     <section ref="section" class="topics frame-section">
         <a
-            v-for="(t, i) in (topics ?? placeholders)"
+            v-for="(t, i) in topics"
             :key="`${t.illo}-${i}`"
-            :href="topics ? '#' : undefined"
+            :href="ready ? '#' : undefined"
             class="topic-card"
-            :aria-busy="!topics"
+            :aria-busy="!ready"
         >
             <div class="topic-illo" :class="t.illo">
                 <template v-if="t.illo === 'ai'">
@@ -86,23 +80,12 @@ const backendTiles = ["py", "ex", "fl", "ne", "el", "N", "so", "bn", "sl"];
             </div>
             <div class="topic-body">
                 <h3>
-                    <template v-if="topics">{{ t.title }}</template>
-                    <Skeleton v-else class="h-5 w-1/3 inline-block align-middle" />
+                    <span :class="{ 'sk-shimmer': !ready }">{{ t.title }}</span>
                 </h3>
                 <p>
-                    <template v-if="topics">{{ t.description }}</template>
-                    <span v-else class="topic-skeleton">
-                        <Skeleton class="h-4 w-full mb-1.5" />
-                        <Skeleton class="h-4 w-4/5" />
-                    </span>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ t.description }}</span>
                 </p>
             </div>
         </a>
     </section>
 </template>
-
-<style scoped>
-.topic-skeleton {
-    display: block;
-}
-</style>

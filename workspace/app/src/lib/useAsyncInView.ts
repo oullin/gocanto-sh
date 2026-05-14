@@ -39,3 +39,31 @@ export function useAsyncInView<T>(
 
     return data;
 }
+
+/**
+ * Like {@link useAsyncInView}, but flips a boolean once visible. Use when you
+ * already have the data synchronously and only need a "ready to reveal" signal
+ * to drive the skeleton-to-content transition.
+ */
+export function useInViewReady(
+    target: Ref<HTMLElement | null>,
+    { rootMargin = "200px", delayMs = 200 }: Options = {},
+): Ref<boolean> {
+    const ready = ref(false);
+    let resolved = false;
+
+    const { stop } = useIntersectionObserver(
+        target,
+        ([entry]) => {
+            if (!entry?.isIntersecting || resolved) {return;}
+            resolved = true;
+            stop();
+            window.setTimeout(() => {
+                ready.value = true;
+            }, delayMs);
+        },
+        { rootMargin },
+    );
+
+    return ready;
+}
