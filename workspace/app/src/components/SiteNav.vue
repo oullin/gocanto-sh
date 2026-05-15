@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Send } from "lucide-vue-next";
+</script>
+
 <template>
     <header class="nav">
         <div class="nav-inner">
@@ -15,10 +19,8 @@
             </nav>
             <div class="nav-right">
                 <a href="#contact" class="nav-cta">
-                    <span class="border-beam" aria-hidden="true">
-                        <span class="border-beam-trail"></span>
-                    </span>
-                    <span class="border-beam-label">Get in touch</span>
+                    <Send class="nav-cta-icon" :size="14" aria-hidden="true" />
+                    <span>Get in touch</span>
                 </a>
                 <a href="#about" class="nav-avatar" aria-label="Profile">
                     <img src="/avatar.jpg" alt="" width="32" height="32" />

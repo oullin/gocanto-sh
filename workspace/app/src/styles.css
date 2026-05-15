@@ -237,6 +237,7 @@
 .nav-cta {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     height: 32px;
     padding: 0 12px;
     border: 0;
@@ -251,6 +252,10 @@
         background 150ms ease;
     position: relative;
     isolation: isolate;
+}
+
+.nav-cta-icon {
+    flex-shrink: 0;
 }
 
 .nav-cta:hover {
@@ -1177,6 +1182,283 @@
     margin: 0;
 }
 
+/* Make <button> variants of explore-card render identically to <a> */
+button.explore-card {
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+button.explore-card:focus-visible {
+    outline: 2px solid var(--btn-ghost-ring-hover, var(--border-strong));
+    outline-offset: 2px;
+}
+
+.explore-card__initials {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
+    line-height: 1;
+}
+
+/* ---------- Explore subhead + dense grid (More skills) ---------- */
+
+.explore-subhead {
+    padding: 8px 48px 16px;
+    border-top: 1px dashed var(--border);
+    margin-top: 8px;
+}
+
+.explore-subhead h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 24px 0 6px;
+}
+
+.explore-subhead p {
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.explore-scroll {
+    height: clamp(420px, 60vh, 640px);
+    overflow: hidden;
+    margin-bottom: 48px;
+}
+
+.explore-grid--dense {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 8px 48px 16px;
+}
+
+.explore-card--compact {
+    min-height: 140px;
+    padding: 14px;
+    gap: 2px;
+}
+
+.explore-card--compact h3 {
+    font-size: 13px;
+}
+
+.explore-card--compact p {
+    font-size: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ---------- Skill detail sheet ---------- */
+
+.skill-sheet {
+    padding: 24px;
+    gap: 16px;
+}
+
+.skill-sheet__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.skill-sheet__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: var(--background);
+    color: var(--muted-foreground);
+}
+
+.skill-sheet__initials {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.skill-sheet__badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    color: var(--foreground);
+    background: hsl(0 0% 100% / 0.04);
+}
+
+:root[data-theme="light"] .skill-sheet__badge {
+    background: hsl(0 0% 0% / 0.04);
+}
+
+.skill-sheet__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 8px 0 24px;
+}
+
+.skill-sheet__meter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skill-sheet__meter-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.skill-sheet__meter-value {
+    color: var(--foreground);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.skill-sheet__bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border);
+    overflow: hidden;
+}
+
+.skill-sheet__bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--foreground);
+    border-radius: inherit;
+    transition: width 240ms ease;
+}
+
+.skill-sheet__long {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--foreground);
+    margin: 0;
+}
+
+.skill-sheet__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px dashed var(--border);
+}
+
+.skill-sheet__section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skill-sheet__label {
+    font-size: 11px;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
+.skill-sheet__value {
+    font-size: 13px;
+    color: var(--foreground);
+    font-weight: 500;
+}
+
+.skill-sheet__chips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.skill-sheet__chip {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--background);
+    color: var(--foreground);
+}
+
+.skill-sheet__projects {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--foreground);
+    line-height: 1.45;
+}
+
+.skill-sheet__project {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: var(--background);
+    color: inherit;
+    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 150ms ease, transform 150ms ease, background-color 150ms ease;
+}
+
+.skill-sheet__project:hover {
+    border-color: var(--btn-ghost-ring-hover, var(--foreground));
+    transform: translateY(-1px);
+}
+
+.skill-sheet__project:focus-visible {
+    outline: 2px solid var(--btn-ghost-ring-hover, var(--foreground));
+    outline-offset: 2px;
+}
+
+.skill-sheet__project-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    transition: color 150ms ease, transform 150ms ease;
+}
+
+.skill-sheet__project:hover .skill-sheet__project-icon {
+    color: var(--foreground);
+    transform: translate(1px, -1px);
+}
+
 /* ---------- CTA band (two-col) ---------- */
 
 .cta-grid {
@@ -1243,60 +1525,6 @@
 
 .btn.primary:hover {
     background: var(--btn-primary-bg-hover);
-}
-
-/* ---- Border beam (animated CTA accent) ---- */
-
-.border-beam-label {
-    position: relative;
-    z-index: 1;
-}
-
-.border-beam {
-    --bb-duration: 1.5s;
-    --bb-width: 1.5px;
-    --bb-from: var(--accent-amber);
-    --bb-to: var(--accent-purple);
-
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    border: var(--bb-width) solid transparent;
-    -webkit-mask:
-        linear-gradient(#000 0 0) padding-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-        linear-gradient(#000 0 0) padding-box,
-        linear-gradient(#000 0 0);
-    mask-composite: exclude;
-}
-
-.border-beam-trail {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 300%;
-    aspect-ratio: 1 / 1;
-    background: conic-gradient(
-        from 0deg,
-        transparent 0deg 240deg,
-        var(--bb-to) 320deg,
-        var(--bb-from) 355deg,
-        transparent 360deg
-    );
-    transform: translate3d(-50%, -50%, 0) rotate(0);
-    animation: border-beam var(--bb-duration) linear infinite;
-    will-change: transform;
-}
-
-@keyframes border-beam {
-    to { transform: translate3d(-50%, -50%, 0) rotate(1turn); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .border-beam-trail { animation: none; }
 }
 
 .btn.ghost {
@@ -1506,6 +1734,16 @@
     .explore-grid {
         grid-template-columns: repeat(2, 1fr);
         padding: 16px;
+    }
+
+    .explore-grid--dense {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 8px 16px 16px;
+    }
+
+    .explore-subhead {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
     .explore-grid .explore-card:nth-child(3n) {

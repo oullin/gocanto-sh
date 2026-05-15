@@ -42,6 +42,15 @@ export type ProfileSkillRecord = {
   readonly item: string
   readonly description: string
   readonly signature?: boolean
+  readonly long_description?: string
+  readonly related_tech?: readonly string[]
+  readonly years?: number
+  readonly example_projects?: readonly (string | ProfileSkillExampleProject)[]
+}
+
+export type ProfileSkillExampleProject = {
+  readonly title: string
+  readonly url?: string
 }
 
 export type ProfileRecord = {
