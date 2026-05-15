@@ -23,7 +23,7 @@ const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> 
         heading: "Work",
         links: [
             { label: "Featured work", href: "#work" },
-            { label: "Projects", href: "#work" },
+            { label: "Projects", href: "#projects" },
             { label: "About", href: "#about" },
         ],
     },

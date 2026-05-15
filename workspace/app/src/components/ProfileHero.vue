@@ -13,7 +13,7 @@ const ready = useInViewReady(section);
 </script>
 
 <template>
-    <section ref="section" class="profile-hero frame-section">
+    <section id="about" ref="section" class="profile-hero frame-section">
         <h1>
             <span :class="{ 'sk-shimmer': !ready }">{{ name }}</span>
         </h1>

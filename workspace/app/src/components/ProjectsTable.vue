@@ -98,7 +98,7 @@ const isLoading = computed(() => !ready.value || filtering.value);
 </script>
 
 <template>
-    <section ref="section" class="frame-section">
+    <section id="projects" ref="section" class="frame-section">
         <div class="section-heading">
             <h2>Projects</h2>
             <Popover v-model:open="popoverOpen">
