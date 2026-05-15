@@ -1086,19 +1086,9 @@
     flex-shrink: 0;
 }
 
-.show-more {
-    padding: 24px 32px 32px;
-    display: flex;
-    justify-content: center;
-}
-
-.show-more .btn {
-    min-width: 140px;
-    justify-content: center;
-    border-radius: 999px;
-    padding: 0 16px;
-    height: 40px;
-    font-size: 14px;
+.projects-scroll {
+    height: clamp(420px, 60vh, 640px);
+    margin-bottom: 48px;
 }
 
 /* ---------- Explore docs (sub-categories) ---------- */
@@ -1181,7 +1171,12 @@
     background: var(--background);
     color: var(--muted-foreground);
     margin-bottom: 4px;
-    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+    transition: border-color 350ms ease, background-color 350ms ease, color 350ms ease;
+}
+
+.explore-card h3 > span,
+.explore-card p > span {
+    transition: color 350ms ease, background-color 350ms ease;
 }
 
 .explore-card__icon--loading {
@@ -1516,13 +1511,19 @@ button.explore-card:focus-visible {
 }
 
 .skill-sheet__chip {
-    font-size: 12px;
-    padding: 4px 10px;
+    font-size: 10.5px;
+    padding: 3px 9px;
     border-radius: 999px;
     border: 1px solid var(--border-strong);
     background: var(--background);
     color: var(--foreground);
+    letter-spacing: 0.01em;
 }
+
+.skill-sheet__chip--green  { background: hsl(142 60% 12%); color: hsl(142 71% 70%); border-color: hsl(142 50% 22%); }
+.skill-sheet__chip--blue   { background: hsl(217 60% 14%); color: hsl(217 91% 78%); border-color: hsl(217 55% 26%); }
+.skill-sheet__chip--purple { background: hsl(270 50% 14%); color: hsl(270 91% 80%); border-color: hsl(270 45% 26%); }
+.skill-sheet__chip--amber  { background: hsl(38 60% 12%);  color: hsl(38 92% 68%);  border-color: hsl(38 55% 24%); }
 
 .skill-sheet__projects {
     list-style: none;
@@ -1844,8 +1845,7 @@ button.explore-card:focus-visible {
 
     .section-heading,
     .explore-head,
-    .guides-list,
-    .show-more {
+    .guides-list {
         padding-left: 16px;
         padding-right: 16px;
     }

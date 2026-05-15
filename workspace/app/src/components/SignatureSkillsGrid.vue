@@ -13,6 +13,7 @@ import {
 import { ScrollFade } from "@/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
+const moreSection = ref<HTMLElement | null>(null);
 
 const skills: readonly ProfileSkillRecord[] = profile.data.skills;
 
@@ -32,6 +33,16 @@ function initials(title: string): string {
     const words = title.replace(/[()/.,]/g, " ").trim().split(/\s+/);
     if (words.length === 1) {return words[0].slice(0, 2).toUpperCase();}
     return (words[0][0] + words[1][0]).toUpperCase();
+}
+
+const CHIP_VARIANTS = ["green", "blue", "purple", "amber"] as const;
+
+function chipVariant(name: string): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = (hash * 31 + name.charCodeAt(i)) | 0;
+    }
+    return CHIP_VARIANTS[Math.abs(hash) % CHIP_VARIANTS.length];
 }
 
 type Cell = {
@@ -62,6 +73,7 @@ const moreCells = computed<Cell[]>(() =>
 );
 
 const ready = useInViewReady(section);
+const moreReady = useInViewReady(moreSection);
 
 const open = ref(false);
 const activeSkill = ref<ProfileSkillRecord | null>(null);
@@ -123,28 +135,28 @@ const activeHasIcon = computed<boolean>(() => {
         </div>
 
         <ScrollFade class="explore-scroll">
-            <div class="explore-grid explore-grid--dense">
+            <div ref="moreSection" class="explore-grid explore-grid--dense">
                 <button
                     v-for="c in moreCells"
                     :key="c.skill.uuid"
                     type="button"
                     class="explore-card explore-card--compact"
-                    :aria-busy="!ready"
+                    :aria-busy="!moreReady"
                     @click="openSkill(c.skill)"
                 >
                     <span
                         class="explore-card__icon"
-                        :class="{ 'explore-card__icon--loading': !ready }"
+                        :class="{ 'explore-card__icon--loading': !moreReady }"
                         aria-hidden="true"
                     >
                         <component v-if="c.icon" :is="c.icon" :size="16" :stroke-width="1.5" />
                         <span v-else class="explore-card__initials">{{ c.initials }}</span>
                     </span>
                     <h3>
-                        <span :class="{ 'sk-shimmer': !ready }">{{ c.title }}</span>
+                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.title }}</span>
                     </h3>
                     <p>
-                        <span :class="{ 'sk-shimmer': !ready }">{{ c.description }}</span>
+                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.description }}</span>
                     </p>
                     <span v-if="c.skill.years" class="explore-card__years explore-card__years--muted" aria-label="Years hands-on">
                         {{ c.skill.years }} yrs
@@ -188,7 +200,12 @@ const activeHasIcon = computed<boolean>(() => {
                     <div v-if="activeSkill.related_tech && activeSkill.related_tech.length" class="skill-sheet__section">
                         <span class="skill-sheet__label">Related tech</span>
                         <ul class="skill-sheet__chips">
-                            <li v-for="t in activeSkill.related_tech" :key="t" class="skill-sheet__chip">{{ t }}</li>
+                            <li
+                                v-for="t in activeSkill.related_tech"
+                                :key="t"
+                                class="skill-sheet__chip"
+                                :class="`skill-sheet__chip--${chipVariant(t)}`"
+                            >{{ t }}</li>
                         </ul>
                     </div>
 

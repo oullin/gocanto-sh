@@ -44,12 +44,11 @@ const rows = computed(() => [
 const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
 
 const cardBase =
-    "tm-card group/card relative flex h-[260px] w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-2xl border p-6 text-left transition-all transform-gpu [backface-visibility:hidden]";
-const cardSurface = "border-border bg-black/[0.02] dark:bg-white/5";
-const cardSurfaceFeatured = "tm-card--featured bg-amber-500/[0.03] dark:bg-amber-400/[0.04]";
-const cardInteractiveHover =
-    "hover:bg-black/[0.04] dark:hover:bg-white/10 hover:-translate-y-1";
-const cardFocus = "focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40";
+    "tm-card group/card relative flex h-[260px] w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
+const cardSurface = "border-[var(--border-strong)] bg-background";
+const cardSurfaceFeatured = "tm-card--featured border-[var(--border-strong)] bg-background";
+const cardInteractiveHover = "hover:border-[var(--btn-ghost-ring-hover)]";
+const cardFocus = "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--btn-ghost-ring-hover)]";
 
 function cardClass(item: Testimonial, opts: { interactive: boolean }) {
     return cn(
@@ -94,9 +93,11 @@ function onSelect(item: Testimonial) {
                     v-for="(item, i) in row.items"
                     :key="`${row.keyPrefix}d-${i}`"
                     :item="item"
-                    :interactive="false"
+                    :interactive="true"
+                    :focusable="false"
                     :loading="loading"
-                    :card-class="cardClass(item, { interactive: false })"
+                    :card-class="cardClass(item, { interactive: true })"
+                    @select="onSelect"
                 />
             </div>
         </div>
@@ -137,30 +138,4 @@ function onSelect(item: Testimonial) {
     background: hsl(0 0% 0% / 0.08);
 }
 
-.tm-card--featured {
-    border-color: var(--accent-amber);
-}
-.tm-card--featured > div.flex-1 {
-    padding-top: 1.25rem;
-}
-
-.tm-featured-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 20;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: hsl(38 92% 50% / 0.14);
-    color: var(--accent-amber);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    line-height: 1;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
 </style>

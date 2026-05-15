@@ -4,6 +4,7 @@ import { projects } from "@gocanto/data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { ScrollFade } from "@/components/ui/scroll-fade";
 import { useInViewReady } from "@lib/useAsyncInView";
 
 type Row = {
@@ -46,18 +47,12 @@ const languages: string[] = [...new Set(allRows.map((r) => r.language))].sort();
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
-const showMore = ref(false);
-const collapsedLimit = 10;
 const filtering = ref(false);
 
 const filteredRows = computed<Row[]>(() =>
     selected.value.size === 0
         ? allRows
         : allRows.filter((r) => selected.value.has(r.language)),
-);
-
-const visibleRows = computed<Row[]>(() =>
-    showMore.value ? filteredRows.value : filteredRows.value.slice(0, collapsedLimit),
 );
 
 const toggleLanguage = (lang: string) => {
@@ -72,7 +67,7 @@ const clearSelection = () => {
 };
 
 const buttonLabel = computed(() => {
-    if (selected.value.size === 0) {return "Filter projects";}
+    if (selected.value.size === 0) {return "Filter";}
     if (selected.value.size === 1) {return [...selected.value][0];}
     return `${selected.value.size} languages`;
 });
@@ -153,48 +148,40 @@ const isLoading = computed(() => !ready.value || filtering.value);
                 </PopoverContent>
             </Popover>
         </div>
-        <div class="guides-list">
-            <a
-                v-for="row in visibleRows"
-                :key="row.title"
-                :href="isLoading ? undefined : row.url"
-                class="row"
-                :target="isLoading ? undefined : '_blank'"
-                rel="noopener noreferrer"
-                :aria-busy="isLoading || undefined"
-            >
-                <span class="row-text">
-                    <span class="title">
-                        <span :class="{ 'sk-shimmer': isLoading }">{{ row.title }}</span>
+        <ScrollFade class="projects-scroll">
+            <div class="guides-list">
+                <a
+                    v-for="row in filteredRows"
+                    :key="row.title"
+                    :href="isLoading ? undefined : row.url"
+                    class="row"
+                    :target="isLoading ? undefined : '_blank'"
+                    rel="noopener noreferrer"
+                    :aria-busy="isLoading || undefined"
+                >
+                    <span class="row-text">
+                        <span class="title">
+                            <span :class="{ 'sk-shimmer': isLoading }">{{ row.title }}</span>
+                        </span>
+                        <span v-if="row.excerpt" class="row-excerpt">
+                            <span :class="{ 'sk-shimmer': isLoading }">{{ row.excerpt }}</span>
+                        </span>
                     </span>
-                    <span v-if="row.excerpt" class="row-excerpt">
-                        <span :class="{ 'sk-shimmer': isLoading }">{{ row.excerpt }}</span>
+                    <span class="tags">
+                        <span
+                            v-for="t in row.tags"
+                            :key="t.label"
+                            class="pill"
+                            :class="isLoading ? 'sk-shimmer-pill' : t.color"
+                        >
+                            {{ t.label }}
+                        </span>
                     </span>
-                </span>
-                <span class="tags">
-                    <span
-                        v-for="t in row.tags"
-                        :key="t.label"
-                        class="pill"
-                        :class="isLoading ? 'sk-shimmer-pill' : t.color"
-                    >
-                        {{ t.label }}
-                    </span>
-                </span>
-            </a>
-            <p v-if="visibleRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
-                No projects match the current filter.
-            </p>
-        </div>
-        <div class="show-more">
-            <button
-                v-if="ready && filteredRows.length > collapsedLimit"
-                class="btn ghost"
-                type="button"
-                @click="showMore = !showMore"
-            >
-                {{ showMore ? "Show less" : `Show more (${filteredRows.length - collapsedLimit})` }}
-            </button>
-        </div>
+                </a>
+                <p v-if="filteredRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
+                    No projects match the current filter.
+                </p>
+            </div>
+        </ScrollFade>
     </section>
 </template>

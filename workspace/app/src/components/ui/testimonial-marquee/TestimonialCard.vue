@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { Star } from "lucide-vue-next";
-import { cn } from "@lib/utils";
 import type { Testimonial } from "./types";
 
-defineProps<{
-    item: Testimonial;
-    interactive: boolean;
-    loading: boolean;
-    cardClass: string;
-}>();
+withDefaults(
+    defineProps<{
+        item: Testimonial;
+        interactive: boolean;
+        loading: boolean;
+        cardClass: string;
+        focusable?: boolean;
+    }>(),
+    { focusable: true },
+);
 
 defineEmits<{
     (e: "select", item: Testimonial): void;
@@ -22,20 +25,14 @@ defineEmits<{
         :class="cardClass"
         :disabled="interactive ? loading : undefined"
         :aria-busy="interactive && loading ? true : undefined"
-        :tabindex="interactive ? undefined : -1"
+        :tabindex="interactive && focusable ? undefined : -1"
         @click="interactive && !loading ? $emit('select', item) : undefined"
     >
-        <div
-            v-if="interactive && !loading"
-            :class="cn(
-                'absolute inset-0 bg-gradient-to-br from-black/[0.02] dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100',
-            )"
-        />
         <span v-if="item.featured && !loading" class="tm-featured-badge">
             <Star class="size-3 fill-current" :stroke-width="0" />
             <span>Featured</span>
         </span>
-        <div class="relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
+        <div class="tm-card__body relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
             <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5 whitespace-pre-line">
                 <span :class="{ 'sk-shimmer': loading }">{{ item.text }}</span>
             </p>
@@ -65,3 +62,29 @@ defineEmits<{
         </div>
     </component>
 </template>
+
+<style scoped>
+.tm-featured-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: hsl(38 92% 50% / 0.14);
+    color: var(--accent-amber);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.tm-card--featured > .tm-card__body {
+    padding-top: 20px;
+}
+</style>
