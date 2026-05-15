@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
-import { profile, type ProfileSkillRecord } from "@gocanto/data";
+import { profile, type ProfileSkillRecord } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
 import { Binary, Server, Workflow, CreditCard, Waypoints, Users, Layers, ShoppingCart, Brain, Sparkles, ExternalLink, ArrowUpRight } from "lucide-vue-next";
 import {

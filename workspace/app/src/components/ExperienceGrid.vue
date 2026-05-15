@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { experience } from "@gocanto/data";
+import { experience } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
 
 type Guide = {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { links, profile } from "@gocanto/data";
+import { links, profile } from "@gocanto/store";
 import { Heart } from "lucide-vue-next";
 import ThemeToggle from "@components/ThemeToggle.vue";
 

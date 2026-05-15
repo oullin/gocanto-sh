@@ -6,6 +6,7 @@ import { dirname, resolve } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
 const ssrOutDir = resolve(appRoot, ".prerender-ssr");
+const ssrEntryFile = "entry-server.js";
 const distIndex = resolve(appRoot, "dist/index.html");
 
 console.log("[prerender] building SSR bundle…");
@@ -19,13 +20,14 @@ await build({
         emptyOutDir: true,
         rollupOptions: {
             input: resolve(appRoot, "src/entry-server.ts"),
-            output: { entryFileNames: "entry-server.mjs" },
+            output: { entryFileNames: ssrEntryFile },
         },
     },
 });
 
 console.log("[prerender] rendering App to HTML…");
-const { render } = await import(pathToFileURL(resolve(ssrOutDir, "entry-server.mjs")).href);
+const ssrBundleUrl = pathToFileURL(resolve(ssrOutDir, ssrEntryFile)).href;
+const { render } = (await import(ssrBundleUrl)) as { render: () => Promise<string> };
 const appHtml = await render();
 
 console.log("[prerender] injecting into dist/index.html…");
@@ -36,10 +38,10 @@ const injected = template.replace(
 );
 
 if (injected === template) {
-    throw new Error("[prerender] could not locate <div id=\"app\"> in dist/index.html");
+    throw new Error('[prerender] could not locate <div id="app"> in dist/index.html');
 }
 
 await writeFile(distIndex, injected);
 await rm(ssrOutDir, { recursive: true, force: true });
 
-console.log("[prerender] dist/index.html prerendered (" + appHtml.length + " bytes of app HTML)");
+console.log(`[prerender] dist/index.html prerendered (${appHtml.length} bytes of app HTML)`);

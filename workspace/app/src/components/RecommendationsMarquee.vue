@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from "vue";
-import { recommendations } from "@gocanto/data";
-import type { RecommendationRecord } from "@gocanto/data";
+import { recommendations } from "@gocanto/store";
+import type { RecommendationRecord } from "@gocanto/store";
 import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
 import { useInViewReady } from "@lib/useAsyncInView";

@@ -13,6 +13,7 @@
     "typecheck": "turbo run typecheck --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status"
   },
   "devDependencies": {
+    "tsx": "^4.20.0",
     "turbo": "^2.9.12"
   }
 }

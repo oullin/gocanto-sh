@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { profile } from "@gocanto/data";
+import { profile } from "@gocanto/store";
 import {
     Bot,
     Check,

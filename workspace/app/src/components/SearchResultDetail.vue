@@ -26,7 +26,7 @@ import type {
     ProjectRecord,
     RecommendationRecord,
     TalkRecord,
-} from "@gocanto/data";
+} from "@gocanto/store";
 
 export type SearchPayload =
     | { kind: "Work"; data: ExperienceRecord }

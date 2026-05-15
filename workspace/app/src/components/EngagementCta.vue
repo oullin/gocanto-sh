@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { profile } from "@gocanto/data";
+import { profile } from "@gocanto/store";
 
 const email = profile.data.email;
 const mailto = `mailto:${email}`;

@@ -99,7 +99,7 @@ function searchable(...parts: string[]): string {
 async function buildCorpus(): Promise<Corpus> {
     // Dynamically import fixtures so module-init cost is deferred.
     const { education, experience, links, profile, projects, recommendations, talks } =
-        await import("@gocanto/data");
+        await import("@gocanto/store");
 
     return {
         work: experience.data.map((e) => ({
