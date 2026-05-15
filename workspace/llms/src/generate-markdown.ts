@@ -32,6 +32,7 @@ mkdirSync(distDir, { recursive: true });
 
 const write = (name: string, body: string): void => {
     const out = body.endsWith("\n") ? body : `${body}\n`;
+
     writeFileSync(resolve(distDir, name), out, "utf8");
 };
 
@@ -64,6 +65,7 @@ const lastmod = computeLastmod({
     recommendations,
     talks,
 });
+
 write("sitemap.xml", renderSitemap(SITE_URL, lastmod));
 
 console.log(

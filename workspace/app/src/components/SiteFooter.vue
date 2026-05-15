@@ -9,9 +9,7 @@ type FooterLink = {
     readonly external?: boolean;
 };
 
-const social = Object.fromEntries(
-    links.data.map((l) => [l.name, l]),
-);
+const social = Object.fromEntries(links.data.map((l) => [l.name, l]));
 const githubPersonalUrl = social.github?.url ?? "#";
 const githubOullinUrl = social.github_oullin?.url ?? "#";
 const linkedinUrl = social.linkedin?.url ?? "#";
@@ -58,7 +56,8 @@ const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> 
                             :href="link.href"
                             :target="link.external ? '_blank' : undefined"
                             :rel="link.external ? 'noopener noreferrer' : undefined"
-                        >{{ link.label }}</a>
+                            >{{ link.label }}</a
+                        >
                     </li>
                 </ul>
             </div>

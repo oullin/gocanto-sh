@@ -57,12 +57,14 @@ interface Cell {
 const cells = computed<Cell[]>(() => {
     const out: Cell[] = [];
     const frame = currentFrame.value;
+
     for (let row = 0; row < props.rows; row++) {
         for (let col = 0; col < props.cols; col++) {
             const value = frame[row]?.[col] ?? 0;
             const opacity = Math.max(0, Math.min(1, props.brightness * value));
             const isActive = opacity > 0.5;
             const isOn = opacity > 0.05;
+
             out.push({
                 key: `${row}-${col}`,
                 cx: col * (props.size + props.gap) + props.size / 2,
@@ -75,6 +77,7 @@ const cells = computed<Cell[]>(() => {
             });
         }
     }
+
     return out;
 });
 
@@ -87,12 +90,7 @@ const styleVars = computed(() => ({
 </script>
 
 <template>
-    <div
-        role="img"
-        :aria-label="ariaLabel"
-        class="relative inline-block"
-        :style="styleVars"
-    >
+    <div role="img" :aria-label="ariaLabel" class="relative inline-block" :style="styleVars">
         <svg
             :width="svgDimensions.width"
             :height="svgDimensions.height"
@@ -130,7 +128,10 @@ const styleVars = computed(() => ({
                 :r="radius"
                 :fill="cell.fill"
                 :opacity="cell.opacity"
-                :style="{ transform: cell.transform, filter: cell.isActive ? `url(#${glowId})` : undefined }"
+                :style="{
+                    transform: cell.transform,
+                    filter: cell.isActive ? `url(#${glowId})` : undefined,
+                }"
             />
         </svg>
     </div>

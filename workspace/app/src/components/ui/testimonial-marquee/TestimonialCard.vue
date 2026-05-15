@@ -33,12 +33,16 @@ defineEmits<{
             <span>Featured</span>
         </span>
         <div class="tm-card__body relative z-10 flex flex-1 flex-col gap-4 overflow-hidden">
-            <p class="text-sm leading-relaxed text-muted-foreground line-clamp-5 whitespace-pre-line">
+            <p
+                class="text-sm leading-relaxed text-muted-foreground line-clamp-5 whitespace-pre-line"
+            >
                 <span :class="{ 'sk-shimmer': loading }">{{ item.text }}</span>
             </p>
         </div>
         <div class="relative z-10 flex items-center gap-3 pt-3">
-            <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
+            <div
+                class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted"
+            >
                 <div v-if="loading" class="tm-avatar-skeleton h-full w-full" />
                 <img
                     v-else
@@ -53,9 +57,13 @@ defineEmits<{
                 <span class="truncate text-sm font-medium text-foreground">
                     <span :class="{ 'sk-shimmer': loading }">{{ item.name }}</span>
                 </span>
-                <span v-if="item.role || item.company" class="truncate text-xs text-muted-foreground">
+                <span
+                    v-if="item.role || item.company"
+                    class="truncate text-xs text-muted-foreground"
+                >
                     <span :class="{ 'sk-shimmer': loading }">
-                        {{ item.role }}<template v-if="item.role && item.company"> · </template>{{ item.company }}
+                        {{ item.role }}<template v-if="item.role && item.company"> · </template
+                        >{{ item.company }}
                     </span>
                 </span>
             </div>

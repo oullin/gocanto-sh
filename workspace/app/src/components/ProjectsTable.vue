@@ -20,9 +20,12 @@ const EXCERPT_MAX = 140;
 const summarise = (text: string): string => {
     const trimmed = text.trim();
     const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
-    const firstSentence =
-        sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
-    if (firstSentence.length <= EXCERPT_MAX) {return firstSentence;}
+    const firstSentence = sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
+
+    if (firstSentence.length <= EXCERPT_MAX) {
+        return firstSentence;
+    }
+
     return `${firstSentence.slice(0, EXCERPT_MAX - 1).trimEnd()}…`;
 };
 
@@ -37,9 +40,7 @@ const allRows: Row[] = [...projects.data]
         excerpt: summarise(p.excerpt),
         tags: [
             { label: p.language, color: "blue" },
-            ...(p.is_open_source
-                ? [{ label: "Open Source", color: "green" }]
-                : []),
+            ...(p.is_open_source ? [{ label: "Open Source", color: "green" }] : []),
         ],
     }));
 
@@ -50,15 +51,18 @@ const popoverOpen = ref(false);
 const filtering = ref(false);
 
 const filteredRows = computed<Row[]>(() =>
-    selected.value.size === 0
-        ? allRows
-        : allRows.filter((r) => selected.value.has(r.language)),
+    selected.value.size === 0 ? allRows : allRows.filter((r) => selected.value.has(r.language)),
 );
 
 const toggleLanguage = (lang: string) => {
     const next = new Set(selected.value);
-    if (next.has(lang)) {next.delete(lang);}
-    else {next.add(lang);}
+
+    if (next.has(lang)) {
+        next.delete(lang);
+    } else {
+        next.add(lang);
+    }
+
     selected.value = next;
 };
 
@@ -67,8 +71,14 @@ const clearSelection = () => {
 };
 
 const buttonLabel = computed(() => {
-    if (selected.value.size === 0) {return "Filter";}
-    if (selected.value.size === 1) {return [...selected.value][0];}
+    if (selected.value.size === 0) {
+        return "Filter";
+    }
+
+    if (selected.value.size === 1) {
+        return [...selected.value][0];
+    }
+
     return `${selected.value.size} languages`;
 });
 
@@ -101,7 +111,16 @@ const isLoading = computed(() => !ready.value || filtering.value);
                         :disabled="!ready"
                     >
                         <span class="filter-icon" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <line x1="4" y1="6" x2="14" y2="6" />
                                 <line x1="18" y1="6" x2="20" y2="6" />
                                 <circle cx="16" cy="6" r="2" />
@@ -115,14 +134,25 @@ const isLoading = computed(() => !ready.value || filtering.value);
                         </span>
                         <span>{{ buttonLabel }}</span>
                         <span class="filter-chevron" aria-hidden="true">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <polyline points="6 9 12 15 18 9" />
                             </svg>
                         </span>
                     </button>
                 </PopoverTrigger>
                 <PopoverContent align="end" class="w-64 p-0">
-                    <div class="flex items-center justify-between px-3 py-2 border-b text-xs text-muted-foreground">
+                    <div
+                        class="flex items-center justify-between px-3 py-2 border-b text-xs text-muted-foreground"
+                    >
                         <span>Filter by language</span>
                         <Button
                             v-if="selected.size > 0"
@@ -136,7 +166,9 @@ const isLoading = computed(() => !ready.value || filtering.value);
                     </div>
                     <ul class="p-1 max-h-72 overflow-y-auto">
                         <li v-for="lang in languages" :key="lang">
-                            <label class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent cursor-pointer text-sm">
+                            <label
+                                class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent cursor-pointer text-sm"
+                            >
                                 <Checkbox
                                     :model-value="selected.has(lang)"
                                     @update:model-value="() => toggleLanguage(lang)"

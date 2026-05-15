@@ -13,13 +13,21 @@
         <link rel="canonical" href="https://gocanto.sh/" />
         <link rel="alternate" href="https://gocanto.sh/" hreflang="en-US" />
         <link rel="alternate" href="https://gocanto.sh/" hreflang="x-default" />
-        <link rel="alternate" type="text/markdown" href="/index.md" title="Full profile as Markdown" />
+        <link
+            rel="alternate"
+            type="text/markdown"
+            href="/index.md"
+            title="Full profile as Markdown"
+        />
         <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png" />
         <link rel="manifest" href="%BASE_URL%site.webmanifest" />
 
         <!-- Open Graph -->
-        <meta property="og:title" content="Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems" />
+        <meta
+            property="og:title"
+            content="Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems"
+        />
         <meta
             property="og:description"
             content="Hands-on software architect. 20 years shipping regulated backends — payments, banking cores, Kafka pipelines, AS/400 modernisation. Now building AI-agentic systems in Go."
@@ -40,7 +48,10 @@
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems" />
+        <meta
+            name="twitter:title"
+            content="Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems"
+        />
         <meta
             name="twitter:description"
             content="Hands-on software architect. 20 years shipping regulated backends — payments, banking cores, Kafka pipelines, AS/400 modernisation. Now building AI-agentic systems in Go."
@@ -50,7 +61,9 @@
         <meta name="twitter:creator" content="@gocanto" />
         <meta name="twitter:site" content="@gocanto" />
 
-        <title>Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems</title>
+        <title>
+            Gustavo Ocanto — Software Architect &amp; Principal Engineer · AI-Agentic Systems
+        </title>
 
         <!-- Structured Data (schema.org) -->
         <script type="application/ld+json">
@@ -106,9 +119,12 @@
             (function () {
                 try {
                     const stored = localStorage.getItem("theme");
-                    const theme = stored === "light" || stored === "dark"
-                        ? stored
-                        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                    const theme =
+                        stored === "light" || stored === "dark"
+                            ? stored
+                            : window.matchMedia("(prefers-color-scheme: dark)").matches
+                              ? "dark"
+                              : "light";
                     document.documentElement.dataset.theme = theme;
                 } catch (_) {
                     document.documentElement.dataset.theme = "dark";
@@ -116,8 +132,14 @@
             })();
         </script>
         <style>
-            :root { background: hsl(0 0% 4%); color: hsl(0 0% 93%); }
-            :root[data-theme="light"] { background: hsl(0 0% 100%); color: hsl(0 0% 9%); }
+            :root {
+                background: hsl(0 0% 4%);
+                color: hsl(0 0% 93%);
+            }
+            :root[data-theme="light"] {
+                background: hsl(0 0% 100%);
+                color: hsl(0 0% 9%);
+            }
         </style>
     </head>
     <body>

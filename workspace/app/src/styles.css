@@ -48,13 +48,13 @@
 
     /* Semantic tokens that flip across themes */
     --nav-bg: hsl(0 0% 0%);
-    --nav-divider: hsl(0 0% 100% / 0.10);
+    --nav-divider: hsl(0 0% 100% / 0.1);
     --pill-bg: hsl(0 0% 0%);
     --pill-fg: hsl(0 0% 100%);
     --ring-alpha: hsl(0 0% 100% / 0.14);
     --ring-alpha-hover: hsl(0 0% 100% / 0.24);
     --surface-tint: hsl(0 0% 100% / 0.06);
-    --surface-tint-hover: hsl(0 0% 100% / 0.10);
+    --surface-tint-hover: hsl(0 0% 100% / 0.1);
     --btn-primary-bg: hsl(0 0% 96%);
     --btn-primary-fg: hsl(0 0% 0%);
     --btn-primary-bg-hover: hsl(0 0% 100%);
@@ -66,7 +66,7 @@
 
     /* Skiper92 / Vercel command palette */
     --cmd-surface: hsl(0 0% 5%);
-    --cmd-border: hsl(0 0% 100% / 0.10);
+    --cmd-border: hsl(0 0% 100% / 0.1);
     --cmd-chip-bg: hsl(0 0% 100% / 0.04);
     --cmd-chip-bg-hover: hsl(0 0% 100% / 0.08);
     --cmd-chip-bg-active: hsl(0 0% 100% / 0.12);
@@ -88,7 +88,7 @@
     --brand-foreground: hsl(0 0% 100%);
 
     --nav-bg: hsl(0 0% 100%);
-    --nav-divider: hsl(0 0% 0% / 0.10);
+    --nav-divider: hsl(0 0% 0% / 0.1);
     --pill-bg: hsl(0 0% 100%);
     --pill-fg: hsl(0 0% 9%);
     --ring-alpha: hsl(0 0% 0% / 0.14);
@@ -106,12 +106,12 @@
 
     /* Skiper92 / Vercel command palette (light) */
     --cmd-surface: hsl(0 0% 100%);
-    --cmd-border: hsl(0 0% 0% / 0.10);
+    --cmd-border: hsl(0 0% 0% / 0.1);
     --cmd-chip-bg: hsl(0 0% 0% / 0.04);
     --cmd-chip-bg-hover: hsl(0 0% 0% / 0.08);
-    --cmd-chip-bg-active: hsl(0 0% 0% / 0.10);
+    --cmd-chip-bg-active: hsl(0 0% 0% / 0.1);
     --cmd-chip-border: hsl(0 0% 0% / 0.08);
-    --cmd-chip-border-active: hsl(0 0% 0% / 0.20);
+    --cmd-chip-border-active: hsl(0 0% 0% / 0.2);
 
     color-scheme: light;
 }
@@ -130,7 +130,13 @@
     body {
         background: var(--background);
         color: var(--foreground);
-        font-family: "Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-family:
+            "Geist Variable",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            sans-serif;
         font-size: 14px;
         line-height: 1.55;
         scroll-behavior: smooth;
@@ -237,7 +243,9 @@
     padding: 8px 12px;
     border-radius: 9999px;
     color: hsl(0 0% 60%);
-    transition: background 120ms ease, color 120ms ease;
+    transition:
+        background 120ms ease,
+        color 120ms ease;
 }
 
 .nav-links a:hover {
@@ -358,8 +366,13 @@
 }
 
 @keyframes sk-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.55; }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.55;
+    }
 }
 
 /* ---------- Hero ---------- */
@@ -414,8 +427,7 @@
     height: 240px;
     margin-bottom: 24px;
     background-color: transparent;
-    background-image:
-        radial-gradient(var(--pattern-dot) 1px, transparent 1px);
+    background-image: radial-gradient(var(--pattern-dot) 1px, transparent 1px);
     background-size: 18px 18px;
     background-position: center;
     display: flex;
@@ -479,9 +491,15 @@
     gap: 10px;
 }
 
-.topic-illo.ai .ai-task-done    { top: 78px; }
-.topic-illo.ai .ai-task-progress { top: 108px; }
-.topic-illo.ai .ai-task-queued  { top: 138px; }
+.topic-illo.ai .ai-task-done {
+    top: 78px;
+}
+.topic-illo.ai .ai-task-progress {
+    top: 108px;
+}
+.topic-illo.ai .ai-task-queued {
+    top: 138px;
+}
 
 .topic-illo.ai .ai-task-status {
     width: 16px;
@@ -511,9 +529,15 @@
     border-radius: 999px;
 }
 
-.topic-illo.ai .ai-task-bar-1 { width: 132px; }
-.topic-illo.ai .ai-task-bar-2 { width: 104px; }
-.topic-illo.ai .ai-task-bar-3 { width: 84px; }
+.topic-illo.ai .ai-task-bar-1 {
+    width: 132px;
+}
+.topic-illo.ai .ai-task-bar-2 {
+    width: 104px;
+}
+.topic-illo.ai .ai-task-bar-3 {
+    width: 84px;
+}
 
 .topic-illo.ai .ai-tool {
     position: absolute;
@@ -538,7 +562,9 @@
 }
 
 @keyframes ai-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ---------- Banking & Fintech illo: card + transactions ---------- */
@@ -573,8 +599,12 @@
     z-index: 0;
 }
 
-.topic-illo.fintech .fintech-txn-1 { top: 30px; }
-.topic-illo.fintech .fintech-txn-2 { top: 60px; }
+.topic-illo.fintech .fintech-txn-1 {
+    top: 30px;
+}
+.topic-illo.fintech .fintech-txn-2 {
+    top: 60px;
+}
 
 .topic-illo.fintech .fintech-txn-dot {
     width: 10px;
@@ -676,12 +706,7 @@
     height: 100%;
     background: var(--surface-2);
     border-right: 1px solid var(--border);
-    background-image:
-        repeating-linear-gradient(
-            45deg,
-            transparent 0 6px,
-            var(--border) 6px 7px
-        );
+    background-image: repeating-linear-gradient(45deg, transparent 0 6px, var(--border) 6px 7px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -815,8 +840,14 @@
     font-family: inherit;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 1px 0 0 hsl(0 0% 100% / 0.02) inset, 0 4px 14px -8px rgba(0, 0, 0, 0.4);
-    transition: background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    box-shadow:
+        0 1px 0 0 hsl(0 0% 100% / 0.02) inset,
+        0 4px 14px -8px rgba(0, 0, 0, 0.4);
+    transition:
+        background 150ms ease,
+        color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
 }
 
 .search-button:hover {
@@ -1075,7 +1106,10 @@
     font-weight: 500;
     line-height: 1;
     cursor: pointer;
-    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+    transition:
+        background 120ms ease,
+        color 120ms ease,
+        border-color 120ms ease;
 }
 
 .search-filters__chip:hover {
@@ -1129,7 +1163,6 @@
     color: var(--foreground);
     box-shadow: inset 0 0 0 1px var(--cmd-chip-border-active);
 }
-
 
 /* ---------- All Guides list ---------- */
 
@@ -1267,12 +1300,17 @@
     background: var(--background);
     color: var(--muted-foreground);
     margin-bottom: 4px;
-    transition: border-color 350ms ease, background-color 350ms ease, color 350ms ease;
+    transition:
+        border-color 350ms ease,
+        background-color 350ms ease,
+        color 350ms ease;
 }
 
 .explore-card h3 > span,
 .explore-card p > span {
-    transition: color 350ms ease, background-color 350ms ease;
+    transition:
+        color 350ms ease,
+        background-color 350ms ease;
 }
 
 .explore-card__icon--loading {
@@ -1422,7 +1460,9 @@ button.explore-card:focus-visible {
             scroll-fade-top linear both,
             scroll-fade-bottom linear both;
         animation-timeline: scroll(self block), scroll(self block);
-        animation-range: 0 4rem, calc(100% - 4rem) 100%;
+        animation-range:
+            0 4rem,
+            calc(100% - 4rem) 100%;
     }
 
     @keyframes scroll-fade-top {
@@ -1616,10 +1656,26 @@ button.explore-card:focus-visible {
     letter-spacing: 0.01em;
 }
 
-.skill-sheet__chip--green  { background: hsl(142 60% 12%); color: hsl(142 71% 70%); border-color: hsl(142 50% 22%); }
-.skill-sheet__chip--blue   { background: hsl(217 60% 14%); color: hsl(217 91% 78%); border-color: hsl(217 55% 26%); }
-.skill-sheet__chip--purple { background: hsl(270 50% 14%); color: hsl(270 91% 80%); border-color: hsl(270 45% 26%); }
-.skill-sheet__chip--amber  { background: hsl(38 60% 12%);  color: hsl(38 92% 68%);  border-color: hsl(38 55% 24%); }
+.skill-sheet__chip--green {
+    background: hsl(142 60% 12%);
+    color: hsl(142 71% 70%);
+    border-color: hsl(142 50% 22%);
+}
+.skill-sheet__chip--blue {
+    background: hsl(217 60% 14%);
+    color: hsl(217 91% 78%);
+    border-color: hsl(217 55% 26%);
+}
+.skill-sheet__chip--purple {
+    background: hsl(270 50% 14%);
+    color: hsl(270 91% 80%);
+    border-color: hsl(270 45% 26%);
+}
+.skill-sheet__chip--amber {
+    background: hsl(38 60% 12%);
+    color: hsl(38 92% 68%);
+    border-color: hsl(38 55% 24%);
+}
 
 .skill-sheet__projects {
     list-style: none;
@@ -1650,7 +1706,10 @@ button.explore-card:focus-visible {
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    transition: border-color 150ms ease, transform 150ms ease, background-color 150ms ease;
+    transition:
+        border-color 150ms ease,
+        transform 150ms ease,
+        background-color 150ms ease;
 }
 
 .skill-sheet__project:hover {
@@ -1667,7 +1726,9 @@ button.explore-card:focus-visible {
     flex-shrink: 0;
     margin-top: 2px;
     color: var(--muted-foreground);
-    transition: color 150ms ease, transform 150ms ease;
+    transition:
+        color 150ms ease,
+        transform 150ms ease;
 }
 
 .skill-sheet__project:hover .skill-sheet__project-icon {
@@ -1860,7 +1921,10 @@ button.explore-card:focus-visible {
     border-radius: 9999px;
     color: hsl(0 0% 53%);
     cursor: pointer;
-    transition: color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+    transition:
+        color 120ms ease,
+        background 120ms ease,
+        box-shadow 120ms ease;
 }
 
 .theme-toggle__option input {
@@ -2029,4 +2093,3 @@ button.explore-card:focus-visible {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-

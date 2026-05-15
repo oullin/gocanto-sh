@@ -1,10 +1,8 @@
 import type { ProfileFixture } from "@gocanto/store";
 
-export const renderLlmsTxt = (
-    siteUrl: string,
-    profile: ProfileFixture,
-): string => {
+export const renderLlmsTxt = (siteUrl: string, profile: ProfileFixture): string => {
     const { name, profession } = profile.data;
+
     return `# ${name}
 
 > ${profession} — full profile, projects, experience, talks, recommendations, and links. Static markdown bundles for LLM agents and direct human consumption.

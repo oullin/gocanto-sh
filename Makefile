@@ -1,4 +1,4 @@
-.PHONY: dev format
+.PHONY: dev format format-all
 
 dev:
 	pnpm dev
@@ -8,3 +8,6 @@ format:
 	pnpm lint
 	pnpm typecheck
 	pnpm test
+
+format-all:
+	pnpm format-all

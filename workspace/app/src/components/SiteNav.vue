@@ -20,10 +20,12 @@ function tick(now: number) {
     if (now - lastUpdate >= UPDATE_INTERVAL_MS) {
         levels.value = levels.value.map((prev) => {
             const target = Math.random();
+
             return prev + (target - prev) * 0.55;
         });
         lastUpdate = now;
     }
+
     rafId = requestAnimationFrame(tick);
 }
 
@@ -31,7 +33,9 @@ onMounted(() => {
     rafId = requestAnimationFrame(tick);
 });
 onUnmounted(() => {
-    if (rafId) {cancelAnimationFrame(rafId);}
+    if (rafId) {
+        cancelAnimationFrame(rafId);
+    }
 });
 </script>
 
@@ -59,7 +63,12 @@ onUnmounted(() => {
                     <Send class="nav-cta-icon" :size="14" aria-hidden="true" />
                     <span>Get in touch</span>
                 </a>
-                <button type="button" class="nav-avatar" aria-label="Back to top" @click="scrollToTop">
+                <button
+                    type="button"
+                    class="nav-avatar"
+                    aria-label="Back to top"
+                    @click="scrollToTop"
+                >
                     <img src="/avatar.jpg" alt="" width="32" height="32" />
                 </button>
             </div>

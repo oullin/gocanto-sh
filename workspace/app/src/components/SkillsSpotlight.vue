@@ -19,8 +19,7 @@ type Topic = { title: string; description: string; illo: "ai" | "fintech" | "eco
 
 const section = ref<HTMLElement | null>(null);
 
-const findSkill = (name: string) =>
-    profile.data.skills.find((s) => s.item === name);
+const findSkill = (name: string) => profile.data.skills.find((s) => s.item === name);
 
 const topics: Topic[] = [
     {
@@ -31,17 +30,17 @@ const topics: Topic[] = [
     {
         title: "Banking & Fintech",
         description:
-            findSkill("AS/400 Modernisation")?.description
-            ?? findSkill("Payment Integration")?.description
-            ?? "",
+            findSkill("AS/400 Modernisation")?.description ??
+            findSkill("Payment Integration")?.description ??
+            "",
         illo: "fintech",
     },
     {
         title: "E-Commerce",
         description:
-            findSkill("E-commerce Architecture")?.description
-            ?? findSkill("Complex 3rd Party System Integrations")?.description
-            ?? "",
+            findSkill("E-commerce Architecture")?.description ??
+            findSkill("Complex 3rd Party System Integrations")?.description ??
+            "",
         illo: "ecom",
     },
 ];

@@ -8,13 +8,9 @@ import { useInViewReady } from "@lib/useAsyncInView";
 
 const AVATAR_BASE = "https://oullin.io/images/";
 
-const sorted = [...recommendations.data].sort((a, b) =>
-    b.created_at.localeCompare(a.created_at),
-);
+const sorted = [...recommendations.data].sort((a, b) => b.created_at.localeCompare(a.created_at));
 
-const byId: Map<string, RecommendationRecord> = new Map(
-    sorted.map((r) => [r.uuid, r]),
-);
+const byId: Map<string, RecommendationRecord> = new Map(sorted.map((r) => [r.uuid, r]));
 
 const items: Testimonial[] = sorted.map((r) => ({
     id: r.uuid,
@@ -35,23 +31,25 @@ const isLoading = computed(() => !ready.value);
 
 function handleSelect(item: Testimonial) {
     const record = byId.get(item.id);
-    if (!record) {return;}
+
+    if (!record) {
+        return;
+    }
+
     activePayload.value = { kind: "Recommendation", data: record };
     sheetOpen.value = true;
 }
 </script>
 
 <template>
-    <section
-        id="recommendations"
-        ref="section"
-        class="recommendations-section frame-section"
-    >
+    <section id="recommendations" ref="section" class="recommendations-section frame-section">
         <header class="recommendations-section__header">
             <h2>Recommendations</h2>
             <p class="recommendations-section__lede">
-                Words from people I've actually shipped with — engineers I've managed, peers across product and design, and leaders I've reported to. The
-                <span class="recommendations-section__hl">highlighted</span> ones are the ones I keep coming back to. Click any card to read the full note.
+                Words from people I've actually shipped with — engineers I've managed, peers across
+                product and design, and leaders I've reported to. The
+                <span class="recommendations-section__hl">highlighted</span> ones are the ones I
+                keep coming back to. Click any card to read the full note.
             </p>
         </header>
         <TestimonialMarquee

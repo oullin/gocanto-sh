@@ -51,8 +51,7 @@ const isOpen = computed({
     set: (v) => emit("update:open", v),
 });
 
-const sanitize = (html: string) =>
-    html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+const sanitize = (html: string) => html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
 
 const kindIcon = computed(() => {
     switch (props.payload?.kind) {
@@ -83,15 +82,16 @@ const kindIcon = computed(() => {
             class="w-full sm:max-w-xl overflow-y-auto bg-card border-l border-border"
         >
             <SheetHeader class="gap-1.5 px-6 pt-6">
-                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
+                <div
+                    class="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground"
+                >
                     <component :is="kindIcon" class="size-3.5" />
                     <span>{{ payload?.kind }}</span>
                 </div>
-                <div
-                    v-if="payload?.kind === 'Recommendation'"
-                    class="flex items-center gap-3 pt-1"
-                >
-                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
+                <div v-if="payload?.kind === 'Recommendation'" class="flex items-center gap-3 pt-1">
+                    <div
+                        class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-border bg-muted"
+                    >
                         <img
                             :src="`https://oullin.io/images/${payload.data.person.avatar}`"
                             :alt="payload.data.person.full_name"
@@ -126,16 +126,20 @@ const kindIcon = computed(() => {
                 </SheetTitle>
                 <SheetDescription class="text-sm text-muted-foreground">
                     <template v-if="payload?.kind === 'Work'">
-                        {{ payload.data.start_date }} – {{ payload.data.end_date }} · {{ payload.data.employment_type }} · {{ payload.data.city }}, {{ payload.data.country }}
+                        {{ payload.data.start_date }} – {{ payload.data.end_date }} ·
+                        {{ payload.data.employment_type }} · {{ payload.data.city }},
+                        {{ payload.data.country }}
                     </template>
                     <template v-else-if="payload?.kind === 'Project'">
-                        {{ payload.data.language }}<span v-if="payload.data.is_open_source"> · Open source</span>
+                        {{ payload.data.language
+                        }}<span v-if="payload.data.is_open_source"> · Open source</span>
                     </template>
                     <template v-else-if="payload?.kind === 'Skill'">
                         Proficiency {{ payload.data.percentage }}%
                     </template>
                     <template v-else-if="payload?.kind === 'Education'">
-                        {{ payload.data.school }} · Graduated {{ payload.data.graduated_at }} · {{ payload.data.issuing_country }}
+                        {{ payload.data.school }} · Graduated {{ payload.data.graduated_at }} ·
+                        {{ payload.data.issuing_country }}
                     </template>
                     <template v-else-if="payload?.kind === 'Talk'">
                         {{ payload.data.subject }} · {{ payload.data.location }}
@@ -151,14 +155,25 @@ const kindIcon = computed(() => {
 
             <div class="px-6 pb-8 pt-2 text-[15px] leading-relaxed text-foreground/90 space-y-4">
                 <template v-if="payload?.kind === 'Work'">
-                    <p v-for="(para, i) in sanitize(payload.data.summary).split('\n\n').filter(Boolean)" :key="i" class="whitespace-pre-line">
+                    <p
+                        v-for="(para, i) in sanitize(payload.data.summary)
+                            .split('\n\n')
+                            .filter(Boolean)"
+                        :key="i"
+                        class="whitespace-pre-line"
+                    >
                         {{ para }}
                     </p>
                     <div v-if="payload.data.skills" class="pt-4 border-t border-border">
-                        <h3 class="text-xs uppercase tracking-wide text-muted-foreground mb-3">Skills</h3>
+                        <h3 class="text-xs uppercase tracking-wide text-muted-foreground mb-3">
+                            Skills
+                        </h3>
                         <div class="flex flex-wrap gap-2">
                             <span
-                                v-for="skill in payload.data.skills.split(',').map((s) => s.trim()).filter(Boolean)"
+                                v-for="skill in payload.data.skills
+                                    .split(',')
+                                    .map((s) => s.trim())
+                                    .filter(Boolean)"
                                 :key="skill"
                                 class="pill"
                             >
@@ -190,14 +205,18 @@ const kindIcon = computed(() => {
                 <template v-else-if="payload?.kind === 'Skill'">
                     <p>{{ payload.data.description }}</p>
                     <div class="pt-4 border-t border-border">
-                        <h3 class="text-xs uppercase tracking-wide text-muted-foreground mb-3">Proficiency</h3>
+                        <h3 class="text-xs uppercase tracking-wide text-muted-foreground mb-3">
+                            Proficiency
+                        </h3>
                         <div class="h-2 w-full rounded-full bg-muted overflow-hidden">
                             <div
                                 class="h-full bg-foreground transition-all"
                                 :style="{ width: `${payload.data.percentage}%` }"
                             />
                         </div>
-                        <p class="mt-2 text-sm text-muted-foreground">{{ payload.data.percentage }}%</p>
+                        <p class="mt-2 text-sm text-muted-foreground">
+                            {{ payload.data.percentage }}%
+                        </p>
                     </div>
                 </template>
 

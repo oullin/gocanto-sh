@@ -8,13 +8,16 @@ export function emptyFrame(rows: number, cols: number): Frame {
 
 export function ensureFrameSize(frame: Frame, rows: number, cols: number): Frame {
     const result: Frame = [];
+
     for (let r = 0; r < rows; r++) {
         const row = frame[r] || [];
+
         result.push([]);
         for (let c = 0; c < cols; c++) {
             result[r][c] = row[c] ?? 0;
         }
     }
+
     return result;
 }
 
@@ -28,8 +31,10 @@ export function vu(columns: number, levels: number[]): Frame {
 
         for (let row = 0; row < rows; row++) {
             const rowFromBottom = rows - 1 - row;
+
             if (rowFromBottom < height) {
                 let brightness = 1;
+
                 if (row < rows * 0.3) {
                     brightness = 1;
                 } else if (row < rows * 0.6) {
@@ -37,6 +42,7 @@ export function vu(columns: number, levels: number[]): Frame {
                 } else {
                     brightness = 0.6;
                 }
+
                 frame[row][col] = brightness;
             }
         }

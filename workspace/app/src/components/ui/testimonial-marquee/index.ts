@@ -1,2 +1,2 @@
-export { default as TestimonialMarquee } from "./TestimonialMarquee.vue"
-export type { Testimonial } from "./types"
+export { default as TestimonialMarquee } from "./TestimonialMarquee.vue";
+export type { Testimonial } from "./types";

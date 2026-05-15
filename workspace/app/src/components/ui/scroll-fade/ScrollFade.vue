@@ -19,7 +19,10 @@ let usingJsFade = false;
 function update() {
     const v = viewport.value;
     const t = thumb.value;
-    if (!v || !t) {return;}
+
+    if (!v || !t) {
+        return;
+    }
 
     const max = v.scrollHeight - v.clientHeight;
 
@@ -35,12 +38,14 @@ function update() {
 
     if (max <= 0) {
         t.style.opacity = "0";
+
         return;
     }
 
     const track = v.clientHeight;
     const thumbH = Math.max(MIN_THUMB, (v.clientHeight / v.scrollHeight) * track);
     const top = (v.scrollTop / max) * (track - thumbH);
+
     t.style.opacity = "";
     t.style.height = `${thumbH}px`;
     t.style.transform = `translateY(${top}px)`;
@@ -48,7 +53,10 @@ function update() {
 
 onMounted(() => {
     const v = viewport.value;
-    if (!v) {return;}
+
+    if (!v) {
+        return;
+    }
 
     const supportsScrollTimeline =
         typeof CSS !== "undefined" &&
@@ -69,13 +77,16 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     const v = viewport.value;
+
     if (v && scrollHandler) {
         v.removeEventListener("scroll", scrollHandler);
     }
+
     if (resizeObserver) {
         resizeObserver.disconnect();
         resizeObserver = null;
     }
+
     scrollHandler = null;
 });
 

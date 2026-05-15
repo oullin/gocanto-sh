@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": "../../storage/.cache/typescript/store.tsbuildinfo",
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src/**/*.ts"]
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "../../storage/.cache/typescript/store.tsbuildinfo",
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": ["src/**/*.ts"]
 }

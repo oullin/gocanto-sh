@@ -14,9 +14,18 @@ const PLACEHOLDER_COUNT = 6;
 const section = ref<HTMLElement | null>(null);
 
 const tagColorFor = (t: string) => {
-    if (t === "Contract") {return "purple";}
-    if (t === "Contractor") {return "amber";}
-    if (t === "Full-Time") {return "blue";}
+    if (t === "Contract") {
+        return "purple";
+    }
+
+    if (t === "Contractor") {
+        return "amber";
+    }
+
+    if (t === "Full-Time") {
+        return "blue";
+    }
+
     return "green";
 };
 
@@ -44,12 +53,7 @@ const ready = useInViewReady(section);
             </div>
             <div class="guides-grid__filler" aria-hidden="true"></div>
             <div class="guides-grid__filler" aria-hidden="true"></div>
-            <div
-                v-for="g in guides"
-                :key="g.title"
-                class="guide-card"
-                :aria-busy="!ready"
-            >
+            <div v-for="g in guides" :key="g.title" class="guide-card" :aria-busy="!ready">
                 <div>
                     <h3>
                         <span :class="{ 'sk-shimmer': !ready }">{{ g.title }}</span>

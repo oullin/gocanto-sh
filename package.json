@@ -7,12 +7,15 @@
     "build": "turbo run build --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "dev": "turbo run dev --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "format": "turbo run format --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
+    "format-all": "turbo run format --cache-dir storage/.cache/turbo --force; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "format:check": "turbo run format:check --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "lint": "turbo run lint --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "test": "turbo run test --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status",
     "typecheck": "turbo run typecheck --cache-dir storage/.cache/turbo; status=$?; rm -rf .turbo workspace/*/.turbo; exit $status"
   },
   "devDependencies": {
+    "oxc-parser": "latest",
+    "oxfmt": "latest",
     "tsx": "^4.20.0",
     "turbo": "^2.9.12"
   }

@@ -20,9 +20,7 @@ import {
     CommandList,
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
-import SearchResultDetail, {
-    type SearchPayload,
-} from "@components/SearchResultDetail.vue";
+import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
 
 type Result = {
     key: string;
@@ -70,12 +68,9 @@ const corpus = shallowRef<Corpus | null>(null);
 const loading = ref(false);
 const selectedKind = ref<KindKey | null>(null);
 
-const isKindVisible = (k: KindKey) =>
-    selectedKind.value === null || selectedKind.value === k;
+const isKindVisible = (k: KindKey) => selectedKind.value === null || selectedKind.value === k;
 
-const visibleKinds = computed(() =>
-    KINDS.filter((k) => isKindVisible(k.key)),
-);
+const visibleKinds = computed(() => KINDS.filter((k) => isKindVisible(k.key)));
 
 const toggleKind = (k: KindKey) => {
     selectedKind.value = selectedKind.value === k ? null : k;
@@ -93,6 +88,7 @@ function searchable(...parts: string[]): string {
         .replace(/\s+/g, " ")
         .trim();
     const compact = clean.replace(/[^A-Za-z0-9]+/g, "");
+
     return `${clean} ${compact}`;
 }
 
@@ -179,9 +175,14 @@ const ready = computed(() => !loading.value && corpus.value !== null);
 watch(open, async (v) => {
     if (!v) {
         selectedKind.value = null;
+
         return;
     }
-    if (corpus.value) {return;}
+
+    if (corpus.value) {
+        return;
+    }
+
     loading.value = true;
     try {
         corpus.value = await buildCorpus();
@@ -214,14 +215,25 @@ useEventListener(window, "keydown", (e: KeyboardEvent) => {
 // Command root has highlightOnHover enabled, and reka-ui listens for pointer
 // events rather than legacy mouse events).
 watch(sheetOpen, (v) => {
-    if (v) {return;}
+    if (v) {
+        return;
+    }
+
     const key = activeKey.value;
-    if (!key) {return;}
+
+    if (!key) {
+        return;
+    }
+
     window.setTimeout(() => {
         const target = document.querySelector<HTMLElement>(
             `[data-slot="command-item"][data-item-key="${CSS.escape(key)}"]`,
         );
-        if (!target) {return;}
+
+        if (!target) {
+            return;
+        }
+
         const rect = target.getBoundingClientRect();
         const init = {
             bubbles: true,
@@ -230,6 +242,7 @@ watch(sheetOpen, (v) => {
             clientX: rect.left + rect.width / 2,
             clientY: rect.top + rect.height / 2,
         };
+
         target.dispatchEvent(new PointerEvent("pointerenter", init));
         target.dispatchEvent(new PointerEvent("pointermove", init));
         target.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -243,7 +256,9 @@ watch(sheetOpen, (v) => {
             <span class="search-button__icon" aria-hidden="true">
                 <Search :size="16" />
             </span>
-            <span class="search-button__label">Search work, projects, skills, education, talks, and more</span>
+            <span class="search-button__label"
+                >Search work, projects, skills, education, talks, and more</span
+            >
             <kbd class="kbd">
                 <span>⌘</span>
                 <span>K</span>

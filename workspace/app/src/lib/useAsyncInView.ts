@@ -27,7 +27,10 @@ export function useAsyncInView<T>(
     const { stop } = useIntersectionObserver(
         target,
         ([entry]) => {
-            if (!entry?.isIntersecting || resolved) {return;}
+            if (!entry?.isIntersecting || resolved) {
+                return;
+            }
+
             resolved = true;
             stop();
             window.setTimeout(async () => {
@@ -55,7 +58,10 @@ export function useInViewReady(
     const { stop } = useIntersectionObserver(
         target,
         ([entry]) => {
-            if (!entry?.isIntersecting || resolved) {return;}
+            if (!entry?.isIntersecting || resolved) {
+                return;
+            }
+
             resolved = true;
             stop();
             window.setTimeout(() => {

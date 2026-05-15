@@ -34,15 +34,14 @@ const stripHtml = (input: string): string =>
 const escapeMarkdown = (input: string): string => input.replace(/\|/g, "\\|");
 
 const renderSkill = (skill: ProfileSkillRecord): string => {
-    const heading = skill.signature
-        ? `### ${skill.item} ⭐ (signature)`
-        : `### ${skill.item}`;
+    const heading = skill.signature ? `### ${skill.item} ⭐ (signature)` : `### ${skill.item}`;
     const lines: string[] = [heading];
 
     lines.push(`- Proficiency: ${skill.percentage}%`);
     if (skill.years !== undefined) {
         lines.push(`- Years: ${skill.years}`);
     }
+
     lines.push("", stripHtml(skill.description));
 
     if (skill.long_description) {
@@ -115,11 +114,13 @@ const renderProject = (project: ProjectRecord): string => {
         "",
         stripHtml(project.excerpt),
     ];
+
     return lines.join("\n");
 };
 
 export const formatProjects = (fixture: ProjectsFixture): string => {
     const sorted = [...fixture.data].sort((a, b) => a.sort - b.sort);
+
     return [
         "# Projects",
         "",
@@ -141,6 +142,7 @@ const renderExperience = (entry: ExperienceRecord): string => {
         "",
         `**Skills:** ${entry.skills}`,
     ];
+
     return lines.join("\n");
 };
 
@@ -163,21 +165,19 @@ const renderEducation = (entry: EducationRecord): string => {
         "",
         stripHtml(entry.description),
     ];
+
     return lines.join("\n");
 };
 
 export const formatEducation = (fixture: EducationFixture): string =>
-    [
-        "# Education",
-        "",
-        fixture.data.map(renderEducation).join("\n\n---\n\n"),
-    ].join("\n");
+    ["# Education", "", fixture.data.map(renderEducation).join("\n\n---\n\n")].join("\n");
 
 const renderRecommendation = (rec: RecommendationRecord): string => {
     const body = stripHtml(rec.text)
         .split("\n")
         .map((line) => (line ? `> ${line}` : ">"))
         .join("\n");
+
     return [
         `### ${rec.person.full_name} — ${rec.person.designation} @ ${rec.person.company}`,
         "",
@@ -187,9 +187,7 @@ const renderRecommendation = (rec: RecommendationRecord): string => {
     ].join("\n");
 };
 
-export const formatRecommendations = (
-    fixture: RecommendationsFixture,
-): string =>
+export const formatRecommendations = (fixture: RecommendationsFixture): string =>
     [
         "# Recommendations",
         "",
@@ -209,11 +207,7 @@ const renderTalk = (talk: TalkRecord): string =>
     ].join("\n");
 
 export const formatTalks = (fixture: TalksFixture): string =>
-    [
-        "# Talks",
-        "",
-        fixture.data.map(renderTalk).join("\n\n---\n\n"),
-    ].join("\n");
+    ["# Talks", "", fixture.data.map(renderTalk).join("\n\n---\n\n")].join("\n");
 
 const renderLink = (link: LinkRecord): string =>
     `- [${link.name} (${link.handle})](${link.url}) — ${stripHtml(link.description)}`;
