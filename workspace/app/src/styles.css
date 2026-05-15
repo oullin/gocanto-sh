@@ -1230,8 +1230,100 @@ button.explore-card:focus-visible {
 
 .explore-scroll {
     height: clamp(420px, 60vh, 640px);
-    overflow: hidden;
     margin-bottom: 48px;
+}
+
+.scroll-fade-root {
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-fade-y {
+    --ft: 0;
+    --fb: 1;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 calc(var(--ft) * 4rem),
+        #000 calc(100% - var(--fb) * 4rem),
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 calc(var(--ft) * 4rem),
+        #000 calc(100% - var(--fb) * 4rem),
+        transparent 100%
+    );
+}
+
+.scroll-fade-y::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-fade-scrollbar {
+    position: absolute;
+    top: 0;
+    right: 1px;
+    bottom: 0;
+    width: 10px;
+    padding: 1px;
+    pointer-events: none;
+    touch-action: none;
+    user-select: none;
+}
+
+.scroll-fade-thumb {
+    width: 100%;
+    height: 0;
+    border-radius: 999px;
+    background-color: var(--border);
+    transition: opacity 150ms ease;
+    will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+    @property --ft {
+        syntax: "<number>";
+        inherits: false;
+        initial-value: 0;
+    }
+
+    @property --fb {
+        syntax: "<number>";
+        inherits: false;
+        initial-value: 0;
+    }
+
+    .scroll-fade-y:not([data-fade-js]) {
+        animation:
+            scroll-fade-top linear both,
+            scroll-fade-bottom linear both;
+        animation-timeline: scroll(self block), scroll(self block);
+        animation-range: 0 4rem, calc(100% - 4rem) 100%;
+    }
+
+    @keyframes scroll-fade-top {
+        from {
+            --ft: 0;
+        }
+        to {
+            --ft: 1;
+        }
+    }
+
+    @keyframes scroll-fade-bottom {
+        from {
+            --fb: 1;
+        }
+        to {
+            --fb: 0;
+        }
+    }
 }
 
 .explore-grid--dense {

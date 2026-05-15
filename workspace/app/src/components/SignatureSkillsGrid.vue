@@ -10,7 +10,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollFade } from "@/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
 
@@ -119,7 +119,7 @@ const activeHasIcon = computed<boolean>(() => {
             <p>Languages, frameworks, and practices I draw on day-to-day. Click any card for the full detail.</p>
         </div>
 
-        <ScrollArea class="explore-scroll">
+        <ScrollFade class="explore-scroll">
             <div class="explore-grid explore-grid--dense">
                 <button
                     v-for="c in moreCells"
@@ -145,7 +145,7 @@ const activeHasIcon = computed<boolean>(() => {
                     </p>
                 </button>
             </div>
-        </ScrollArea>
+        </ScrollFade>
 
         <Sheet v-model:open="open">
             <SheetContent class="skill-sheet" side="right">
