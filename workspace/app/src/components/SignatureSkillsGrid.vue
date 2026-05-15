@@ -111,6 +111,9 @@ const activeHasIcon = computed<boolean>(() => {
                 <p>
                     <span :class="{ 'sk-shimmer': !ready }">{{ c.description }}</span>
                 </p>
+                <span v-if="c.skill.years" class="explore-card__years" aria-label="Years hands-on">
+                    {{ c.skill.years }} yrs
+                </span>
             </button>
         </div>
 
@@ -143,6 +146,9 @@ const activeHasIcon = computed<boolean>(() => {
                     <p>
                         <span :class="{ 'sk-shimmer': !ready }">{{ c.description }}</span>
                     </p>
+                    <span v-if="c.skill.years" class="explore-card__years explore-card__years--muted" aria-label="Years hands-on">
+                        {{ c.skill.years }} yrs
+                    </span>
                 </button>
             </div>
         </ScrollFade>

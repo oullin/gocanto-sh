@@ -1128,6 +1128,7 @@
 }
 
 .explore-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1137,6 +1138,32 @@
     border-radius: 6px;
     background: var(--background);
     transition: border-color 150ms ease;
+}
+
+.explore-card__years {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--accent, var(--border-strong));
+    color: var(--accent-foreground, var(--foreground));
+    background: color-mix(in oklab, var(--accent, var(--foreground)) 14%, transparent);
+    line-height: 1;
+}
+
+.explore-card__years--muted {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted-foreground);
 }
 
 .explore-card:hover {
