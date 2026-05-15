@@ -7,7 +7,7 @@
         "#config/vite": "./vite.config.ts"
     },
     "scripts": {
-        "build": "vue-tsc -b && vite build --configLoader runner",
+        "build": "vue-tsc -b && vite build --configLoader runner && node scripts/prerender.mjs",
         "dev": "portless",
         "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
         "format": "oxfmt .",
@@ -35,6 +35,7 @@
         "@fontsource-variable/geist-mono": "^5.2.7",
         "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^25.6.2",
+        "@vue/server-renderer": "^3.5.34",
         "oxfmt": "latest",
         "oxlint": "^1.31.0",
         "portless": "^0.13.0",

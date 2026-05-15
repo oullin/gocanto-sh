@@ -183,12 +183,16 @@ const handleSelect = (r: Result) => {
     sheetOpen.value = true;
 };
 
-useEventListener(window, "keydown", (e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        open.value = !open.value;
-    }
-});
+useEventListener(
+    () => (typeof window === "undefined" ? null : window),
+    "keydown",
+    (e: KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+            e.preventDefault();
+            open.value = !open.value;
+        }
+    },
+);
 
 // When the Sheet closes, restore visibility to the previously-selected item
 // inside the still-open palette. cmdk preserves the data-highlighted attribute
