@@ -1,0 +1,27 @@
+{
+    "name": "Gustavo Ocanto",
+    "short_name": "Gocanto",
+    "description": "Software architect — AI-agentic systems, regulated backends, payments and banking cores.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "any",
+    "lang": "en-US",
+    "dir": "ltr",
+    "theme_color": "#0a0a0a",
+    "background_color": "#0a0a0a",
+    "icons": [
+        {
+            "src": "/favicon.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "any"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "type": "image/png",
+            "sizes": "180x180",
+            "purpose": "any"
+        }
+    ]
+}

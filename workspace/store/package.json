@@ -1,0 +1,20 @@
+{
+    "name": "@gocanto/store",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "scripts": {
+        "format": "tsx ../../scripts/blank-lines.ts && oxfmt .",
+        "format:check": "tsx ../../scripts/blank-lines.ts --check && oxfmt --check .",
+        "typecheck": "tsc -p tsconfig.json"
+    },
+    "devDependencies": {
+        "typescript": "^6.0.3"
+    }
+}

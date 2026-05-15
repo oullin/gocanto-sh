@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "../../storage/.cache/typescript/llms.tsbuildinfo",
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "allowImportingTsExtensions": true,
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "ignoreDeprecations": "6.0",
+        "types": ["node"]
+    },
+    "include": ["src/**/*.ts"]
+}

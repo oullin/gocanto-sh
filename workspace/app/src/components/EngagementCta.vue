@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { profile } from "@gocanto/data";
+import { profile } from "@gocanto/store";
 
 const email = profile.data.email;
 const mailto = `mailto:${email}`;
+const oullinLabsUrl = "https://oullin.io";
 </script>
 
 <template>
-    <section class="cta-grid frame-section">
+    <section id="book-a-review" class="cta-grid frame-section">
         <div class="cta-cell">
-            <h3>Ready to build? Start with a free conversation about your <b>system</b> or <b>team</b>.</h3>
-            <p>Walk through architecture, hiring, or a specific blocker. No pitch.</p>
+            <h3>Architecture review for your <b>AI-agentic</b> or <b>backend</b> system.</h3>
+            <p>
+                Deep dive on idempotency, audit trails, throughput, and what's about to break. Two
+                hours, written write-up, no pitch.
+            </p>
             <div class="cta-actions">
-                <a :href="mailto" class="btn primary">Get in touch</a>
+                <a :href="mailto" class="btn primary">Book a review</a>
                 <a href="#work" class="btn ghost">See work</a>
             </div>
         </div>
         <div class="cta-cell">
-            <h3>Explore engineering leadership with an in-depth review of your stack.</h3>
-            <p>For founders and CTOs who want a second pair of eyes on what's shipping.</p>
+            <h3>Need a fixed-scope sprint?</h3>
+            <p>
+                Oullin Labs ships payment integrations (hara.sh), event pipelines (kuda.sh), and
+                AS/400 modernisation (toku.sh) — agent-accelerated, audit-trail-by-default.
+            </p>
             <div class="cta-actions">
-                <a :href="mailto" class="btn ghost">Book a review</a>
+                <a :href="oullinLabsUrl" target="_blank" rel="noopener noreferrer" class="btn ghost"
+                    >Explore Oullin Labs</a
+                >
             </div>
         </div>
     </section>

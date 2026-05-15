@@ -4,6 +4,7 @@ import ExperienceGrid from "@components/ExperienceGrid.vue";
 import GlobalSearch from "@components/GlobalSearch.vue";
 import ProfileHero from "@components/ProfileHero.vue";
 import ProjectsTable from "@components/ProjectsTable.vue";
+import RecommendationsMarquee from "@components/RecommendationsMarquee.vue";
 import SignatureSkillsGrid from "@components/SignatureSkillsGrid.vue";
 import SiteFooter from "@components/SiteFooter.vue";
 import SiteNav from "@components/SiteNav.vue";
@@ -22,6 +23,8 @@ import SkillsSpotlight from "@components/SkillsSpotlight.vue";
         <SignatureSkillsGrid />
         <div class="frame-section frame-spacer" aria-hidden="true"></div>
         <EngagementCta />
+        <div class="frame-section frame-spacer" aria-hidden="true"></div>
+        <RecommendationsMarquee />
     </main>
     <SiteFooter />
 </template>

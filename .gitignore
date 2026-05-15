@@ -5,7 +5,7 @@ storage/
 .turbo/
 .vite/
 *.tsbuildinfo
-
+.playwright-mcp/
 # Code coverage profiles and other test artifacts
 *.out
 coverage.*

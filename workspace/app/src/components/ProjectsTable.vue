@@ -1,73 +1,68 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { projects } from "@gocanto/data";
+import { projects } from "@gocanto/store";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { useAsyncInView } from "@lib/useAsyncInView";
+import { ScrollFade } from "@/components/ui/scroll-fade";
+import { useInViewReady } from "@lib/useAsyncInView";
 
 type Row = {
     title: string;
     url: string;
     language: string;
+    excerpt: string;
     tags: { label: string; color: string }[];
 };
 
-const PLACEHOLDER_COUNT = 10;
-const placeholders: Row[] = Array.from({ length: PLACEHOLDER_COUNT }, () => ({
-    title: "",
-    url: "#",
-    language: "",
-    tags: [],
-}));
+const EXCERPT_MAX = 140;
+
+const summarise = (text: string): string => {
+    const trimmed = text.trim();
+    const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
+    const firstSentence = sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
+
+    if (firstSentence.length <= EXCERPT_MAX) {
+        return firstSentence;
+    }
+
+    return `${firstSentence.slice(0, EXCERPT_MAX - 1).trimEnd()}…`;
+};
 
 const section = ref<HTMLElement | null>(null);
 
-const allRows = useAsyncInView<Row[]>(section, () =>
-    [...projects.data]
-        .sort((a, b) => a.sort - b.sort)
-        .map((p) => ({
-            title: p.title,
-            url: p.url,
-            language: p.language,
-            tags: [
-                { label: p.language, color: "blue" },
-                ...(p.is_open_source
-                    ? [{ label: "Open Source", color: "green" }]
-                    : []),
-            ],
-        })),
-);
+const allRows: Row[] = [...projects.data]
+    .sort((a, b) => a.sort - b.sort)
+    .map((p) => ({
+        title: p.title,
+        url: p.url,
+        language: p.language,
+        excerpt: summarise(p.excerpt),
+        tags: [
+            { label: p.language, color: "blue" },
+            ...(p.is_open_source ? [{ label: "Open Source", color: "green" }] : []),
+        ],
+    }));
 
-const languages = computed<string[]>(() => {
-    if (!allRows.value) {return [];}
-    const seen = new Set<string>();
-    for (const r of allRows.value) {seen.add(r.language);}
-    return [...seen].sort();
-});
+const languages: string[] = [...new Set(allRows.map((r) => r.language))].sort();
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
-const showMore = ref(false);
-const collapsedLimit = 10;
 const filtering = ref(false);
 
-const filteredRows = computed<Row[]>(() => {
-    if (!allRows.value) {return placeholders;}
-    return selected.value.size === 0
-        ? allRows.value
-        : allRows.value.filter((r) => selected.value.has(r.language));
-});
-
-const visibleRows = computed<Row[]>(() =>
-    showMore.value ? filteredRows.value : filteredRows.value.slice(0, collapsedLimit),
+const filteredRows = computed<Row[]>(() =>
+    selected.value.size === 0 ? allRows : allRows.filter((r) => selected.value.has(r.language)),
 );
 
 const toggleLanguage = (lang: string) => {
     const next = new Set(selected.value);
-    if (next.has(lang)) {next.delete(lang);}
-    else {next.add(lang);}
+
+    if (next.has(lang)) {
+        next.delete(lang);
+    } else {
+        next.add(lang);
+    }
+
     selected.value = next;
 };
 
@@ -76,8 +71,14 @@ const clearSelection = () => {
 };
 
 const buttonLabel = computed(() => {
-    if (selected.value.size === 0) {return "Filter projects";}
-    if (selected.value.size === 1) {return [...selected.value][0];}
+    if (selected.value.size === 0) {
+        return "Filter";
+    }
+
+    if (selected.value.size === 1) {
+        return [...selected.value][0];
+    }
+
     return `${selected.value.size} languages`;
 });
 
@@ -92,12 +93,12 @@ watch(
     { deep: true },
 );
 
-const isLoaded = computed(() => allRows.value !== null);
-const showSkeleton = computed(() => !isLoaded.value || filtering.value);
+const ready = useInViewReady(section);
+const isLoading = computed(() => !ready.value || filtering.value);
 </script>
 
 <template>
-    <section ref="section" class="frame-section">
+    <section id="projects" ref="section" class="frame-section">
         <div class="section-heading">
             <h2>Projects</h2>
             <Popover v-model:open="popoverOpen">
@@ -107,10 +108,19 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
                         type="button"
                         aria-haspopup="listbox"
                         :aria-expanded="popoverOpen"
-                        :disabled="!isLoaded"
+                        :disabled="!ready"
                     >
                         <span class="filter-icon" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <line x1="4" y1="6" x2="14" y2="6" />
                                 <line x1="18" y1="6" x2="20" y2="6" />
                                 <circle cx="16" cy="6" r="2" />
@@ -124,14 +134,25 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
                         </span>
                         <span>{{ buttonLabel }}</span>
                         <span class="filter-chevron" aria-hidden="true">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <polyline points="6 9 12 15 18 9" />
                             </svg>
                         </span>
                     </button>
                 </PopoverTrigger>
                 <PopoverContent align="end" class="w-64 p-0">
-                    <div class="flex items-center justify-between px-3 py-2 border-b text-xs text-muted-foreground">
+                    <div
+                        class="flex items-center justify-between px-3 py-2 border-b text-xs text-muted-foreground"
+                    >
                         <span>Filter by language</span>
                         <Button
                             v-if="selected.size > 0"
@@ -145,7 +166,9 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
                     </div>
                     <ul class="p-1 max-h-72 overflow-y-auto">
                         <li v-for="lang in languages" :key="lang">
-                            <label class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent cursor-pointer text-sm">
+                            <label
+                                class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent cursor-pointer text-sm"
+                            >
                                 <Checkbox
                                     :model-value="selected.has(lang)"
                                     @update:model-value="() => toggleLanguage(lang)"
@@ -157,39 +180,40 @@ const showSkeleton = computed(() => !isLoaded.value || filtering.value);
                 </PopoverContent>
             </Popover>
         </div>
-        <div class="guides-list">
-            <template v-if="showSkeleton">
-                <div v-for="i in PLACEHOLDER_COUNT" :key="`sk-${i}`" class="row" aria-busy="true" aria-hidden="true">
-                    <Skeleton class="h-[25px] w-2/3" />
-                    <span class="tags">
-                        <Skeleton class="h-6 w-12 rounded-full" />
-                        <Skeleton class="h-6 w-20 rounded-full" />
+        <ScrollFade class="projects-scroll">
+            <div class="guides-list">
+                <a
+                    v-for="row in filteredRows"
+                    :key="row.title"
+                    :href="isLoading ? undefined : row.url"
+                    class="row"
+                    :target="isLoading ? undefined : '_blank'"
+                    rel="noopener noreferrer"
+                    :aria-busy="isLoading || undefined"
+                >
+                    <span class="row-text">
+                        <span class="title">
+                            <span :class="{ 'sk-shimmer': isLoading }">{{ row.title }}</span>
+                        </span>
+                        <span v-if="row.excerpt" class="row-excerpt">
+                            <span :class="{ 'sk-shimmer': isLoading }">{{ row.excerpt }}</span>
+                        </span>
                     </span>
-                </div>
-            </template>
-            <template v-else>
-                <a v-for="row in visibleRows" :key="row.title" :href="row.url" class="row" target="_blank" rel="noopener noreferrer">
-                    <span class="title">{{ row.title }}</span>
                     <span class="tags">
-                        <span v-for="t in row.tags" :key="t.label" class="pill">
+                        <span
+                            v-for="t in row.tags"
+                            :key="t.label"
+                            class="pill"
+                            :class="isLoading ? 'sk-shimmer-pill' : t.color"
+                        >
                             {{ t.label }}
                         </span>
                     </span>
                 </a>
-                <p v-if="visibleRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
+                <p v-if="filteredRows.length === 0" class="px-8 py-6 text-sm text-muted-foreground">
                     No projects match the current filter.
                 </p>
-            </template>
-        </div>
-        <div class="show-more">
-            <button
-                v-if="isLoaded && filteredRows.length > collapsedLimit"
-                class="btn ghost"
-                type="button"
-                @click="showMore = !showMore"
-            >
-                {{ showMore ? "Show less" : `Show more (${filteredRows.length - collapsedLimit})` }}
-            </button>
-        </div>
+            </div>
+        </ScrollFade>
     </section>
 </template>

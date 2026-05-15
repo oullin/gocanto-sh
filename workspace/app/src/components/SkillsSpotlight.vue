@@ -1,108 +1,149 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { profile } from "@gocanto/data";
-import { CornerDownLeft, Plus, Sparkles, User } from "lucide-vue-next";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useAsyncInView } from "@lib/useAsyncInView";
+import { profile } from "@gocanto/store";
+import {
+    Bot,
+    Check,
+    CreditCard,
+    Image as ImageIcon,
+    Landmark,
+    Loader,
+    Plus,
+    ShoppingBag,
+    Star,
+    Wrench,
+} from "lucide-vue-next";
+import { useInViewReady } from "@lib/useAsyncInView";
 
-type Topic = { title: string; description: string; illo: "ai" | "backend" | "security" };
+type Topic = { title: string; description: string; illo: "ai" | "fintech" | "ecom" };
 
 const section = ref<HTMLElement | null>(null);
 
-const placeholders: Topic[] = [
-    { title: "", description: "", illo: "ai" },
-    { title: "", description: "", illo: "backend" },
-    { title: "", description: "", illo: "security" },
+const findSkill = (name: string) => profile.data.skills.find((s) => s.item === name);
+
+const topics: Topic[] = [
+    {
+        title: "Agentic AI",
+        description: findSkill("Agentic Orchestration")?.description ?? "",
+        illo: "ai",
+    },
+    {
+        title: "Banking & Fintech",
+        description:
+            findSkill("AS/400 Modernisation")?.description ??
+            findSkill("Payment Integration")?.description ??
+            "",
+        illo: "fintech",
+    },
+    {
+        title: "E-Commerce",
+        description:
+            findSkill("E-commerce Architecture")?.description ??
+            findSkill("Complex 3rd Party System Integrations")?.description ??
+            "",
+        illo: "ecom",
+    },
 ];
 
-const topics = useAsyncInView<Topic[]>(section, () => {
-    const findSkill = (name: string) =>
-        profile.data.skills.find((s) => s.item === name);
-    return [
-        {
-            title: "AI",
-            description: findSkill("AI (Artificial Intelligence)")?.description ?? "",
-            illo: "ai",
-        },
-        {
-            title: "Backend",
-            description: findSkill("System Design")?.description ?? "",
-            illo: "backend",
-        },
-        {
-            title: "Integrations",
-            description: findSkill("Complex 3rd Party System Integrations")?.description ?? "",
-            illo: "security",
-        },
-    ];
-});
-
-const backendTiles = ["py", "ex", "fl", "ne", "el", "N", "so", "bn", "sl"];
+const ready = useInViewReady(section);
 </script>
 
 <template>
     <section ref="section" class="topics frame-section">
         <a
-            v-for="(t, i) in (topics ?? placeholders)"
+            v-for="(t, i) in topics"
             :key="`${t.illo}-${i}`"
-            :href="topics ? '#' : undefined"
+            :href="ready ? '#' : undefined"
             class="topic-card"
-            :aria-busy="!topics"
+            :aria-busy="!ready"
         >
             <div class="topic-illo" :class="t.illo">
-                <template v-if="t.illo === 'ai'">
-                    <div class="ai-avatar">
-                        <User :size="14" :stroke-width="1.5" />
-                    </div>
-                    <div class="ai-bubble ai-bubble-short"></div>
-                    <div class="ai-bubble ai-bubble-long"></div>
-                    <div class="ai-sparkle">
-                        <Sparkles :size="14" :stroke-width="1.5" />
-                    </div>
-                    <div class="ai-input">
-                        <span class="ai-input-plus">
-                            <Plus :size="12" :stroke-width="1.5" />
-                        </span>
-                        <span class="ai-input-enter">
-                            <CornerDownLeft :size="12" :stroke-width="1.5" />
-                        </span>
-                    </div>
-                </template>
-                <template v-else-if="t.illo === 'backend'">
-                    <div class="backend-grid">
-                        <div v-for="(tile, j) in backendTiles" :key="j" class="backend-tile">
-                            <span>{{ tile }}</span>
+                <template v-if="ready">
+                    <template v-if="t.illo === 'ai'">
+                        <div class="ai-avatar">
+                            <Bot :size="14" :stroke-width="1.5" />
+                            <span class="ai-status-dot" />
                         </div>
-                    </div>
-                </template>
-                <template v-else-if="t.illo === 'security'">
-                    <div class="security-window">
-                        <div class="security-titlebar">
-                            <span></span><span></span><span></span>
+                        <div class="ai-rail" />
+                        <div class="ai-task ai-task-done">
+                            <span class="ai-task-status ai-task-status-done">
+                                <Check :size="10" :stroke-width="2" />
+                            </span>
+                            <span class="ai-task-bar ai-task-bar-1" />
                         </div>
-                        <div class="security-body"></div>
-                    </div>
+                        <div class="ai-task ai-task-progress">
+                            <span class="ai-task-status ai-task-status-progress">
+                                <Loader :size="10" :stroke-width="2" />
+                            </span>
+                            <span class="ai-task-bar ai-task-bar-2" />
+                        </div>
+                        <div class="ai-task ai-task-queued">
+                            <span class="ai-task-status" />
+                            <span class="ai-task-bar ai-task-bar-3" />
+                        </div>
+                        <div class="ai-tool">
+                            <Wrench :size="10" :stroke-width="1.75" />
+                            <span class="ai-tool-bar" />
+                        </div>
+                    </template>
+                    <template v-else-if="t.illo === 'fintech'">
+                        <div class="fintech-chip">
+                            <Landmark :size="12" :stroke-width="1.5" />
+                        </div>
+                        <div class="fintech-txn fintech-txn-1">
+                            <span class="fintech-txn-dot" />
+                            <span class="fintech-txn-bar" />
+                            <span class="fintech-txn-amt">$</span>
+                        </div>
+                        <div class="fintech-txn fintech-txn-2">
+                            <span class="fintech-txn-dot" />
+                            <span class="fintech-txn-bar" />
+                            <span class="fintech-txn-amt">$</span>
+                        </div>
+                        <div class="fintech-card">
+                            <span class="fintech-card-chip" />
+                            <span class="fintech-card-digits fintech-card-digits-1" />
+                            <span class="fintech-card-digits fintech-card-digits-2" />
+                            <span class="fintech-card-name" />
+                            <span class="fintech-card-brand">
+                                <CreditCard :size="14" :stroke-width="1.5" />
+                            </span>
+                        </div>
+                    </template>
+                    <template v-else-if="t.illo === 'ecom'">
+                        <div class="ecom-card">
+                            <div class="ecom-image">
+                                <ImageIcon :size="18" :stroke-width="1.25" />
+                            </div>
+                            <div class="ecom-detail">
+                                <span class="ecom-title-bar" />
+                                <span class="ecom-sub-bar" />
+                                <div class="ecom-row">
+                                    <span class="ecom-price">$</span>
+                                    <span class="ecom-cart">
+                                        <Plus :size="10" :stroke-width="2" />
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="ecom-badge">
+                                <Star :size="10" :stroke-width="1.75" />
+                            </span>
+                        </div>
+                        <div class="ecom-corner">
+                            <ShoppingBag :size="12" :stroke-width="1.5" />
+                        </div>
+                    </template>
                 </template>
+                <div v-else class="topic-illo-skeleton" aria-hidden="true" />
             </div>
             <div class="topic-body">
                 <h3>
-                    <template v-if="topics">{{ t.title }}</template>
-                    <Skeleton v-else class="h-5 w-1/3 inline-block align-middle" />
+                    <span :class="{ 'sk-shimmer': !ready }">{{ t.title }}</span>
                 </h3>
                 <p>
-                    <template v-if="topics">{{ t.description }}</template>
-                    <span v-else class="topic-skeleton">
-                        <Skeleton class="h-4 w-full mb-1.5" />
-                        <Skeleton class="h-4 w-4/5" />
-                    </span>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ t.description }}</span>
                 </p>
             </div>
         </a>
     </section>
 </template>
-
-<style scoped>
-.topic-skeleton {
-    display: block;
-}
-</style>

@@ -1,40 +1,46 @@
 <script setup lang="ts">
-import { links, profile } from "@gocanto/data";
+import { links, profile } from "@gocanto/store";
+import { Heart } from "lucide-vue-next";
 import ThemeToggle from "@components/ThemeToggle.vue";
 
-const social = Object.fromEntries(
-    links.data.map((l) => [l.name, l]),
-);
-const githubUrl = social.github?.url ?? "#";
+type FooterLink = {
+    readonly label: string;
+    readonly href: string;
+    readonly external?: boolean;
+};
+
+const social = Object.fromEntries(links.data.map((l) => [l.name, l]));
+const githubPersonalUrl = social.github?.url ?? "#";
+const githubOullinUrl = social.github_oullin?.url ?? "#";
 const linkedinUrl = social.linkedin?.url ?? "#";
+const xUrl = social.x?.url ?? "#";
 const mailto = `mailto:${profile.data.email}`;
 const year = new Date().getFullYear();
 const ownerName = profile.data.name;
 
-const columns = [
+const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> = [
     {
-        heading: "Get started",
-        links: ["Latest", "Featured", "Topics", "Archives"],
+        heading: "Work",
+        links: [
+            { label: "Featured work", href: "#work" },
+            { label: "Projects", href: "#projects" },
+            { label: "About", href: "#about" },
+        ],
     },
     {
-        heading: "Build",
-        links: ["Backend", "Frontend", "Tooling", "DX"],
+        heading: "Open Source",
+        links: [
+            { label: "GitHub · gocanto", href: githubPersonalUrl, external: true },
+            { label: "GitHub · oullin", href: githubOullinUrl, external: true },
+        ],
     },
     {
-        heading: "Scale",
-        links: ["Observability", "Infrastructure", "Performance", "Cost"],
-    },
-    {
-        heading: "Secure",
-        links: ["AppSec", "Secrets", "Supply chain", "Auth"],
-    },
-    {
-        heading: "Resources",
-        links: ["Talks", "Open source", "Reading list", "Press kit"],
-    },
-    {
-        heading: "Learn",
-        links: ["Notes", "Case studies", "Changelog", "Glossary"],
+        heading: "Connect",
+        links: [
+            { label: "Email", href: mailto },
+            { label: "LinkedIn", href: linkedinUrl, external: true },
+            { label: "X", href: xUrl, external: true },
+        ],
     },
 ];
 </script>
@@ -45,18 +51,23 @@ const columns = [
             <div v-for="col in columns" :key="col.heading" class="footer-col">
                 <h4>{{ col.heading }}</h4>
                 <ul>
-                    <li v-for="link in col.links" :key="link">
-                        <a href="#">{{ link }}</a>
+                    <li v-for="link in col.links" :key="`${col.heading}-${link.label}`">
+                        <a
+                            :href="link.href"
+                            :target="link.external ? '_blank' : undefined"
+                            :rel="link.external ? 'noopener noreferrer' : undefined"
+                            >{{ link.label }}</a
+                        >
                     </li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <span class="status">All systems normal</span>
+            <span class="status">
+                <Heart :size="14" :stroke-width="1.75" aria-hidden="true" class="status-icon" />
+                <span>Husband, Father, Brother, and Son</span>
+            </span>
             <div class="footer-socials">
-                <a :href="githubUrl" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a :href="linkedinUrl" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a :href="mailto">Email</a>
                 <span>© {{ year }} {{ ownerName }}</span>
                 <ThemeToggle />
             </div>
