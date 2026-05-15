@@ -9,11 +9,13 @@ import SignatureSkillsGrid from "@components/SignatureSkillsGrid.vue";
 import SiteFooter from "@components/SiteFooter.vue";
 import SiteNav from "@components/SiteNav.vue";
 import SkillsSpotlight from "@components/SkillsSpotlight.vue";
+import { BorderBeam } from "@components/ui/border-beam";
 </script>
 
 <template>
     <SiteNav />
     <main class="outer">
+        <BorderBeam />
         <ProfileHero />
         <SkillsSpotlight />
         <GlobalSearch />
