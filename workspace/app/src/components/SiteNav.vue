@@ -1,14 +1,46 @@
 <script setup lang="ts">
 import { Send } from "lucide-vue-next";
+import { onMounted, onUnmounted, ref } from "vue";
+import { Matrix } from "@/components/ui/matrix";
+
+const COLS = 8;
+const levels = ref<number[]>(Array(COLS).fill(0.3));
+let rafId: number | undefined;
+let lastUpdate = 0;
+const UPDATE_INTERVAL_MS = 90;
+
+function tick(now: number) {
+    if (now - lastUpdate >= UPDATE_INTERVAL_MS) {
+        levels.value = levels.value.map((prev) => {
+            const target = Math.random();
+            return prev + (target - prev) * 0.55;
+        });
+        lastUpdate = now;
+    }
+    rafId = requestAnimationFrame(tick);
+}
+
+onMounted(() => {
+    rafId = requestAnimationFrame(tick);
+});
+onUnmounted(() => {
+    if (rafId) {cancelAnimationFrame(rafId);}
+});
 </script>
 
 <template>
     <header class="nav">
         <div class="nav-inner">
             <a href="#" class="nav-brand" aria-label="gocanto home">
-                <svg class="nav-logo" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 2 H20 V8 H16 V6 H6 V16 H16 V13 H11 V10 H20 V20 H2 Z" fill="currentColor" />
-                </svg>
+                <Matrix
+                    :rows="7"
+                    :cols="COLS"
+                    :levels="levels"
+                    :size="3"
+                    :gap="1"
+                    aria-label="gocanto home"
+                    class="nav-logo"
+                />
             </a>
             <nav class="nav-links">
                 <a href="#writing">Writing</a>
