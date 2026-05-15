@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { DialogRootEmits, DialogRootProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
 import { useForwardPropsEmits } from "reka-ui"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { cn } from "@/lib/utils"
 import Command from "./Command.vue"
 
 const props = withDefaults(defineProps<DialogRootProps & {
   title?: string
   description?: string
+  contentClass?: HTMLAttributes["class"]
 }>(), {
   title: "Command Palette",
   description: "Search for a command to run...",
@@ -18,12 +21,17 @@ const forwarded = useForwardPropsEmits(props, emits)
 
 <template>
   <Dialog v-slot="slotProps" v-bind="forwarded">
-    <DialogContent class="overflow-hidden p-0 sm:max-w-[640px] rounded-xl border-0 shadow-[0_0_0_1px_rgba(255,255,255,0.08),_0_24px_48px_rgba(0,0,0,0.5)]">
+    <DialogContent
+      :class="cn(
+        'cmd-dialog-surface overflow-hidden p-0 sm:max-w-[640px] rounded-[14px]',
+        props.contentClass,
+      )"
+    >
       <DialogHeader class="sr-only">
         <DialogTitle>{{ title }}</DialogTitle>
         <DialogDescription>{{ description }}</DialogDescription>
       </DialogHeader>
-      <Command class="bg-card">
+      <Command class="bg-transparent">
         <slot v-bind="slotProps" />
       </Command>
     </DialogContent>

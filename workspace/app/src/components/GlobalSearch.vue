@@ -8,6 +8,7 @@ import {
     Link as LinkIcon,
     Mic,
     Quote,
+    Search,
     Sparkles,
 } from "lucide-vue-next";
 import {
@@ -52,6 +53,16 @@ const KINDS: { key: KindKey; label: string }[] = [
     { key: "links", label: "Links" },
 ];
 
+const groupIcons = {
+    work: BookOpen,
+    projects: FileText,
+    skills: Sparkles,
+    education: GraduationCap,
+    talks: Mic,
+    recommendations: Quote,
+    links: LinkIcon,
+} as const;
+
 const open = ref(false);
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
@@ -61,6 +72,10 @@ const selectedKind = ref<KindKey | null>(null);
 
 const isKindVisible = (k: KindKey) =>
     selectedKind.value === null || selectedKind.value === k;
+
+const visibleKinds = computed(() =>
+    KINDS.filter((k) => isKindVisible(k.key)),
+);
 
 const toggleKind = (k: KindKey) => {
     selectedKind.value = selectedKind.value === k ? null : k;
@@ -175,35 +190,49 @@ watch(open, async (v) => {
     }
 });
 
+const activeKey = ref<string | null>(null);
+
 const handleSelect = (r: Result) => {
     activePayload.value = r.payload;
+    activeKey.value = r.key;
     // Keep the Command dialog open behind the Sheet — closing the Sheet
     // returns the user to the palette with their previous selection still
     // highlighted.
     sheetOpen.value = true;
 };
 
-useEventListener(
-    () => (typeof window === "undefined" ? null : window),
-    "keydown",
-    (e: KeyboardEvent) => {
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-            e.preventDefault();
-            open.value = !open.value;
-        }
-    },
-);
+useEventListener(window, "keydown", (e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        open.value = !open.value;
+    }
+});
 
-// When the Sheet closes, restore visibility to the previously-selected item
-// inside the still-open palette. cmdk preserves the data-highlighted attribute
-// but the scroll position may be at the top, so we scroll it back into view.
+// When the Sheet closes, re-highlight and scroll to the previously-selected
+// item inside the still-open palette. Reka-ui's Listbox clears its highlight
+// when focus leaves to the Sheet, so we re-trigger it via pointermove (the
+// Command root has highlightOnHover enabled, and reka-ui listens for pointer
+// events rather than legacy mouse events).
 watch(sheetOpen, (v) => {
     if (v) {return;}
+    const key = activeKey.value;
+    if (!key) {return;}
     window.setTimeout(() => {
-        const highlighted = document.querySelector<HTMLElement>(
-            '[data-slot="command-item"][data-highlighted]',
+        const target = document.querySelector<HTMLElement>(
+            `[data-slot="command-item"][data-item-key="${CSS.escape(key)}"]`,
         );
-        highlighted?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (!target) {return;}
+        const rect = target.getBoundingClientRect();
+        const init = {
+            bubbles: true,
+            cancelable: true,
+            pointerType: "mouse",
+            clientX: rect.left + rect.width / 2,
+            clientY: rect.top + rect.height / 2,
+        };
+        target.dispatchEvent(new PointerEvent("pointerenter", init));
+        target.dispatchEvent(new PointerEvent("pointermove", init));
+        target.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, 300);
 });
 </script>
@@ -211,6 +240,9 @@ watch(sheetOpen, (v) => {
 <template>
     <section class="global-search frame-section">
         <button class="search-button" type="button" @click="open = true">
+            <span class="search-button__icon" aria-hidden="true">
+                <Search :size="16" />
+            </span>
             <span class="search-button__label">Search work, projects, skills, education, talks, and more</span>
             <kbd class="kbd">
                 <span>⌘</span>
@@ -230,7 +262,7 @@ watch(sheetOpen, (v) => {
                 v-for="k in KINDS"
                 :key="k.key"
                 type="button"
-                class="pill search-filters__pill"
+                class="search-filters__chip"
                 :class="{ 'is-active': selectedKind === k.key }"
                 :aria-pressed="selectedKind === k.key"
                 @click="toggleKind(k.key)"
@@ -238,100 +270,31 @@ watch(sheetOpen, (v) => {
                 {{ k.label }}
             </button>
         </div>
-        <CommandList>
+        <CommandList class="cmd-list">
             <template v-if="!ready">
                 <div class="px-3 py-3" aria-busy="true">
-                    <Skeleton v-for="i in 6" :key="i" class="h-12 w-full my-1" />
+                    <Skeleton v-for="i in 6" :key="i" class="h-10 w-full my-1" />
                 </div>
             </template>
             <template v-else-if="corpus">
-                <CommandEmpty class="px-5 py-8 text-center text-sm text-muted-foreground">
+                <CommandEmpty class="px-5 py-10 text-center text-sm text-muted-foreground">
                     No matches found.
                 </CommandEmpty>
-                <CommandGroup v-if="isKindVisible('work')" heading="Work">
-                    <CommandItem
-                        v-for="r in corpus.work"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <BookOpen />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('projects')" heading="Projects">
-                    <CommandItem
-                        v-for="r in corpus.projects"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <FileText />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('skills')" heading="Skills">
-                    <CommandItem
-                        v-for="r in corpus.skills"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <Sparkles />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('education')" heading="Education">
-                    <CommandItem
-                        v-for="r in corpus.education"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <GraduationCap />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('talks')" heading="Talks">
-                    <CommandItem
-                        v-for="r in corpus.talks"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <Mic />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('recommendations')" heading="Recommendations">
-                    <CommandItem
-                        v-for="r in corpus.recommendations"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <Quote />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
-                <CommandGroup v-if="isKindVisible('links')" heading="Links">
-                    <CommandItem
-                        v-for="r in corpus.links"
-                        :key="r.key"
-                        :value="r.key"
-                        @select="handleSelect(r)"
-                    >
-                        <LinkIcon />
-                        <span class="truncate">{{ r.title }}</span>
-                        <span class="sr-only">{{ r.searchText }}</span>
-                    </CommandItem>
-                </CommandGroup>
+                <template v-for="kind in visibleKinds" :key="kind.key">
+                    <CommandGroup :heading="kind.label">
+                        <CommandItem
+                            v-for="r in corpus[kind.key]"
+                            :key="r.key"
+                            :value="r.key"
+                            :data-item-key="r.key"
+                            @select="handleSelect(r)"
+                        >
+                            <component :is="groupIcons[kind.key]" />
+                            <span class="truncate">{{ r.title }}</span>
+                            <span class="sr-only">{{ r.searchText }}</span>
+                        </CommandItem>
+                    </CommandGroup>
+                </template>
             </template>
         </CommandList>
     </CommandDialog>

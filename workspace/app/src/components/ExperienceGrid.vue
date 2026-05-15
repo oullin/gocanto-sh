@@ -44,10 +44,9 @@ const ready = useInViewReady(section);
             </div>
             <div class="guides-grid__filler" aria-hidden="true"></div>
             <div class="guides-grid__filler" aria-hidden="true"></div>
-            <a
+            <div
                 v-for="g in guides"
                 :key="g.title"
-                :href="ready ? '#' : undefined"
                 class="guide-card"
                 :aria-busy="!ready"
             >
@@ -69,7 +68,7 @@ const ready = useInViewReady(section);
                         {{ t.label }}
                     </span>
                 </div>
-            </a>
+            </div>
         </div>
     </section>
 </template>

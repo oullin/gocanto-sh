@@ -64,6 +64,15 @@
     --filter-chip-bg: var(--background);
     --pattern-dot: hsl(0 0% 18%);
 
+    /* Skiper92 / Vercel command palette */
+    --cmd-surface: hsl(0 0% 5%);
+    --cmd-border: hsl(0 0% 100% / 0.10);
+    --cmd-chip-bg: hsl(0 0% 100% / 0.04);
+    --cmd-chip-bg-hover: hsl(0 0% 100% / 0.08);
+    --cmd-chip-bg-active: hsl(0 0% 100% / 0.12);
+    --cmd-chip-border: hsl(0 0% 100% / 0.08);
+    --cmd-chip-border-active: hsl(0 0% 100% / 0.18);
+
     color-scheme: dark;
 }
 
@@ -94,6 +103,15 @@
     --btn-ghost-ring-hover: hsl(0 0% 70%);
     --filter-chip-bg: hsl(0 0% 100%);
     --pattern-dot: hsl(0 0% 82%);
+
+    /* Skiper92 / Vercel command palette (light) */
+    --cmd-surface: hsl(0 0% 100%);
+    --cmd-border: hsl(0 0% 0% / 0.10);
+    --cmd-chip-bg: hsl(0 0% 0% / 0.04);
+    --cmd-chip-bg-hover: hsl(0 0% 0% / 0.08);
+    --cmd-chip-bg-active: hsl(0 0% 0% / 0.10);
+    --cmd-chip-border: hsl(0 0% 0% / 0.08);
+    --cmd-chip-border-active: hsl(0 0% 0% / 0.20);
 
     color-scheme: light;
 }
@@ -785,29 +803,41 @@
 .search-button {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
     width: 100%;
     max-width: 672px;
-    height: 50px;
-    padding: 0 16px;
-    border: 0;
-    border-radius: 6px;
-    background: var(--surface-tint);
+    height: 52px;
+    padding: 0 14px;
+    border: 1px solid var(--cmd-border);
+    border-radius: 10px;
+    background: var(--cmd-surface);
     color: var(--muted-foreground);
     font-family: inherit;
     font-size: 14px;
     cursor: pointer;
-    transition: background 150ms ease, color 150ms ease;
+    box-shadow: 0 1px 0 0 hsl(0 0% 100% / 0.02) inset, 0 4px 14px -8px rgba(0, 0, 0, 0.4);
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .search-button:hover {
     background: var(--surface-tint-hover);
     color: var(--foreground);
+    border-color: var(--ring-alpha-hover);
+}
+
+.search-button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
 }
 
 .search-button__label {
     text-align: left;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .search-button .kbd {
@@ -815,13 +845,14 @@
     align-items: center;
     gap: 2px;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1;
     padding: 4px 6px;
     border-radius: 4px;
-    background: var(--card);
+    background: var(--cmd-chip-bg);
     color: var(--muted-foreground);
-    box-shadow: 0 0 0 1px var(--ring-alpha);
+    border: 1px solid var(--cmd-chip-border);
+    box-shadow: none;
 }
 
 /* ---------- Section heading ---------- */
@@ -1013,32 +1044,92 @@
     color: hsl(28 80% 32%);
 }
 
-/* ---------- Global search filter pills ---------- */
+/* ---------- Global search filter chips (Skiper92 / Vercel) ---------- */
 
 .search-filters {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 6px;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cmd-border);
+    overflow-x: auto;
+    scrollbar-width: none;
 }
 
-.search-filters__pill {
+.search-filters::-webkit-scrollbar {
+    display: none;
+}
+
+.search-filters__chip {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid var(--cmd-chip-border);
+    border-radius: 999px;
+    background: var(--cmd-chip-bg);
+    color: var(--muted-foreground);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
     cursor: pointer;
-    opacity: 0.55;
-    transition: opacity 120ms ease;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 
-.search-filters__pill:hover,
-.search-filters__pill:focus-visible,
-.search-filters__pill.is-active {
-    opacity: 1;
+.search-filters__chip:hover {
+    background: var(--cmd-chip-bg-hover);
+    color: var(--foreground);
 }
 
-.search-filters__pill:focus-visible {
-    outline: 2px solid var(--ring);
+.search-filters__chip.is-active {
+    background: var(--cmd-chip-bg-active);
+    border-color: var(--cmd-chip-border-active);
+    color: var(--foreground);
+}
+
+.search-filters__chip:focus-visible {
+    outline: 2px solid var(--ring-alpha-hover);
     outline-offset: 2px;
 }
+
+.cmd-list {
+    max-height: min(60vh, 480px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 8px;
+}
+
+.cmd-dialog-surface {
+    background: var(--cmd-surface);
+    border: 1px solid var(--cmd-border);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 30px 60px -15px rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme="light"] .cmd-dialog-surface {
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.04),
+        0 30px 60px -15px rgba(0, 0, 0, 0.25);
+}
+
+.cmd-input-wrapper {
+    border-bottom: 1px solid var(--cmd-border);
+}
+
+.cmd-kbd {
+    background: var(--cmd-chip-bg);
+    border: 1px solid var(--cmd-chip-border);
+}
+
+.cmd-item[data-highlighted] {
+    background: var(--cmd-chip-bg-active);
+    color: var(--foreground);
+    box-shadow: inset 0 0 0 1px var(--cmd-chip-border-active);
+}
+
 
 /* ---------- All Guides list ---------- */
 
