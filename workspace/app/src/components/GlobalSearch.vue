@@ -202,7 +202,7 @@ const handleSelect = (r: Result) => {
     sheetOpen.value = true;
 };
 
-useEventListener(window, "keydown", (e: KeyboardEvent) => {
+useEventListener("keydown", (e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         open.value = !open.value;
