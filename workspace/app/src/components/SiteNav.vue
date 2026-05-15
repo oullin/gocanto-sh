@@ -9,6 +9,13 @@ let rafId: number | undefined;
 let lastUpdate = 0;
 const UPDATE_INTERVAL_MS = 90;
 
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+}
+
 function tick(now: number) {
     if (now - lastUpdate >= UPDATE_INTERVAL_MS) {
         levels.value = levels.value.map((prev) => {
@@ -43,20 +50,18 @@ onUnmounted(() => {
                 />
             </a>
             <nav class="nav-links">
-                <a href="#writing">Writing</a>
                 <a href="#work">Work</a>
-                <a href="#about">About</a>
                 <a href="#recommendations">Recommendations</a>
-                <a href="#contact">Contact</a>
+                <a href="#book-a-review">Book a review</a>
             </nav>
             <div class="nav-right">
-                <a href="#contact" class="nav-cta">
+                <a href="#book-a-review" class="nav-cta">
                     <Send class="nav-cta-icon" :size="14" aria-hidden="true" />
                     <span>Get in touch</span>
                 </a>
-                <a href="#about" class="nav-avatar" aria-label="Profile">
+                <button type="button" class="nav-avatar" aria-label="Back to top" @click="scrollToTop">
                     <img src="/avatar.jpg" alt="" width="32" height="32" />
-                </a>
+                </button>
             </div>
         </div>
     </header>

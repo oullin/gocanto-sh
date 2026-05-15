@@ -37,7 +37,7 @@ const ready = useInViewReady(section);
 </script>
 
 <template>
-    <section ref="section" class="frame-section">
+    <section id="work" ref="section" class="frame-section">
         <div class="guides-grid">
             <div class="guides-grid__title">
                 <h2>Featured Work</h2>

@@ -7,7 +7,7 @@ const oullinLabsUrl = "https://oullin.io";
 </script>
 
 <template>
-    <section class="cta-grid frame-section">
+    <section id="book-a-review" class="cta-grid frame-section">
         <div class="cta-cell">
             <h3>Architecture review for your <b>AI-agentic</b> or <b>backend</b> system.</h3>
             <p>Deep dive on idempotency, audit trails, throughput, and what's about to break. Two hours, written write-up, no pitch.</p>
