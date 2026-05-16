@@ -1,47 +1,30 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { profile } from "@gocanto/store";
-import {
-    Bot,
-    Check,
-    CreditCard,
-    Image as ImageIcon,
-    Landmark,
-    Loader,
-    Plus,
-    ShoppingBag,
-    Star,
-    Wrench,
-} from "lucide-vue-next";
 import { useInViewReady } from "@lib/useAsyncInView";
 
-type Topic = { title: string; description: string; illo: "ai" | "fintech" | "ecom" };
+type Pillar = {
+    sub: string;
+    title: string;
+    body: string;
+};
 
 const section = ref<HTMLElement | null>(null);
 
-const findSkill = (name: string) => profile.data.skills.find((s) => s.item === name);
-
-const topics: Topic[] = [
+const pillars: Pillar[] = [
     {
-        title: "Agentic AI",
-        description: findSkill("Agentic Orchestration")?.description ?? "",
-        illo: "ai",
+        sub: "Agentic AI",
+        title: "AI assistants you can actually trust with real work.",
+        body: "Not chatbots. AI that books, files, refunds, dispatches. Every action is logged, every decision is replayable, and the system refuses unsafe steps before they happen. Built for teams who can't afford an AI \"oops.\"",
     },
     {
-        title: "Banking & Fintech",
-        description:
-            findSkill("AS/400 Modernisation")?.description ??
-            findSkill("Payment Integration")?.description ??
-            "",
-        illo: "fintech",
+        sub: "Banking & Fintech",
+        title: "Modernise the surface. Leave the old core where it is.",
+        body: "Most banks run on 30-year-old systems that still work. They just feel slow and rigid. I wrap them in a fast, modern layer that adds logins, retries, rate limits, and full audit trails. Customers get a 2026 app; the regulator gets a clean paper trail.",
     },
     {
-        title: "E-Commerce",
-        description:
-            findSkill("E-commerce Architecture")?.description ??
-            findSkill("Complex 3rd Party System Integrations")?.description ??
-            "",
-        illo: "ecom",
+        sub: "E-Commerce",
+        title: "Checkouts that don't drop sales when traffic spikes.",
+        body: "Multi-country checkout, modular payment adapters, dozens of integrations. Built so a Black-Friday spike doesn't drop orders and the finance team's end-of-day numbers still balance to the cent.",
     },
 ];
 
@@ -49,101 +32,63 @@ const ready = useInViewReady(section);
 </script>
 
 <template>
-    <section ref="section" class="topics frame-section">
-        <a
-            v-for="(t, i) in topics"
-            :key="`${t.illo}-${i}`"
-            :href="ready ? '#' : undefined"
-            class="topic-card"
-            :aria-busy="!ready"
-        >
-            <div class="topic-illo" :class="t.illo">
-                <template v-if="ready">
-                    <template v-if="t.illo === 'ai'">
-                        <div class="ai-avatar">
-                            <Bot :size="14" :stroke-width="1.5" />
-                            <span class="ai-status-dot" />
-                        </div>
-                        <div class="ai-rail" />
-                        <div class="ai-task ai-task-done">
-                            <span class="ai-task-status ai-task-status-done">
-                                <Check :size="10" :stroke-width="2" />
-                            </span>
-                            <span class="ai-task-bar ai-task-bar-1" />
-                        </div>
-                        <div class="ai-task ai-task-progress">
-                            <span class="ai-task-status ai-task-status-progress">
-                                <Loader :size="10" :stroke-width="2" />
-                            </span>
-                            <span class="ai-task-bar ai-task-bar-2" />
-                        </div>
-                        <div class="ai-task ai-task-queued">
-                            <span class="ai-task-status" />
-                            <span class="ai-task-bar ai-task-bar-3" />
-                        </div>
-                        <div class="ai-tool">
-                            <Wrench :size="10" :stroke-width="1.75" />
-                            <span class="ai-tool-bar" />
-                        </div>
-                    </template>
-                    <template v-else-if="t.illo === 'fintech'">
-                        <div class="fintech-chip">
-                            <Landmark :size="12" :stroke-width="1.5" />
-                        </div>
-                        <div class="fintech-txn fintech-txn-1">
-                            <span class="fintech-txn-dot" />
-                            <span class="fintech-txn-bar" />
-                            <span class="fintech-txn-amt">$</span>
-                        </div>
-                        <div class="fintech-txn fintech-txn-2">
-                            <span class="fintech-txn-dot" />
-                            <span class="fintech-txn-bar" />
-                            <span class="fintech-txn-amt">$</span>
-                        </div>
-                        <div class="fintech-card">
-                            <span class="fintech-card-chip" />
-                            <span class="fintech-card-digits fintech-card-digits-1" />
-                            <span class="fintech-card-digits fintech-card-digits-2" />
-                            <span class="fintech-card-name" />
-                            <span class="fintech-card-brand">
-                                <CreditCard :size="14" :stroke-width="1.5" />
-                            </span>
-                        </div>
-                    </template>
-                    <template v-else-if="t.illo === 'ecom'">
-                        <div class="ecom-card">
-                            <div class="ecom-image">
-                                <ImageIcon :size="18" :stroke-width="1.25" />
-                            </div>
-                            <div class="ecom-detail">
-                                <span class="ecom-title-bar" />
-                                <span class="ecom-sub-bar" />
-                                <div class="ecom-row">
-                                    <span class="ecom-price">$</span>
-                                    <span class="ecom-cart">
-                                        <Plus :size="10" :stroke-width="2" />
-                                    </span>
-                                </div>
-                            </div>
-                            <span class="ecom-badge">
-                                <Star :size="10" :stroke-width="1.75" />
-                            </span>
-                        </div>
-                        <div class="ecom-corner">
-                            <ShoppingBag :size="12" :stroke-width="1.5" />
-                        </div>
-                    </template>
-                </template>
-                <div v-else class="topic-illo-skeleton" aria-hidden="true" />
+    <section ref="section">
+        <div class="sect-head">
+            <div>
+                <span class="kicker">What I can do for you</span>
+                <h2>Three kinds of problems I solve.</h2>
             </div>
-            <div class="topic-body">
-                <h3>
-                    <span :class="{ 'sk-shimmer': !ready }">{{ t.title }}</span>
-                </h3>
-                <p>
-                    <span :class="{ 'sk-shimmer': !ready }">{{ t.description }}</span>
-                </p>
+            <div class="sub">
+                If your team is staring at one of these, we should talk. Plain language first; deep
+                technical detail is further down the page.
             </div>
-        </a>
+        </div>
+
+        <div class="pillars">
+            <article class="pillar" :aria-busy="!ready">
+                <div class="art">
+                    <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+                        <circle class="ico-line" cx="30" cy="22" r="9" />
+                        <path class="ico-line" d="M30 31 L30 44 M22 38 L38 38" />
+                        <circle class="ico-line" cx="16" cy="48" r="3" />
+                        <circle class="ico-line" cx="30" cy="48" r="3" />
+                        <circle class="ico-line" cx="44" cy="48" r="3" />
+                    </svg>
+                </div>
+                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].sub }}</span></div>
+                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].title }}</span></h3>
+                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].body }}</span></p>
+            </article>
+
+            <article class="pillar" :aria-busy="!ready">
+                <div class="art">
+                    <svg width="80" height="60" viewBox="0 0 80 60" aria-hidden="true">
+                        <rect class="ico-line" x="14" y="20" width="52" height="32" rx="3" />
+                        <path class="ico-line" d="M14 30 L66 30" />
+                        <path class="ico-line" d="M22 40 L34 40 M22 45 L30 45" />
+                        <circle class="ico-line" cx="56" cy="42" r="4" />
+                        <path class="ico-line" d="M22 14 L58 14 L60 20 L20 20 Z" />
+                    </svg>
+                </div>
+                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].sub }}</span></div>
+                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].title }}</span></h3>
+                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].body }}</span></p>
+            </article>
+
+            <article class="pillar" :aria-busy="!ready">
+                <div class="art">
+                    <svg width="80" height="60" viewBox="0 0 80 60" aria-hidden="true">
+                        <path class="ico-line" d="M18 22 L62 22 L58 46 L22 46 Z" />
+                        <path class="ico-line" d="M18 22 L14 14 L8 14" />
+                        <circle class="ico-line" cx="28" cy="52" r="3" />
+                        <circle class="ico-line" cx="52" cy="52" r="3" />
+                        <path class="ico-line" d="M30 30 L50 30 M30 36 L46 36" />
+                    </svg>
+                </div>
+                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].sub }}</span></div>
+                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].title }}</span></h3>
+                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].body }}</span></p>
+            </article>
+        </div>
     </section>
 </template>

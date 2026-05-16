@@ -1,34 +1,43 @@
 <script setup lang="ts">
-import { profile } from "@gocanto/store";
+import { links, profile } from "@gocanto/store";
 
-const email = profile.data.email;
-const mailto = `mailto:${email}`;
-const oullinLabsUrl = "https://oullin.io";
+const mailto = `mailto:${profile.data.email}`;
+const linkedinUrl = links.data.find((l) => l.name === "linkedin")?.url ?? mailto;
 </script>
 
 <template>
-    <section id="book-a-review" class="cta-grid frame-section">
-        <div class="cta-cell">
-            <h3>Architecture review for your <b>AI-agentic</b> or <b>backend</b> system.</h3>
-            <p>
-                Deep dive on idempotency, audit trails, throughput, and what's about to break. Two
-                hours, written write-up, no pitch.
-            </p>
-            <div class="cta-actions">
-                <a :href="mailto" class="btn primary">Book a review</a>
-                <a href="#work" class="btn ghost">See work</a>
+    <section id="engage">
+        <div class="engage">
+            <div>
+                <span class="kicker">How to engage</span>
+                <h2>Let's see if I'm a fit.</h2>
+                <p>
+                    Three ways in: an honest two-hour architecture review, a real conversation about a
+                    role, or a no-strings hello. Pick whichever fits.
+                </p>
             </div>
-        </div>
-        <div class="cta-cell">
-            <h3>Need a fixed-scope sprint?</h3>
-            <p>
-                Oullin Labs ships payment integrations (hara.sh), event pipelines (kuda.sh), and
-                AS/400 modernisation (toku.sh) — agent-accelerated, audit-trail-by-default.
-            </p>
-            <div class="cta-actions">
-                <a :href="oullinLabsUrl" target="_blank" rel="noopener noreferrer" class="btn ghost"
-                    >Explore Oullin Labs</a
-                >
+            <div class="ctas">
+                <a class="btn primary" :href="mailto">
+                    <span class="what">
+                        <span class="label">Book a 2-hour architecture review</span>
+                        <span class="hint">For founders &amp; CTOs · paid, fixed scope</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a class="btn" :href="linkedinUrl" target="_blank" rel="noopener noreferrer">
+                    <span class="what">
+                        <span class="label">Talk about a role</span>
+                        <span class="hint">For recruiters · LinkedIn or email</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a class="btn" :href="mailto">
+                    <span class="what">
+                        <span class="label">Just say hi</span>
+                        <span class="hint">Engineer-to-engineer, or genuinely curious. Both welcome.</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
             </div>
         </div>
     </section>

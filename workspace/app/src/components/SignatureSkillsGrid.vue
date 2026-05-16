@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
-import { profile, type ProfileSkillRecord } from "@gocanto/store";
+import { profile, projects, type ProfileSkillRecord, type ProjectRecord } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
 import {
     Binary,
@@ -23,7 +23,6 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
-import { ScrollFade } from "@/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
 const moreSection = ref<HTMLElement | null>(null);
@@ -67,31 +66,72 @@ function chipVariant(name: string): string {
     return CHIP_VARIANTS[Math.abs(hash) % CHIP_VARIANTS.length];
 }
 
-type Cell = {
+type SmallSkill = {
     skill: ProfileSkillRecord;
-    title: string;
-    description: string;
-    icon: Component | null;
-    initials: string;
+    badge: string;
+    short: string;
 };
 
-function toCell(s: ProfileSkillRecord): Cell {
-    const icon = iconFor[s.item] ?? null;
+const SMALL_DESC_MAX = 90;
 
-    return {
-        skill: s,
-        title: s.item,
-        description: s.description,
-        icon: icon,
-        initials: initials(s.item),
-    };
-}
+const truncate = (text: string, max: number): string => {
+    if (text.length <= max) {
+        return text;
+    }
+    const slice = text.slice(0, max);
+    const lastSpace = slice.lastIndexOf(" ");
+    return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
+};
 
-const signatureCells = computed<Cell[]>(() =>
-    skills.filter((s) => s.signature === true).map(toCell),
+const signatureSkills = computed<ProfileSkillRecord[]>(() =>
+    skills.filter((s) => s.signature === true),
 );
 
-const moreCells = computed<Cell[]>(() => skills.filter((s) => s.signature !== true).map(toCell));
+const moreSkills = computed<SmallSkill[]>(() =>
+    skills
+        .filter((s) => s.signature !== true)
+        .map((s) => ({
+            skill: s,
+            badge: initials(s.item),
+            short: truncate(s.description, SMALL_DESC_MAX),
+        })),
+);
+
+const PROJ_LANG_CLASS: Record<string, string> = {
+    Go: "go",
+    "Go / Docker": "go",
+    "Vue / TypeScript": "vue",
+    Vue: "vue",
+    PHP: "php",
+    "PHP / Vue": "vue",
+};
+
+const langClass = (lang: string): string => {
+    if (PROJ_LANG_CLASS[lang]) {
+        return PROJ_LANG_CLASS[lang];
+    }
+    const lower = lang.toLowerCase();
+    if (lower.startsWith("go")) {
+        return "go";
+    }
+    if (lower.includes("vue")) {
+        return "vue";
+    }
+    if (lower.includes("php")) {
+        return "php";
+    }
+    return "";
+};
+
+const projShort = (text: string): string => {
+    const cleaned = text.split(".")[0];
+    return truncate(cleaned, 60);
+};
+
+const openSourceProjects: ProjectRecord[] = [...projects.data]
+    .filter((p) => p.is_open_source)
+    .sort((a, b) => a.sort - b.sort)
+    .slice(0, 6);
 
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
@@ -106,100 +146,96 @@ function openSkill(s: ProfileSkillRecord) {
 
 const activeIcon = computed<Component>(() => {
     const s = activeSkill.value;
-
     if (!s) {
         return Sparkles;
     }
-
     return iconFor[s.item] ?? Sparkles;
 });
 
 const activeHasIcon = computed<boolean>(() => {
     const s = activeSkill.value;
-
     return !!s && !!iconFor[s.item];
 });
 </script>
 
 <template>
-    <section ref="section" class="frame-section">
-        <div class="explore-head">
-            <h2>Signature skills</h2>
-            <p>
-                Hands-on craft I lean on across every engagement — agentic platforms, payment cores,
-                streaming pipelines, banking legacy.
-            </p>
+    <section ref="section">
+        <div class="skills-head">
+            <div>
+                <span class="kicker">The technical part · For engineers and CTOs</span>
+                <h2>Signature skills</h2>
+            </div>
+            <span class="for-techies">Buzzword zone · for people who want the specifics</span>
         </div>
-        <div class="explore-grid">
+
+        <div class="skill-grid">
             <button
-                v-for="c in signatureCells"
-                :key="c.skill.uuid"
+                v-for="s in signatureSkills"
+                :key="s.uuid"
                 type="button"
-                class="explore-card"
+                class="skill"
                 :aria-busy="!ready"
-                @click="openSkill(c.skill)"
+                @click="openSkill(s)"
             >
-                <span
-                    class="explore-card__icon"
-                    :class="{ 'explore-card__icon--loading': !ready }"
-                    aria-hidden="true"
-                >
-                    <component :is="c.icon ?? Sparkles" :size="16" :stroke-width="1.5" />
-                </span>
-                <h3>
-                    <span :class="{ 'sk-shimmer': !ready }">{{ c.title }}</span>
-                </h3>
-                <p>
-                    <span :class="{ 'sk-shimmer': !ready }">{{ c.description }}</span>
-                </p>
-                <span v-if="c.skill.years" class="explore-card__years" aria-label="Years hands-on">
-                    {{ c.skill.years }} yrs
-                </span>
+                <div class="skill-top">
+                    <component
+                        :is="iconFor[s.item] ?? Sparkles"
+                        class="ico"
+                        :size="22"
+                        :stroke-width="1.6"
+                        aria-hidden="true"
+                    />
+                    <span v-if="s.years" class="yrs">
+                        <span :class="{ 'sk-shimmer': !ready }">{{ s.years }} yrs</span>
+                    </span>
+                </div>
+                <h4><span :class="{ 'sk-shimmer': !ready }">{{ s.item }}</span></h4>
+                <p><span :class="{ 'sk-shimmer': !ready }">{{ s.description }}</span></p>
             </button>
         </div>
 
-        <div class="explore-subhead">
-            <h3>More skills</h3>
-            <p>
-                Languages, frameworks, and practices I draw on day-to-day. Click any card for the
-                full detail.
-            </p>
+        <h3 class="skills-extra-head">More skills</h3>
+        <p class="skills-extra-sub">
+            Languages, frameworks, and practices I draw on day-to-day. Click any card for the full
+            detail.
+        </p>
+
+        <div ref="moreSection" class="small-skills">
+            <button
+                v-for="m in moreSkills"
+                :key="m.skill.uuid"
+                type="button"
+                class="small"
+                :aria-busy="!moreReady"
+                @click="openSkill(m.skill)"
+            >
+                <div class="badge mono">
+                    <span :class="{ 'sk-shimmer': !moreReady }">{{ m.badge }}</span>
+                </div>
+                <h5><span :class="{ 'sk-shimmer': !moreReady }">{{ m.skill.item }}</span></h5>
+                <p><span :class="{ 'sk-shimmer': !moreReady }">{{ m.short }}</span></p>
+            </button>
         </div>
 
-        <ScrollFade class="explore-scroll">
-            <div ref="moreSection" class="explore-grid explore-grid--dense">
-                <button
-                    v-for="c in moreCells"
-                    :key="c.skill.uuid"
-                    type="button"
-                    class="explore-card explore-card--compact"
-                    :aria-busy="!moreReady"
-                    @click="openSkill(c.skill)"
-                >
-                    <span
-                        class="explore-card__icon"
-                        :class="{ 'explore-card__icon--loading': !moreReady }"
-                        aria-hidden="true"
-                    >
-                        <component v-if="c.icon" :is="c.icon" :size="16" :stroke-width="1.5" />
-                        <span v-else class="explore-card__initials">{{ c.initials }}</span>
-                    </span>
-                    <h3>
-                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.title }}</span>
-                    </h3>
-                    <p>
-                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.description }}</span>
-                    </p>
-                    <span
-                        v-if="c.skill.years"
-                        class="explore-card__years explore-card__years--muted"
-                        aria-label="Years hands-on"
-                    >
-                        {{ c.skill.years }} yrs
-                    </span>
-                </button>
-            </div>
-        </ScrollFade>
+        <h3 id="projects" class="skills-extra-head">Open source</h3>
+        <p class="skills-extra-sub">
+            A few small projects I maintain in public.
+            <a href="https://github.com/gocanto" target="_blank" rel="noopener noreferrer">Full list on GitHub →</a>
+        </p>
+        <div class="proj-strip">
+            <a
+                v-for="p in openSourceProjects"
+                :key="p.uuid"
+                :href="p.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="proj"
+            >
+                <span class="name">{{ p.title }}</span>
+                <span class="desc">{{ projShort(p.excerpt) }}</span>
+                <span class="lang" :class="langClass(p.language)">{{ p.language }}</span>
+            </a>
+        </div>
 
         <Sheet v-model:open="open">
             <SheetContent class="skill-sheet" side="right">
@@ -216,9 +252,7 @@ const activeHasIcon = computed<boolean>(() => {
                                 activeSkill ? initials(activeSkill.item) : ""
                             }}</span>
                         </span>
-                        <span v-if="activeSkill?.signature" class="skill-sheet__badge"
-                            >Signature</span
-                        >
+                        <span v-if="activeSkill?.signature" class="skill-sheet__badge">Signature</span>
                     </div>
                     <SheetTitle>{{ activeSkill?.item }}</SheetTitle>
                     <SheetDescription>{{ activeSkill?.description }}</SheetDescription>
@@ -228,9 +262,7 @@ const activeHasIcon = computed<boolean>(() => {
                     <div class="skill-sheet__meter" aria-label="Proficiency">
                         <div class="skill-sheet__meter-head">
                             <span>Proficiency</span>
-                            <span class="skill-sheet__meter-value"
-                                >{{ activeSkill.percentage }}%</span
-                            >
+                            <span class="skill-sheet__meter-value">{{ activeSkill.percentage }}%</span>
                         </div>
                         <div
                             class="skill-sheet__bar"

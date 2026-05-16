@@ -1,3 +1,4 @@
+export { bio } from "./bio";
 export { education } from "./education";
 export { experience } from "./experience";
 export { links } from "./links";
@@ -7,6 +8,9 @@ export { recommendations } from "./recommendations";
 export { talks } from "./talks";
 
 export type {
+    BioFixture,
+    BioQuickFact,
+    BioRecord,
     EducationFixture,
     EducationRecord,
     ExperienceFixture,

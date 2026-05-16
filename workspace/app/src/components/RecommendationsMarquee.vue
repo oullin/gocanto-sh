@@ -1,88 +1,130 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef } from "vue";
+import { ref, shallowRef } from "vue";
 import { recommendations } from "@gocanto/store";
 import type { RecommendationRecord } from "@gocanto/store";
-import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
 import { useInViewReady } from "@lib/useAsyncInView";
 
-const AVATAR_BASE = "https://oullin.io/images/";
+type RecCard = {
+    id: string;
+    quote: string;
+    markHead: string;
+    quoteTail: string;
+    initials: string;
+    name: string;
+    titleLine: string;
+    featured: boolean;
+};
+
+const QUOTE_MAX = 220;
+const MARK_WORDS = 7;
+
+const stripHtml = (s: string): string =>
+    s
+        .replace(/<br\s*\/?\s*>/gi, " ")
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+const truncate = (text: string, max: number): string => {
+    if (text.length <= max) {
+        return text;
+    }
+    const slice = text.slice(0, max);
+    const lastSpace = slice.lastIndexOf(" ");
+    return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
+};
+
+const initialsOf = (full: string): string => {
+    const parts = full.trim().split(/\s+/);
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
 
 const sorted = [...recommendations.data].sort((a, b) => b.created_at.localeCompare(a.created_at));
+const featured = sorted.filter((r) => r.featured === 1);
+const others = sorted.filter((r) => r.featured !== 1);
+const picked: RecommendationRecord[] = [...featured, ...others].slice(0, 6);
 
-const byId: Map<string, RecommendationRecord> = new Map(sorted.map((r) => [r.uuid, r]));
+const byId: Map<string, RecommendationRecord> = new Map(picked.map((r) => [r.uuid, r]));
 
-const items: Testimonial[] = sorted.map((r) => ({
-    id: r.uuid,
-    name: r.person.full_name,
-    text: r.text,
-    avatar: AVATAR_BASE + r.person.avatar,
-    role: r.person.designation,
-    company: r.person.company,
-    featured: r.featured === 1,
-}));
+const cards: RecCard[] = picked.map((r) => {
+    const cleaned = stripHtml(r.text);
+    const quoteText = truncate(cleaned, QUOTE_MAX);
+    const words = quoteText.split(/\s+/);
+    const head = words.slice(0, MARK_WORDS).join(" ");
+    const tail = words.slice(MARK_WORDS).join(" ");
+
+    return {
+        id: r.uuid,
+        quote: quoteText,
+        markHead: head,
+        quoteTail: tail ? ` ${tail}` : "",
+        initials: initialsOf(r.person.full_name),
+        name: r.person.full_name,
+        titleLine: `${r.person.designation} · ${r.person.company}`,
+        featured: r.featured === 1,
+    };
+});
 
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 
 const section = ref<HTMLElement | null>(null);
 const ready = useInViewReady(section);
-const isLoading = computed(() => !ready.value);
 
-function handleSelect(item: Testimonial) {
-    const record = byId.get(item.id);
-
+function openRec(id: string) {
+    const record = byId.get(id);
     if (!record) {
         return;
     }
-
     activePayload.value = { kind: "Recommendation", data: record };
     sheetOpen.value = true;
 }
 </script>
 
 <template>
-    <section id="recommendations" ref="section" class="recommendations-section frame-section">
-        <header class="recommendations-section__header">
-            <h2>Recommendations</h2>
-            <p class="recommendations-section__lede">
-                Words from people I've actually shipped with — engineers I've managed, peers across
-                product and design, and leaders I've reported to. The
-                <span class="recommendations-section__hl">highlighted</span> ones are the ones I
-                keep coming back to. Click any card to read the full note.
-            </p>
-        </header>
-        <TestimonialMarquee
-            :items="items"
-            :speed="120"
-            :loading="isLoading"
-            @select="handleSelect"
-        />
+    <section id="testimonials" ref="section">
+        <div class="sect-head">
+            <div>
+                <span class="kicker">Proof · What people I've worked with say</span>
+                <h2>Testimonials.</h2>
+            </div>
+            <div class="sub">
+                Notes from engineers, managers, and founders I've shipped real things with. The
+                <span style="color: var(--amber)">highlighted ones</span> are the ones I'd point a
+                recruiter to first.
+            </div>
+        </div>
+
+        <div class="rec-grid">
+            <button
+                v-for="c in cards"
+                :key="c.id"
+                type="button"
+                class="rec"
+                :class="{ 'hi-bg': c.featured }"
+                :aria-busy="!ready"
+                @click="openRec(c.id)"
+            >
+                <p class="rec-quote">
+                    <span :class="{ 'sk-shimmer': !ready }">
+                        “<span class="mark">{{ c.markHead }}</span>{{ c.quoteTail }}”
+                    </span>
+                </p>
+                <div class="rec-by">
+                    <div class="avatar" aria-hidden="true">
+                        <span :class="{ 'sk-shimmer': !ready }">{{ c.initials }}</span>
+                    </div>
+                    <div class="rec-who">
+                        <span class="rec-name"><span :class="{ 'sk-shimmer': !ready }">{{ c.name }}</span></span>
+                        <span class="rec-title"><span :class="{ 'sk-shimmer': !ready }">{{ c.titleLine }}</span></span>
+                    </div>
+                </div>
+            </button>
+        </div>
     </section>
     <SearchResultDetail v-model:open="sheetOpen" :payload="activePayload" />
 </template>
-
-<style scoped>
-.recommendations-section {
-    padding: 48px 0 32px;
-}
-.recommendations-section__header {
-    padding: 0 24px 8px;
-}
-.recommendations-section__header h2 {
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-}
-.recommendations-section__lede {
-    margin-top: 10px;
-    max-width: 60ch;
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--muted-foreground);
-}
-.recommendations-section__hl {
-    color: var(--accent-amber);
-    font-weight: 500;
-}
-</style>

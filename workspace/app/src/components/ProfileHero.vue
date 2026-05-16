@@ -7,18 +7,25 @@ const section = ref<HTMLElement | null>(null);
 
 const name = profile.data.name;
 const profession = profile.data.profession;
-const paragraph = `${profession} — 20 years shipping regulated backends. Now architecting AI-agentic systems in Go, and founder of Oullin Labs (hara.sh · kuda.sh · toku.sh) for fintech, banking, and e-commerce.`;
 
 const ready = useInViewReady(section);
 </script>
 
 <template>
-    <section id="about" ref="section" class="profile-hero frame-section">
-        <h1>
+    <header id="about" ref="section" class="hero">
+        <h1 class="name">
             <span :class="{ 'sk-shimmer': !ready }">{{ name }}</span>
         </h1>
-        <p>
-            <span :class="{ 'sk-shimmer': !ready }">{{ paragraph }}</span>
+        <p class="lede">
+            <span :class="{ 'sk-shimmer': !ready }">
+                <span class="em">Software engineer for 20 years.</span> I build the systems that move
+                money, run online stores, and now power the new wave of AI assistants: the kind that
+                take real actions, not just answer questions.
+            </span>
         </p>
-    </section>
+        <div class="hero-meta">
+            <span><span :class="{ 'sk-shimmer': !ready }">{{ profession }}</span></span>
+            <span><span :class="{ 'sk-shimmer': !ready }">Founder of Oullin</span></span>
+        </div>
+    </header>
 </template>
