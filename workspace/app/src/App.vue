@@ -2,6 +2,8 @@
 import EngagementCta from "@components/EngagementCta.vue";
 import ExperienceGrid from "@components/ExperienceGrid.vue";
 import GlobalSearch from "@components/GlobalSearch.vue";
+import HeroCta from "@components/HeroCta.vue";
+import PixelHero from "@components/PixelHero.vue";
 import ProfileHero from "@components/ProfileHero.vue";
 import RecommendationsMarquee from "@components/RecommendationsMarquee.vue";
 import SignatureSkillsGrid from "@components/SignatureSkillsGrid.vue";
@@ -13,8 +15,11 @@ import WhoIAm from "@components/WhoIAm.vue";
 
 <template>
     <SiteNav />
-    <main class="outer">
+    <PixelHero>
         <ProfileHero />
+        <HeroCta />
+    </PixelHero>
+    <main class="outer">
         <SkillsSpotlight />
         <ExperienceGrid />
         <RecommendationsMarquee />

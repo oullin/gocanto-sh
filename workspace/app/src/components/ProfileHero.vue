@@ -6,7 +6,6 @@ import { useInViewReady } from "@lib/useAsyncInView";
 const section = ref<HTMLElement | null>(null);
 
 const name = profile.data.name;
-const profession = profile.data.profession;
 
 const ready = useInViewReady(section);
 </script>
@@ -23,9 +22,5 @@ const ready = useInViewReady(section);
                 take real actions, not just answer questions.
             </span>
         </p>
-        <div class="hero-meta">
-            <span><span :class="{ 'sk-shimmer': !ready }">{{ profession }}</span></span>
-            <span><span :class="{ 'sk-shimmer': !ready }">Founder of Oullin</span></span>
-        </div>
     </header>
 </template>
