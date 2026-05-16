@@ -18,5 +18,11 @@
     "oxfmt": "latest",
     "tsx": "^4.20.0",
     "turbo": "^2.9.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "stylus": "^0.64.0",
+      "glob": "^13.0.6"
+    }
   }
 }
