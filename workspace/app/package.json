@@ -20,6 +20,7 @@
     "dependencies": {
         "@gocanto/store": "workspace:*",
         "@tailwindcss/vite": "^4.3.0",
+        "@vercel/analytics": "^2.0.1",
         "@vitejs/plugin-vue": "^6.0.6",
         "@vueuse/core": "^14.3.0",
         "class-variance-authority": "^0.7.1",

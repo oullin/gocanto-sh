@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Analytics } from "@vercel/analytics/vue";
+
 import EngagementCta from "@components/EngagementCta.vue";
 import ExperienceGrid from "@components/ExperienceGrid.vue";
 import GlobalSearch from "@components/GlobalSearch.vue";
@@ -27,4 +29,5 @@ import SkillsSpotlight from "@components/SkillsSpotlight.vue";
         <RecommendationsMarquee />
     </main>
     <SiteFooter />
+    <Analytics />
 </template>
