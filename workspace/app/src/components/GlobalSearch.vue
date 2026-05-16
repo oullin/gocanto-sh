@@ -19,7 +19,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
-import { Skeleton } from "@/components/ui/skeleton";
+import { education, experience, links, profile, projects, recommendations, talks } from "@gocanto/store";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
 
 type Result = {
@@ -65,7 +65,6 @@ const open = ref(false);
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 const corpus = shallowRef<Corpus | null>(null);
-const loading = ref(false);
 const selectedKind = ref<KindKey | null>(null);
 
 const isKindVisible = (k: KindKey) => selectedKind.value === null || selectedKind.value === k;
@@ -92,11 +91,7 @@ function searchable(...parts: string[]): string {
     return `${clean} ${compact}`;
 }
 
-async function buildCorpus(): Promise<Corpus> {
-    // Dynamically import fixtures so module-init cost is deferred.
-    const { education, experience, links, profile, projects, recommendations, talks } =
-        await import("@gocanto/store");
-
+function buildCorpus(): Corpus {
     return {
         work: experience.data.map((e) => ({
             key: `exp:${e.uuid}`,
@@ -170,9 +165,7 @@ async function buildCorpus(): Promise<Corpus> {
     };
 }
 
-const ready = computed(() => !loading.value && corpus.value !== null);
-
-watch(open, async (v) => {
+watch(open, (v) => {
     if (!v) {
         selectedKind.value = null;
 
@@ -183,12 +176,7 @@ watch(open, async (v) => {
         return;
     }
 
-    loading.value = true;
-    try {
-        corpus.value = await buildCorpus();
-    } finally {
-        loading.value = false;
-    }
+    corpus.value = buildCorpus();
 });
 
 const activeKey = ref<string | null>(null);
@@ -202,7 +190,7 @@ const handleSelect = (r: Result) => {
     sheetOpen.value = true;
 };
 
-useEventListener(window, "keydown", (e: KeyboardEvent) => {
+useEventListener("keydown", (e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         open.value = !open.value;
@@ -286,12 +274,7 @@ watch(sheetOpen, (v) => {
             </button>
         </div>
         <CommandList class="cmd-list">
-            <template v-if="!ready">
-                <div class="px-3 py-3" aria-busy="true">
-                    <Skeleton v-for="i in 6" :key="i" class="h-10 w-full my-1" />
-                </div>
-            </template>
-            <template v-else-if="corpus">
+            <template v-if="corpus">
                 <CommandEmpty class="px-5 py-10 text-center text-sm text-muted-foreground">
                     No matches found.
                 </CommandEmpty>
