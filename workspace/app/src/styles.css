@@ -255,7 +255,7 @@
 .nav-inner {
     position: relative;
     z-index: 1;
-    max-width: 1100px;
+    max-width: 1280px;
     margin: 0 auto;
     min-height: 72px;
     display: flex;
@@ -270,7 +270,6 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    min-width: 190px;
     color: oklch(0.98 0 0);
     font-weight: 600;
     letter-spacing: 0;
@@ -881,6 +880,11 @@ main.outer > section:last-child {
     transition: border-color 0.18s;
 }
 
+.rec-skeleton {
+    cursor: default;
+    pointer-events: none;
+}
+
 .rec:hover {
     border-color: var(--ink-soft);
 }
@@ -939,6 +943,59 @@ main.outer > section:last-child {
 .rec-title {
     font-size: 11.5px;
     color: var(--muted-foreground);
+}
+
+.rec-skeleton__quote {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-top: 2px;
+}
+
+.rec-skeleton__line {
+    display: block;
+    height: 13px;
+    border-radius: 999px;
+    background: var(--surface-tint-hover);
+    animation: sk-pulse 2s ease-in-out infinite;
+}
+
+.rec-skeleton__line--full {
+    width: 100%;
+}
+
+.rec-skeleton__line--wide {
+    width: 88%;
+}
+
+.rec-skeleton__line--medium {
+    width: 72%;
+}
+
+.rec-skeleton__line--short {
+    width: 56%;
+}
+
+.rec-skeleton__line--name {
+    width: 128px;
+}
+
+.rec-skeleton__line--title {
+    width: 188px;
+    height: 11px;
+    opacity: 0.75;
+}
+
+.rec-skeleton__avatar {
+    background: var(--surface-tint-hover);
+    animation: sk-pulse 2s ease-in-out infinite;
+}
+
+.rec-skeleton__who {
+    gap: 7px;
+    width: 100%;
 }
 
 /* ---------- Who I am ---------- */
@@ -1996,7 +2053,7 @@ main.outer > section:last-child {
 
 .wf-canvas {
     position: relative;
-    height: 604px;
+    height: 680px;
     overflow: hidden;
     background:
         radial-gradient(ellipse at center, transparent 0 34%, oklch(0.085 0 0 / 0.3) 52%, var(--wf-bg) 78%),
@@ -2063,10 +2120,21 @@ main.outer > section:last-child {
 .wf-card {
     position: absolute;
     z-index: 2;
+    isolation: isolate;
     width: 330px;
     padding-top: 30px;
     opacity: 0;
     animation: wf-card-fade 500ms ease-out both;
+}
+
+.wf-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 12px;
+    background: var(--wf-bg);
+    pointer-events: none;
 }
 
 .wf-card--early {
@@ -2100,7 +2168,7 @@ main.outer > section:last-child {
 
 .wf-card[data-step-id="lead-action"] {
     left: 489px;
-    top: 333px;
+    top: 320px;
 }
 
 .wf-card[data-step-id="lead-output"] {
@@ -2164,7 +2232,7 @@ main.outer > section:last-child {
 .wf-card[data-step-id="data-output"] {
     display: block;
     left: 912px;
-    top: 298px;
+    top: 372px;
     width: 290px;
 }
 
@@ -2204,7 +2272,7 @@ main.outer > section:last-child {
 .wf-card[data-step-id="content-output"] {
     display: block;
     left: 922px;
-    top: 301px;
+    top: 374px;
     width: 290px;
 }
 
@@ -2212,14 +2280,14 @@ main.outer > section:last-child {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     min-height: 42px;
     padding: 8px 16px 13px;
     border-radius: 12px 12px 0 0;
-    background: color-mix(in oklab, var(--wf-blue) 22%, transparent);
+    background: color-mix(in oklab, var(--wf-blue) 22%, var(--wf-bg));
     color: var(--wf-blue);
     font-size: 14px;
     font-weight: 500;
@@ -2227,6 +2295,8 @@ main.outer > section:last-child {
 }
 
 .wf-card__body {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -2429,6 +2499,24 @@ main.outer > section:last-child {
 
 /* ---------- Responsive ---------- */
 
+@media (min-width: 961px) and (max-width: 1344px) {
+    .wf-card[data-step-id="lead-action"] {
+        top: 320px;
+    }
+
+    .wf-card[data-step-id="lead-output"] {
+        left: 866px;
+    }
+
+    .wf-card[data-step-id="data-output"] {
+        left: 908px;
+    }
+
+    .wf-card[data-step-id="content-output"] {
+        left: 908px;
+    }
+}
+
 @media (max-width: 960px) {
     main.outer {
         padding: 0 16px;
@@ -2546,6 +2634,15 @@ main.outer > section:last-child {
     }
     .small-skills {
         grid-template-columns: repeat(2, 1fr);
+    }
+    .skills-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .skills-head .for-techies {
+        max-width: 100%;
+        white-space: normal;
     }
     .foot-inner {
         grid-template-columns: 1fr;

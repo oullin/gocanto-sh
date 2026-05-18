@@ -6,7 +6,6 @@ import RecommendationsMarquee from "@components/RecommendationsMarquee.vue";
 import SignatureSkillsGrid from "@components/SignatureSkillsGrid.vue";
 import SiteFooter from "@components/SiteFooter.vue";
 import SiteNav from "@components/SiteNav.vue";
-import SkillsSpotlight from "@components/SkillsSpotlight.vue";
 import WhoIAm from "@components/WhoIAm.vue";
 import WorkflowHero from "@components/WorkflowHero.vue";
 </script>
@@ -15,7 +14,6 @@ import WorkflowHero from "@components/WorkflowHero.vue";
     <SiteNav />
     <WorkflowHero />
     <main class="outer">
-        <SkillsSpotlight />
         <ExperienceGrid />
         <RecommendationsMarquee />
         <WhoIAm />

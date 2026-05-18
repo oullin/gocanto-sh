@@ -4,9 +4,9 @@ import {
     links,
     profile,
     projects,
-    recommendations,
     talks,
 } from "@gocanto/store";
+import { recommendations } from "@gocanto/store/recommendations";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";

@@ -18,7 +18,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
-import { education, experience, links, profile, projects, recommendations, talks } from "@gocanto/store";
+import { education, experience, links, profile, projects, talks } from "@gocanto/store";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
 import { globalSearchOpen } from "@lib/globalSearch";
 
@@ -66,6 +66,7 @@ const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 const corpus = shallowRef<Corpus | null>(null);
 const selectedKind = ref<KindKey | null>(null);
+let corpusLoading = false;
 
 const isKindVisible = (k: KindKey) => selectedKind.value === null || selectedKind.value === k;
 
@@ -91,7 +92,9 @@ function searchable(...parts: string[]): string {
     return `${clean} ${compact}`;
 }
 
-function buildCorpus(): Corpus {
+async function buildCorpus(): Promise<Corpus> {
+    const { recommendations } = await import("@gocanto/store/recommendations");
+
     return {
         work: experience.data.map((e) => ({
             key: `exp:${e.uuid}`,
@@ -172,11 +175,19 @@ watch(open, (v) => {
         return;
     }
 
-    if (corpus.value) {
+    if (corpus.value || corpusLoading) {
         return;
     }
 
-    corpus.value = buildCorpus();
+    corpusLoading = true;
+    void buildCorpus()
+        .then((nextCorpus) => {
+            corpus.value = nextCorpus;
+            corpusLoading = false;
+        })
+        .catch(() => {
+            corpusLoading = false;
+        });
 });
 
 const activeKey = ref<string | null>(null);

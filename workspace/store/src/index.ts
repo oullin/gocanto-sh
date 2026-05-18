@@ -4,7 +4,6 @@ export { experience } from "./experience";
 export { links } from "./links";
 export { profile } from "./profile";
 export { projects } from "./projects";
-export { recommendations } from "./recommendations";
 export { talks } from "./talks";
 
 export type {
