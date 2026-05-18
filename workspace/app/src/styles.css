@@ -5,129 +5,132 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-    --color-background: var(--bg);
-    --color-foreground: var(--ink);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
     --color-card: var(--card);
-    --color-card-foreground: var(--ink);
-    --color-popover: var(--card);
-    --color-popover-foreground: var(--ink);
-    --color-primary: var(--ink);
-    --color-primary-foreground: var(--bg);
-    --color-secondary: var(--card-2);
-    --color-secondary-foreground: var(--ink);
-    --color-muted: var(--card-2);
-    --color-muted-foreground: var(--muted);
-    --color-accent: var(--card-2);
-    --color-accent-foreground: var(--ink);
-    --color-destructive: hsl(0 84% 60%);
-    --color-destructive-foreground: hsl(0 0% 98%);
-    --color-border: var(--line);
-    --color-input: var(--line);
-    --color-ring: var(--ring-alpha-hover);
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 12px;
-    --radius-xl: 14px;
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: oklch(0.58 0.24 28.48);
+    --color-destructive-foreground: oklch(0.99 0 0);
+    --color-border: var(--border);
+    --color-input: var(--border);
+    --color-ring: var(--ring);
+    --radius-xs: 0.125rem;
+    --radius-sm: calc(0.625rem - 4px);
+    --radius-md: calc(0.625rem - 2px);
+    --radius-lg: 0.625rem;
+    --radius-xl: calc(0.625rem + 4px);
 }
 
 :root {
-    /* --- Design tokens (light, ported from unlumen) --- */
-    --bg: #ffffff;
-    --bg-2: #f7f7f7;
-    --card: #f5f5f5;
-    --card-2: #f0f0f0;
-    --line: #e5e5e5;
-    --line-soft: #efefef;
-    --ink: #333333;
-    --ink-soft: #555555;
-    --muted: #8e8e8e;
-    --muted-2: #a8a8a8;
-    --accent: #333333;
+    /* shadcn neutral palette — oklch (matches shadcnstudio.com/templates) */
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.14 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.14 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.14 0 0);
+    --primary: oklch(0.2 0 0);
+    --primary-foreground: oklch(0.99 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.2 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.56 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.2 0 0);
+    --border: oklch(0.92 0 0);
+    --ring: oklch(0.71 0 0);
+    --radius: 0.625rem;
 
-    /* Rose is the only colored accent (unlumen --accent-pro) */
-    --rose: #ff96a9;
-    --rose-bg: rgba(255, 150, 169, 0.12);
+    /* Legacy aliases so existing class rules keep working */
+    --bg: var(--background);
+    --bg-2: oklch(0.985 0 0);
+    --line: var(--border);
+    --line-soft: oklch(0.96 0 0);
+    --ink: var(--foreground);
+    --ink-soft: oklch(0.32 0 0);
+    --muted-2: oklch(0.7 0 0);
+    --card-2: var(--muted);
 
-    /* Legacy hues collapsed to neutral so any incidental usage degrades gracefully */
+    /* Legacy hues collapsed to neutral */
     --green: var(--ink-soft);
-    --green-bg: var(--card-2);
+    --green-bg: var(--muted);
     --blue: var(--ink-soft);
-    --blue-bg: var(--card-2);
+    --blue-bg: var(--muted);
     --amber: var(--ink-soft);
-    --amber-bg: var(--card-2);
+    --amber-bg: var(--muted);
     --cyan: var(--ink-soft);
-    --cyan-bg: var(--card-2);
+    --cyan-bg: var(--muted);
     --violet: var(--ink-soft);
-    --violet-bg: var(--card-2);
+    --violet-bg: var(--muted);
 
-    /* Legacy aliases — kept so shadcn-vue / Sheet / Popover keep working */
-    --background: var(--bg);
-    --foreground: var(--ink);
-    --muted-foreground: var(--muted);
-    --border: var(--line-soft);
-    --border-strong: var(--line);
-    --brand: var(--ink);
-    --brand-foreground: var(--bg);
+    --border-strong: var(--border);
+    --brand: var(--primary);
+    --brand-foreground: var(--primary-foreground);
     --accent-green: var(--green);
     --accent-blue: var(--blue);
     --accent-purple: var(--violet);
     --accent-amber: var(--amber);
-    --radius: 10px;
 
-    --ring-alpha: rgba(0, 0, 0, 0.1);
-    --ring-alpha-hover: rgba(0, 0, 0, 0.22);
-    --surface-tint: rgba(0, 0, 0, 0.04);
-    --surface-tint-hover: rgba(0, 0, 0, 0.08);
+    --ring-alpha: oklch(0.71 0 0 / 0.4);
+    --ring-alpha-hover: var(--ring);
+    --surface-tint: oklch(0.14 0 0 / 0.04);
+    --surface-tint-hover: oklch(0.14 0 0 / 0.08);
 
     /* Command palette */
     --cmd-surface: var(--card);
-    --cmd-border: var(--line);
-    --cmd-chip-bg: rgba(0, 0, 0, 0.04);
-    --cmd-chip-bg-hover: rgba(0, 0, 0, 0.08);
-    --cmd-chip-bg-active: rgba(0, 0, 0, 0.1);
-    --cmd-chip-border: rgba(0, 0, 0, 0.08);
-    --cmd-chip-border-active: rgba(0, 0, 0, 0.2);
+    --cmd-border: var(--border);
+    --cmd-chip-bg: oklch(0.14 0 0 / 0.04);
+    --cmd-chip-bg-hover: oklch(0.14 0 0 / 0.08);
+    --cmd-chip-bg-active: oklch(0.14 0 0 / 0.1);
+    --cmd-chip-border: oklch(0.14 0 0 / 0.08);
+    --cmd-chip-border-active: oklch(0.14 0 0 / 0.2);
 
     color-scheme: light;
 }
 
 :root[data-theme="dark"] {
-    --bg: #121212;
-    --bg-2: #171717;
-    --card: #191919;
-    --card-2: #232323;
-    --line: rgba(255, 255, 255, 0.12);
-    --line-soft: rgba(255, 255, 255, 0.06);
-    --ink: #e5e5e5;
-    --ink-soft: #b4b4b4;
-    --muted: #999999;
-    --muted-2: #737373;
-    --accent: #e5e5e5;
+    --background: oklch(0.14 0 0);
+    --foreground: oklch(0.99 0 0);
+    --card: oklch(0.2 0 0);
+    --card-foreground: oklch(0.99 0 0);
+    --popover: oklch(0.2 0 0);
+    --popover-foreground: oklch(0.99 0 0);
+    --primary: oklch(0.99 0 0);
+    --primary-foreground: oklch(0.2 0 0);
+    --secondary: oklch(0.27 0 0);
+    --secondary-foreground: oklch(0.99 0 0);
+    --muted: oklch(0.27 0 0);
+    --muted-foreground: oklch(0.71 0 0);
+    --accent: oklch(0.27 0 0);
+    --accent-foreground: oklch(0.99 0 0);
+    --border: oklch(1 0 0 / 0.12);
+    --ring: oklch(0.55 0 0);
 
-    --rose: #ffb3c6;
-    --rose-bg: rgba(255, 179, 198, 0.14);
+    --bg-2: oklch(0.18 0 0);
+    --line-soft: oklch(1 0 0 / 0.06);
+    --ink-soft: oklch(0.78 0 0);
+    --muted-2: oklch(0.5 0 0);
 
-    --green: var(--ink-soft);
-    --green-bg: var(--card-2);
-    --blue: var(--ink-soft);
-    --blue-bg: var(--card-2);
-    --amber: var(--ink-soft);
-    --amber-bg: var(--card-2);
-    --cyan: var(--ink-soft);
-    --cyan-bg: var(--card-2);
-    --violet: var(--ink-soft);
-    --violet-bg: var(--card-2);
+    --ring-alpha: oklch(1 0 0 / 0.14);
+    --ring-alpha-hover: oklch(1 0 0 / 0.28);
+    --surface-tint: oklch(1 0 0 / 0.06);
+    --surface-tint-hover: oklch(1 0 0 / 0.1);
 
-    --ring-alpha: rgba(255, 255, 255, 0.14);
-    --ring-alpha-hover: rgba(255, 255, 255, 0.28);
-    --surface-tint: rgba(255, 255, 255, 0.06);
-    --surface-tint-hover: rgba(255, 255, 255, 0.1);
-
-    --cmd-chip-bg: rgba(255, 255, 255, 0.04);
-    --cmd-chip-bg-hover: rgba(255, 255, 255, 0.08);
-    --cmd-chip-bg-active: rgba(255, 255, 255, 0.12);
-    --cmd-chip-border: rgba(255, 255, 255, 0.08);
-    --cmd-chip-border-active: rgba(255, 255, 255, 0.18);
+    --cmd-chip-bg: oklch(1 0 0 / 0.04);
+    --cmd-chip-bg-hover: oklch(1 0 0 / 0.08);
+    --cmd-chip-bg-active: oklch(1 0 0 / 0.12);
+    --cmd-chip-border: oklch(1 0 0 / 0.08);
+    --cmd-chip-border-active: oklch(1 0 0 / 0.18);
 
     color-scheme: dark;
 }
@@ -156,8 +159,8 @@
             -apple-system,
             "Segoe UI",
             sans-serif;
-        font-size: 15px;
-        line-height: 1.55;
+        font-size: 16px;
+        line-height: 1.5;
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
@@ -249,7 +252,7 @@
     align-items: center;
     gap: 14px;
     padding: 12px 28px;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .nav-menu {
@@ -277,8 +280,8 @@
     border-radius: 8px;
     background: var(--bg);
     border: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 13px;
+    color: var(--muted-foreground);
+    font-size: 14px;
     transition:
         border-color 0.15s,
         color 0.15s;
@@ -298,10 +301,10 @@
 
 .search-pill kbd {
     font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
-    font-size: 11px;
-    color: var(--muted-2);
-    background: var(--card-2);
-    border: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--muted-foreground);
+    background: var(--muted);
+    border: 1px solid var(--border);
     border-radius: 4px;
     padding: 1px 6px;
 }
@@ -339,7 +342,7 @@ body {
 }
 
 .nav a.link {
-    color: var(--muted);
+    color: var(--muted-foreground);
     transition: color 0.15s;
 }
 
@@ -359,7 +362,7 @@ body {
     border-radius: 8px;
     border: 2px solid transparent;
     color: var(--bg);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.5;
     cursor: pointer;
@@ -513,21 +516,18 @@ main.outer > section:last-child {
 
 .eyebrow {
     display: inline-block;
-    font-size: 11.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    background: var(--card);
+    font-size: 14px;
+    color: var(--muted-foreground);
+    border: 1px solid var(--border);
+    background: var(--muted);
     padding: 5px 12px;
     border-radius: 999px;
     margin-bottom: 28px;
 }
 
 .hero h1.name {
-    font-size: 56px;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
+    font-size: 36px;
+    line-height: 40px;
     font-weight: 600;
     margin: 0 0 22px;
 }
@@ -535,13 +535,13 @@ main.outer > section:last-child {
 .hero .lede {
     max-width: 640px;
     margin: 0 auto;
-    font-size: 17px;
-    color: var(--ink-soft);
-    line-height: 1.55;
+    font-size: 18px;
+    color: var(--muted-foreground);
+    line-height: 28px;
 }
 
 .hero .lede .em {
-    color: var(--ink);
+    color: var(--foreground);
     font-weight: 500;
 }
 
@@ -591,25 +591,25 @@ main.outer > section:last-child {
 }
 
 .sect-head h2 {
-    font-size: 28px;
-    letter-spacing: -0.02em;
+    font-size: 36px;
+    line-height: 40px;
     font-weight: 600;
     margin: 0;
 }
 
 .sect-head .sub {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 14px;
+    line-height: 20px;
     max-width: 460px;
     text-align: right;
 }
 
 .kicker {
     display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted-2);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--muted-foreground);
     margin-bottom: 10px;
 }
 
@@ -673,14 +673,14 @@ main.outer > section:last-child {
 }
 
 .pillar h3 {
-    font-size: 15.5px;
+    font-size: 20px;
+    line-height: 28px;
     font-weight: 600;
     margin: 0 0 8px;
-    letter-spacing: -0.005em;
 }
 
 .pillar .sub {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 12px;
     margin-bottom: 8px;
     font-weight: 500;
@@ -727,15 +727,14 @@ main.outer > section:last-child {
 }
 
 .job-role {
-    font-size: 14.5px;
+    font-size: 16px;
+    line-height: 24px;
     font-weight: 600;
     margin: 0 0 6px;
-    letter-spacing: -0.005em;
-    line-height: 1.35;
 }
 
 .job-co {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 12.5px;
     margin-bottom: 14px;
 }
@@ -761,8 +760,9 @@ main.outer > section:last-child {
 /* ---------- Tags ---------- */
 
 .tag {
-    font-size: 11px;
-    padding: 3px 9px;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 4px 10px;
     border-radius: 999px;
     font-weight: 500;
     border: 1px solid transparent;
@@ -778,9 +778,9 @@ main.outer > section:last-child {
     border-color: var(--line);
 }
 .tag.rose {
-    background: var(--rose-bg);
-    color: var(--rose);
-    border-color: color-mix(in srgb, var(--rose) 30%, transparent);
+    background: var(--muted);
+    color: var(--foreground);
+    border-color: var(--border);
 }
 
 /* ---------- Recommendations ---------- */
@@ -861,7 +861,7 @@ main.outer > section:last-child {
 
 .rec-title {
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--muted-foreground);
 }
 
 /* ---------- Who I am ---------- */
@@ -883,21 +883,20 @@ main.outer > section:last-child {
 }
 
 .bio-side h2 {
-    font-size: 32px;
-    letter-spacing: -0.02em;
+    font-size: 36px;
+    line-height: 40px;
     font-weight: 600;
     margin: 0 0 18px;
-    line-height: 1.15;
 }
 
 .bio-side .lede {
-    color: var(--muted);
+    color: var(--muted-foreground);
     margin: 0;
     font-size: 14px;
 }
 
 .bio-side .note {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 13px;
     border-left: 1px solid var(--line);
     padding-left: 14px;
@@ -953,15 +952,15 @@ main.outer > section:last-child {
 }
 
 .skills-head h2 {
-    font-size: 22px;
-    letter-spacing: -0.015em;
+    font-size: 24px;
+    line-height: 32px;
     margin: 8px 0 0;
     font-weight: 600;
 }
 
 .skills-head .for-techies {
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     border: 1px solid var(--line);
     padding: 4px 10px;
     border-radius: 999px;
@@ -1001,7 +1000,7 @@ main.outer > section:last-child {
 .skill .ico {
     width: 22px;
     height: 22px;
-    color: var(--muted);
+    color: var(--muted-foreground);
 }
 
 .skill .yrs {
@@ -1017,7 +1016,7 @@ main.outer > section:last-child {
 
 .skill p {
     font-size: 12px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     margin: 0;
     line-height: 1.5;
 }
@@ -1060,7 +1059,7 @@ main.outer > section:last-child {
 
 .small p {
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     margin: 0;
     line-height: 1.45;
 }
@@ -1073,7 +1072,7 @@ main.outer > section:last-child {
 }
 
 .skills-extra-sub {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 12.5px;
     margin: 0 0 18px;
 }
@@ -1115,7 +1114,7 @@ main.outer > section:last-child {
 }
 
 .proj .desc {
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 12px;
 }
 
@@ -1124,7 +1123,7 @@ main.outer > section:last-child {
     padding: 2px 7px;
     border-radius: 999px;
     background: var(--card-2);
-    color: var(--muted);
+    color: var(--muted-foreground);
 }
 
 .proj .lang.go,
@@ -1149,10 +1148,9 @@ main.outer > section:last-child {
 
 .engage h2 {
     font-size: 30px;
-    letter-spacing: -0.022em;
+    line-height: 36px;
     font-weight: 600;
     margin: 0 0 14px;
-    line-height: 1.2;
 }
 
 .engage p {
@@ -1216,7 +1214,7 @@ main.outer > section:last-child {
 
 .btn .hint {
     font-size: 11px;
-    color: var(--muted);
+    color: var(--muted-foreground);
 }
 
 .btn.primary .hint {
@@ -1233,7 +1231,7 @@ main.outer > section:last-child {
 .footer {
     border-top: 1px solid var(--line-soft);
     padding: 56px 0 32px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-size: 12.5px;
 }
 
@@ -1318,7 +1316,7 @@ main.outer > section:last-child {
     border-radius: 9999px;
     border: 1px solid var(--line);
     background: var(--card-2);
-    color: var(--muted);
+    color: var(--muted-foreground);
     cursor: pointer;
     transition:
         border-color 0.15s,
@@ -1439,7 +1437,7 @@ main.outer > section:last-child {
     border: 1px solid var(--cmd-chip-border);
     border-radius: 999px;
     background: var(--cmd-chip-bg);
-    color: var(--muted);
+    color: var(--muted-foreground);
     font-family: inherit;
     font-size: 12px;
     font-weight: 500;
@@ -1485,7 +1483,7 @@ main.outer > section:last-child {
     border-radius: 8px;
     border: 1px solid var(--line);
     background: var(--bg);
-    color: var(--muted);
+    color: var(--muted-foreground);
 }
 
 .skill-sheet__initials {
@@ -1524,7 +1522,7 @@ main.outer > section:last-child {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
@@ -1575,7 +1573,7 @@ main.outer > section:last-child {
 
 .skill-sheet__label {
     font-size: 11px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 600;
@@ -1658,7 +1656,7 @@ main.outer > section:last-child {
 .skill-sheet__project-icon {
     flex-shrink: 0;
     margin-top: 2px;
-    color: var(--muted);
+    color: var(--muted-foreground);
     transition:
         color 150ms ease,
         transform 150ms ease;
@@ -1690,7 +1688,8 @@ main.outer > section:last-child {
         display: none;
     }
     .hero h1.name {
-        font-size: 44px;
+        font-size: 32px;
+        line-height: 36px;
     }
     .pillars,
     .work-grid,
@@ -1743,7 +1742,8 @@ main.outer > section:last-child {
         padding: 56px 0 40px;
     }
     .hero h1.name {
-        font-size: 36px;
+        font-size: 30px;
+        line-height: 36px;
     }
     .pillars,
     .work-grid,
