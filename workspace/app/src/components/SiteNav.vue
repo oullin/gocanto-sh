@@ -2,7 +2,14 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Menu, Search } from "lucide-vue-next";
 import { openGlobalSearch } from "@lib/globalSearch";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 
 const scrolled = ref(false);
 
@@ -62,12 +69,21 @@ onBeforeUnmount(() => {
 
             <Sheet>
                 <SheetTrigger as-child>
-                    <button type="button" class="nav-menu-trigger" aria-label="Open navigation menu">
+                    <button
+                        type="button"
+                        class="nav-menu-trigger"
+                        aria-label="Open navigation menu"
+                    >
                         <Menu class="nav-menu-trigger__icon" aria-hidden="true" />
                     </button>
                 </SheetTrigger>
 
                 <SheetContent side="right" class="nav-sheet">
+                    <SheetTitle class="sr-only">Navigation menu</SheetTitle>
+                    <SheetDescription class="sr-only">
+                        Browse page sections or open the global search.
+                    </SheetDescription>
+
                     <div class="nav-sheet__brand">
                         <span class="logo logo--mark" aria-hidden="true">
                             <img
