@@ -8,7 +8,6 @@ import {
     Link as LinkIcon,
     Mic,
     Quote,
-    Search,
     Sparkles,
 } from "lucide-vue-next";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/command";
 import { education, experience, links, profile, projects, recommendations, talks } from "@gocanto/store";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
+import { globalSearchOpen } from "@lib/globalSearch";
 
 type Result = {
     key: string;
@@ -61,7 +61,7 @@ const groupIcons = {
     links: LinkIcon,
 } as const;
 
-const open = ref(false);
+const open = globalSearchOpen;
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 const corpus = shallowRef<Corpus | null>(null);
@@ -239,21 +239,6 @@ watch(sheetOpen, (v) => {
 </script>
 
 <template>
-    <section class="global-search frame-section">
-        <button class="search-button" type="button" @click="open = true">
-            <span class="search-button__icon" aria-hidden="true">
-                <Search :size="16" />
-            </span>
-            <span class="search-button__label"
-                >Search work, projects, skills, education, talks, and more</span
-            >
-            <kbd class="kbd">
-                <span>⌘</span>
-                <span>K</span>
-            </kbd>
-        </button>
-    </section>
-
     <CommandDialog
         v-model:open="open"
         title="Search"

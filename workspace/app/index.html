@@ -127,18 +127,18 @@
                               : "light";
                     document.documentElement.dataset.theme = theme;
                 } catch (_) {
-                    document.documentElement.dataset.theme = "dark";
+                    document.documentElement.dataset.theme = "light";
                 }
             })();
         </script>
         <style>
             :root {
-                background: hsl(0 0% 4%);
-                color: hsl(0 0% 93%);
+                background: #ffffff;
+                color: #333333;
             }
-            :root[data-theme="light"] {
-                background: hsl(0 0% 100%);
-                color: hsl(0 0% 9%);
+            :root[data-theme="dark"] {
+                background: #121212;
+                color: #e5e5e5;
             }
         </style>
     </head>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { links, profile } from "@gocanto/store";
+import ThemeToggle from "@components/ThemeToggle.vue";
 
 const social = Object.fromEntries(links.data.map((l) => [l.name, l]));
 const githubPersonalUrl = social.github?.url ?? "#";
@@ -17,6 +18,10 @@ const ownerName = profile.data.name;
             <div class="foot-brand">
                 <div class="name">{{ ownerName }}</div>
                 <div class="where">Software engineer · Singapore</div>
+                <div class="foot-extras">
+                    <span class="foot-extras__label">Theme</span>
+                    <ThemeToggle />
+                </div>
                 <div class="copyright">
                     © {{ year }} {{ ownerName }} · MIT for code, all rights reserved for personal
                     content.
