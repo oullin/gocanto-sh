@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
-import { profile, projects, type ProfileSkillRecord, type ProjectRecord } from "@gocanto/store";
+import { profile, type ProfileSkillRecord } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
 import {
     Binary,
@@ -78,8 +78,10 @@ const truncate = (text: string, max: number): string => {
     if (text.length <= max) {
         return text;
     }
+
     const slice = text.slice(0, max);
     const lastSpace = slice.lastIndexOf(" ");
+
     return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 };
 
@@ -97,42 +99,6 @@ const moreSkills = computed<SmallSkill[]>(() =>
         })),
 );
 
-const PROJ_LANG_CLASS: Record<string, string> = {
-    Go: "go",
-    "Go / Docker": "go",
-    "Vue / TypeScript": "vue",
-    Vue: "vue",
-    PHP: "php",
-    "PHP / Vue": "vue",
-};
-
-const langClass = (lang: string): string => {
-    if (PROJ_LANG_CLASS[lang]) {
-        return PROJ_LANG_CLASS[lang];
-    }
-    const lower = lang.toLowerCase();
-    if (lower.startsWith("go")) {
-        return "go";
-    }
-    if (lower.includes("vue")) {
-        return "vue";
-    }
-    if (lower.includes("php")) {
-        return "php";
-    }
-    return "";
-};
-
-const projShort = (text: string): string => {
-    const cleaned = text.split(".")[0];
-    return truncate(cleaned, 60);
-};
-
-const openSourceProjects: ProjectRecord[] = [...projects.data]
-    .filter((p) => p.is_open_source)
-    .sort((a, b) => a.sort - b.sort)
-    .slice(0, 6);
-
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
 
@@ -146,14 +112,17 @@ function openSkill(s: ProfileSkillRecord) {
 
 const activeIcon = computed<Component>(() => {
     const s = activeSkill.value;
+
     if (!s) {
         return Sparkles;
     }
+
     return iconFor[s.item] ?? Sparkles;
 });
 
 const activeHasIcon = computed<boolean>(() => {
     const s = activeSkill.value;
+
     return !!s && !!iconFor[s.item];
 });
 </script>
@@ -215,26 +184,6 @@ const activeHasIcon = computed<boolean>(() => {
                 <h5><span :class="{ 'sk-shimmer': !moreReady }">{{ m.skill.item }}</span></h5>
                 <p><span :class="{ 'sk-shimmer': !moreReady }">{{ m.short }}</span></p>
             </button>
-        </div>
-
-        <h3 id="projects" class="skills-extra-head">Open source</h3>
-        <p class="skills-extra-sub">
-            A few small projects I maintain in public.
-            <a href="https://github.com/gocanto" target="_blank" rel="noopener noreferrer">Full list on GitHub →</a>
-        </p>
-        <div class="proj-strip">
-            <a
-                v-for="p in openSourceProjects"
-                :key="p.uuid"
-                :href="p.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="proj"
-            >
-                <span class="name">{{ p.title }}</span>
-                <span class="desc">{{ projShort(p.excerpt) }}</span>
-                <span class="lang" :class="langClass(p.language)">{{ p.language }}</span>
-            </a>
         </div>
 
         <Sheet v-model:open="open">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import EngagementCta from "@components/EngagementCta.vue";
 import ExperienceGrid from "@components/ExperienceGrid.vue";
 import GlobalSearch from "@components/GlobalSearch.vue";
+import ProjectsTable from "@components/ProjectsTable.vue";
 import RecommendationsMarquee from "@components/RecommendationsMarquee.vue";
 import SignatureSkillsGrid from "@components/SignatureSkillsGrid.vue";
 import SiteFooter from "@components/SiteFooter.vue";
@@ -15,10 +15,10 @@ import WorkflowHero from "@components/WorkflowHero.vue";
     <WorkflowHero />
     <main class="outer">
         <ExperienceGrid />
+        <ProjectsTable />
         <RecommendationsMarquee />
         <WhoIAm />
         <SignatureSkillsGrid />
-        <EngagementCta />
     </main>
     <SiteFooter />
     <GlobalSearch />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import {
     ArrowUpRight,
     Bot,
@@ -21,6 +21,8 @@ import {
     Wand2,
 } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import { profile } from "@gocanto/store";
+import type { RecommendationRecord } from "@gocanto/store";
 
 type Detail = {
     text: string;
@@ -66,6 +68,11 @@ type Workflow = {
     steps: Step[];
 };
 
+type ProofAvatar = {
+    src: string;
+    alt: string;
+};
+
 const activeTab = ref("lead-qualifier");
 const panelKey = ref(0);
 const tabRefs = ref<HTMLButtonElement[]>([]);
@@ -78,12 +85,37 @@ const detailFirstStepIds = new Set([
     "content-action",
 ]);
 
-const avatars = [
-    { src: "/orion/avatar-45.png", alt: "Ali Hussein" },
-    { src: "/orion/avatar-59.png", alt: "Sahaj Jain" },
-    { src: "/orion/avatar-34.png", alt: "Chánh Đại" },
-    { src: "/orion/avatar-58.png", alt: "Julian" },
-];
+const proofAvatars = ref<ProofAvatar[]>([]);
+const testimonialCount = ref(0);
+const mailto = `mailto:${profile.data.email}`;
+
+const uniqueRecommendations = (items: readonly RecommendationRecord[]): RecommendationRecord[] => {
+    const seen = new Set<string>();
+    const unique: RecommendationRecord[] = [];
+
+    for (const item of items) {
+        if (seen.has(item.uuid)) {
+            continue;
+        }
+
+        seen.add(item.uuid);
+        unique.push(item);
+    }
+
+    return unique;
+};
+
+onMounted(async () => {
+    const { recommendations } = await import("@gocanto/store/recommendations");
+    const unique = uniqueRecommendations(recommendations.data);
+    const sorted = [...unique].sort((a, b) => b.created_at.localeCompare(a.created_at));
+
+    testimonialCount.value = unique.length;
+    proofAvatars.value = sorted.slice(0, 4).map((r) => ({
+        src: `https://oullin.io/images/${r.person.avatar}`,
+        alt: r.person.full_name,
+    }));
+});
 
 const workflows: Workflow[] = [
     {
@@ -140,7 +172,11 @@ const workflows: Workflow[] = [
                 title: "Generate, Validate, Replay",
                 description:
                     "Claude handles the first pass, GPT-4 is available as fallback, and validators fail closed before anything ships.",
-                details: [{ text: "Provider abstraction" }, { text: "Structured output" }, { text: "Build, test, lint, security gates" }],
+                details: [
+                    { text: "Provider abstraction" },
+                    { text: "Structured output" },
+                    { text: "Build, test, lint, security gates" },
+                ],
                 chip: "Agent-accelerated",
                 time: "Hours, not days",
                 model: true,
@@ -154,8 +190,13 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: PackageCheck,
                 title: "Reviewable Client Package",
-                description: "Senior-engineer code, tests, docs, runbooks, and audit evidence delivered as a fixed-scope sprint.",
-                details: [{ text: "README and API reference" }, { text: "Reproducible artifact manifest" }, { text: "Audit trail for review" }],
+                description:
+                    "Senior-engineer code, tests, docs, runbooks, and audit evidence delivered as a fixed-scope sprint.",
+                details: [
+                    { text: "README and API reference" },
+                    { text: "Reproducible artifact manifest" },
+                    { text: "Audit trail for review" },
+                ],
                 chip: "Production-grade",
                 time: "Fixed scope",
                 action: "Ready for review",
@@ -221,7 +262,8 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: ShieldCheck,
                 title: "Payments Discipline",
-                description: "The patterns Gustavo used across Aspire and BeMyGuest become the default integration shape.",
+                description:
+                    "The patterns Gustavo used across Aspire and BeMyGuest become the default integration shape.",
                 details: [
                     { text: "Idempotency on mutating calls" },
                     { text: "Webhook signature verification" },
@@ -239,7 +281,8 @@ const workflows: Workflow[] = [
                 icon: CreditCard,
                 title: "Provider + Stack",
                 titleMeta: "hara.sh",
-                description: "Stripe, Adyen, NETS, or a documented provider surface for Go and TypeScript delivery.",
+                description:
+                    "Stripe, Adyen, NETS, or a documented provider surface for Go and TypeScript delivery.",
                 delay: "early",
                 position: "center",
             },
@@ -249,7 +292,8 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: PackageCheck,
                 title: "Sandbox in 30 Minutes",
-                description: "Client engineers receive code, fixtures, docs, hashes, and a complete generation audit log.",
+                description:
+                    "Client engineers receive code, fixtures, docs, hashes, and a complete generation audit log.",
                 details: [{ text: "Deliverable zip" }, { text: "SHA256 manifest" }],
                 time: "Client-ready",
                 delay: "late",
@@ -261,7 +305,8 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: Wand2,
                 title: "Generate Integration",
-                description: "hara.sh emits a typed module, client SDK, OpenAPI contract, Postman collection, and sandbox tests.",
+                description:
+                    "hara.sh emits a typed module, client SDK, OpenAPI contract, Postman collection, and sandbox tests.",
                 details: [
                     { text: "Go module + TypeScript client" },
                     { text: "OpenAPI 3.1 + Postman" },
@@ -309,8 +354,12 @@ const workflows: Workflow[] = [
                 labelIcon: PenLine,
                 icon: Landmark,
                 title: "Legacy Surface",
-                description: "One AS/400, VCOS, Java monolith, or core-banking surface is scoped for a fixed pilot.",
-                details: [{ text: "Sparse docs + sample records" }, { text: "Security and compliance stakeholders" }],
+                description:
+                    "One AS/400, VCOS, Java monolith, or core-banking surface is scoped for a fixed pilot.",
+                details: [
+                    { text: "Sparse docs + sample records" },
+                    { text: "Security and compliance stakeholders" },
+                ],
                 time: "Discovery",
                 delay: "early",
                 position: "left",
@@ -321,8 +370,13 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: ServerCog,
                 title: "Proxy + Controls",
-                description: "toku.sh wraps the legacy system with a modern API while preserving auditability and operational control.",
-                details: [{ text: "Go reverse proxy + OpenAPI" }, { text: "Auth, cache, rate limits, circuit breaker" }, { text: "Kafka projection when needed" }],
+                description:
+                    "toku.sh wraps the legacy system with a modern API while preserving auditability and operational control.",
+                details: [
+                    { text: "Go reverse proxy + OpenAPI" },
+                    { text: "Auth, cache, rate limits, circuit breaker" },
+                    { text: "Kafka projection when needed" },
+                ],
                 chip: "AS/400 protected",
                 time: "8-12 weeks",
                 delay: "middle",
@@ -334,8 +388,13 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: Gauge,
                 title: "Operational Console",
-                description: "Bank teams get traffic, latency, AS/400 health, audit export, and rollback runbooks.",
-                details: [{ text: "p50/p95/p99 latency" }, { text: "Caller + operation audit filters" }, { text: "Compliance pack" }],
+                description:
+                    "Bank teams get traffic, latency, AS/400 health, audit export, and rollback runbooks.",
+                details: [
+                    { text: "p50/p95/p99 latency" },
+                    { text: "Caller + operation audit filters" },
+                    { text: "Compliance pack" },
+                ],
                 time: "Pilot-ready",
                 delay: "late",
                 position: "right",
@@ -388,8 +447,12 @@ const workflows: Workflow[] = [
                 labelIcon: PenLine,
                 icon: Cable,
                 title: "Flow Contract",
-                description: "Plain-English or YAML definition of event sources, sinks, semantics, and throughput target.",
-                details: [{ text: "Kafka or RabbitMQ source" }, { text: "Postgres, webhook, S3, or topic sink" }],
+                description:
+                    "Plain-English or YAML definition of event sources, sinks, semantics, and throughput target.",
+                details: [
+                    { text: "Kafka or RabbitMQ source" },
+                    { text: "Postgres, webhook, S3, or topic sink" },
+                ],
                 time: "Spec first",
                 delay: "early",
                 position: "left",
@@ -400,8 +463,13 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: DatabaseZap,
                 title: "Consumer + DLQ",
-                description: "kuda.sh generates the Go pipeline with offset handling, idempotent writes, back-pressure, and replay tooling.",
-                details: [{ text: "Exactly-once consumer option" }, { text: "DLQ with full failure context" }, { text: "Schema evolution tests" }],
+                description:
+                    "kuda.sh generates the Go pipeline with offset handling, idempotent writes, back-pressure, and replay tooling.",
+                details: [
+                    { text: "Exactly-once consumer option" },
+                    { text: "DLQ with full failure context" },
+                    { text: "Schema evolution tests" },
+                ],
                 time: "3-week build",
                 delay: "middle",
                 position: "center",
@@ -412,8 +480,13 @@ const workflows: Workflow[] = [
                 labelIcon: Clipboard,
                 icon: Gauge,
                 title: "Helm + Observability",
-                description: "Deployment and operations are part of the package, not an afterthought.",
-                details: [{ text: "Helm chart + values" }, { text: "Grafana dashboard JSON" }, { text: "Prometheus alerts" }],
+                description:
+                    "Deployment and operations are part of the package, not an afterthought.",
+                details: [
+                    { text: "Helm chart + values" },
+                    { text: "Grafana dashboard JSON" },
+                    { text: "Prometheus alerts" },
+                ],
                 time: "Deployable",
                 action: "Runbook included",
                 delay: "late",
@@ -425,8 +498,12 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: PackageCheck,
                 title: "Recoverable Stream",
-                description: "The finished system can drain, replay, roll back, and evolve without custom incident scripts.",
-                details: [{ text: "Lag, throughput, error-rate alerts" }, { text: "DLQ replay command" }],
+                description:
+                    "The finished system can drain, replay, roll back, and evolve without custom incident scripts.",
+                details: [
+                    { text: "Lag, throughput, error-rate alerts" },
+                    { text: "DLQ replay command" },
+                ],
                 time: "Production handoff",
                 delay: "final",
                 position: "mobile-only",
@@ -468,8 +545,12 @@ const workflows: Workflow[] = [
                 labelIcon: PenLine,
                 icon: ShoppingCart,
                 title: "Checkout Surface",
-                description: "Multi-tenant marketplace, SaaS checkout, wallet, booking, or partner API surface.",
-                details: [{ text: "Provider mix + currency rules" }, { text: "Inventory and capacity constraints" }],
+                description:
+                    "Multi-tenant marketplace, SaaS checkout, wallet, booking, or partner API surface.",
+                details: [
+                    { text: "Provider mix + currency rules" },
+                    { text: "Inventory and capacity constraints" },
+                ],
                 time: "Discovery",
                 delay: "early",
                 position: "left",
@@ -480,8 +561,13 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: ShieldCheck,
                 title: "Resilient Commerce",
-                description: "Patterns from BeMyGuest: idempotent checkout, modular payment adapters, contract-tested integrations, and audit trails.",
-                details: [{ text: "Adyen, Stripe, PayPal, WeChat, PayDollar" }, { text: "OpenAPI partner sync" }, { text: "Ledgering + reconciliation reports" }],
+                description:
+                    "Patterns from BeMyGuest: idempotent checkout, modular payment adapters, contract-tested integrations, and audit trails.",
+                details: [
+                    { text: "Adyen, Stripe, PayPal, WeChat, PayDollar" },
+                    { text: "OpenAPI partner sync" },
+                    { text: "Ledgering + reconciliation reports" },
+                ],
                 chip: "Ecommerce-ready",
                 time: "10+ gateways",
                 model: true,
@@ -495,8 +581,13 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: PackageCheck,
                 title: "Revenue-Safe Delivery",
-                description: "The result is a checkout or integration layer that protects customer trust and finance operations.",
-                details: [{ text: "Retries + dispute hooks" }, { text: "Immutable critical records" }, { text: "Regression-tested release path" }],
+                description:
+                    "The result is a checkout or integration layer that protects customer trust and finance operations.",
+                details: [
+                    { text: "Retries + dispute hooks" },
+                    { text: "Immutable critical records" },
+                    { text: "Regression-tested release path" },
+                ],
                 time: "Launch-ready",
                 delay: "late",
                 position: "right",
@@ -550,7 +641,10 @@ const workflows: Workflow[] = [
                 icon: DatabaseZap,
                 title: "Slow Query Signal",
                 description: "Postgres or MySQL performance data exposes high-impact query paths.",
-                details: [{ text: "pg_stat_statements or performance schema" }, { text: "Repository migration format" }],
+                details: [
+                    { text: "pg_stat_statements or performance schema" },
+                    { text: "Repository migration format" },
+                ],
                 time: "Local-first",
                 delay: "early",
                 position: "left",
@@ -561,8 +655,13 @@ const workflows: Workflow[] = [
                 labelIcon: Wand2,
                 icon: Gauge,
                 title: "Explain + Fix",
-                description: "horu.sh codifies the Aspire-style latency work Gustavo did manually into conservative PR-based suggestions.",
-                details: [{ text: "EXPLAIN before and after" }, { text: "Index or migration draft" }, { text: "Expected impact and rollback" }],
+                description:
+                    "horu.sh codifies the Aspire-style latency work Gustavo did manually into conservative PR-based suggestions.",
+                details: [
+                    { text: "EXPLAIN before and after" },
+                    { text: "Index or migration draft" },
+                    { text: "Expected impact and rollback" },
+                ],
                 chip: "PR-gated",
                 time: "Year 2 agent",
                 delay: "middle",
@@ -574,7 +673,8 @@ const workflows: Workflow[] = [
                 labelIcon: Clipboard,
                 icon: Clipboard,
                 title: "Engineer Approval",
-                description: "No write access to production data. The output is a reviewable change, not an auto-applied mutation.",
+                description:
+                    "No write access to production data. The output is a reviewable change, not an auto-applied mutation.",
                 details: [{ text: "Read-only database credentials" }, { text: "GitHub/GitLab PR" }],
                 time: "Human gate",
                 action: "Review PR",
@@ -587,7 +687,8 @@ const workflows: Workflow[] = [
                 labelIcon: FileText,
                 icon: PackageCheck,
                 title: "Measured Improvement",
-                description: "The PR carries query evidence, migration code, rollback notes, and audit log context.",
+                description:
+                    "The PR carries query evidence, migration code, rollback notes, and audit log context.",
                 details: [{ text: "Before/after plan evidence" }, { text: "Migration + rollback" }],
                 time: "Reviewable",
                 delay: "final",
@@ -597,7 +698,9 @@ const workflows: Workflow[] = [
     },
 ];
 
-const activeWorkflow = computed(() => workflows.find((workflow) => workflow.id === activeTab.value) ?? workflows[0]);
+const activeWorkflow = computed(
+    () => workflows.find((workflow) => workflow.id === activeTab.value) ?? workflows[0],
+);
 
 const setTabRef = (el: HTMLButtonElement | null, index: number) => {
     if (el) {
@@ -656,12 +759,12 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
 
                     <p class="wf-hero__lede">
                         I build production-grade backends for fintech, banking, and e-commerce:
-                        payment integrations, event pipelines, legacy modernization, and practical AI
-                        agents that ship fast and pass audit.
+                        payment integrations, event pipelines, legacy modernization, and practical
+                        AI agents that ship fast and pass audit.
                     </p>
 
                     <div class="wf-hero__ctas">
-                        <Button as="a" href="#engage" variant="outline" class="wf-cta-primary">
+                        <Button as="a" :href="mailto" variant="outline" class="wf-cta-primary">
                             <ArrowUpRight class="size-4" aria-hidden="true" />
                             Book a review
                         </Button>
@@ -669,12 +772,23 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
 
                     <div class="wf-proof">
                         <div class="wf-proof__users">
-                            <ul class="wf-proof__avatars" aria-label="Users">
-                                <li v-for="avatar in avatars" :key="avatar.src" class="wf-proof__avatar">
-                                    <img :src="avatar.src" :alt="avatar.alt" width="36" height="36" />
+                            <ul class="wf-proof__avatars" aria-label="Testimonials">
+                                <li
+                                    v-for="avatar in proofAvatars"
+                                    :key="avatar.src"
+                                    class="wf-proof__avatar"
+                                >
+                                    <img
+                                        :src="avatar.src"
+                                        :alt="avatar.alt"
+                                        width="36"
+                                        height="36"
+                                    />
                                 </li>
                             </ul>
-                            <span><strong>12K+</strong> Users</span>
+                            <span v-if="testimonialCount > 0"
+                                ><strong>{{ testimonialCount }}+</strong> Testimonials</span
+                            >
                         </div>
                     </div>
                 </div>
@@ -750,19 +864,33 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                         <header class="wf-card__header">
                             <component :is="step.icon" class="size-5" aria-hidden="true" />
                             <h2>{{ step.title }}</h2>
-                            <span v-if="step.titleMeta" class="wf-card__meta">{{ step.titleMeta }}</span>
-                            <Button variant="ghost" size="icon-sm" class="wf-card__menu" aria-label="Menu">
+                            <span v-if="step.titleMeta" class="wf-card__meta">{{
+                                step.titleMeta
+                            }}</span>
+                            <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                class="wf-card__menu"
+                                aria-label="Menu"
+                            >
                                 <Menu class="size-4" aria-hidden="true" />
                             </Button>
                         </header>
 
-                        <p v-if="step.description && !detailFirstStepIds.has(step.id)" class="wf-card__description">
+                        <p
+                            v-if="step.description && !detailFirstStepIds.has(step.id)"
+                            class="wf-card__description"
+                        >
                             {{ step.description }}
                         </p>
 
                         <div v-if="step.details?.length || step.chip" class="wf-card__details">
                             <span v-if="step.chip" class="wf-card__chip">{{ step.chip }}</span>
-                            <div v-for="detail in step.details" :key="detail.text" class="wf-card__detail">
+                            <div
+                                v-for="detail in step.details"
+                                :key="detail.text"
+                                class="wf-card__detail"
+                            >
                                 <img
                                     v-if="detail.asset"
                                     :src="detail.asset"
@@ -775,18 +903,30 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                             </div>
                         </div>
 
-                        <p v-if="step.description && detailFirstStepIds.has(step.id)" class="wf-card__description">
+                        <p
+                            v-if="step.description && detailFirstStepIds.has(step.id)"
+                            class="wf-card__description"
+                        >
                             {{ step.description }}
                         </p>
 
-                        <footer v-if="step.time || step.model || step.action" class="wf-card__footer">
+                        <footer
+                            v-if="step.time || step.model || step.action"
+                            class="wf-card__footer"
+                        >
                             <span v-if="step.time" class="wf-card__time">{{ step.time }}</span>
                             <span v-if="step.model" class="wf-card__model">
                                 <img src="/orion/chatgpt.png" alt="" width="18" height="18" />
                                 {{ step.modelLabel ?? "Claude + GPT-4" }}
                             </span>
                             <span v-if="step.action" class="wf-card__action">
-                                <img v-if="step.action === 'File updated'" src="/orion/notion.png" alt="" width="18" height="18" />
+                                <img
+                                    v-if="step.action === 'File updated'"
+                                    src="/orion/notion.png"
+                                    alt=""
+                                    width="18"
+                                    height="18"
+                                />
                                 {{ step.action }}
                             </span>
                         </footer>
