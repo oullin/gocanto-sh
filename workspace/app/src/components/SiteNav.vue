@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
+import { Menu, Search } from "lucide-vue-next";
 import { openGlobalSearch } from "@lib/globalSearch";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const scrolled = ref(false);
 
+const navItems = [
+    { href: "#about", label: "About" },
+    { href: "#skills", label: "Skills" },
+    { href: "#work", label: "Work" },
+    { href: "#projects", label: "Projects" },
+    { href: "#testimonials", label: "Testimonials" },
+];
+
 const onScroll = () => {
     scrolled.value = window.scrollY > 8;
+};
+
+const openSearch = () => {
+    openGlobalSearch();
 };
 
 onMounted(() => {
@@ -21,44 +35,67 @@ onBeforeUnmount(() => {
 <template>
     <header class="nav" :class="{ 'is-scrolled': scrolled }">
         <div class="nav-inner">
-            <a href="#" class="logo logo--mark" aria-label="gocanto home">
-                <img
-                    src="/avatar-128.jpg"
-                    srcset="/avatar-128.jpg 1x, /avatar-128.jpg 2x"
-                    alt=""
-                    width="36"
-                    height="36"
-                />
+            <a href="#" class="nav-brand" aria-label="gocanto home">
+                <span class="logo logo--mark" aria-hidden="true">
+                    <img
+                        src="/avatar-128.jpg"
+                        srcset="/avatar-128.jpg 1x, /avatar-128.jpg 2x"
+                        alt=""
+                        width="28"
+                        height="28"
+                    />
+                </span>
+                <span class="nav-brand__name">gocanto</span>
             </a>
 
             <nav class="nav-menu" aria-label="Primary">
-                <a href="#about" class="link">About</a>
-                <a href="#skills" class="link">Skills</a>
-                <a href="#work" class="link">Work</a>
-                <a href="#projects" class="link">Projects</a>
-                <a href="#testimonials" class="link">Testimonials</a>
+                <a v-for="item in navItems" :key="item.href" :href="item.href" class="link">
+                    {{ item.label }}
+                </a>
             </nav>
 
-            <div class="spacer"></div>
-
-            <button type="button" class="search-pill" @click="openGlobalSearch()" aria-label="Open search">
-                <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                >
-                    <circle cx="11" cy="11" r="7" />
-                    <path d="m21 21-4.3-4.3" />
-                </svg>
+            <button type="button" class="nav-search" @click="openSearch()" aria-label="Open search">
+                <Search class="nav-search__icon" aria-hidden="true" />
                 <span>Search…</span>
                 <kbd>⌘K</kbd>
             </button>
+
+            <Sheet>
+                <SheetTrigger as-child>
+                    <button type="button" class="nav-menu-trigger" aria-label="Open navigation menu">
+                        <Menu class="nav-menu-trigger__icon" aria-hidden="true" />
+                    </button>
+                </SheetTrigger>
+
+                <SheetContent side="right" class="nav-sheet">
+                    <div class="nav-sheet__brand">
+                        <span class="logo logo--mark" aria-hidden="true">
+                            <img
+                                src="/avatar-128.jpg"
+                                srcset="/avatar-128.jpg 1x, /avatar-128.jpg 2x"
+                                alt=""
+                                width="28"
+                                height="28"
+                            />
+                        </span>
+                        <span class="nav-brand__name">gocanto</span>
+                    </div>
+
+                    <nav class="nav-sheet__menu" aria-label="Mobile primary">
+                        <SheetClose v-for="item in navItems" :key="item.href" as-child>
+                            <a :href="item.href" class="nav-sheet__link">{{ item.label }}</a>
+                        </SheetClose>
+                    </nav>
+
+                    <SheetClose as-child>
+                        <button type="button" class="nav-sheet__search" @click="openSearch()">
+                            <Search class="nav-search__icon" aria-hidden="true" />
+                            <span>Search…</span>
+                            <kbd>⌘K</kbd>
+                        </button>
+                    </SheetClose>
+                </SheetContent>
+            </Sheet>
         </div>
     </header>
 </template>
