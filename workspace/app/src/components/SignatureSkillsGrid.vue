@@ -159,7 +159,7 @@ const activeHasIcon = computed<boolean>(() => {
 </script>
 
 <template>
-    <section ref="section">
+    <section id="skills" ref="section">
         <div class="skills-head">
             <div>
                 <span class="kicker">The technical part · For engineers and CTOs</span>

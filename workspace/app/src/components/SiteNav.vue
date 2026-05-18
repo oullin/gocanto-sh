@@ -32,13 +32,14 @@ onBeforeUnmount(() => {
             </a>
 
             <nav class="nav-menu" aria-label="Primary">
+                <a href="#about" class="link">About</a>
+                <a href="#skills" class="link">Skills</a>
                 <a href="#work" class="link">Work</a>
+                <a href="#projects" class="link">Projects</a>
                 <a href="#testimonials" class="link">Testimonials</a>
             </nav>
 
             <div class="spacer"></div>
-
-            <a href="#engage" class="nav-cta">Book a review</a>
 
             <button type="button" class="search-pill" @click="openGlobalSearch()" aria-label="Open search">
                 <svg
