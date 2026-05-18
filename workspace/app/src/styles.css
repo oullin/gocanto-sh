@@ -2037,7 +2037,13 @@ main.outer > section:last-child {
     z-index: 1;
     background: oklch(1 0 0 / 0.12);
     border-color: oklch(1 0 0 / 0.32);
+    border-left-width: 1px;
+    margin-left: -1px;
     color: var(--wf-ink);
+}
+
+.wf-tab.is-active:first-child {
+    margin-left: 0;
 }
 
 .wf-tab:focus-visible,
