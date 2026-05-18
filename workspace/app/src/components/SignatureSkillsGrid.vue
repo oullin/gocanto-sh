@@ -23,6 +23,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
+import { ScrollFade } from "@/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
 const moreSection = ref<HTMLElement | null>(null);
@@ -66,38 +67,31 @@ function chipVariant(name: string): string {
     return CHIP_VARIANTS[Math.abs(hash) % CHIP_VARIANTS.length];
 }
 
-type SmallSkill = {
+type Cell = {
     skill: ProfileSkillRecord;
-    badge: string;
-    short: string;
+    title: string;
+    description: string;
+    icon: Component | null;
+    initials: string;
 };
 
-const SMALL_DESC_MAX = 90;
+function toCell(s: ProfileSkillRecord): Cell {
+    const icon = iconFor[s.item] ?? null;
 
-const truncate = (text: string, max: number): string => {
-    if (text.length <= max) {
-        return text;
-    }
+    return {
+        skill: s,
+        title: s.item,
+        description: s.description,
+        icon: icon,
+        initials: initials(s.item),
+    };
+}
 
-    const slice = text.slice(0, max);
-    const lastSpace = slice.lastIndexOf(" ");
-
-    return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
-};
-
-const signatureSkills = computed<ProfileSkillRecord[]>(() =>
-    skills.filter((s) => s.signature === true),
+const signatureCells = computed<Cell[]>(() =>
+    skills.filter((s) => s.signature === true).map(toCell),
 );
 
-const moreSkills = computed<SmallSkill[]>(() =>
-    skills
-        .filter((s) => s.signature !== true)
-        .map((s) => ({
-            skill: s,
-            badge: initials(s.item),
-            short: truncate(s.description, SMALL_DESC_MAX),
-        })),
-);
+const moreCells = computed<Cell[]>(() => skills.filter((s) => s.signature !== true).map(toCell));
 
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
@@ -128,63 +122,85 @@ const activeHasIcon = computed<boolean>(() => {
 </script>
 
 <template>
-    <section id="skills" ref="section">
-        <div class="skills-head">
-            <div>
-                <span class="kicker">The technical part · For engineers and CTOs</span>
-                <h2>Signature skills</h2>
-            </div>
-            <span class="for-techies">Buzzword zone · for people who want the specifics</span>
+    <section id="skills" ref="section" class="frame-section">
+        <div class="explore-head">
+            <h2>Signature skills</h2>
+            <p>
+                Hands-on craft I lean on across every engagement — agentic platforms, payment cores,
+                streaming pipelines, banking legacy.
+            </p>
         </div>
 
-        <div class="skill-grid">
+        <div class="explore-grid">
             <button
-                v-for="s in signatureSkills"
-                :key="s.uuid"
+                v-for="c in signatureCells"
+                :key="c.skill.uuid"
                 type="button"
-                class="skill"
+                class="explore-card"
                 :aria-busy="!ready"
-                @click="openSkill(s)"
+                @click="openSkill(c.skill)"
             >
-                <div class="skill-top">
-                    <component
-                        :is="iconFor[s.item] ?? Sparkles"
-                        class="ico"
-                        :size="22"
-                        :stroke-width="1.6"
+                <span
+                    class="explore-card__icon"
+                    :class="{ 'explore-card__icon--loading': !ready }"
+                    aria-hidden="true"
+                >
+                    <component :is="c.icon ?? Sparkles" :size="16" :stroke-width="1.5" />
+                </span>
+                <h3>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ c.title }}</span>
+                </h3>
+                <p>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ c.description }}</span>
+                </p>
+                <span v-if="c.skill.years" class="explore-card__years" aria-label="Years hands-on">
+                    {{ c.skill.years }} yrs
+                </span>
+            </button>
+        </div>
+
+        <div class="explore-subhead">
+            <h3>More skills</h3>
+            <p>
+                Languages, frameworks, and practices I draw on day-to-day. Click any card for the
+                full detail.
+            </p>
+        </div>
+
+        <ScrollFade class="explore-scroll">
+            <div ref="moreSection" class="explore-grid explore-grid--dense">
+                <button
+                    v-for="c in moreCells"
+                    :key="c.skill.uuid"
+                    type="button"
+                    class="explore-card explore-card--compact"
+                    :aria-busy="!moreReady"
+                    @click="openSkill(c.skill)"
+                >
+                    <span
+                        class="explore-card__icon"
+                        :class="{ 'explore-card__icon--loading': !moreReady }"
                         aria-hidden="true"
-                    />
-                    <span v-if="s.years" class="yrs">
-                        <span :class="{ 'sk-shimmer': !ready }">{{ s.years }} yrs</span>
+                    >
+                        <component v-if="c.icon" :is="c.icon" :size="16" :stroke-width="1.5" />
+                        <span v-else class="explore-card__initials">{{ c.initials }}</span>
                     </span>
-                </div>
-                <h4><span :class="{ 'sk-shimmer': !ready }">{{ s.item }}</span></h4>
-                <p><span :class="{ 'sk-shimmer': !ready }">{{ s.description }}</span></p>
-            </button>
-        </div>
-
-        <h3 class="skills-extra-head">More skills</h3>
-        <p class="skills-extra-sub">
-            Languages, frameworks, and practices I draw on day-to-day. Click any card for the full
-            detail.
-        </p>
-
-        <div ref="moreSection" class="small-skills">
-            <button
-                v-for="m in moreSkills"
-                :key="m.skill.uuid"
-                type="button"
-                class="small"
-                :aria-busy="!moreReady"
-                @click="openSkill(m.skill)"
-            >
-                <div class="badge mono">
-                    <span :class="{ 'sk-shimmer': !moreReady }">{{ m.badge }}</span>
-                </div>
-                <h5><span :class="{ 'sk-shimmer': !moreReady }">{{ m.skill.item }}</span></h5>
-                <p><span :class="{ 'sk-shimmer': !moreReady }">{{ m.short }}</span></p>
-            </button>
-        </div>
+                    <h3>
+                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.title }}</span>
+                    </h3>
+                    <p>
+                        <span :class="{ 'sk-shimmer': !moreReady }">{{ c.description }}</span>
+                    </p>
+                    <span
+                        v-if="c.skill.years"
+                        class="explore-card__years explore-card__years--muted"
+                        aria-label="Years hands-on"
+                    >
+                        {{ c.skill.years }} yrs
+                    </span>
+                </button>
+            </div>
+        </ScrollFade>
 
         <Sheet v-model:open="open">
             <SheetContent class="skill-sheet" side="right">

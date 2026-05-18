@@ -18,7 +18,6 @@ const navItems = [
     { href: "#skills", label: "Skills" },
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
-    { href: "#testimonials", label: "Testimonials" },
 ];
 
 const onScroll = () => {

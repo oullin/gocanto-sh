@@ -771,7 +771,11 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                     </div>
 
                     <div class="wf-proof">
-                        <div class="wf-proof__users">
+                        <a
+                            href="#testimonials"
+                            class="wf-proof__users"
+                            aria-label="View testimonials"
+                        >
                             <ul class="wf-proof__avatars" aria-label="Testimonials">
                                 <li
                                     v-for="avatar in proofAvatars"
@@ -789,7 +793,7 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                             <span v-if="testimonialCount > 0"
                                 ><strong>{{ testimonialCount }}+</strong> Testimonials</span
                             >
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -916,16 +920,14 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                         >
                             <span v-if="step.time" class="wf-card__time">{{ step.time }}</span>
                             <span v-if="step.model" class="wf-card__model">
-                                <img src="/orion/chatgpt.png" alt="" width="18" height="18" />
+                                <Bot class="size-[18px]" aria-hidden="true" />
                                 {{ step.modelLabel ?? "Claude + GPT-4" }}
                             </span>
                             <span v-if="step.action" class="wf-card__action">
-                                <img
+                                <FileText
                                     v-if="step.action === 'File updated'"
-                                    src="/orion/notion.png"
-                                    alt=""
-                                    width="18"
-                                    height="18"
+                                    class="size-[18px]"
+                                    aria-hidden="true"
                                 />
                                 {{ step.action }}
                             </span>

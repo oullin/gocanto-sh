@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BackToTop from "@components/BackToTop.vue";
 import ExperienceGrid from "@components/ExperienceGrid.vue";
 import GlobalSearch from "@components/GlobalSearch.vue";
 import ProjectsTable from "@components/ProjectsTable.vue";
@@ -21,5 +22,6 @@ import WorkflowHero from "@components/WorkflowHero.vue";
         <SignatureSkillsGrid />
     </main>
     <SiteFooter />
+    <BackToTop />
     <GlobalSearch />
 </template>

@@ -1,52 +1,57 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
-type Resolved = "light" | "dark";
-type ThemeMode = "system" | Resolved;
+type ThemeMode = "system" | "light" | "dark";
 
 const STORAGE_KEY = "theme";
 
 const mode = ref<ThemeMode>("system");
-const systemPrefersDark = ref(false);
 let mediaQuery: MediaQueryList | null = null;
 
-const resolved = computed<Resolved>(() => {
-    if (mode.value === "system") {
-        return systemPrefersDark.value ? "dark" : "light";
+function resolveTheme(m: ThemeMode): "light" | "dark" {
+    if (m === "system") {
+        return mediaQuery && mediaQuery.matches ? "dark" : "light";
     }
 
-    return mode.value;
-});
-
-function applyTheme(value: Resolved) {
-    document.documentElement.dataset.theme = value;
+    return m;
 }
 
-function setMode(next: Exclude<ThemeMode, "system">) {
+function applyTheme(m: ThemeMode) {
+    const resolved = resolveTheme(m);
+
+    document.documentElement.dataset.theme = resolved;
+}
+
+function setMode(next: ThemeMode) {
     mode.value = next;
-    localStorage.setItem(STORAGE_KEY, next);
+    if (next === "system") {
+        localStorage.removeItem(STORAGE_KEY);
+    } else {
+        localStorage.setItem(STORAGE_KEY, next);
+    }
+
+    applyTheme(next);
 }
 
-function toggle() {
-    setMode(resolved.value === "dark" ? "light" : "dark");
-}
-
-function handleSystemChange(event: MediaQueryListEvent) {
-    systemPrefersDark.value = event.matches;
+function handleSystemChange() {
+    if (mode.value === "system") {
+        applyTheme("system");
+    }
 }
 
 onMounted(() => {
     mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    systemPrefersDark.value = mediaQuery.matches;
     mediaQuery.addEventListener("change", handleSystemChange);
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
 
     if (stored === "light" || stored === "dark") {
         mode.value = stored;
+    } else {
+        mode.value = "system";
     }
 
-    applyTheme(resolved.value);
+    applyTheme(mode.value);
 });
 
 onBeforeUnmount(() => {
@@ -55,54 +60,78 @@ onBeforeUnmount(() => {
     }
 });
 
-watch(resolved, applyTheme);
+watch(mode, applyTheme);
 </script>
 
 <template>
-    <button
-        type="button"
-        class="theme-switch"
-        :data-resolved="resolved"
-        :aria-label="`Switch to ${resolved === 'dark' ? 'light' : 'dark'} mode`"
-        :aria-pressed="resolved === 'dark'"
-        @click="toggle"
-    >
-        <svg
-            class="theme-switch__icon theme-switch__icon--sun"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+    <fieldset class="theme-toggle" aria-label="Select a display theme">
+        <legend class="sr-only">Select a display theme</legend>
+        <label
+            v-for="option in ['system', 'light', 'dark'] as const"
+            :key="option"
+            class="theme-toggle__option"
+            :class="{ 'is-active': mode === option }"
         >
-            <circle cx="12" cy="12" r="4" />
-            <line x1="12" y1="2" x2="12" y2="4" />
-            <line x1="12" y1="20" x2="12" y2="22" />
-            <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
-            <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
-            <line x1="2" y1="12" x2="4" y2="12" />
-            <line x1="20" y1="12" x2="22" y2="12" />
-            <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
-            <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
-        </svg>
-        <span class="theme-switch__thumb"></span>
-        <svg
-            class="theme-switch__icon theme-switch__icon--moon"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-        >
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-    </button>
+            <input
+                type="radio"
+                name="theme"
+                :value="option"
+                :checked="mode === option"
+                @change="setMode(option)"
+            />
+            <span class="sr-only">{{ option }}</span>
+            <svg
+                v-if="option === 'system'"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+            <svg
+                v-else-if="option === 'light'"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <circle cx="12" cy="12" r="4" />
+                <line x1="12" y1="2" x2="12" y2="4" />
+                <line x1="12" y1="20" x2="12" y2="22" />
+                <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+                <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+                <line x1="2" y1="12" x2="4" y2="12" />
+                <line x1="20" y1="12" x2="22" y2="12" />
+                <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+                <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+            </svg>
+            <svg
+                v-else
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </label>
+    </fieldset>
 </template>

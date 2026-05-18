@@ -7,6 +7,10 @@ const section = ref<HTMLElement | null>(null);
 const ready = useInViewReady(section);
 
 const data = bio.data;
+const stackedFactKeys = new Set(["Originally from"]);
+
+const shouldStackFact = (fact: (typeof data.quick_facts)[number]) => stackedFactKeys.has(fact.key);
+const factValueLines = (fact: (typeof data.quick_facts)[number]) => fact.value.split(" · ");
 </script>
 
 <template>
@@ -33,7 +37,18 @@ const data = bio.data;
                 <div class="quick-facts">
                     <div v-for="f in data.quick_facts" :key="f.key" class="fact">
                         <div class="k"><span :class="{ 'sk-shimmer': !ready }">{{ f.key }}</span></div>
-                        <div class="v"><span :class="{ 'sk-shimmer': !ready }">{{ f.value }}</span></div>
+                        <div class="v" :class="{ 'v--stacked': shouldStackFact(f) }">
+                            <template v-if="shouldStackFact(f)">
+                                <span
+                                    v-for="line in factValueLines(f)"
+                                    :key="line"
+                                    :class="{ 'sk-shimmer': !ready }"
+                                >
+                                    {{ line }}
+                                </span>
+                            </template>
+                            <span v-else :class="{ 'sk-shimmer': !ready }">{{ f.value }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
