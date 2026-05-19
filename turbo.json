@@ -19,7 +19,14 @@
       "outputs": []
     },
     "test": {
-      "outputs": []
+      "dependsOn": ["^test"],
+      "outputs": [],
+      "inputs": [
+        "src/**",
+        "vitest.config.ts",
+        "package.json",
+        "tsconfig.json"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],

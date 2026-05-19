@@ -102,6 +102,20 @@ export type TalkRecord = {
     readonly updated_at: string;
 };
 
+export type BioQuickFact = {
+    readonly key: string;
+    readonly value: string;
+};
+
+export type BioRecord = {
+    readonly tagline: string;
+    readonly note: string;
+    readonly paragraphs: readonly string[];
+    readonly quick_facts: readonly BioQuickFact[];
+};
+
+export type BioFixture = FixtureEnvelope<BioRecord>;
+
 export type EducationFixture = FixtureEnvelope<readonly EducationRecord[]>;
 export type ExperienceFixture = FixtureEnvelope<readonly ExperienceRecord[]>;
 export type LinksFixture = FixtureEnvelope<readonly LinkRecord[]>;

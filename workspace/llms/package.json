@@ -7,6 +7,7 @@
         "build": "tsx src/generate-markdown.ts",
         "format": "tsx ../../scripts/blank-lines.ts && oxfmt .",
         "format:check": "tsx ../../scripts/blank-lines.ts --check && oxfmt --check .",
+        "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },
     "dependencies": {
@@ -15,6 +16,7 @@
     "devDependencies": {
         "@gocanto/app": "workspace:*",
         "@types/node": "^25.6.2",
-        "typescript": "^6.0.3"
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.5"
     }
 }

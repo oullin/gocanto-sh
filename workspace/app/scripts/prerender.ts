@@ -32,14 +32,17 @@ const appHtml = await render();
 
 console.log("[prerender] injecting into dist/index.html…");
 const template = await readFile(distIndex, "utf8");
-const injected = template.replace(
-    /<div id="app">[\s\S]*?<\/div>(?=\s*<\/body>)/,
-    `<div id="app">${appHtml}</div>`,
-);
+const appStart = template.indexOf('<div id="app">');
+const bodyEnd = template.lastIndexOf("</body>");
+const appEnd = bodyEnd > appStart ? template.lastIndexOf("</div>", bodyEnd) : -1;
 
-if (injected === template) {
+if (appStart === -1 || appEnd === -1) {
     throw new Error('[prerender] could not locate <div id="app"> in dist/index.html');
 }
+
+const injected = `${template.slice(0, appStart)}<div id="app">${appHtml}</div>${template.slice(
+    appEnd + "</div>".length,
+)}`;
 
 await writeFile(distIndex, injected);
 await rm(ssrOutDir, { recursive: true, force: true });

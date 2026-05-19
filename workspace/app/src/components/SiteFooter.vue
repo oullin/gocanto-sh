@@ -47,29 +47,31 @@ const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> 
 
 <template>
     <footer class="footer">
-        <div class="footer-top">
-            <div v-for="col in columns" :key="col.heading" class="footer-col">
-                <h4>{{ col.heading }}</h4>
-                <ul>
-                    <li v-for="link in col.links" :key="`${col.heading}-${link.label}`">
-                        <a
-                            :href="link.href"
-                            :target="link.external ? '_blank' : undefined"
-                            :rel="link.external ? 'noopener noreferrer' : undefined"
-                            >{{ link.label }}</a
-                        >
-                    </li>
-                </ul>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div v-for="col in columns" :key="col.heading" class="footer-col">
+                    <h4>{{ col.heading }}</h4>
+                    <ul>
+                        <li v-for="link in col.links" :key="`${col.heading}-${link.label}`">
+                            <a
+                                :href="link.href"
+                                :target="link.external ? '_blank' : undefined"
+                                :rel="link.external ? 'noopener noreferrer' : undefined"
+                                >{{ link.label }}</a
+                            >
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <span class="status">
-                <Heart :size="14" :stroke-width="1.75" aria-hidden="true" class="status-icon" />
-                <span>Husband, Father, Brother, and Son</span>
-            </span>
-            <div class="footer-socials">
-                <span>© {{ year }} {{ ownerName }}</span>
-                <ThemeToggle />
+            <div class="footer-bottom">
+                <span class="status">
+                    <Heart :size="14" :stroke-width="1.75" aria-hidden="true" class="status-icon" />
+                    <span>Husband, Father, Brother, and Son</span>
+                </span>
+                <div class="footer-socials">
+                    <span>© {{ year }} {{ ownerName }}</span>
+                    <ThemeToggle />
+                </div>
             </div>
         </div>
     </footer>

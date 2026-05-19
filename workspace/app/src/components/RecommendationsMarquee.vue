@@ -1,36 +1,53 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from "vue";
-import { recommendations } from "@gocanto/store";
 import type { RecommendationRecord } from "@gocanto/store";
 import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useAsyncInView } from "@lib/useAsyncInView";
 
 const AVATAR_BASE = "https://oullin.io/images/";
 
-const sorted = [...recommendations.data].sort((a, b) => b.created_at.localeCompare(a.created_at));
+const section = ref<HTMLElement | null>(null);
+const recommendationsFixture = useAsyncInView(section, async () => {
+    const store = await import("@gocanto/store/recommendations");
 
-const byId: Map<string, RecommendationRecord> = new Map(sorted.map((r) => [r.uuid, r]));
+    return store.recommendations;
+});
 
-const items: Testimonial[] = sorted.map((r) => ({
-    id: r.uuid,
-    name: r.person.full_name,
-    text: r.text,
-    avatar: AVATAR_BASE + r.person.avatar,
-    role: r.person.designation,
-    company: r.person.company,
-    featured: r.featured === 1,
-}));
+const picked = computed<RecommendationRecord[]>(() => {
+    if (!recommendationsFixture.value) {
+        return [];
+    }
+
+    const sorted = [...recommendationsFixture.value.data].sort((a, b) =>
+        b.created_at.localeCompare(a.created_at),
+    );
+
+    return sorted;
+});
+
+const byId = computed<Map<string, RecommendationRecord>>(
+    () => new Map(picked.value.map((r) => [r.uuid, r])),
+);
+
+const items = computed<Testimonial[]>(() =>
+    picked.value.map((r) => ({
+        id: r.uuid,
+        name: r.person.full_name,
+        text: r.text,
+        avatar: AVATAR_BASE + r.person.avatar,
+        role: r.person.designation,
+        company: r.person.company,
+        featured: r.featured === 1,
+    })),
+);
+const loading = computed(() => recommendationsFixture.value === null);
 
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 
-const section = ref<HTMLElement | null>(null);
-const ready = useInViewReady(section);
-const isLoading = computed(() => !ready.value);
-
 function handleSelect(item: Testimonial) {
-    const record = byId.get(item.id);
+    const record = byId.value.get(item.id);
 
     if (!record) {
         return;
@@ -42,47 +59,20 @@ function handleSelect(item: Testimonial) {
 </script>
 
 <template>
-    <section id="recommendations" ref="section" class="recommendations-section frame-section">
-        <header class="recommendations-section__header">
-            <h2>Recommendations</h2>
-            <p class="recommendations-section__lede">
-                Words from people I've actually shipped with — engineers I've managed, peers across
-                product and design, and leaders I've reported to. The
-                <span class="recommendations-section__hl">highlighted</span> ones are the ones I
-                keep coming back to. Click any card to read the full note.
-            </p>
-        </header>
-        <TestimonialMarquee
-            :items="items"
-            :speed="120"
-            :loading="isLoading"
-            @select="handleSelect"
-        />
+    <section id="testimonials" ref="section">
+        <div class="sect-head">
+            <div>
+                <span class="kicker">Proof · What people I've worked with say</span>
+                <h2>Testimonials.</h2>
+            </div>
+            <div class="sub">
+                Notes from engineers, managers, and founders I've shipped real things with. The
+                <span style="color: var(--amber)">highlighted ones</span> are the ones I'd point a
+                recruiter to first.
+            </div>
+        </div>
+
+        <TestimonialMarquee :items="items" :speed="160" :loading="loading" @select="handleSelect" />
     </section>
     <SearchResultDetail v-model:open="sheetOpen" :payload="activePayload" />
 </template>
-
-<style scoped>
-.recommendations-section {
-    padding: 48px 0 32px;
-}
-.recommendations-section__header {
-    padding: 0 24px 8px;
-}
-.recommendations-section__header h2 {
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-}
-.recommendations-section__lede {
-    margin-top: 10px;
-    max-width: 60ch;
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--muted-foreground);
-}
-.recommendations-section__hl {
-    color: var(--accent-amber);
-    font-weight: 500;
-}
-</style>

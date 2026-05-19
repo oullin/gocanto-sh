@@ -3,9 +3,6 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "imports": {
-        "#config/vite": "./vite.config.ts"
-    },
     "scripts": {
         "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts",
         "dev": "portless",
@@ -14,7 +11,7 @@
         "format:check": "tsx ../../scripts/blank-lines.ts --check && oxfmt --check .",
         "lint": "oxlint .",
         "preview": "vite preview --configLoader runner --host 0.0.0.0",
-        "test": "vitest run --passWithNoTests --configLoader runner",
+        "test": "vitest run --passWithNoTests",
         "typecheck": "vue-tsc -b"
     },
     "dependencies": {
@@ -38,6 +35,8 @@
         "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^25.6.2",
         "@vue/server-renderer": "^3.5.34",
+        "@vue/test-utils": "^2.4.6",
+        "happy-dom": "^15.11.7",
         "oxlint": "^1.31.0",
         "portless": "^0.13.0",
         "shadcn-vue": "^2.6.2",

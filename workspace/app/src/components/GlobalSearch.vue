@@ -8,7 +8,6 @@ import {
     Link as LinkIcon,
     Mic,
     Quote,
-    Search,
     Sparkles,
 } from "lucide-vue-next";
 import {
@@ -19,8 +18,9 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
-import { education, experience, links, profile, projects, recommendations, talks } from "@gocanto/store";
+import { education, experience, links, profile, projects, talks } from "@gocanto/store";
 import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
+import { globalSearchOpen } from "@lib/globalSearch";
 
 type Result = {
     key: string;
@@ -61,11 +61,12 @@ const groupIcons = {
     links: LinkIcon,
 } as const;
 
-const open = ref(false);
+const open = globalSearchOpen;
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
 const corpus = shallowRef<Corpus | null>(null);
 const selectedKind = ref<KindKey | null>(null);
+let corpusLoading = false;
 
 const isKindVisible = (k: KindKey) => selectedKind.value === null || selectedKind.value === k;
 
@@ -91,7 +92,9 @@ function searchable(...parts: string[]): string {
     return `${clean} ${compact}`;
 }
 
-function buildCorpus(): Corpus {
+async function buildCorpus(): Promise<Corpus> {
+    const { recommendations } = await import("@gocanto/store/recommendations");
+
     return {
         work: experience.data.map((e) => ({
             key: `exp:${e.uuid}`,
@@ -172,11 +175,19 @@ watch(open, (v) => {
         return;
     }
 
-    if (corpus.value) {
+    if (corpus.value || corpusLoading) {
         return;
     }
 
-    corpus.value = buildCorpus();
+    corpusLoading = true;
+    void buildCorpus()
+        .then((nextCorpus) => {
+            corpus.value = nextCorpus;
+            corpusLoading = false;
+        })
+        .catch(() => {
+            corpusLoading = false;
+        });
 });
 
 const activeKey = ref<string | null>(null);
@@ -239,21 +250,6 @@ watch(sheetOpen, (v) => {
 </script>
 
 <template>
-    <section class="global-search frame-section">
-        <button class="search-button" type="button" @click="open = true">
-            <span class="search-button__icon" aria-hidden="true">
-                <Search :size="16" />
-            </span>
-            <span class="search-button__label"
-                >Search work, projects, skills, education, talks, and more</span
-            >
-            <kbd class="kbd">
-                <span>⌘</span>
-                <span>K</span>
-            </kbd>
-        </button>
-    </section>
-
     <CommandDialog
         v-model:open="open"
         title="Search"

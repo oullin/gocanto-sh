@@ -1,77 +1,120 @@
 <script setup lang="ts">
-import { Send } from "lucide-vue-next";
-import { onMounted, onUnmounted, ref } from "vue";
-import { Matrix } from "@/components/ui/matrix";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { Menu, Search } from "lucide-vue-next";
+import { openGlobalSearch } from "@lib/globalSearch";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 
-const COLS = 8;
-const levels = ref<number[]>(Array(COLS).fill(0.3));
-let rafId: number | undefined;
-let lastUpdate = 0;
-const UPDATE_INTERVAL_MS = 90;
+const scrolled = ref(false);
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    if (window.location.hash) {
-        history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-}
+const navItems = [
+    { href: "#about", label: "About" },
+    { href: "#work", label: "Work" },
+    { href: "#projects", label: "Projects" },
+    { href: "#testimonials", label: "Testimonials" },
+    { href: "#bio", label: "Bio" },
+    { href: "#skills", label: "Skills" },
+];
 
-function tick(now: number) {
-    if (now - lastUpdate >= UPDATE_INTERVAL_MS) {
-        levels.value = levels.value.map((prev) => {
-            const target = Math.random();
+const onScroll = () => {
+    scrolled.value = window.scrollY > 8;
+};
 
-            return prev + (target - prev) * 0.55;
-        });
-        lastUpdate = now;
-    }
-
-    rafId = requestAnimationFrame(tick);
-}
+const openSearch = () => {
+    openGlobalSearch();
+};
 
 onMounted(() => {
-    rafId = requestAnimationFrame(tick);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
 });
-onUnmounted(() => {
-    if (rafId) {
-        cancelAnimationFrame(rafId);
-    }
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", onScroll);
 });
 </script>
 
 <template>
-    <header class="nav">
+    <header class="nav" :class="{ 'is-scrolled': scrolled }">
         <div class="nav-inner">
             <a href="#" class="nav-brand" aria-label="gocanto home">
-                <Matrix
-                    :rows="7"
-                    :cols="COLS"
-                    :levels="levels"
-                    :size="3"
-                    :gap="1"
-                    aria-label="gocanto home"
-                    class="nav-logo"
-                />
+                <span class="logo logo--mark" aria-hidden="true">
+                    <img
+                        src="/avatar-128.jpg"
+                        srcset="/avatar-128.jpg 1x, /avatar-128.jpg 2x"
+                        alt=""
+                        width="28"
+                        height="28"
+                    />
+                </span>
+                <span class="nav-brand__name">gocanto</span>
             </a>
-            <nav class="nav-links">
-                <a href="#work">Work</a>
-                <a href="#recommendations">Recommendations</a>
-                <a href="#book-a-review">Book a review</a>
-            </nav>
-            <div class="nav-right">
-                <a href="#book-a-review" class="nav-cta">
-                    <Send class="nav-cta-icon" :size="14" aria-hidden="true" />
-                    <span>Get in touch</span>
+
+            <nav class="nav-menu" aria-label="Primary">
+                <a v-for="item in navItems" :key="item.href" :href="item.href" class="link">
+                    {{ item.label }}
                 </a>
-                <button
-                    type="button"
-                    class="nav-avatar"
-                    aria-label="Back to top"
-                    @click="scrollToTop"
-                >
-                    <img src="/avatar.jpg" alt="" width="32" height="32" />
-                </button>
-            </div>
+            </nav>
+
+            <button type="button" class="nav-search" @click="openSearch()" aria-label="Open search">
+                <Search class="nav-search__icon" aria-hidden="true" />
+                <span>Search…</span>
+                <kbd>⌘K</kbd>
+            </button>
+
+            <Sheet>
+                <SheetTrigger as-child>
+                    <button
+                        type="button"
+                        class="nav-menu-trigger"
+                        aria-label="Open navigation menu"
+                    >
+                        <Menu class="nav-menu-trigger__icon" aria-hidden="true" />
+                    </button>
+                </SheetTrigger>
+
+                <SheetContent side="right" class="nav-sheet">
+                    <SheetTitle class="sr-only">Navigation menu</SheetTitle>
+                    <SheetDescription class="sr-only">
+                        Browse page sections or open the global search.
+                    </SheetDescription>
+
+                    <div class="nav-sheet__brand">
+                        <span class="logo logo--mark" aria-hidden="true">
+                            <img
+                                src="/avatar-128.jpg"
+                                srcset="/avatar-128.jpg 1x, /avatar-128.jpg 2x"
+                                alt=""
+                                width="28"
+                                height="28"
+                            />
+                        </span>
+                        <span class="nav-brand__name">gocanto</span>
+                    </div>
+
+                    <nav class="nav-sheet__menu" aria-label="Mobile primary">
+                        <SheetClose v-for="item in navItems" :key="item.href" as-child>
+                            <a :href="item.href" class="nav-sheet__link">{{ item.label }}</a>
+                        </SheetClose>
+                    </nav>
+
+                    <hr class="nav-sheet__divider" aria-hidden="true" />
+
+                    <SheetClose as-child>
+                        <button type="button" class="nav-sheet__search" @click="openSearch()">
+                            <Search class="nav-search__icon" aria-hidden="true" />
+                            <span>Search…</span>
+                            <kbd>⌘K</kbd>
+                        </button>
+                    </SheetClose>
+                </SheetContent>
+            </Sheet>
         </div>
     </header>
 </template>

@@ -122,7 +122,7 @@ const activeHasIcon = computed<boolean>(() => {
 </script>
 
 <template>
-    <section ref="section" class="frame-section">
+    <section id="skills" ref="section" class="frame-section">
         <div class="explore-head">
             <h2>Signature skills</h2>
             <p>
@@ -130,6 +130,7 @@ const activeHasIcon = computed<boolean>(() => {
                 streaming pipelines, banking legacy.
             </p>
         </div>
+
         <div class="explore-grid">
             <button
                 v-for="c in signatureCells"

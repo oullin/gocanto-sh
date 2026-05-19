@@ -4,20 +4,21 @@
   "private": true,
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "scripts": {
-    "build": "turbo run build --cache-dir storage/.cache/turbo",
-    "dev": "turbo run dev --cache-dir storage/.cache/turbo",
-    "format": "turbo run format --cache-dir storage/.cache/turbo",
-    "format-all": "turbo run format --cache-dir storage/.cache/turbo --force",
-    "format:check": "turbo run format:check --cache-dir storage/.cache/turbo",
-    "lint": "turbo run lint --cache-dir storage/.cache/turbo",
-    "test": "turbo run test --cache-dir storage/.cache/turbo",
-    "typecheck": "turbo run typecheck --cache-dir storage/.cache/turbo"
+    "build": "turbo run build --ui=stream --cache-dir storage/.cache/turbo",
+    "dev": "turbo run dev --ui=stream --cache-dir storage/.cache/turbo",
+    "format": "turbo run format --ui=stream --cache-dir storage/.cache/turbo",
+    "format-all": "turbo run format --ui=stream --cache-dir storage/.cache/turbo --force",
+    "format:check": "turbo run format:check --ui=stream --cache-dir storage/.cache/turbo",
+    "lint": "turbo run lint --ui=stream --cache-dir storage/.cache/turbo",
+    "test": "turbo run test --ui=stream --cache-dir storage/.cache/turbo",
+    "typecheck": "turbo run typecheck --ui=stream --cache-dir storage/.cache/turbo"
   },
   "devDependencies": {
     "oxc-parser": "latest",
     "oxfmt": "latest",
     "tsx": "^4.20.0",
-    "turbo": "^2.9.12"
+    "turbo": "^2.9.12",
+    "vitest": "^4.1.5"
   },
   "pnpm": {
     "overrides": {
