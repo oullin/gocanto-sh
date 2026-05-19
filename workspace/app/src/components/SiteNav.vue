@@ -104,6 +104,8 @@ onBeforeUnmount(() => {
                         </SheetClose>
                     </nav>
 
+                    <hr class="nav-sheet__divider" aria-hidden="true" />
+
                     <SheetClose as-child>
                         <button type="button" class="nav-sheet__search" @click="openSearch()">
                             <Search class="nav-search__icon" aria-hidden="true" />

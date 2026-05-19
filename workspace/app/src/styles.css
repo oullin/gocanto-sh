@@ -420,6 +420,13 @@
     color: oklch(0.98 0 0);
 }
 
+.nav-sheet__divider {
+    border: 0;
+    border-top: 1px solid oklch(1 0 0 / 0.1);
+    margin: 0;
+    width: 100%;
+}
+
 .nav-sheet__search {
     justify-content: flex-start;
     width: 100%;
@@ -717,41 +724,6 @@ main.outer > header.hero {
 .hero .lede .em {
     color: var(--foreground);
     font-weight: 500;
-}
-
-/* ---------- Pixel hero ---------- */
-
-.pixel-hero {
-    position: relative;
-    width: 100%;
-    isolation: isolate;
-    overflow: hidden;
-}
-
-.pixel-hero-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    display: block;
-}
-
-.pixel-hero-inner {
-    position: relative;
-    z-index: 2;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 28px;
-}
-
-.pixel-hero-inner > header.hero {
-    padding: 76px 0 24px;
-}
-
-.pixel-hero-inner > section.hero-cta {
-    display: flex;
-    justify-content: center;
-    padding: 8px 0 64px;
 }
 
 /* ---------- Section heads ---------- */
@@ -2204,10 +2176,6 @@ button.explore-card:focus-visible {
     padding: 92px 32px 96px;
 }
 
-.wf-hero__pixels {
-    z-index: 0;
-}
-
 .wf-hero__copy {
     position: relative;
     z-index: 1;
@@ -3042,14 +3010,6 @@ button.explore-card:focus-visible {
         display: none;
     }
     .nav-search {
-        min-width: 44px;
-        width: 44px;
-        min-height: 44px;
-        padding: 0;
-        justify-content: center;
-    }
-    .nav-search span,
-    .nav-search kbd {
         display: none;
     }
     .nav-menu-trigger {

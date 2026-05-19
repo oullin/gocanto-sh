@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, onMounted, ref } from "vue";
-import { usePreferredReducedMotion } from "@vueuse/core";
+import { computed, nextTick, onMounted, ref } from "vue";
 import {
     ArrowUpRight,
     Bot,
@@ -24,11 +23,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { profile } from "@gocanto/store";
 import type { RecommendationRecord } from "@gocanto/store";
-
-const PixelCanvas = defineAsyncComponent(() => import("./PixelCanvas.vue"));
-const heroMounted = ref(false);
-const reducedMotion = usePreferredReducedMotion();
-const showHeroPixels = computed(() => heroMounted.value && reducedMotion.value !== "reduce");
 
 type Detail = {
     text: string;
@@ -112,7 +106,6 @@ const uniqueRecommendations = (items: readonly RecommendationRecord[]): Recommen
 };
 
 onMounted(async () => {
-    heroMounted.value = true;
     const { recommendations } = await import("@gocanto/store/recommendations");
     const unique = uniqueRecommendations(recommendations.data);
     const sorted = [...unique].sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -752,7 +745,6 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
     <section id="about" class="wf-hero" aria-labelledby="hero-title">
         <div class="wf-hero__intro">
             <div class="wf-hero__frame">
-                <PixelCanvas v-if="showHeroPixels" class="wf-hero__pixels" />
                 <div class="wf-hero__copy">
                     <span class="wf-badge">
                         <span class="wf-badge__new">
