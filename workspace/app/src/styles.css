@@ -367,8 +367,8 @@
     display: none;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     border: 1px solid oklch(1 0 0 / 0.12);
     border-radius: 8px;
     background: oklch(1 0 0 / 0.06);
@@ -437,8 +437,8 @@
 
 .back-to-top {
     position: fixed;
-    right: 24px;
-    bottom: 24px;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(24px, env(safe-area-inset-bottom));
     z-index: 40;
     display: inline-flex;
     align-items: center;
@@ -2195,13 +2195,22 @@ button.explore-card:focus-visible {
 }
 
 .wf-hero__frame {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     min-height: 557px;
     display: grid;
     place-items: center;
     padding: 92px 32px 96px;
 }
 
+.wf-hero__pixels {
+    z-index: 0;
+}
+
 .wf-hero__copy {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2779,9 +2788,13 @@ button.explore-card:focus-visible {
 }
 
 .wf-card__menu {
-    width: 24px !important;
-    height: 24px !important;
-    color: var(--wf-muted) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--wf-muted);
+    pointer-events: none;
 }
 
 .wf-card__description {
@@ -3021,6 +3034,29 @@ button.explore-card:focus-visible {
     }
 }
 
+@media (max-width: 820px) {
+    .nav-brand {
+        min-width: 0;
+    }
+    .nav-menu {
+        display: none;
+    }
+    .nav-search {
+        min-width: 44px;
+        width: 44px;
+        min-height: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+    .nav-search span,
+    .nav-search kbd {
+        display: none;
+    }
+    .nav-menu-trigger {
+        display: inline-flex;
+    }
+}
+
 @media (max-width: 640px) {
     main.outer {
         padding: 0;
@@ -3035,30 +3071,11 @@ button.explore-card:focus-visible {
     .nav-inner {
         gap: 10px;
     }
-    .nav-brand {
-        min-width: 0;
-    }
-    .nav-menu {
-        display: none;
-    }
-    .nav-search {
-        min-width: 38px;
-        width: 38px;
-        min-height: 38px;
-        padding: 0;
-    }
-    .nav-search span,
-    .nav-search kbd {
-        display: none;
-    }
-    .nav-menu-trigger {
-        display: inline-flex;
-    }
     .back-to-top {
-        right: 16px;
-        bottom: 16px;
-        width: 42px;
-        height: 42px;
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        width: 44px;
+        height: 44px;
     }
     .hero {
         padding: 56px 0 40px;

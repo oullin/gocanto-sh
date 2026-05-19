@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from "vue";
+import { usePreferredReducedMotion } from "@vueuse/core";
 import {
     ArrowUpRight,
     Bot,
@@ -23,6 +24,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { profile } from "@gocanto/store";
 import type { RecommendationRecord } from "@gocanto/store";
+
+const PixelCanvas = defineAsyncComponent(() => import("./PixelCanvas.vue"));
+const heroMounted = ref(false);
+const reducedMotion = usePreferredReducedMotion();
+const showHeroPixels = computed(() => heroMounted.value && reducedMotion.value !== "reduce");
 
 type Detail = {
     text: string;
@@ -106,6 +112,7 @@ const uniqueRecommendations = (items: readonly RecommendationRecord[]): Recommen
 };
 
 onMounted(async () => {
+    heroMounted.value = true;
     const { recommendations } = await import("@gocanto/store/recommendations");
     const unique = uniqueRecommendations(recommendations.data);
     const sorted = [...unique].sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -745,6 +752,7 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
     <section id="about" class="wf-hero" aria-labelledby="hero-title">
         <div class="wf-hero__intro">
             <div class="wf-hero__frame">
+                <PixelCanvas v-if="showHeroPixels" class="wf-hero__pixels" />
                 <div class="wf-hero__copy">
                     <span class="wf-badge">
                         <span class="wf-badge__new">
@@ -833,109 +841,109 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
             tabindex="0"
         >
             <div class="wf-canvas-frame">
-            <div class="wf-canvas">
-                <svg class="wf-connectors" viewBox="0 0 1280 604" fill="none" aria-hidden="true">
+                <div class="wf-canvas">
                     <svg
-                        v-for="connector in activeWorkflow.connectors"
-                        :key="`${connector.x}-${connector.y}-${connector.viewBox}`"
-                        class="wf-connector"
-                        :class="`wf-connector--${connector.delay}`"
-                        :x="connector.x"
-                        :y="connector.y"
-                        :width="connector.width"
-                        :height="connector.height"
-                        :viewBox="connector.viewBox"
+                        class="wf-connectors"
+                        viewBox="0 0 1280 604"
                         fill="none"
+                        aria-hidden="true"
                     >
-                        <path class="wf-connector-diamond" :d="connector.diamond" />
-                        <path class="wf-connector-path" :d="connector.line" pathLength="1" />
-                        <path class="wf-connector-arrow" :d="connector.arrow" pathLength="1" />
-                    </svg>
-                </svg>
-
-                <article
-                    v-for="step in activeWorkflow.steps"
-                    :key="step.id"
-                    class="wf-card"
-                    :data-step-id="step.id"
-                    :class="[`wf-card--${step.position}`, `wf-card--${step.delay}`]"
-                >
-                    <div class="wf-card__tag">
-                        <component :is="step.labelIcon" class="size-4" aria-hidden="true" />
-                        <span>{{ step.label }}</span>
-                    </div>
-
-                    <div class="wf-card__body">
-                        <header class="wf-card__header">
-                            <component :is="step.icon" class="size-5" aria-hidden="true" />
-                            <h2>{{ step.title }}</h2>
-                            <span v-if="step.titleMeta" class="wf-card__meta">{{
-                                step.titleMeta
-                            }}</span>
-                            <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                class="wf-card__menu"
-                                aria-label="Menu"
-                            >
-                                <Menu class="size-4" aria-hidden="true" />
-                            </Button>
-                        </header>
-
-                        <p
-                            v-if="step.description && !detailFirstStepIds.has(step.id)"
-                            class="wf-card__description"
+                        <svg
+                            v-for="connector in activeWorkflow.connectors"
+                            :key="`${connector.x}-${connector.y}-${connector.viewBox}`"
+                            class="wf-connector"
+                            :class="`wf-connector--${connector.delay}`"
+                            :x="connector.x"
+                            :y="connector.y"
+                            :width="connector.width"
+                            :height="connector.height"
+                            :viewBox="connector.viewBox"
+                            fill="none"
                         >
-                            {{ step.description }}
-                        </p>
+                            <path class="wf-connector-diamond" :d="connector.diamond" />
+                            <path class="wf-connector-path" :d="connector.line" pathLength="1" />
+                            <path class="wf-connector-arrow" :d="connector.arrow" pathLength="1" />
+                        </svg>
+                    </svg>
 
-                        <div v-if="step.details?.length || step.chip" class="wf-card__details">
-                            <span v-if="step.chip" class="wf-card__chip">{{ step.chip }}</span>
-                            <div
-                                v-for="detail in step.details"
-                                :key="detail.text"
-                                class="wf-card__detail"
-                            >
-                                <img
-                                    v-if="detail.asset"
-                                    :src="detail.asset"
-                                    :alt="detail.alt ?? ''"
-                                    width="18"
-                                    height="18"
-                                />
-                                <span v-else class="wf-card__bullet" aria-hidden="true"></span>
-                                <span>{{ detail.text }}</span>
-                            </div>
+                    <article
+                        v-for="step in activeWorkflow.steps"
+                        :key="step.id"
+                        class="wf-card"
+                        :data-step-id="step.id"
+                        :class="[`wf-card--${step.position}`, `wf-card--${step.delay}`]"
+                    >
+                        <div class="wf-card__tag">
+                            <component :is="step.labelIcon" class="size-4" aria-hidden="true" />
+                            <span>{{ step.label }}</span>
                         </div>
 
-                        <p
-                            v-if="step.description && detailFirstStepIds.has(step.id)"
-                            class="wf-card__description"
-                        >
-                            {{ step.description }}
-                        </p>
+                        <div class="wf-card__body">
+                            <header class="wf-card__header">
+                                <component :is="step.icon" class="size-5" aria-hidden="true" />
+                                <h2>{{ step.title }}</h2>
+                                <span v-if="step.titleMeta" class="wf-card__meta">{{
+                                    step.titleMeta
+                                }}</span>
+                                <span class="wf-card__menu" aria-hidden="true">
+                                    <Menu class="size-4" />
+                                </span>
+                            </header>
 
-                        <footer
-                            v-if="step.time || step.model || step.action"
-                            class="wf-card__footer"
-                        >
-                            <span v-if="step.time" class="wf-card__time">{{ step.time }}</span>
-                            <span v-if="step.model" class="wf-card__model">
-                                <Bot class="size-[18px]" aria-hidden="true" />
-                                {{ step.modelLabel ?? "Claude + GPT-4" }}
-                            </span>
-                            <span v-if="step.action" class="wf-card__action">
-                                <FileText
-                                    v-if="step.action === 'File updated'"
-                                    class="size-[18px]"
-                                    aria-hidden="true"
-                                />
-                                {{ step.action }}
-                            </span>
-                        </footer>
-                    </div>
-                </article>
-            </div>
+                            <p
+                                v-if="step.description && !detailFirstStepIds.has(step.id)"
+                                class="wf-card__description"
+                            >
+                                {{ step.description }}
+                            </p>
+
+                            <div v-if="step.details?.length || step.chip" class="wf-card__details">
+                                <span v-if="step.chip" class="wf-card__chip">{{ step.chip }}</span>
+                                <div
+                                    v-for="detail in step.details"
+                                    :key="detail.text"
+                                    class="wf-card__detail"
+                                >
+                                    <img
+                                        v-if="detail.asset"
+                                        :src="detail.asset"
+                                        :alt="detail.alt ?? ''"
+                                        width="18"
+                                        height="18"
+                                    />
+                                    <span v-else class="wf-card__bullet" aria-hidden="true"></span>
+                                    <span>{{ detail.text }}</span>
+                                </div>
+                            </div>
+
+                            <p
+                                v-if="step.description && detailFirstStepIds.has(step.id)"
+                                class="wf-card__description"
+                            >
+                                {{ step.description }}
+                            </p>
+
+                            <footer
+                                v-if="step.time || step.model || step.action"
+                                class="wf-card__footer"
+                            >
+                                <span v-if="step.time" class="wf-card__time">{{ step.time }}</span>
+                                <span v-if="step.model" class="wf-card__model">
+                                    <Bot class="size-[18px]" aria-hidden="true" />
+                                    {{ step.modelLabel ?? "Claude + GPT-4" }}
+                                </span>
+                                <span v-if="step.action" class="wf-card__action">
+                                    <FileText
+                                        v-if="step.action === 'File updated'"
+                                        class="size-[18px]"
+                                        aria-hidden="true"
+                                    />
+                                    {{ step.action }}
+                                </span>
+                            </footer>
+                        </div>
+                    </article>
+                </div>
             </div>
         </div>
     </section>

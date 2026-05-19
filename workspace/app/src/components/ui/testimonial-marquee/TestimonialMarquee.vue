@@ -40,7 +40,7 @@ const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
 const isTouchPaused = ref(false);
 
 const cardBase =
-    "tm-card group/card relative flex h-[260px] w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
+    "tm-card group/card relative flex h-[260px] w-[clamp(260px,82vw,350px)] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
 const cardSurface = "border-[var(--border-strong)] bg-background";
 const cardSurfaceFeatured = "tm-card--featured border-[var(--border-strong)] bg-background";
 const cardInteractiveHover = "hover:border-[var(--btn-ghost-ring-hover)]";
@@ -78,7 +78,7 @@ function resumeFromTouch() {
 <template>
     <div class="tm-root flex flex-col gap-4 py-8 overflow-hidden" :aria-busy="loading || undefined">
         <div
-            class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_48px,#000_calc(100%-48px),transparent)]"
+            class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [--tm-mask:48px] [mask-image:linear-gradient(to_right,transparent,#000_var(--tm-mask),#000_calc(100%-var(--tm-mask)),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_var(--tm-mask),#000_calc(100%-var(--tm-mask)),transparent)]"
             @pointerdown="pauseForTouch"
             @pointerup="resumeFromTouch"
             @pointercancel="resumeFromTouch"
@@ -133,6 +133,12 @@ function resumeFromTouch() {
 @media (prefers-reduced-motion: reduce) {
     .tm-track {
         animation: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .tm-row {
+        --tm-mask: 20px;
     }
 }
 
