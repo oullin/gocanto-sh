@@ -2155,10 +2155,14 @@ button.explore-card:focus-visible {
 
 .wf-hero__frame,
 .wf-tabs-frame,
-.wf-canvas {
+.wf-canvas-frame {
     max-width: 1280px;
     margin: 0 auto;
     border-inline: 1px solid var(--wf-line);
+}
+
+.wf-canvas-frame {
+    padding-bottom: 64px;
 }
 
 .wf-hero__frame {
@@ -2395,7 +2399,7 @@ button.explore-card:focus-visible {
 }
 
 .wf-canvas-wrap {
-    padding: 0 32px 64px;
+    padding: 0 32px;
     background: var(--wf-bg);
 }
 
@@ -3078,8 +3082,11 @@ button.explore-card:focus-visible {
     }
     .wf-hero__frame,
     .wf-tabs-frame,
-    .wf-canvas {
+    .wf-canvas-frame {
         border-inline: 0;
+    }
+    .wf-canvas-frame {
+        padding-bottom: 0;
     }
     .wf-hero__frame {
         min-height: auto;

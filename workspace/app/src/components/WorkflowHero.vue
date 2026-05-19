@@ -832,6 +832,7 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
             :aria-labelledby="`wf-tab-${activeWorkflow.id}`"
             tabindex="0"
         >
+            <div class="wf-canvas-frame">
             <div class="wf-canvas">
                 <svg class="wf-connectors" viewBox="0 0 1280 604" fill="none" aria-hidden="true">
                     <svg
@@ -934,6 +935,7 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                         </footer>
                     </div>
                 </article>
+            </div>
             </div>
         </div>
     </section>
