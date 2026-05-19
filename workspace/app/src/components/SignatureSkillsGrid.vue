@@ -217,7 +217,9 @@ const activeHasIcon = computed<boolean>(() => {
                                 activeSkill ? initials(activeSkill.item) : ""
                             }}</span>
                         </span>
-                        <span v-if="activeSkill?.signature" class="skill-sheet__badge">Signature</span>
+                        <span v-if="activeSkill?.signature" class="skill-sheet__badge"
+                            >Signature</span
+                        >
                     </div>
                     <SheetTitle>{{ activeSkill?.item }}</SheetTitle>
                     <SheetDescription>{{ activeSkill?.description }}</SheetDescription>
@@ -227,7 +229,9 @@ const activeHasIcon = computed<boolean>(() => {
                     <div class="skill-sheet__meter" aria-label="Proficiency">
                         <div class="skill-sheet__meter-head">
                             <span>Proficiency</span>
-                            <span class="skill-sheet__meter-value">{{ activeSkill.percentage }}%</span>
+                            <span class="skill-sheet__meter-value"
+                                >{{ activeSkill.percentage }}%</span
+                            >
                         </div>
                         <div
                             class="skill-sheet__bar"

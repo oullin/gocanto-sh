@@ -17,9 +17,9 @@ const ready = useInViewReady(section);
         </h1>
         <p class="lede">
             <span :class="{ 'sk-shimmer': !ready }">
-                <span class="em">Software engineer for 20 years.</span> I build the systems that move
-                money, run online stores, and now power the new wave of AI assistants: the kind that
-                take real actions, not just answer questions.
+                <span class="em">Software engineer for 20 years.</span> I build the systems that
+                move money, run online stores, and now power the new wave of AI assistants: the kind
+                that take real actions, not just answer questions.
             </span>
         </p>
     </header>

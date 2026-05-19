@@ -340,7 +340,7 @@ export const recommendations = {
             featured: 0,
         },
         {
-            uuid: "1ca2026d-9d52-4da9-bbe2-5adba175d4c4",
+            uuid: "3fb5dfaa-a7b7-411c-8d2e-80b75fcd45df",
             relation: "Dawid managed Gus directly.",
             text: "It was a pleasure to have an opportunity to work with Gustavo. He's a brilliant developer and analyst, with a head full of new ideas. He's not afraid of approaching the most complex problems and testing new waters to find the best solutions.<br/><br/>He's got a great personality and always fun to have around in your team. Always keen to share his knowledge thru training or giving public presentations. He's got that deep internal drive to learn every day and test new ideas in real life, which I always find very valuable.",
             person: {

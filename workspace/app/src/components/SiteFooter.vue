@@ -65,12 +65,7 @@ const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> 
             </div>
             <div class="footer-bottom">
                 <span class="status">
-                    <Heart
-                        :size="14"
-                        :stroke-width="1.75"
-                        aria-hidden="true"
-                        class="status-icon"
-                    />
+                    <Heart :size="14" :stroke-width="1.75" aria-hidden="true" class="status-icon" />
                     <span>Husband, Father, Brother, and Son</span>
                 </span>
                 <div class="footer-socials">

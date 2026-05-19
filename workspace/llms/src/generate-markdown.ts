@@ -1,11 +1,4 @@
-import {
-    education,
-    experience,
-    links,
-    profile,
-    projects,
-    talks,
-} from "@gocanto/store";
+import { education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

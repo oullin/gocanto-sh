@@ -1,13 +1,10 @@
 import { defineConfig } from "vitest/config";
 
-import viteConfig from "#config/vite";
-
 export default defineConfig({
-    ...viteConfig,
-    cacheDir: "../../storage/.cache/vitest/app",
+    cacheDir: "../../storage/.cache/vitest/llms",
     test: {
         attachmentsDir: "../../storage/.cache/vitest/attachments",
-        environment: "happy-dom",
+        environment: "node",
         globals: false,
         include: ["src/**/*.test.ts"],
     },

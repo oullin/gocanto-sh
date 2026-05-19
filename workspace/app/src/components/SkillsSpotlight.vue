@@ -14,7 +14,7 @@ const pillars: Pillar[] = [
     {
         sub: "Agentic AI",
         title: "AI assistants you can actually trust with real work.",
-        body: "Not chatbots. AI that books, files, refunds, dispatches. Every action is logged, every decision is replayable, and the system refuses unsafe steps before they happen. Built for teams who can't afford an AI \"oops.\"",
+        body: 'Not chatbots. AI that books, files, refunds, dispatches. Every action is logged, every decision is replayable, and the system refuses unsafe steps before they happen. Built for teams who can\'t afford an AI "oops."',
     },
     {
         sub: "Banking & Fintech",
@@ -55,9 +55,15 @@ const ready = useInViewReady(section);
                         <circle class="ico-line" cx="44" cy="48" r="3" />
                     </svg>
                 </div>
-                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].sub }}</span></div>
-                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].title }}</span></h3>
-                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].body }}</span></p>
+                <div class="sub">
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].sub }}</span>
+                </div>
+                <h3>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].title }}</span>
+                </h3>
+                <p>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[0].body }}</span>
+                </p>
             </article>
 
             <article class="pillar" :aria-busy="!ready">
@@ -70,9 +76,15 @@ const ready = useInViewReady(section);
                         <path class="ico-line" d="M22 14 L58 14 L60 20 L20 20 Z" />
                     </svg>
                 </div>
-                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].sub }}</span></div>
-                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].title }}</span></h3>
-                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].body }}</span></p>
+                <div class="sub">
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].sub }}</span>
+                </div>
+                <h3>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].title }}</span>
+                </h3>
+                <p>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[1].body }}</span>
+                </p>
             </article>
 
             <article class="pillar" :aria-busy="!ready">
@@ -85,9 +97,15 @@ const ready = useInViewReady(section);
                         <path class="ico-line" d="M30 30 L50 30 M30 36 L46 36" />
                     </svg>
                 </div>
-                <div class="sub"><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].sub }}</span></div>
-                <h3><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].title }}</span></h3>
-                <p><span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].body }}</span></p>
+                <div class="sub">
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].sub }}</span>
+                </div>
+                <h3>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].title }}</span>
+                </h3>
+                <p>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ pillars[2].body }}</span>
+                </p>
             </article>
         </div>
     </section>

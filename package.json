@@ -10,14 +10,15 @@
     "format-all": "turbo run format --ui=stream --cache-dir storage/.cache/turbo --force",
     "format:check": "turbo run format:check --ui=stream --cache-dir storage/.cache/turbo",
     "lint": "turbo run lint --ui=stream --cache-dir storage/.cache/turbo",
-    "test": "turbo run test --ui=stream --cache-dir storage/.cache/turbo",
+    "test": "vitest run",
     "typecheck": "turbo run typecheck --ui=stream --cache-dir storage/.cache/turbo"
   },
   "devDependencies": {
     "oxc-parser": "latest",
     "oxfmt": "latest",
     "tsx": "^4.20.0",
-    "turbo": "^2.9.12"
+    "turbo": "^2.9.12",
+    "vitest": "^4.1.5"
   },
   "pnpm": {
     "overrides": {

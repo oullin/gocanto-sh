@@ -22,9 +22,11 @@ const tokenizeParagraph = (input: string): ParagraphToken[] => {
 
     for (const match of input.matchAll(EM_TAG_RE)) {
         const start = match.index ?? 0;
+
         if (start > cursor) {
             out.push({ type: "text", value: input.slice(cursor, start) });
         }
+
         out.push({ type: "em", value: match[1] });
         cursor = start + match[0].length;
     }
@@ -44,7 +46,9 @@ const paragraphs = data.paragraphs.map(tokenizeParagraph);
         <div class="bio">
             <aside class="bio-side">
                 <span class="kicker">Who I am</span>
-                <h2><span :class="{ 'sk-shimmer': !ready }">{{ data.tagline }}</span></h2>
+                <h2>
+                    <span :class="{ 'sk-shimmer': !ready }">{{ data.tagline }}</span>
+                </h2>
                 <p class="lede">
                     <span :class="{ 'sk-shimmer': !ready }">
                         The short version, in plain English. No buzzwords.
@@ -67,7 +71,9 @@ const paragraphs = data.paragraphs.map(tokenizeParagraph);
 
                 <div class="quick-facts">
                     <div v-for="f in data.quick_facts" :key="f.key" class="fact">
-                        <div class="k"><span :class="{ 'sk-shimmer': !ready }">{{ f.key }}</span></div>
+                        <div class="k">
+                            <span :class="{ 'sk-shimmer': !ready }">{{ f.key }}</span>
+                        </div>
                         <div class="v" :class="{ 'v--stacked': shouldStackFact(f) }">
                             <template v-if="shouldStackFact(f)">
                                 <span

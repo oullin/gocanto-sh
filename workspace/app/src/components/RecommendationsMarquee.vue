@@ -72,12 +72,7 @@ function handleSelect(item: Testimonial) {
             </div>
         </div>
 
-        <TestimonialMarquee
-            :items="items"
-            :speed="160"
-            :loading="loading"
-            @select="handleSelect"
-        />
+        <TestimonialMarquee :items="items" :speed="160" :loading="loading" @select="handleSelect" />
     </section>
     <SearchResultDetail v-model:open="sheetOpen" :payload="activePayload" />
 </template>
