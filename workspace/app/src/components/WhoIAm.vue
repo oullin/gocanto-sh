@@ -11,10 +11,36 @@ const stackedFactKeys = new Set(["Originally from"]);
 
 const shouldStackFact = (fact: (typeof data.quick_facts)[number]) => stackedFactKeys.has(fact.key);
 const factValueLines = (fact: (typeof data.quick_facts)[number]) => fact.value.split(" · ");
+
+type ParagraphToken = { type: "text" | "em"; value: string };
+
+const EM_TAG_RE = /<em>([\s\S]*?)<\/em>/gi;
+
+const tokenizeParagraph = (input: string): ParagraphToken[] => {
+    const out: ParagraphToken[] = [];
+    let cursor = 0;
+
+    for (const match of input.matchAll(EM_TAG_RE)) {
+        const start = match.index ?? 0;
+        if (start > cursor) {
+            out.push({ type: "text", value: input.slice(cursor, start) });
+        }
+        out.push({ type: "em", value: match[1] });
+        cursor = start + match[0].length;
+    }
+
+    if (cursor < input.length) {
+        out.push({ type: "text", value: input.slice(cursor) });
+    }
+
+    return out;
+};
+
+const paragraphs = data.paragraphs.map(tokenizeParagraph);
 </script>
 
 <template>
-    <section ref="section">
+    <section id="bio" ref="section">
         <div class="bio">
             <aside class="bio-side">
                 <span class="kicker">Who I am</span>
@@ -30,8 +56,13 @@ const factValueLines = (fact: (typeof data.quick_facts)[number]) => fact.value.s
             </aside>
 
             <div class="bio-body">
-                <p v-for="(p, i) in data.paragraphs" :key="i">
-                    <span :class="{ 'sk-shimmer': !ready }" v-html="p" />
+                <p v-for="(tokens, i) in paragraphs" :key="i">
+                    <span :class="{ 'sk-shimmer': !ready }">
+                        <template v-for="(t, j) in tokens" :key="j">
+                            <em v-if="t.type === 'em'">{{ t.value }}</em>
+                            <template v-else>{{ t.value }}</template>
+                        </template>
+                    </span>
                 </p>
 
                 <div class="quick-facts">

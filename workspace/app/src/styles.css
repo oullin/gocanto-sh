@@ -954,7 +954,12 @@ main.outer > header.hero {
 .guides-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    gap: 0;
+}
+
+.guides-grid > * {
+    border-right: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
 }
 
 .guide-card {
@@ -963,17 +968,41 @@ main.outer > header.hero {
     justify-content: space-between;
     min-height: 304px;
     padding: 32px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: var(--card-2);
-    transition:
-        background 150ms ease,
-        border-color 150ms ease;
+    transition: background 150ms ease;
+}
+
+.guides-grid > :nth-child(3n) {
+    border-right: 0;
+}
+
+.guides-grid > :nth-last-child(-n + 3) {
+    border-bottom: 0;
 }
 
 .guide-card:hover {
     background: var(--surface-tint);
-    border-color: var(--ring-alpha-hover);
+}
+
+button.guide-card {
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border-top: 0;
+    border-left: 0;
+}
+
+button.guide-card:disabled {
+    cursor: default;
+}
+
+button.guide-card:focus-visible {
+    outline: 2px solid var(--btn-ghost-ring-hover, var(--border-strong));
+    outline-offset: -2px;
 }
 
 .guide-card h3 {
@@ -2905,6 +2934,22 @@ button.explore-card:focus-visible {
     .guides-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .guides-grid > :nth-child(3n) {
+        border-right: 1px dashed var(--border);
+    }
+    .guides-grid > :nth-child(2n) {
+        border-right: 0;
+    }
+    .guides-grid > :nth-last-child(-n + 3) {
+        border-bottom: 1px dashed var(--border);
+    }
+    .guides-grid > :nth-last-child(-n + 2) {
+        border-bottom: 0;
+    }
+    .guides-grid .guide-card:last-of-type {
+        border-right: 0;
+        border-bottom: 0;
+    }
     .explore-grid {
         padding: 0 0 48px;
     }
@@ -3030,6 +3075,13 @@ button.explore-card:focus-visible {
     }
     .guides-grid {
         grid-template-columns: 1fr;
+    }
+    .guides-grid > * {
+        border-right: 0;
+        border-bottom: 1px dashed var(--border);
+    }
+    .guides-grid .guide-card:last-of-type {
+        border-bottom: 0;
     }
     .explore-grid--dense {
         grid-template-columns: repeat(2, 1fr);

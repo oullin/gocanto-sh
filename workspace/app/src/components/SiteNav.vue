@@ -15,9 +15,11 @@ const scrolled = ref(false);
 
 const navItems = [
     { href: "#about", label: "About" },
-    { href: "#skills", label: "Skills" },
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
+    { href: "#testimonials", label: "Testimonials" },
+    { href: "#bio", label: "Bio" },
+    { href: "#skills", label: "Skills" },
 ];
 
 const onScroll = () => {
