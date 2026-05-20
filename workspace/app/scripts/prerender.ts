@@ -14,6 +14,9 @@ await build({
     root: appRoot,
     configLoader: "runner",
     logLevel: "warn",
+    ssr: {
+        external: ["jsdom"],
+    },
     build: {
         ssr: "src/entry-server.ts",
         outDir: ssrOutDir,

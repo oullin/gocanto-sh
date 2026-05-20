@@ -14,22 +14,9 @@ import type {
     TalkRecord,
     TalksFixture,
 } from "@gocanto/store";
+import { stripHtml } from "@gocanto/domain/text";
 
 const SITE_URL = "https://gocanto.sh";
-
-const stripHtml = (input: string): string =>
-    input
-        .replace(/<br\s*\/?>/gi, "\n\n")
-        .replace(/<\/p>\s*<p>/gi, "\n\n")
-        .replace(/<[^>]+>/g, "")
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&nbsp;/g, " ")
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
 
 const escapeMarkdown = (input: string): string => input.replace(/\|/g, "\\|");
 

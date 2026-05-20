@@ -11,6 +11,7 @@
         "typecheck": "tsc -p tsconfig.json"
     },
     "dependencies": {
+        "@gocanto/domain": "workspace:*",
         "@gocanto/store": "workspace:*"
     },
     "devDependencies": {

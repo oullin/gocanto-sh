@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
+import {
+    iconKeyForSkill,
+    listSignatureSkillCells,
+    listSupportingSkillCells,
+    skillChipVariant,
+    skillInitials,
+} from "@gocanto/domain";
 import { profile, type ProfileSkillRecord } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
 import {
@@ -28,70 +35,20 @@ import { ScrollFade } from "@/components/ui/scroll-fade";
 const section = ref<HTMLElement | null>(null);
 const moreSection = ref<HTMLElement | null>(null);
 
-const skills: readonly ProfileSkillRecord[] = profile.data.skills;
-
 const iconFor: Record<string, Component> = {
-    Leadership: Users,
-    "System Design": Layers,
-    "E-commerce Architecture": ShoppingCart,
-    "Go (Programming Language)": Binary,
-    "AI (Artificial Intelligence)": Brain,
-    "AS/400 Modernisation": Server,
-    "Agentic Orchestration": Workflow,
-    "Payment Integration": CreditCard,
-    "Kafka Event Pipelines": Waypoints,
+    users: Users,
+    layers: Layers,
+    "shopping-cart": ShoppingCart,
+    binary: Binary,
+    brain: Brain,
+    server: Server,
+    workflow: Workflow,
+    "credit-card": CreditCard,
+    waypoints: Waypoints,
 };
 
-function initials(title: string): string {
-    const words = title
-        .replace(/[()/.,]/g, " ")
-        .trim()
-        .split(/\s+/);
-
-    if (words.length === 1) {
-        return words[0].slice(0, 2).toUpperCase();
-    }
-
-    return (words[0][0] + words[1][0]).toUpperCase();
-}
-
-const CHIP_VARIANTS = ["green", "blue", "purple", "amber"] as const;
-
-function chipVariant(name: string): string {
-    let hash = 0;
-
-    for (let i = 0; i < name.length; i++) {
-        hash = (hash * 31 + name.charCodeAt(i)) | 0;
-    }
-
-    return CHIP_VARIANTS[Math.abs(hash) % CHIP_VARIANTS.length];
-}
-
-type Cell = {
-    skill: ProfileSkillRecord;
-    title: string;
-    description: string;
-    icon: Component | null;
-    initials: string;
-};
-
-function toCell(s: ProfileSkillRecord): Cell {
-    const icon = iconFor[s.item] ?? null;
-
-    return {
-        skill: s,
-        title: s.item,
-        description: s.description,
-        icon: icon,
-        initials: initials(s.item),
-    };
-}
-
-const signatureCells = computed<Cell[]>(() =>
-    skills.filter((s) => s.signature === true).map(toCell),
-);
-
-const moreCells = computed<Cell[]>(() => skills.filter((s) => s.signature !== true).map(toCell));
+const signatureCells = computed(() => listSignatureSkillCells(profile));
+const moreCells = computed(() => listSupportingSkillCells(profile));
 
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
@@ -111,14 +68,20 @@ const activeIcon = computed<Component>(() => {
         return Sparkles;
     }
 
-    return iconFor[s.item] ?? Sparkles;
+    const iconKey = iconKeyForActiveSkill(s);
+
+    return iconKey ? iconFor[iconKey] : Sparkles;
 });
 
 const activeHasIcon = computed<boolean>(() => {
     const s = activeSkill.value;
 
-    return !!s && !!iconFor[s.item];
+    return !!s && !!iconKeyForActiveSkill(s);
 });
+
+function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
+    return iconKeyForSkill(skill.item);
+}
 </script>
 
 <template>
@@ -145,7 +108,11 @@ const activeHasIcon = computed<boolean>(() => {
                     :class="{ 'explore-card__icon--loading': !ready }"
                     aria-hidden="true"
                 >
-                    <component :is="c.icon ?? Sparkles" :size="16" :stroke-width="1.5" />
+                    <component
+                        :is="c.iconKey ? iconFor[c.iconKey] : Sparkles"
+                        :size="16"
+                        :stroke-width="1.5"
+                    />
                 </span>
                 <h3>
                     <span :class="{ 'sk-shimmer': !ready }">{{ c.title }}</span>
@@ -182,7 +149,12 @@ const activeHasIcon = computed<boolean>(() => {
                         :class="{ 'explore-card__icon--loading': !moreReady }"
                         aria-hidden="true"
                     >
-                        <component v-if="c.icon" :is="c.icon" :size="16" :stroke-width="1.5" />
+                        <component
+                            v-if="c.iconKey"
+                            :is="iconFor[c.iconKey]"
+                            :size="16"
+                            :stroke-width="1.5"
+                        />
                         <span v-else class="explore-card__initials">{{ c.initials }}</span>
                     </span>
                     <h3>
@@ -214,7 +186,7 @@ const activeHasIcon = computed<boolean>(() => {
                                 :stroke-width="1.5"
                             />
                             <span v-else class="skill-sheet__initials">{{
-                                activeSkill ? initials(activeSkill.item) : ""
+                                activeSkill ? skillInitials(activeSkill.item) : ""
                             }}</span>
                         </span>
                         <span v-if="activeSkill?.signature" class="skill-sheet__badge"
@@ -266,7 +238,7 @@ const activeHasIcon = computed<boolean>(() => {
                                 v-for="t in activeSkill.related_tech"
                                 :key="t"
                                 class="skill-sheet__chip"
-                                :class="`skill-sheet__chip--${chipVariant(t)}`"
+                                :class="`skill-sheet__chip--${skillChipVariant(t)}`"
                             >
                                 {{ t }}
                             </li>

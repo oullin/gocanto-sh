@@ -2,7 +2,13 @@
   "files": [],
   "references": [
     {
-      "path": "./workspace/data"
+      "path": "./workspace/store"
+    },
+    {
+      "path": "./workspace/domain"
+    },
+    {
+      "path": "./workspace/llms"
     },
     {
       "path": "./workspace/app"
