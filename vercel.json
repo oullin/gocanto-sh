@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm turbo run build --filter=@gocanto/app --cache-dir storage/.cache/turbo",
+  "buildCommand": "pnpm turbo run build --filter=@gocanto/llms --cache-dir storage/.cache/turbo",
   "installCommand": "pnpm install --frozen-lockfile",
   "outputDirectory": "workspace/app/dist",
   "framework": "vite"
