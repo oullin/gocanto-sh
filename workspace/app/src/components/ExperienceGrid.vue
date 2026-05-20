@@ -1,49 +1,15 @@
 <script setup lang="ts">
 import { ref, shallowRef } from "vue";
+import { listFeaturedWorkCards, type SearchPayload } from "@gocanto/domain";
 import { experience, type ExperienceRecord } from "@gocanto/store";
 import { useInViewReady } from "@lib/useAsyncInView";
-import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
-
-type Guide = {
-    record: ExperienceRecord;
-    title: string;
-    excerpt: string;
-    tags: { label: string; color: string }[];
-};
+import SearchResultDetail from "@components/SearchResultDetail.vue";
 
 const PLACEHOLDER_COUNT = 6;
 
 const section = ref<HTMLElement | null>(null);
 
-const tagColorFor = (t: string) => {
-    if (t === "Contract") {
-        return "purple";
-    }
-
-    if (t === "Contractor") {
-        return "amber";
-    }
-
-    if (t === "Full-Time") {
-        return "blue";
-    }
-
-    return "green";
-};
-
-const guides: Guide[] = experience.data.slice(0, PLACEHOLDER_COUNT).map((e) => ({
-    record: e,
-    title: `${e.position} · ${e.company}`,
-    excerpt: e.summary
-        .replace(/<br\s*\/?>/g, " ")
-        .replace(/\s+/g, " ")
-        .slice(0, 180)
-        .trim(),
-    tags: [
-        { label: e.employment_type, color: tagColorFor(e.employment_type) },
-        { label: e.country, color: "green" },
-    ],
-}));
+const guides = listFeaturedWorkCards(experience, PLACEHOLDER_COUNT);
 
 const ready = useInViewReady(section);
 

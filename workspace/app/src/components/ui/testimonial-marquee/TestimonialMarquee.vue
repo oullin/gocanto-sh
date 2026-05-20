@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { stripHtml } from "@gocanto/domain";
 import { cn } from "@lib/utils";
 import TestimonialCard from "./TestimonialCard.vue";
 import type { Testimonial } from "./types";
@@ -19,13 +20,10 @@ const emit = defineEmits<{
     (e: "select", item: Testimonial): void;
 }>();
 
-const sanitizeText = (html: string): string =>
-    html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
-
 const itemsToDisplay = computed<Testimonial[]>(() => {
     const sanitized = props.items.map((item) => ({
         ...item,
-        text: sanitizeText(item.text),
+        text: stripHtml(item.text),
     }));
     let result = [...sanitized];
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { filterProjectRows, listProjectLanguages, listProjectRows } from "@gocanto/domain";
 import { projects } from "@gocanto/store";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,52 +8,16 @@ import { Button } from "@/components/ui/button";
 import { ScrollFade } from "@/components/ui/scroll-fade";
 import { useInViewReady } from "@lib/useAsyncInView";
 
-type Row = {
-    title: string;
-    url: string;
-    language: string;
-    excerpt: string;
-    tags: { label: string; color: string }[];
-};
-
-const EXCERPT_MAX = 140;
-
-const summarise = (text: string): string => {
-    const trimmed = text.trim();
-    const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
-    const firstSentence = sentenceEnd > 0 ? trimmed.slice(0, sentenceEnd + 1) : trimmed;
-
-    if (firstSentence.length <= EXCERPT_MAX) {
-        return firstSentence;
-    }
-
-    return `${firstSentence.slice(0, EXCERPT_MAX - 1).trimEnd()}…`;
-};
-
 const section = ref<HTMLElement | null>(null);
 
-const allRows: Row[] = [...projects.data]
-    .sort((a, b) => a.sort - b.sort)
-    .map((p) => ({
-        title: p.title,
-        url: p.url,
-        language: p.language,
-        excerpt: summarise(p.excerpt),
-        tags: [
-            { label: p.language, color: "blue" },
-            ...(p.is_open_source ? [{ label: "Open Source", color: "green" }] : []),
-        ],
-    }));
-
-const languages: string[] = [...new Set(allRows.map((r) => r.language))].sort();
+const allRows = listProjectRows(projects);
+const languages = listProjectLanguages(allRows);
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
 const filtering = ref(false);
 
-const filteredRows = computed<Row[]>(() =>
-    selected.value.size === 0 ? allRows : allRows.filter((r) => selected.value.has(r.language)),
-);
+const filteredRows = computed(() => filterProjectRows(allRows, selected.value));
 
 const toggleLanguage = (lang: string) => {
     const next = new Set(selected.value);

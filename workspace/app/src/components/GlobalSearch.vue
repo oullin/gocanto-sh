@@ -18,38 +18,16 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
+import {
+    buildSearchCorpus,
+    SEARCH_KINDS,
+    type SearchCorpus,
+    type SearchKind,
+    type SearchResult,
+} from "@gocanto/domain";
 import { education, experience, links, profile, projects, talks } from "@gocanto/store";
-import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
+import SearchResultDetail from "@components/SearchResultDetail.vue";
 import { globalSearchOpen } from "@lib/globalSearch";
-
-type Result = {
-    key: string;
-    title: string;
-    searchText: string;
-    payload: SearchPayload;
-};
-
-type Corpus = {
-    work: Result[];
-    projects: Result[];
-    skills: Result[];
-    education: Result[];
-    talks: Result[];
-    recommendations: Result[];
-    links: Result[];
-};
-
-type KindKey = keyof Corpus;
-
-const KINDS: { key: KindKey; label: string }[] = [
-    { key: "work", label: "Work" },
-    { key: "projects", label: "Projects" },
-    { key: "skills", label: "Skills" },
-    { key: "education", label: "Education" },
-    { key: "talks", label: "Talks" },
-    { key: "recommendations", label: "Recommendations" },
-    { key: "links", label: "Links" },
-];
 
 const groupIcons = {
     work: BookOpen,
@@ -63,109 +41,31 @@ const groupIcons = {
 
 const open = globalSearchOpen;
 const sheetOpen = ref(false);
-const activePayload = shallowRef<SearchPayload | null>(null);
-const corpus = shallowRef<Corpus | null>(null);
-const selectedKind = ref<KindKey | null>(null);
+const activePayload = shallowRef<SearchResult["payload"] | null>(null);
+const corpus = shallowRef<SearchCorpus | null>(null);
+const selectedKind = ref<SearchKind | null>(null);
 let corpusLoading = false;
 
-const isKindVisible = (k: KindKey) => selectedKind.value === null || selectedKind.value === k;
+const isKindVisible = (k: SearchKind) => selectedKind.value === null || selectedKind.value === k;
 
-const visibleKinds = computed(() => KINDS.filter((k) => isKindVisible(k.key)));
+const visibleKinds = computed(() => SEARCH_KINDS.filter((k) => isKindVisible(k.key)));
 
-const toggleKind = (k: KindKey) => {
+const toggleKind = (k: SearchKind) => {
     selectedKind.value = selectedKind.value === k ? null : k;
 };
 
-// Strip HTML, then append an alphanumeric-only variant of the same text so
-// queries like "as400" match content that says "AS/400", "node.js" matches
-// "Node.js", "kafkago" matches "Kafka + Go", etc. Both forms are kept so
-// natural-language queries (e.g. "kafka") still match the original spacing.
-function searchable(...parts: string[]): string {
-    const clean = parts
-        .filter(Boolean)
-        .join(" ")
-        .replace(/<[^>]+>/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-    const compact = clean.replace(/[^A-Za-z0-9]+/g, "");
-
-    return `${clean} ${compact}`;
-}
-
-async function buildCorpus(): Promise<Corpus> {
+async function buildCorpus(): Promise<SearchCorpus> {
     const { recommendations } = await import("@gocanto/store/recommendations");
 
-    return {
-        work: experience.data.map((e) => ({
-            key: `exp:${e.uuid}`,
-            title: `${e.position} · ${e.company}`,
-            searchText: searchable(
-                e.position,
-                e.company,
-                e.country,
-                e.city,
-                e.skills,
-                e.summary,
-                e.start_date,
-                e.end_date,
-            ),
-            payload: { kind: "Work", data: e },
-        })),
-        projects: projects.data.map((p) => ({
-            key: `project:${p.uuid}`,
-            title: p.title,
-            searchText: searchable(
-                p.title,
-                p.language,
-                p.excerpt,
-                p.is_open_source ? "open source" : "",
-            ),
-            payload: { kind: "Project", data: p },
-        })),
-        skills: profile.data.skills.map((s) => ({
-            key: `skill:${s.uuid}`,
-            title: s.item,
-            searchText: searchable(s.item, s.description),
-            payload: { kind: "Skill", data: s },
-        })),
-        education: education.data.map((e) => ({
-            key: `edu:${e.uuid}`,
-            title: `${e.degree} · ${e.field}`,
-            searchText: searchable(
-                e.degree,
-                e.field,
-                e.school,
-                e.issuing_country,
-                e.graduated_at,
-                e.description,
-            ),
-            payload: { kind: "Education", data: e },
-        })),
-        talks: talks.data.map((t) => ({
-            key: `talk:${t.uuid}`,
-            title: t.title,
-            searchText: searchable(t.title, t.subject, t.location),
-            payload: { kind: "Talk", data: t },
-        })),
-        recommendations: recommendations.data.map((r) => ({
-            key: `rec:${r.uuid}`,
-            title: `${r.person.full_name} · ${r.person.company}`,
-            searchText: searchable(
-                r.person.full_name,
-                r.person.company,
-                r.person.designation,
-                r.relation,
-                r.text,
-            ),
-            payload: { kind: "Recommendation", data: r },
-        })),
-        links: links.data.map((l) => ({
-            key: `link:${l.uuid}`,
-            title: `${l.name} · ${l.handle}`,
-            searchText: searchable(l.name, l.handle, l.url, l.description),
-            payload: { kind: "Link", data: l },
-        })),
-    };
+    return buildSearchCorpus({
+        education,
+        experience,
+        links,
+        profile,
+        projects,
+        recommendations,
+        talks,
+    });
 }
 
 watch(open, (v) => {
@@ -192,7 +92,7 @@ watch(open, (v) => {
 
 const activeKey = ref<string | null>(null);
 
-const handleSelect = (r: Result) => {
+const handleSelect = (r: SearchResult) => {
     activePayload.value = r.payload;
     activeKey.value = r.key;
     // Keep the Command dialog open behind the Sheet — closing the Sheet
@@ -258,7 +158,7 @@ watch(sheetOpen, (v) => {
         <CommandInput placeholder="What are you searching for?" />
         <div class="search-filters" role="group" aria-label="Filter by kind">
             <button
-                v-for="k in KINDS"
+                v-for="k in SEARCH_KINDS"
                 :key="k.key"
                 type="button"
                 class="search-filters__chip"

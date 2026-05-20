@@ -15,6 +15,7 @@
         "typecheck": "vue-tsc -b"
     },
     "dependencies": {
+        "@gocanto/domain": "workspace:*",
         "@gocanto/store": "workspace:*",
         "@tailwindcss/vite": "^4.3.0",
         "@vercel/analytics": "^2.0.1",

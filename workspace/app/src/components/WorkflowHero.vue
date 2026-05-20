@@ -21,8 +21,12 @@ import {
     Wand2,
 } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import {
+    AVATAR_BASE_URL,
+    sortRecommendationsNewestFirst,
+    uniqueRecommendations,
+} from "@gocanto/domain";
 import { profile } from "@gocanto/store";
-import type { RecommendationRecord } from "@gocanto/store";
 
 type Detail = {
     text: string;
@@ -89,30 +93,14 @@ const proofAvatars = ref<ProofAvatar[]>([]);
 const testimonialCount = ref(0);
 const mailto = `mailto:${profile.data.email}`;
 
-const uniqueRecommendations = (items: readonly RecommendationRecord[]): RecommendationRecord[] => {
-    const seen = new Set<string>();
-    const unique: RecommendationRecord[] = [];
-
-    for (const item of items) {
-        if (seen.has(item.uuid)) {
-            continue;
-        }
-
-        seen.add(item.uuid);
-        unique.push(item);
-    }
-
-    return unique;
-};
-
 onMounted(async () => {
     const { recommendations } = await import("@gocanto/store/recommendations");
     const unique = uniqueRecommendations(recommendations.data);
-    const sorted = [...unique].sort((a, b) => b.created_at.localeCompare(a.created_at));
+    const sorted = sortRecommendationsNewestFirst(unique);
 
     testimonialCount.value = unique.length;
     proofAvatars.value = sorted.slice(0, 4).map((r) => ({
-        src: `https://oullin.io/images/${r.person.avatar}`,
+        src: `${AVATAR_BASE_URL}${r.person.avatar}`,
         alt: r.person.full_name,
     }));
 });

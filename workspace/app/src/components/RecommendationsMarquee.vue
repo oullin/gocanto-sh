@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from "vue";
+import {
+    listRecommendationsNewestFirst,
+    listTestimonials,
+    type SearchPayload,
+} from "@gocanto/domain";
 import type { RecommendationRecord } from "@gocanto/store";
 import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
-import SearchResultDetail, { type SearchPayload } from "@components/SearchResultDetail.vue";
+import SearchResultDetail from "@components/SearchResultDetail.vue";
 import { useAsyncInView } from "@lib/useAsyncInView";
-
-const AVATAR_BASE = "https://oullin.io/images/";
 
 const section = ref<HTMLElement | null>(null);
 const recommendationsFixture = useAsyncInView(section, async () => {
@@ -19,11 +22,7 @@ const picked = computed<RecommendationRecord[]>(() => {
         return [];
     }
 
-    const sorted = [...recommendationsFixture.value.data].sort((a, b) =>
-        b.created_at.localeCompare(a.created_at),
-    );
-
-    return sorted;
+    return [...listRecommendationsNewestFirst(recommendationsFixture.value)];
 });
 
 const byId = computed<Map<string, RecommendationRecord>>(
@@ -31,15 +30,7 @@ const byId = computed<Map<string, RecommendationRecord>>(
 );
 
 const items = computed<Testimonial[]>(() =>
-    picked.value.map((r) => ({
-        id: r.uuid,
-        name: r.person.full_name,
-        text: r.text,
-        avatar: AVATAR_BASE + r.person.avatar,
-        role: r.person.designation,
-        company: r.person.company,
-        featured: r.featured === 1,
-    })),
+    recommendationsFixture.value ? [...listTestimonials(recommendationsFixture.value)] : [],
 );
 const loading = computed(() => recommendationsFixture.value === null);
 
