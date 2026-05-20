@@ -3,8 +3,8 @@ import { decodeHtmlEntities, purify } from "@gocanto/domain/purify";
 const lineBreakPlaceholder = "__GOCANTO_STRIP_HTML_LINE_BREAK__";
 const paragraphBreakPlaceholder = "__GOCANTO_STRIP_HTML_PARAGRAPH_BREAK__";
 
-export const stripHtml = (input: string): string => {
-    const normalized = input
+export const stripHtml = (input: string | null | undefined): string => {
+    const normalized = (input ?? "")
         .replace(/<br\s*\/?>/gi, lineBreakPlaceholder)
         .replace(/<\/p>\s*<p>/gi, paragraphBreakPlaceholder);
 

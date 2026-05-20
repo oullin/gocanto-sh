@@ -85,6 +85,11 @@ describe("text helpers", () => {
         );
     });
 
+    it("handles nullish input as empty text", () => {
+        expect(stripHtml(null)).toBe("");
+        expect(stripHtml(undefined)).toBe("");
+    });
+
     it("keeps text helper behavior on sanitized input", () => {
         expect(excerpt("<p>First &amp; second sentence.</p>", 8)).toBe("First &…");
         expect(firstSentenceExcerpt("<p>First sentence. Second sentence.</p>", 80)).toBe(

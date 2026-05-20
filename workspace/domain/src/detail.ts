@@ -1,3 +1,4 @@
+import { AVATAR_BASE_URL } from "./recommendations";
 import type { SearchPayload } from "./search";
 import { stripHtml } from "./text";
 
@@ -69,7 +70,7 @@ export const detailHeaderFor = (payload: SearchPayload | null): DetailHeader | n
                 title: payload.data.person.full_name,
                 description: `${payload.data.person.designation} · ${payload.data.person.company}`,
                 avatar: {
-                    src: `https://oullin.io/images/${payload.data.person.avatar}`,
+                    src: `${AVATAR_BASE_URL}${payload.data.person.avatar}`,
                     alt: payload.data.person.full_name,
                 },
             };

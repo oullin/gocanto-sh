@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
 import {
+    iconKeyForSkill,
     listSignatureSkillCells,
     listSupportingSkillCells,
     skillChipVariant,
@@ -67,7 +68,7 @@ const activeIcon = computed<Component>(() => {
         return Sparkles;
     }
 
-    const iconKey = s ? iconKeyForActiveSkill(s) : null;
+    const iconKey = iconKeyForActiveSkill(s);
 
     return iconKey ? iconFor[iconKey] : Sparkles;
 });
@@ -79,10 +80,7 @@ const activeHasIcon = computed<boolean>(() => {
 });
 
 function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
-    return (
-        signatureCells.value.concat(moreCells.value).find((cell) => cell.skill.uuid === skill.uuid)
-            ?.iconKey ?? null
-    );
+    return iconKeyForSkill(skill.item);
 }
 </script>
 
