@@ -44,7 +44,7 @@ Build-time prerender so crawlers and social scrapers get rendered HTML, not an e
 **Prerender flow** (follows [Vite's SSR guide](https://vite.dev/guide/ssr)):
 
 1. `vite build` emits the client bundle with a loading shell.
-2. `node scripts/prerender.mjs` builds the SSR entry, calls `renderToString(createSSRApp(App))`, and injects the result into `dist/index.html`.
+2. `tsx scripts/prerender.ts` builds the SSR entry, calls `renderToString(createSSRApp(App))`, and injects the result into `dist/index.html`.
 3. Client hydrates via `createSSRApp` in prod, `createApp` in dev.
 
 **SSR-safety:** components must not touch `window`/`document` at setup top-level. Use `onMounted`, event handlers, or a getter guard:
