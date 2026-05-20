@@ -1,16 +1,24 @@
-export const stripHtml = (input: string): string =>
-    input
-        .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<\/p>\s*<p>/gi, "\n\n")
-        .replace(/<[^>]+>/g, "")
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&nbsp;/g, " ")
+import { decodeHtmlEntities, purify } from "@gocanto/domain/purify";
+
+const lineBreakPlaceholder = "__GOCANTO_STRIP_HTML_LINE_BREAK__";
+const paragraphBreakPlaceholder = "__GOCANTO_STRIP_HTML_PARAGRAPH_BREAK__";
+
+export const stripHtml = (input: string): string => {
+    const normalized = input
+        .replace(/<br\s*\/?>/gi, lineBreakPlaceholder)
+        .replace(/<\/p>\s*<p>/gi, paragraphBreakPlaceholder);
+
+    const sanitized = purify.sanitize(normalized, {
+        ALLOWED_ATTR: [],
+        ALLOWED_TAGS: [],
+    });
+
+    return decodeHtmlEntities(sanitized)
+        .replaceAll(lineBreakPlaceholder, "\n")
+        .replaceAll(paragraphBreakPlaceholder, "\n\n")
         .replace(/\n{3,}/g, "\n\n")
         .trim();
+};
 
 export const compactWhitespace = (input: string): string => input.replace(/\s+/g, " ").trim();
 

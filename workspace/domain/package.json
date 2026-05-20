@@ -12,6 +12,14 @@
             "types": "./src/text.ts",
             "default": "./src/text.ts"
         },
+        "./purify": {
+            "browser": {
+                "types": "./src/purify.browser.ts",
+                "default": "./src/purify.browser.ts"
+            },
+            "types": "./src/purify.node.ts",
+            "default": "./src/purify.node.ts"
+        },
         "./search": {
             "types": "./src/search.ts",
             "default": "./src/search.ts"
@@ -24,9 +32,12 @@
         "typecheck": "tsc -p tsconfig.json"
     },
     "dependencies": {
-        "@gocanto/store": "workspace:*"
+        "@gocanto/store": "workspace:*",
+        "dompurify": "^3.4.5",
+        "jsdom": "^29.1.1"
     },
     "devDependencies": {
+        "@types/jsdom": "^28.0.3",
         "typescript": "^6.0.3",
         "vitest": "^4.1.5"
     }
