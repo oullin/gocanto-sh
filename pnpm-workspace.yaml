@@ -1,6 +1,6 @@
 packages:
-  - "workspace/*"
+    - "workspace/*"
 
 onlyBuiltDependencies:
-  - esbuild
-  - vue-demi
+    - esbuild
+    - vue-demi
