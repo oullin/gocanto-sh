@@ -9,6 +9,7 @@
         "format-all": "make format-all",
         "format:check": "make ui-format",
         "lint": "turbo run lint --ui=stream --cache-dir storage/.cache/turbo",
+        "perf:lighthouse": "pnpm dlx lighthouse@13.0.2 http://localhost:4173/ --quiet --chrome-flags='--headless=new --disable-gpu --no-sandbox --disable-extensions' --output=json --output-path=/tmp/gocanto-local-lighthouse.json",
         "test": "turbo run test --ui=stream --cache-dir storage/.cache/turbo",
         "typecheck": "turbo run typecheck --ui=stream --cache-dir storage/.cache/turbo"
     },
