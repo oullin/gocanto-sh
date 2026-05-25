@@ -1,6 +1,6 @@
-import { projectItems } from "./projects/items";
+import { projectItems } from "#store/projects/items";
 
-import type { ProjectsFixture } from "./types";
+import type { ProjectsFixture } from "#store/types";
 
 export const projects = {
     version: "1.0.4",

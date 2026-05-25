@@ -1,4 +1,4 @@
-import type { RecommendationRecord } from "../types";
+import type { RecommendationRecord } from "#store/types";
 
 export const perxRecommendations = [
     {

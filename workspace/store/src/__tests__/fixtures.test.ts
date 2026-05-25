@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { bio } from "../bio";
-import { education } from "../education";
-import { experience } from "../experience";
-import { links } from "../links";
-import { profile } from "../profile";
-import { projects } from "../projects";
-import { recommendations } from "../recommendations";
-import { talks } from "../talks";
-import type { ProfileSkillRecord } from "../types";
+import { bio } from "#store/bio";
+import { education } from "#store/education";
+import { experience } from "#store/experience";
+import { links } from "#store/links";
+import { profile } from "#store/profile";
+import { projects } from "#store/projects";
+import { recommendations } from "#store/recommendations";
+import { talks } from "#store/talks";
+import type { ProfileSkillRecord } from "#store/types";
 
 type WithUuid = { readonly uuid: string };
 

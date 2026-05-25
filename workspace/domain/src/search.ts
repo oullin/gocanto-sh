@@ -15,7 +15,7 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 
-import { searchableText } from "./text";
+import { searchableText } from "#domain/text";
 
 export type SearchPayload =
     | { readonly kind: "Work"; readonly data: ExperienceRecord }

@@ -1,7 +1,7 @@
-import { signatureSkills } from "./signature-skills";
-import { supportingSkills } from "./supporting-skills";
+import { signatureSkills } from "#store/profile/signature-skills";
+import { supportingSkills } from "#store/profile/supporting-skills";
 
-import type { ProfileSkillRecord } from "../types";
+import type { ProfileSkillRecord } from "#store/types";
 
 const profileSkillOrder = [
     "a1b2c3d4-e5f6-7890-1234-567890abcdef",

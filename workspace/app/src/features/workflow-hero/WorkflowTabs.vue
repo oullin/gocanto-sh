@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Workflow } from "./types";
+import type { Workflow } from "@features/workflow-hero/types";
 
 defineProps<{
     activeTab: string;

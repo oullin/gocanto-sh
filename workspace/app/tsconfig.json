@@ -25,7 +25,9 @@
             "@components": ["./src/components"],
             "@components/*": ["./src/components/*"],
             "@lib": ["./src/lib"],
-            "@lib/*": ["./src/lib/*"]
+            "@lib/*": ["./src/lib/*"],
+            "@features": ["./src/features"],
+            "@features/*": ["./src/features/*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "scripts/**/*.ts"]

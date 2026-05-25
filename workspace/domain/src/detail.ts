@@ -1,6 +1,6 @@
-import { AVATAR_BASE_URL } from "./recommendations";
-import type { SearchPayload } from "./search";
-import { stripHtml } from "./text";
+import { AVATAR_BASE_URL } from "#domain/recommendations";
+import type { SearchPayload } from "#domain/search";
+import { stripHtml } from "#domain/text";
 
 export type DetailKind =
     | "work"

@@ -2,7 +2,13 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, nextTick, ref } from "vue";
 import { describe, expect, it } from "vitest";
 
-import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
+import {
+    Command,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@components/ui/command";
 
 const SearchHarness = defineComponent({
     components: {

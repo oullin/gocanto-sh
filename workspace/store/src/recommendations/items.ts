@@ -1,9 +1,9 @@
-import { aspireRecommendations } from "./aspire";
-import { otherRecommendations } from "./other";
-import { perxRecommendations } from "./perx";
-import { silverlakeRecommendations } from "./silverlake";
+import { aspireRecommendations } from "#store/recommendations/aspire";
+import { otherRecommendations } from "#store/recommendations/other";
+import { perxRecommendations } from "#store/recommendations/perx";
+import { silverlakeRecommendations } from "#store/recommendations/silverlake";
 
-import type { RecommendationRecord } from "../types";
+import type { RecommendationRecord } from "#store/types";
 
 const recommendationOrder = [
     "1f58646c-ba87-4306-905f-cb64a5e49b5e",

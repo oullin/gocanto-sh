@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Bot, FileText, Menu } from "lucide-vue-next";
 
-import type { WorkflowStep } from "./types";
+import type { WorkflowStep } from "@features/workflow-hero/types";
 
 defineProps<{
     step: WorkflowStep;

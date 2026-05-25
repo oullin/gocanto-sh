@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { buildSearchCorpus } from "./search";
-import { filterProjectRows, listProjectLanguages, listProjectRows } from "./projects";
-import { listFeaturedWorkCards } from "./work";
-import { excerpt, firstSentenceExcerpt, searchableText, stripHtml } from "./text";
+import { buildSearchCorpus } from "#domain/search";
+import { filterProjectRows, listProjectLanguages, listProjectRows } from "#domain/projects";
+import { listFeaturedWorkCards } from "#domain/work";
+import { excerpt, firstSentenceExcerpt, searchableText, stripHtml } from "#domain/text";
 import {
     listRecommendationsNewestFirst,
     listTestimonials,
     uniqueRecommendations,
-} from "./recommendations";
-import { listSignatureSkillCells, skillChipVariant, skillInitials } from "./skills";
-import { detailHeaderFor } from "./detail";
+} from "#domain/recommendations";
+import { listSignatureSkillCells, skillChipVariant, skillInitials } from "#domain/skills";
+import { detailHeaderFor } from "#domain/detail";
 
 const projectFixture = {
     version: "1.0.0",

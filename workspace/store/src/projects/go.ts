@@ -1,4 +1,4 @@
-import type { ProjectRecord } from "../types";
+import type { ProjectRecord } from "#store/types";
 
 export const goProjects = [
     {

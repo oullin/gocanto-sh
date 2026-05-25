@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProofAvatar } from "./types";
+import type { ProofAvatar } from "@features/workflow-hero/types";
 
 defineProps<{
     avatars: readonly ProofAvatar[];

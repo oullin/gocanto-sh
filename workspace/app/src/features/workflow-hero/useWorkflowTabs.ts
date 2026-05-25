@@ -1,6 +1,6 @@
 import { computed, nextTick, ref } from "vue";
 
-import type { Workflow } from "./types";
+import type { Workflow } from "@features/workflow-hero/types";
 
 export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
     const fallbackWorkflow = workflows[0];

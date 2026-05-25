@@ -10,7 +10,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import Command from "./Command.vue";
+import Command from "@components/ui/command/Command.vue";
 
 const props = withDefaults(
     defineProps<

@@ -5,7 +5,7 @@ import {
     uniqueRecommendations,
 } from "@gocanto/domain";
 
-import type { ProofAvatar } from "./types";
+import type { ProofAvatar } from "@features/workflow-hero/types";
 
 export const useTestimonialProof = () => {
     const proofAvatars = ref<ProofAvatar[]>([]);

@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
 import { workflows } from "@/features/workflow-hero/data";
-import WorkflowHero from "../WorkflowHero.vue";
+import WorkflowHero from "@components/WorkflowHero.vue";
 
 describe("WorkflowHero", () => {
     it("renders a stable testimonial proof skeleton before recommendations load", () => {

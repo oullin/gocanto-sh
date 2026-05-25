@@ -13,9 +13,9 @@ import {
     formatProjects,
     formatRecommendations,
     formatTalks,
-} from "./formatters.ts";
-import { renderLlmsTxt } from "./llms-txt.ts";
-import { computeLastmod, renderSitemap } from "./sitemap.ts";
+} from "#llms/formatters";
+import { renderLlmsTxt } from "#llms/llms-txt";
+import { computeLastmod, renderSitemap } from "#llms/sitemap";
 
 const SITE_URL = "https://gocanto.sh";
 const __dirname = dirname(fileURLToPath(import.meta.url));

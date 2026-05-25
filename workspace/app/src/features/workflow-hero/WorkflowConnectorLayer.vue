@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WorkflowConnector } from "./types";
+import type { WorkflowConnector } from "@features/workflow-hero/types";
 
 defineProps<{
     connectors: readonly WorkflowConnector[];

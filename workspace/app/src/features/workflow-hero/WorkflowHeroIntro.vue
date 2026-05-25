@@ -3,8 +3,8 @@ import { ArrowUpRight, Handshake } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { profile } from "@gocanto/store";
 
-import { useTestimonialProof } from "./useTestimonialProof";
-import WorkflowProof from "./WorkflowProof.vue";
+import { useTestimonialProof } from "@features/workflow-hero/useTestimonialProof";
+import WorkflowProof from "@features/workflow-hero/WorkflowProof.vue";
 
 const mailto = "mailto:" + profile.data.email;
 const { proofAvatars, proofLoaded, proofSkeletons, testimonialCount } = useTestimonialProof();

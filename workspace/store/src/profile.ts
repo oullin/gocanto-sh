@@ -1,6 +1,6 @@
-import { profileSkills } from "./profile/skills";
+import { profileSkills } from "#store/profile/skills";
 
-import type { ProfileFixture } from "./types";
+import type { ProfileFixture } from "#store/types";
 
 export const profile = {
     version: "1.0.3",

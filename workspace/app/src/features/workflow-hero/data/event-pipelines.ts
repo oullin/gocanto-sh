@@ -9,7 +9,7 @@ import {
     Wand2,
 } from "lucide-vue-next";
 
-import type { Workflow } from "../types";
+import type { Workflow } from "@features/workflow-hero/types";
 
 export const eventPipelinesWorkflow: Workflow = {
     id: "data-sync",

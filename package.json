@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "build": "turbo run build --ui=stream --cache-dir storage/.cache/turbo",
+        "check:imports": "node scripts/check-relative-imports.mjs",
         "dev": "turbo run dev --ui=stream --cache-dir storage/.cache/turbo",
         "format": "make format",
         "format-all": "make format-all",

@@ -1,11 +1,11 @@
-import { aiPlatformWorkflow } from "./ai-platform";
-import { bankingWorkflow } from "./banking";
-import { ecommerceWorkflow } from "./ecommerce";
-import { eventPipelinesWorkflow } from "./event-pipelines";
-import { fintechPaymentsWorkflow } from "./fintech-payments";
-import { queryTuningWorkflow } from "./query-tuning";
+import { aiPlatformWorkflow } from "@features/workflow-hero/data/ai-platform";
+import { bankingWorkflow } from "@features/workflow-hero/data/banking";
+import { ecommerceWorkflow } from "@features/workflow-hero/data/ecommerce";
+import { eventPipelinesWorkflow } from "@features/workflow-hero/data/event-pipelines";
+import { fintechPaymentsWorkflow } from "@features/workflow-hero/data/fintech-payments";
+import { queryTuningWorkflow } from "@features/workflow-hero/data/query-tuning";
 
-import type { Workflow } from "../types";
+import type { Workflow } from "@features/workflow-hero/types";
 
 export const workflows = [
     aiPlatformWorkflow,

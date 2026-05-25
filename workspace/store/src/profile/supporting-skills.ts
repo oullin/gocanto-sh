@@ -1,4 +1,4 @@
-import type { ProfileSkillRecord } from "../types";
+import type { ProfileSkillRecord } from "#store/types";
 
 export const supportingSkills = [
     {

@@ -3,6 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
+    "imports": {
+        "#llms/*": "./src/*.ts"
+    },
     "scripts": {
         "build": "tsx src/generate-markdown.ts",
         "format": "make -C ../.. ui-format",

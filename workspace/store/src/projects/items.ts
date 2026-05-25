@@ -1,10 +1,10 @@
-import { goProjects } from "./go";
-import { otherProjects } from "./other";
-import { oullinProjects } from "./oullin";
-import { phpProjects } from "./php";
-import { vueProjects } from "./vue";
+import { goProjects } from "#store/projects/go";
+import { otherProjects } from "#store/projects/other";
+import { oullinProjects } from "#store/projects/oullin";
+import { phpProjects } from "#store/projects/php";
+import { vueProjects } from "#store/projects/vue";
 
-import type { ProjectRecord } from "../types";
+import type { ProjectRecord } from "#store/types";
 
 const projectOrder = [
     "538e5f1d-86f0-4071-b270-6aa61a156612",

@@ -3,7 +3,7 @@ import { nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { globalSearchOpen } from "@lib/globalSearch";
-import GlobalSearch from "../GlobalSearch.vue";
+import GlobalSearch from "@components/GlobalSearch.vue";
 
 describe("GlobalSearch", () => {
     beforeEach(() => {
