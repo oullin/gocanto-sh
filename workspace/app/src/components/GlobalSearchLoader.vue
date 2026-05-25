@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useEventListener } from "@vueuse/core";
+import { defineAsyncComponent, ref, watch } from "vue";
 import { globalSearchOpen } from "@lib/globalSearch";
 
 const GlobalSearch = defineAsyncComponent(() => import("@components/GlobalSearch.vue"));
@@ -21,13 +22,7 @@ const onKeydown = (event: KeyboardEvent) => {
     globalSearchOpen.value = !globalSearchOpen.value;
 };
 
-onMounted(() => {
-    window.addEventListener("keydown", onKeydown);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("keydown", onKeydown);
-});
+useEventListener(() => (typeof window === "undefined" ? null : window), "keydown", onKeydown);
 </script>
 
 <template>
