@@ -6,9 +6,11 @@
   "scripts": {
     "build": "turbo run build --ui=stream --cache-dir storage/.cache/turbo",
     "dev": "turbo run dev --ui=stream --cache-dir storage/.cache/turbo",
-    "format": "turbo run format --ui=stream --cache-dir storage/.cache/turbo",
-    "format-all": "turbo run format --ui=stream --cache-dir storage/.cache/turbo --force",
-    "format:check": "turbo run format:check --ui=stream --cache-dir storage/.cache/turbo",
+    "format": "pnpm go-fmt:format && turbo run format --ui=stream --cache-dir storage/.cache/turbo",
+    "format-all": "pnpm go-fmt:format && turbo run format --ui=stream --cache-dir storage/.cache/turbo --force",
+    "format:check": "pnpm go-fmt:check && turbo run format:check --ui=stream --cache-dir storage/.cache/turbo",
+    "go-fmt:check": "make go-fmt-check",
+    "go-fmt:format": "make go-fmt-format",
     "lint": "turbo run lint --ui=stream --cache-dir storage/.cache/turbo",
     "test": "turbo run test --ui=stream --cache-dir storage/.cache/turbo",
     "typecheck": "turbo run typecheck --ui=stream --cache-dir storage/.cache/turbo"

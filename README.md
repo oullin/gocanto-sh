@@ -33,6 +33,14 @@ pnpm typecheck
 pnpm build
 ```
 
+Local formatting uses Docker Compose to run [`go-fmt`](https://github.com/oullin/go-fmt) for Go files alongside the TypeScript/Vue tooling. The formatter service is defined in [`go-fmt.compose.yaml`](go-fmt.compose.yaml) and receives the host project path so Go file discovery works from the repository root:
+
+```sh
+make format
+make go-fmt-check
+pnpm go-fmt:format
+```
+
 ### SEO & prerendering
 
 Build-time prerender so crawlers and social scrapers get rendered HTML, not an empty SPA shell.
