@@ -33,11 +33,10 @@ pnpm typecheck
 pnpm build
 ```
 
-Local formatting uses Docker Compose to run [`go-fmt`](https://github.com/oullin/go-fmt) for Go files and its upstream support formatter for TypeScript/Vue files:
+Local formatting uses Docker Compose to run the upstream [`go-fmt`](https://github.com/oullin/go-fmt) support formatter for TypeScript/Vue files:
 
 ```sh
 make format
-pnpm go-fmt:format
 ```
 
 ### SEO & prerendering

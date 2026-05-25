@@ -26,8 +26,8 @@
         }
     },
     "scripts": {
-        "format": "oxfmt .",
-        "format:check": "oxfmt --check .",
+        "format": "make -C ../.. ui-format",
+        "format:check": "make -C ../.. ui-format",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },

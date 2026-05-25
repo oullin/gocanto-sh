@@ -5,8 +5,8 @@
     "type": "module",
     "scripts": {
         "build": "tsx src/generate-markdown.ts",
-        "format": "oxfmt .",
-        "format:check": "oxfmt --check .",
+        "format": "make -C ../.. ui-format",
+        "format:check": "make -C ../.. ui-format",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },
