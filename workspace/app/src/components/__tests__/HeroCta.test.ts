@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { profile } from "@gocanto/store";
 
-import HeroCta from "../HeroCta.vue";
+import HeroCta from "@components/HeroCta.vue";
 
 describe("HeroCta", () => {
     it("renders a mailto link pointing at the profile email", () => {

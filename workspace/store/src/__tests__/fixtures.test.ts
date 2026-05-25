@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { bio } from "../bio";
-import { education } from "../education";
-import { experience } from "../experience";
-import { links } from "../links";
-import { profile } from "../profile";
-import { projects } from "../projects";
-import { recommendations } from "../recommendations";
-import { talks } from "../talks";
-import type { ProfileSkillRecord } from "../types";
+import { bio } from "#store/bio";
+import { education } from "#store/education";
+import { experience } from "#store/experience";
+import { links } from "#store/links";
+import { profile } from "#store/profile";
+import { projects } from "#store/projects";
+import { recommendations } from "#store/recommendations";
+import { talks } from "#store/talks";
+import type { ProfileSkillRecord } from "#store/types";
 
 type WithUuid = { readonly uuid: string };
 
@@ -73,6 +73,11 @@ describe("uuid uniqueness", () => {
 });
 
 describe("projects", () => {
+    it("preserves the assembled project fixture size", () => {
+        expect(projects.data).toHaveLength(23);
+        expect(projects.data[0]?.uuid).toBe("538e5f1d-86f0-4071-b270-6aa61a156612");
+    });
+
     it("sort indices are unique", () => {
         const sorts = projects.data.map((p) => p.sort);
 
@@ -80,7 +85,19 @@ describe("projects", () => {
     });
 });
 
+describe("recommendations", () => {
+    it("preserves the assembled recommendation fixture size", () => {
+        expect(recommendations.data).toHaveLength(37);
+        expect(recommendations.data[0]?.uuid).toBe("1f58646c-ba87-4306-905f-cb64a5e49b5e");
+    });
+});
+
 describe("profile", () => {
+    it("preserves the assembled skill fixture size", () => {
+        expect(profile.data.skills).toHaveLength(46);
+        expect(profile.data.skills[0]?.uuid).toBe("a1b2c3d4-e5f6-7890-1234-567890abcdef");
+    });
+
     it("has at least one signature skill", () => {
         const skills = profile.data.skills as readonly ProfileSkillRecord[];
         const signature = skills.filter((s) => s.signature);

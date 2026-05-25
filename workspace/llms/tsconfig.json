@@ -15,7 +15,10 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "ignoreDeprecations": "6.0",
-        "types": ["node"]
+        "types": ["node"],
+        "paths": {
+            "#llms/*": ["./src/*"]
+        }
     },
     "include": ["src/**/*.ts"]
 }

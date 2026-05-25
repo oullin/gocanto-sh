@@ -19,7 +19,7 @@ import {
     formatProjects,
     formatRecommendations,
     formatTalks,
-} from "../formatters";
+} from "#llms/formatters";
 
 const profile: ProfileFixture = {
     version: "1.0.0",

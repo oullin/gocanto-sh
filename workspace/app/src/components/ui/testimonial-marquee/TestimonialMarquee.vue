@@ -2,8 +2,8 @@
 import { computed, ref } from "vue";
 import { stripHtml } from "@gocanto/domain";
 import { cn } from "@lib/utils";
-import TestimonialCard from "./TestimonialCard.vue";
-import type { Testimonial } from "./types";
+import TestimonialCard from "@components/ui/testimonial-marquee/TestimonialCard.vue";
+import type { Testimonial } from "@components/ui/testimonial-marquee/types";
 
 export type { Testimonial };
 

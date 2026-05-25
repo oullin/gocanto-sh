@@ -12,7 +12,10 @@
         "moduleDetection": "force",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "paths": {
+            "#store/*": ["./src/*"]
+        }
     },
     "include": ["src/**/*.ts"]
 }

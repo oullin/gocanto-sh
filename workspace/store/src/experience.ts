@@ -1,4 +1,4 @@
-import type { ExperienceFixture } from "./types";
+import type { ExperienceFixture } from "#store/types";
 
 export const experience = {
     version: "1.0.4",

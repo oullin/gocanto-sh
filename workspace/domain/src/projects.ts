@@ -1,6 +1,6 @@
 import type { ProjectRecord, ProjectsFixture } from "@gocanto/store";
 
-import { firstSentenceExcerpt } from "./text";
+import { firstSentenceExcerpt } from "#domain/text";
 
 export type ProjectTag = {
     readonly label: string;

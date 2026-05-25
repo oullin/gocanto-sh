@@ -1,0 +1,130 @@
+/* ---------- Responsive ---------- */
+
+@media (min-width: 961px) and (max-width: 1344px) {
+    .wf-card[data-step-id="lead-action"] {
+        top: 320px;
+    }
+
+    .wf-card[data-step-id="lead-output"] {
+        left: 866px;
+    }
+
+    .wf-card[data-step-id="data-output"] {
+        left: 908px;
+    }
+
+    .wf-card[data-step-id="content-output"] {
+        left: 908px;
+    }
+}
+
+@media (max-width: 960px) {
+    .wf-hero__title {
+        font-size: 40px;
+    }
+    .wf-hero__intro,
+    .wf-tabs-wrap,
+    .wf-canvas-wrap {
+        padding-inline: 16px;
+    }
+    .wf-hero__frame {
+        min-height: 500px;
+        padding: 72px 24px;
+    }
+    .wf-tabs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .wf-tab {
+        border-top-width: 0;
+    }
+    .wf-tab:nth-child(3n + 1) {
+        border-left-width: 1px;
+    }
+    .wf-card--left {
+        left: 4%;
+    }
+    .wf-card--right {
+        right: 4%;
+    }
+}
+
+@media (max-width: 640px) {
+    .wf-hero__title {
+        font-size: 32px;
+        line-height: 1.18;
+    }
+    .wf-hero__lede {
+        font-size: 17px;
+    }
+    .wf-hero__ctas {
+        width: 100%;
+        gap: 12px;
+    }
+    .wf-cta-primary {
+        min-width: 145px;
+        padding-inline: 14px;
+    }
+    .wf-proof {
+        gap: 14px;
+    }
+    .wf-hero__intro,
+    .wf-tabs-wrap,
+    .wf-canvas-wrap {
+        padding-inline: 0;
+    }
+    .wf-hero__frame,
+    .wf-tabs-frame,
+    .wf-canvas-frame {
+        border-inline: 0;
+    }
+    .wf-canvas-frame {
+        padding-bottom: 0;
+    }
+    .wf-hero__frame {
+        min-height: auto;
+        padding: 56px 20px 64px;
+    }
+    .wf-tabs {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+    .wf-tab {
+        flex: 0 0 190px;
+        scroll-snap-align: start;
+    }
+    .wf-canvas {
+        height: auto;
+        min-height: 0;
+        padding: 40px 20px 56px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+    .wf-connectors {
+        display: none;
+    }
+    .wf-card,
+    .wf-card--left,
+    .wf-card--center,
+    .wf-card--right,
+    .wf-card--mobile-only {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        display: block;
+        width: min(100%, 330px);
+        transform: none;
+    }
+    .wf-card[data-step-id] {
+        left: auto;
+        right: auto;
+        top: auto;
+        width: min(100%, 330px);
+    }
+    .wf-card--mobile-only {
+        animation-delay: 3600ms;
+    }
+}

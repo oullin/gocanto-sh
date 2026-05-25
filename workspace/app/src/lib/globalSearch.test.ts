@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { globalSearchOpen, openGlobalSearch } from "./globalSearch";
+import { globalSearchOpen, openGlobalSearch } from "@lib/globalSearch";
 
 describe("globalSearch", () => {
     beforeEach(() => {

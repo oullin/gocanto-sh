@@ -1,4 +1,4 @@
-import type { LinksFixture } from "./types";
+import type { LinksFixture } from "#store/types";
 
 export const links = {
     version: "1.0.3",

@@ -159,11 +159,13 @@ const isLoading = computed(() => !ready.value || filtering.value);
                 <a
                     v-for="row in filteredRows"
                     :key="row.title"
-                    :href="isLoading ? undefined : row.url"
+                    :href="row.url"
                     class="row"
-                    :target="isLoading ? undefined : '_blank'"
+                    target="_blank"
                     rel="noopener noreferrer"
                     :aria-busy="isLoading || undefined"
+                    :tabindex="isLoading ? -1 : undefined"
+                    @click="isLoading && $event.preventDefault()"
                 >
                     <span class="row-text">
                         <span class="title">

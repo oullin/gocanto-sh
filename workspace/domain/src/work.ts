@@ -1,6 +1,6 @@
 import type { ExperienceRecord, ExperienceFixture } from "@gocanto/store";
 
-import { compactWhitespace, stripHtml } from "./text";
+import { compactWhitespace, stripHtml } from "#domain/text";
 
 export type WorkTagColor = "amber" | "blue" | "green" | "purple";
 

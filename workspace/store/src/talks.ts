@@ -1,4 +1,4 @@
-import type { TalksFixture } from "./types";
+import type { TalksFixture } from "#store/types";
 
 export const talks = {
     version: "1.0.0",

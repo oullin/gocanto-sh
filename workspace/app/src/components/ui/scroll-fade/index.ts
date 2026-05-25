@@ -1,1 +1,1 @@
-export { default as ScrollFade } from "./ScrollFade.vue";
+export { default as ScrollFade } from "@components/ui/scroll-fade/ScrollFade.vue";

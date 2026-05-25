@@ -1,4 +1,4 @@
-import type { EducationFixture } from "./types";
+import type { EducationFixture } from "#store/types";
 
 export const education = {
     version: "1.0.1",

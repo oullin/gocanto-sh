@@ -4,7 +4,7 @@ import type { HTMLAttributes } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { DialogContent, DialogPortal, useForwardPropsEmits } from "reka-ui";
 import { cn } from "@/lib/utils";
-import DialogOverlay from "./DialogOverlay.vue";
+import DialogOverlay from "@components/ui/dialog/DialogOverlay.vue";
 
 defineOptions({
     inheritAttrs: false,

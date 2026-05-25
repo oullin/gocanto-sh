@@ -1,17 +1,17 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./workspace/store"
-    },
-    {
-      "path": "./workspace/domain"
-    },
-    {
-      "path": "./workspace/llms"
-    },
-    {
-      "path": "./workspace/app"
-    }
-  ]
+    "files": [],
+    "references": [
+        {
+            "path": "./workspace/store"
+        },
+        {
+            "path": "./workspace/domain"
+        },
+        {
+            "path": "./workspace/llms"
+        },
+        {
+            "path": "./workspace/app"
+        }
+    ]
 }

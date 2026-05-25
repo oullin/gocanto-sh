@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ProfileFixture } from "@gocanto/store";
 
-import { renderLlmsTxt } from "../llms-txt";
+import { renderLlmsTxt } from "#llms/llms-txt";
 
 const profile: ProfileFixture = {
     version: "1.0.0",

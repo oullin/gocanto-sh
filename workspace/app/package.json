@@ -5,10 +5,10 @@
     "type": "module",
     "scripts": {
         "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts",
-        "dev": "portless",
+        "dev": "PORTLESS_PORT=${PORTLESS_PORT:-1355} PORTLESS_HTTPS=${PORTLESS_HTTPS:-1} PORTLESS_SYNC_HOSTS=${PORTLESS_SYNC_HOSTS:-0} portless",
         "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
-        "format": "tsx ../../scripts/blank-lines.ts && oxfmt .",
-        "format:check": "tsx ../../scripts/blank-lines.ts --check && oxfmt --check .",
+        "format": "make -C ../.. ui-format",
+        "format:check": "make -C ../.. ui-format",
         "lint": "oxlint .",
         "preview": "vite preview --configLoader runner --host 0.0.0.0",
         "test": "vitest run --passWithNoTests",
@@ -31,8 +31,6 @@
         "vue": "^3.5.34"
     },
     "devDependencies": {
-        "@fontsource-variable/geist": "^5.2.8",
-        "@fontsource-variable/geist-mono": "^5.2.7",
         "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^25.6.2",
         "@vue/server-renderer": "^3.5.34",

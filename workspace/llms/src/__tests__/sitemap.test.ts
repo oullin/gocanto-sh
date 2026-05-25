@@ -7,7 +7,7 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 
-import { computeLastmod, renderSitemap } from "../sitemap";
+import { computeLastmod, renderSitemap } from "#llms/sitemap";
 
 const emptySources = {
     projects: { version: "1.0.0", data: [] } satisfies ProjectsFixture,

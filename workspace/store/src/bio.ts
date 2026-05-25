@@ -1,4 +1,4 @@
-import type { BioFixture } from "./types";
+import type { BioFixture } from "#store/types";
 
 export const bio = {
     version: "1.0.0",

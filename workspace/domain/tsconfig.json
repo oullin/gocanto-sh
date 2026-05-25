@@ -12,7 +12,10 @@
         "moduleDetection": "force",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "paths": {
+            "#domain/*": ["./src/*"]
+        }
     },
     "include": ["src/**/*.ts"]
 }

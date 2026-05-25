@@ -1,4 +1,4 @@
-export { default as Matrix } from "./Matrix.vue";
+export { default as Matrix } from "@components/ui/matrix/Matrix.vue";
 
 export type Frame = number[][];
 

@@ -1,10 +1,10 @@
-export { bio } from "./bio";
-export { education } from "./education";
-export { experience } from "./experience";
-export { links } from "./links";
-export { profile } from "./profile";
-export { projects } from "./projects";
-export { talks } from "./talks";
+export { bio } from "#store/bio";
+export { education } from "#store/education";
+export { experience } from "#store/experience";
+export { links } from "#store/links";
+export { profile } from "#store/profile";
+export { projects } from "#store/projects";
+export { talks } from "#store/talks";
 
 export type {
     BioFixture,
@@ -27,4 +27,4 @@ export type {
     RecommendationsFixture,
     TalkRecord,
     TalksFixture,
-} from "./types";
+} from "#store/types";

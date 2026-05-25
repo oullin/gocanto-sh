@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import { ensureFrameSize, vu, type Frame } from "./index";
+import { ensureFrameSize, vu, type Frame } from "@components/ui/matrix/index";
 
 interface Palette {
     on: string;

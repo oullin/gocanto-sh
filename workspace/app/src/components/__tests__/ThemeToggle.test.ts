@@ -1,7 +1,7 @@
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import ThemeToggle from "../ThemeToggle.vue";
+import ThemeToggle from "@components/ThemeToggle.vue";
 
 const stubMatchMedia = (matches: boolean) => {
     const mql: Partial<MediaQueryList> = {

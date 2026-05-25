@@ -33,6 +33,12 @@ pnpm typecheck
 pnpm build
 ```
 
+Local formatting uses Docker Compose to run the upstream [`go-fmt`](https://github.com/oullin/go-fmt) support formatter for TypeScript/Vue files:
+
+```sh
+make format
+```
+
 ### SEO & prerendering
 
 Build-time prerender so crawlers and social scrapers get rendered HTML, not an empty SPA shell.
@@ -50,11 +56,7 @@ Build-time prerender so crawlers and social scrapers get rendered HTML, not an e
 **SSR-safety:** components must not touch `window`/`document` at setup top-level. Use `onMounted`, event handlers, or a getter guard:
 
 ```ts
-useEventListener(
-    () => (typeof window === "undefined" ? null : window),
-    "keydown",
-    handler,
-);
+useEventListener(() => (typeof window === "undefined" ? null : window), "keydown", handler);
 ```
 
 If a third-party component crashes during prerender, gate it behind an `onMounted`-toggled `v-if`.
