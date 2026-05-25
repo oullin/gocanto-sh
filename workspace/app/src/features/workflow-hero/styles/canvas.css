@@ -1,0 +1,80 @@
+.wf-canvas-wrap:focus-visible {
+    outline: 3px solid oklch(1 0 0 / 0.2);
+    outline-offset: -4px;
+}
+
+.wf-canvas-wrap {
+    padding: 0 32px;
+    background: var(--wf-bg);
+}
+
+.wf-canvas {
+    position: relative;
+    height: 680px;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 0 34%,
+            oklch(0.085 0 0 / 0.3) 52%,
+            var(--wf-bg) 78%
+        ),
+        radial-gradient(circle, oklch(1 0 0 / 0.12) 1px, transparent 1.5px);
+    background-size:
+        100% 100%,
+        20px 20px;
+}
+
+.wf-canvas::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 0 44%, var(--wf-bg) 75%);
+    z-index: 0;
+}
+
+.wf-connectors {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.wf-connector {
+    --wf-connector-delay: 1200ms;
+}
+
+.wf-connector--middle {
+    --wf-connector-delay: 1200ms;
+}
+
+.wf-connector--late {
+    --wf-connector-delay: 2400ms;
+}
+
+.wf-connector--final {
+    --wf-connector-delay: 3600ms;
+}
+
+.wf-connector-path,
+.wf-connector-arrow {
+    stroke: oklch(1 0 0 / 0.24);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 0 1;
+    stroke-dashoffset: 0;
+    animation: wf-line-draw 500ms ease-out both;
+    animation-delay: var(--wf-connector-delay);
+}
+
+.wf-connector-diamond {
+    fill: oklch(1 0 0 / 0.24);
+    opacity: 0;
+    animation: wf-node-fade 500ms ease-out both;
+    animation-delay: var(--wf-connector-delay);
+}

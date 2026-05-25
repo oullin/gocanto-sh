@@ -1,0 +1,88 @@
+import type { RecommendationRecord } from "../types";
+
+export const aspireRecommendations = [
+    {
+        uuid: "e4626228-99fa-4778-9a22-783174e7ab60",
+        relation: "Damien was a senior to Gus, but did not manage him directly.",
+        text: "Over the past two years, Gus has shown consistently high levels of technical skill and an innovative mindset, adapting through numerous changes and growth periods within our company.<br/><br/>He is always eager to support the team in reaching its goals, displaying readiness to take action, and effective communication. His ability to think outside the box is a distinct strength.<br/><br/>In this time, he also worked intentionally on his planning and leadership abilities, which have significantly complemented his already notable contributions to the team.",
+        person: {
+            avatar: "recommendation/damien-passavent.jpeg",
+            full_name: "Damien Passavent",
+            company: "Aspire",
+            designation: "Chief Product Officer",
+        },
+        created_at: "2024-04-10",
+        updated_at: "2024-04-10",
+        featured: 1,
+    },
+    {
+        uuid: "fa5c4084-e1b4-45dd-a314-e8d9f589f67e",
+        relation: "Claudio managed Gus directly.",
+        text: "Gustavo's blend of strong technical skills, problem-solving, and warm personality make him stand out. He's not only great at leading projects but also shines in teamwork, often stepping beyond his role to help others.<br/><br/>As a mentor, he'd be invaluable, and his ability to communicate and innovate positions him perfectly for roles that bridge technical teams and clients.",
+        person: {
+            avatar: "recommendation/claudio-reggiani.jpeg",
+            full_name: "Claudio Reggiani",
+            company: "Aspire",
+            designation: "Engineering Manger",
+        },
+        created_at: "2024-04-10",
+        updated_at: "2024-04-10",
+        featured: 1,
+    },
+    {
+        uuid: "8bc18bf9-0983-4c7e-8095-b3d1e642fee4",
+        relation: "Yash worked with Gus in the same team.",
+        text: "I had the pleasure of closely collaborating with Gustavo during my tenure as a Product Manager in the Payments squad in Aspire where he was the Engineering Manager. Throughout our partnership on various high-priority and critical projects, Gustavo's leadership not only ensured that the development team was aligned with project goals but also served as a driving force for inspiring excellence.<br/><br/>Gustavo's dedication to the technical aspects of our work and his openness to feedback were truly commendable. He actively contributed to problem solving discussions, demonstrating a commitment to continuous improvement. These qualities had a profound impact on the success of the products and features that we built together.",
+        person: {
+            avatar: "recommendation/yash-aspire.jpeg",
+            full_name: "Yash Maheshwari",
+            company: "Aspire",
+            designation: "Senior Product Manager",
+        },
+        created_at: "2023-11-28",
+        updated_at: "2023-11-28",
+        featured: 0,
+    },
+    {
+        uuid: "b282a643-b283-41be-82ee-5a3eda853e69",
+        relation: "Mohin worked with Gus in the same team.",
+        text: "Gustavo is a highly skilled web developer with special expertise in PHP, GoLang, and a bunch of other languages along with extensive experience in managing large-scale distributed systems.<br/><br/>During our collaboration, Gustavo showcased exceptional problem-solving abilities, ensuring the highest standards of code quality and performance. He is not only technically proficient but also a great team player, always ready to share knowledge and support colleagues and a great asset to the team.",
+        person: {
+            avatar: "recommendation/mohin-lakdawala.jpeg",
+            full_name: "Mohin Lakdawala",
+            company: "Aspire",
+            designation: "Senior Software Engineer",
+        },
+        created_at: "2023-10-19",
+        updated_at: "2023-10-19",
+        featured: 0,
+    },
+    {
+        uuid: "0e587fa2-b678-4ca5-9eed-0f115c4a092d",
+        relation: "Jarek managed Gus indirectly.",
+        text: "I have worked with Gustavo as a Sr Engineer in my department at Aspire. It was the second time we worked together and it has been a great pleasure to see how far Gustavo progressed in the last few years.<br/><br/>Gustavo has an exceptional depth of knowledge in software development and consistently expands his high-quality knowledge with new technologies to better fit scaling team and systems.<br/><br/>He constantly demonstrated ambition and drive to learn and improve each stage of the engineering process. With his level of knowledge and skills I can wholeheartedly recommend Gustavo for senior technical roles, as well as leadership positions where he can leverage this experience even more.",
+        person: {
+            avatar: "recommendation/jarek-tkaczyk.jpeg",
+            full_name: "Jarek Tkaczyk",
+            company: "Aspire",
+            designation: "Head of Engineering",
+        },
+        created_at: "2023-02-27",
+        updated_at: "2023-02-27",
+        featured: 1,
+    },
+    {
+        uuid: "4b4d927a-ad7b-4f00-9140-d5b27f99fdc9",
+        relation: "Rajan reported to Gus directly.",
+        text: "I worked with Gustavo in the same team for Aspire. He had excellent time management skills and had a knack for keeping everyone calm and productive during intense crunch periods. His work ethics is immaculate and so easy to work together with. Also he goes out of his way when you ask for some help and guidance. Any company would be lucky to have Gustavo.",
+        person: {
+            avatar: "recommendation/rajan-chaudhary.jpeg",
+            full_name: "Rajan Chaudhary",
+            company: "Aspire",
+            designation: "Senior QA Engineer",
+        },
+        created_at: "2022-11-16",
+        updated_at: "2022-11-16",
+        featured: 0,
+    },
+] as const satisfies readonly RecommendationRecord[];

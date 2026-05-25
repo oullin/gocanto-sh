@@ -1,0 +1,121 @@
+import {
+    Cable,
+    Clipboard,
+    DatabaseZap,
+    FileText,
+    Gauge,
+    PackageCheck,
+    PenLine,
+    Wand2,
+} from "lucide-vue-next";
+
+import type { Workflow } from "../types";
+
+export const eventPipelinesWorkflow: Workflow = {
+    id: "data-sync",
+    label: "Event Pipelines",
+    icon: Cable,
+    connectors: [
+        {
+            x: 300,
+            y: 306,
+            width: 103,
+            height: 121,
+            viewBox: "0 0 103 121",
+            diamond: "M6 0L12 6L6 12L0 6L6 0Z",
+            line: "M6 6V93.2683C6 104.314 14.9543 113.268 26 113.268H101.997",
+            arrow: "M95.6143 106.91L101.997 113.269L95.6146 119.626",
+            delay: "middle",
+        },
+        {
+            x: 613,
+            y: 179,
+            width: 134,
+            height: 121,
+            viewBox: "0 0 134 121",
+            diamond: "M6 108.626L12 114.626L6 120.626L0 114.626L6 108.626Z",
+            line: "M6 114.626V27.3579C6 16.3122 14.9543 7.35791 26 7.35791H132.311",
+            arrow: "M125.928 1L132.31 7.35817L125.928 13.7158",
+            delay: "late",
+        },
+        {
+            x: 1021,
+            y: 224,
+            width: 93,
+            height: 112,
+            viewBox: "0 0 93 112",
+            diamond: "M6 0L12 6L6 12L0 6L6 0Z",
+            line: "M6 6H64.792C75.8377 6 84.792 14.9543 84.792 26V110.695",
+            arrow: "M91.1494 104.146L84.7912 110.528L78.4336 104.146",
+            delay: "final",
+        },
+    ],
+    steps: [
+        {
+            id: "data-input",
+            label: "Input",
+            labelIcon: PenLine,
+            icon: Cable,
+            title: "Flow Contract",
+            description:
+                "Plain-English or YAML definition of event sources, sinks, semantics, and throughput target.",
+            details: [
+                { text: "Kafka or RabbitMQ source" },
+                { text: "Postgres, webhook, S3, or topic sink" },
+            ],
+            time: "Spec first",
+            delay: "early",
+            position: "left",
+        },
+        {
+            id: "data-action",
+            label: "Generate",
+            labelIcon: Wand2,
+            icon: DatabaseZap,
+            title: "Consumer + DLQ",
+            description:
+                "kuda.sh generates the Go pipeline with offset handling, idempotent writes, back-pressure, and replay tooling.",
+            details: [
+                { text: "Exactly-once consumer option" },
+                { text: "DLQ with full failure context" },
+                { text: "Schema evolution tests" },
+            ],
+            time: "3-week build",
+            delay: "middle",
+            position: "center",
+        },
+        {
+            id: "data-pending",
+            label: "Operate",
+            labelIcon: Clipboard,
+            icon: Gauge,
+            title: "Helm + Observability",
+            description: "Deployment and operations are part of the package, not an afterthought.",
+            details: [
+                { text: "Helm chart + values" },
+                { text: "Grafana dashboard JSON" },
+                { text: "Prometheus alerts" },
+            ],
+            time: "Deployable",
+            action: "Runbook included",
+            delay: "late",
+            position: "right",
+        },
+        {
+            id: "data-output",
+            label: "Output",
+            labelIcon: FileText,
+            icon: PackageCheck,
+            title: "Recoverable Stream",
+            description:
+                "The finished system can drain, replay, roll back, and evolve without custom incident scripts.",
+            details: [
+                { text: "Lag, throughput, error-rate alerts" },
+                { text: "DLQ replay command" },
+            ],
+            time: "Production handoff",
+            delay: "final",
+            position: "mobile-only",
+        },
+    ],
+};

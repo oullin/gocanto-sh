@@ -1,0 +1,118 @@
+import { CreditCard, FileText, PackageCheck, PenLine, ShieldCheck, Wand2 } from "lucide-vue-next";
+
+import type { Workflow } from "../types";
+
+export const fintechPaymentsWorkflow: Workflow = {
+    id: "meeting-prep",
+    label: "Fintech Payments",
+    icon: CreditCard,
+    connectors: [
+        {
+            x: 404,
+            y: 222,
+            width: 243,
+            height: 78,
+            viewBox: "0 0 243 78",
+            diamond: "M6 0L12 6L6 12L0 6L6 0Z",
+            line: "M6 6H215.402C226.447 6 235.402 14.9543 235.402 26V75.8754",
+            arrow: "M241.77 69.6841L235.411 76.0668L229.054 69.6844",
+            delay: "middle",
+        },
+        {
+            x: 409,
+            y: 168,
+            width: 236,
+            height: 109,
+            viewBox: "0 0 236 109",
+            diamond: "M229.891 0L235.891 6L229.891 12L223.891 6L229.891 0Z",
+            line: "M229.823 6V81.1435C229.823 92.1892 220.869 101.144 209.823 101.144H1.00074",
+            arrow: "M7.38281 94.7856L1.00019 101.144L7.38252 107.501",
+            delay: "middle",
+        },
+        {
+            x: 633,
+            y: 168,
+            width: 235,
+            height: 109,
+            viewBox: "0 0 235 109",
+            diamond: "M6 0L12 6L6 12L0 6L6 0Z",
+            line: "M6.00195 6V81.1435C6.00195 92.1892 14.9563 101.144 26.002 101.144H233.945",
+            arrow: "M227.562 94.7856L233.945 101.144L227.563 107.501",
+            delay: "late",
+        },
+        {
+            x: 632,
+            y: 222,
+            width: 245,
+            height: 78,
+            viewBox: "0 0 245 78",
+            diamond: "M238.457 0L244.457 6L238.457 12L232.457 6L238.457 0Z",
+            line: "M238.457 6H27.3579C16.3122 6 7.35792 14.9543 7.35792 26V75.8754",
+            arrow: "M13.7158 69.6841L7.35765 76.0668L1 69.6844",
+            delay: "middle",
+        },
+    ],
+    steps: [
+        {
+            id: "meeting-left",
+            label: "Engineering",
+            labelIcon: Wand2,
+            icon: ShieldCheck,
+            title: "Payments Discipline",
+            description:
+                "The patterns Gustavo used across Aspire and BeMyGuest become the default integration shape.",
+            details: [
+                { text: "Idempotency on mutating calls" },
+                { text: "Webhook signature verification" },
+                { text: "Retry policy and typed errors" },
+            ],
+            chip: "Fail closed",
+            time: "Code + tests",
+            delay: "middle",
+            position: "left",
+        },
+        {
+            id: "meeting-input",
+            label: "Input",
+            labelIcon: PenLine,
+            icon: CreditCard,
+            title: "Provider + Stack",
+            titleMeta: "hara.sh",
+            description:
+                "Stripe, Adyen, NETS, or a documented provider surface for Go and TypeScript delivery.",
+            delay: "early",
+            position: "center",
+        },
+        {
+            id: "meeting-output",
+            label: "Handoff",
+            labelIcon: FileText,
+            icon: PackageCheck,
+            title: "Sandbox in 30 Minutes",
+            description:
+                "Client engineers receive code, fixtures, docs, hashes, and a complete generation audit log.",
+            details: [{ text: "Deliverable zip" }, { text: "SHA256 manifest" }],
+            time: "Client-ready",
+            delay: "late",
+            position: "center",
+        },
+        {
+            id: "meeting-right",
+            label: "Agent",
+            labelIcon: Wand2,
+            icon: Wand2,
+            title: "Generate Integration",
+            description:
+                "hara.sh emits a typed module, client SDK, OpenAPI contract, Postman collection, and sandbox tests.",
+            details: [
+                { text: "Go module + TypeScript client" },
+                { text: "OpenAPI 3.1 + Postman" },
+                { text: "go test, tsc, npm test, gosec" },
+            ],
+            chip: "Validated output",
+            time: "4 hours target",
+            delay: "middle",
+            position: "right",
+        },
+    ],
+};

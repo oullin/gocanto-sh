@@ -73,6 +73,11 @@ describe("uuid uniqueness", () => {
 });
 
 describe("projects", () => {
+    it("preserves the assembled project fixture size", () => {
+        expect(projects.data).toHaveLength(23);
+        expect(projects.data[0]?.uuid).toBe("538e5f1d-86f0-4071-b270-6aa61a156612");
+    });
+
     it("sort indices are unique", () => {
         const sorts = projects.data.map((p) => p.sort);
 
@@ -80,7 +85,19 @@ describe("projects", () => {
     });
 });
 
+describe("recommendations", () => {
+    it("preserves the assembled recommendation fixture size", () => {
+        expect(recommendations.data).toHaveLength(37);
+        expect(recommendations.data[0]?.uuid).toBe("1f58646c-ba87-4306-905f-cb64a5e49b5e");
+    });
+});
+
 describe("profile", () => {
+    it("preserves the assembled skill fixture size", () => {
+        expect(profile.data.skills).toHaveLength(46);
+        expect(profile.data.skills[0]?.uuid).toBe("a1b2c3d4-e5f6-7890-1234-567890abcdef");
+    });
+
     it("has at least one signature skill", () => {
         const skills = profile.data.skills as readonly ProfileSkillRecord[];
         const signature = skills.filter((s) => s.signature);
