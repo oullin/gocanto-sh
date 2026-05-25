@@ -91,6 +91,8 @@ const detailFirstStepIds = new Set([
 
 const proofAvatars = ref<ProofAvatar[]>([]);
 const testimonialCount = ref(0);
+const proofSkeletons = [0, 1, 2, 3] as const;
+const proofLoaded = computed(() => testimonialCount.value > 0 && proofAvatars.value.length > 0);
 const mailto = `mailto:${profile.data.email}`;
 
 onMounted(async () => {
@@ -763,25 +765,41 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                             href="#testimonials"
                             class="wf-proof__users"
                             aria-label="View testimonials"
+                            :aria-busy="proofLoaded ? undefined : 'true'"
                         >
                             <ul class="wf-proof__avatars" aria-label="Testimonials">
-                                <li
-                                    v-for="avatar in proofAvatars"
-                                    :key="avatar.src"
-                                    class="wf-proof__avatar"
-                                >
-                                    <img
-                                        :src="avatar.src"
-                                        :alt="avatar.alt"
-                                        width="36"
-                                        height="36"
-                                        loading="lazy"
-                                        decoding="async"
-                                        referrerpolicy="no-referrer"
+                                <template v-if="!proofLoaded">
+                                    <li
+                                        v-for="index in proofSkeletons"
+                                        :key="`proof-skeleton-${index}`"
+                                        class="wf-proof__avatar wf-proof__avatar--skeleton"
+                                        aria-hidden="true"
                                     />
-                                </li>
+                                </template>
+                                <template v-else>
+                                    <li
+                                        v-for="avatar in proofAvatars"
+                                        :key="avatar.src"
+                                        class="wf-proof__avatar"
+                                    >
+                                        <img
+                                            :src="avatar.src"
+                                            :alt="avatar.alt"
+                                            width="36"
+                                            height="36"
+                                            loading="lazy"
+                                            decoding="async"
+                                            referrerpolicy="no-referrer"
+                                        />
+                                    </li>
+                                </template>
                             </ul>
-                            <span v-if="testimonialCount > 0"
+                            <span
+                                v-if="!proofLoaded"
+                                class="wf-proof__label-skeleton"
+                                aria-hidden="true"
+                            />
+                            <span v-else
                                 ><strong>{{ testimonialCount }}+</strong> Testimonials</span
                             >
                         </a>

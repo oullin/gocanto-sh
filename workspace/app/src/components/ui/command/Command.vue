@@ -37,11 +37,14 @@ const filterState = reactive({
 function filterItems() {
     if (!filterState.search) {
         filterState.filtered.count = allItems.value.size;
+        filterState.filtered.items = new Map();
+        filterState.filtered.groups = new Set(allGroups.value.keys());
         // Do nothing, each item will know to show itself because search is empty
         return;
     }
 
     // Reset the groups
+    filterState.filtered.items = new Map();
     filterState.filtered.groups = new Set();
     let itemCount = 0;
 
@@ -78,6 +81,7 @@ watch(
 provideCommandContext({
     allItems,
     allGroups,
+    refreshFilter: filterItems,
     filterState,
 });
 </script>

@@ -67,27 +67,31 @@ async function buildCorpus(): Promise<SearchCorpus> {
     });
 }
 
-watch(open, (v) => {
-    if (!v) {
-        selectedKind.value = null;
+watch(
+    open,
+    (v) => {
+        if (!v) {
+            selectedKind.value = null;
 
-        return;
-    }
+            return;
+        }
 
-    if (corpus.value || corpusLoading) {
-        return;
-    }
+        if (corpus.value || corpusLoading) {
+            return;
+        }
 
-    corpusLoading = true;
-    void buildCorpus()
-        .then((nextCorpus) => {
-            corpus.value = nextCorpus;
-            corpusLoading = false;
-        })
-        .catch(() => {
-            corpusLoading = false;
-        });
-});
+        corpusLoading = true;
+        void buildCorpus()
+            .then((nextCorpus) => {
+                corpus.value = nextCorpus;
+                corpusLoading = false;
+            })
+            .catch(() => {
+                corpusLoading = false;
+            });
+    },
+    { immediate: true },
+);
 
 const activeKey = ref<string | null>(null);
 
@@ -172,12 +176,12 @@ watch(sheetOpen, (v) => {
                             v-for="r in corpus[kind.key]"
                             :key="r.key"
                             :value="r.key"
+                            :search-value="r.searchText"
                             :data-item-key="r.key"
                             @select="handleSelect(r)"
                         >
                             <component :is="groupIcons[kind.key]" />
                             <span class="truncate">{{ r.title }}</span>
-                            <span class="sr-only">{{ r.searchText }}</span>
                         </CommandItem>
                     </CommandGroup>
                 </template>
