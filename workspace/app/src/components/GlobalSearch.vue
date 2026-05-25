@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch } from "vue";
-import { useEventListener } from "@vueuse/core";
 import {
     BookOpen,
     FileText,
@@ -100,13 +99,6 @@ const handleSelect = (r: SearchResult) => {
     // highlighted.
     sheetOpen.value = true;
 };
-
-useEventListener("keydown", (e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        open.value = !open.value;
-    }
-});
 
 // When the Sheet closes, re-highlight and scroll to the previously-selected
 // item inside the still-open palette. Reka-ui's Listbox clears its highlight
