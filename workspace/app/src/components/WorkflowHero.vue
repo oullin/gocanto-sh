@@ -775,6 +775,9 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                                         :alt="avatar.alt"
                                         width="36"
                                         height="36"
+                                        loading="lazy"
+                                        decoding="async"
+                                        referrerpolicy="no-referrer"
                                     />
                                 </li>
                             </ul>
@@ -890,6 +893,9 @@ const onTabKeydown = (event: KeyboardEvent, index: number) => {
                                         :alt="detail.alt ?? ''"
                                         width="18"
                                         height="18"
+                                        loading="lazy"
+                                        decoding="async"
+                                        referrerpolicy="no-referrer"
                                     />
                                     <span v-else class="wf-card__bullet" aria-hidden="true"></span>
                                     <span>{{ detail.text }}</span>

@@ -44,6 +44,8 @@ const openSearch = () => {
                         alt=""
                         width="28"
                         height="28"
+                        loading="lazy"
+                        decoding="async"
                     />
                 </span>
                 <span class="nav-brand__name">gocanto</span>

@@ -47,6 +47,8 @@ onBeforeUnmount(() => {
                         alt=""
                         width="28"
                         height="28"
+                        decoding="async"
+                        fetchpriority="low"
                     />
                 </span>
                 <span class="nav-brand__name">gocanto</span>

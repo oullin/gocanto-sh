@@ -49,7 +49,10 @@ defineEmits<{
                     :src="item.avatar"
                     :alt="interactive ? item.name : ''"
                     class="h-full w-full object-cover"
+                    width="40"
+                    height="40"
                     loading="lazy"
+                    decoding="async"
                     referrerpolicy="no-referrer"
                 />
             </div>

@@ -85,7 +85,10 @@ const kindIcon = computed(() => {
                             :src="header.avatar.src"
                             :alt="header.avatar.alt"
                             class="h-full w-full object-cover"
+                            width="48"
+                            height="48"
                             loading="lazy"
+                            decoding="async"
                             referrerpolicy="no-referrer"
                         />
                     </div>
