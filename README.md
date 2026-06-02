@@ -22,13 +22,13 @@ Fork it as a template if useful — swap out my name, content, and likeness befo
 
 `gocanto.sh` is the canonical production domain for this project.
 
-Related Oullin domains live in separate Vercel projects:
+Related Oullin domains live in separate deployment targets:
 
-| Domain | Project | Purpose |
+| Domain | Deployment target | Purpose |
 | --- | --- | --- |
-| [`gocanto.sh`](https://gocanto.sh) | `gocanto-sh` | Gustavo Ocanto's personal profile site. |
-| [`ollin.sh`](https://ollin.sh) | `ollin-sh` | Short-domain redirect to [`oullin.io`](https://oullin.io). |
-| [`oullin.io`](https://oullin.io) | Oullin site | Boutique software engineering and architecture consultancy. |
+| [`gocanto.sh`](https://gocanto.sh) | Vercel project `gocanto-sh` | Gustavo Ocanto's personal profile site. |
+| [`ollin.sh`](https://ollin.sh) | Vercel project `ollin-sh` | Short-domain redirect to [`oullin.io`](https://oullin.io). |
+| [`oullin.io`](https://oullin.io) | External site `oullin.io` | Boutique software engineering and architecture consultancy. |
 
 Keep these projects separate. A deployment from the `ollin-sh` redirect repo must never target `gocanto-sh`.
 
@@ -73,7 +73,7 @@ Expected production response for `https://gocanto.sh/` is `HTTP/2 200`.
 If Vercel shows an Instant Rollback warning, do not deploy from another repository to clear it. Vercel disables auto-assignment of production domains after a rollback. Restore normal behaviour by promoting a good `gocanto-sh` deployment, or by freshly redeploying from this checkout and then promoting that fresh deployment:
 
 ```sh
-npx vercel@latest promote <deployment>.vercel.app --scope oullin --yes
+npx vercel@latest promote <deployment-url> --scope oullin --yes
 ```
 
 Verify aliases again after promotion.
