@@ -18,6 +18,20 @@ A single-page profile site: who I am, what I've shipped, how to reach me. Not a 
 
 Fork it as a template if useful — swap out my name, content, and likeness before deploying.
 
+## Domain map
+
+`gocanto.sh` is the canonical production domain for this project.
+
+Related Oullin domains live in separate Vercel projects:
+
+| Domain | Project | Purpose |
+| --- | --- | --- |
+| [`gocanto.sh`](https://gocanto.sh) | `gocanto-sh` | Gustavo Ocanto's personal profile site. |
+| [`ollin.sh`](https://ollin.sh) | `ollin-sh` | Short-domain redirect to [`oullin.io`](https://oullin.io). |
+| [`oullin.io`](https://oullin.io) | Oullin site | Boutique software engineering and architecture consultancy. |
+
+Keep these projects separate. A deployment from the `ollin-sh` redirect repo must never target `gocanto-sh`.
+
 ## How
 
 ### Stack
@@ -38,6 +52,31 @@ Local formatting uses Docker Compose to run the upstream [`go-fmt`](https://gith
 ```sh
 make format
 ```
+
+### Vercel operations
+
+Production deploys for this repo should target the `oullin/gocanto-sh` Vercel project from this checkout:
+
+```sh
+npx vercel@latest deploy --prod --project gocanto-sh --scope oullin
+```
+
+After deployment, verify the custom domain and generated project aliases still point at the fresh `gocanto-sh` deployment:
+
+```sh
+npx vercel@latest alias list --scope oullin
+curl -I https://gocanto.sh/
+```
+
+Expected production response for `https://gocanto.sh/` is `HTTP/2 200`.
+
+If Vercel shows an Instant Rollback warning, do not deploy from another repository to clear it. Vercel disables auto-assignment of production domains after a rollback. Restore normal behaviour by promoting a good `gocanto-sh` deployment, or by freshly redeploying from this checkout and then promoting that fresh deployment:
+
+```sh
+npx vercel@latest promote <deployment>.vercel.app --scope oullin --yes
+```
+
+Verify aliases again after promotion.
 
 ### SEO & prerendering
 
