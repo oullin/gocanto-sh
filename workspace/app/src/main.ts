@@ -53,9 +53,15 @@ if (shouldInjectVercelVitals()) {
     window.addEventListener("pointerdown", injectVercelVitals, once);
     window.addEventListener("keydown", injectVercelVitals, once);
     window.addEventListener("pagehide", injectVercelVitals, once);
-    document.addEventListener("visibilitychange", () => {
+
+    // visibilitychange can't use { once: true } (it also fires on hidden→visible),
+    // so guard on the hidden state and detach manually once it has injected.
+    const handleVisibility = () => {
         if (document.visibilityState === "hidden") {
             injectVercelVitals();
+            document.removeEventListener("visibilitychange", handleVisibility);
         }
-    });
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
 }
