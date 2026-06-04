@@ -20,7 +20,15 @@ const shouldInjectVercelVitals = () => {
     );
 };
 
+let vitalsInjected = false;
+
 const injectVercelVitals = () => {
+    if (vitalsInjected) {
+        return;
+    }
+
+    vitalsInjected = true;
+
     void Promise.all([import("@vercel/analytics"), import("@vercel/speed-insights")]).then(
         ([analytics, speedInsights]) => {
             analytics.inject();
@@ -29,8 +37,25 @@ const injectVercelVitals = () => {
     );
 };
 
-if (shouldInjectVercelVitals() && "requestIdleCallback" in window) {
-    window.requestIdleCallback(injectVercelVitals, { timeout: 4000 });
-} else if (shouldInjectVercelVitals()) {
-    globalThis.setTimeout(injectVercelVitals, 2500);
+if (shouldInjectVercelVitals()) {
+    // Defer past the critical render path, but guarantee the beacon still fires
+    // for short or bouncing sessions (common on mobile) by also flushing on the
+    // first interaction and before the page is hidden. injectVercelVitals is
+    // idempotent, so whichever trigger wins, it only runs once.
+    if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(injectVercelVitals, { timeout: 3000 });
+    } else {
+        globalThis.setTimeout(injectVercelVitals, 1500);
+    }
+
+    const once = { once: true, passive: true } as const;
+
+    window.addEventListener("pointerdown", injectVercelVitals, once);
+    window.addEventListener("keydown", injectVercelVitals, once);
+    window.addEventListener("pagehide", injectVercelVitals, once);
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") {
+            injectVercelVitals();
+        }
+    });
 }
