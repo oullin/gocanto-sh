@@ -4,15 +4,21 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vitepress dev",
+        "dev": "PORTLESS_PORT=${PORTLESS_PORT:-1355} PORTLESS_HTTPS=${PORTLESS_HTTPS:-1} PORTLESS_SYNC_HOSTS=${PORTLESS_SYNC_HOSTS:-0} portless",
+        "dev:site": "vitepress dev --host 0.0.0.0 --port ${PORT:-5175}",
         "build": "vitepress build",
-        "preview": "vitepress preview",
+        "preview": "vitepress preview --host 0.0.0.0 --port ${PORT:-4175}",
         "lint": "exit 0",
         "test": "exit 0",
         "typecheck": "exit 0"
     },
     "devDependencies": {
+        "portless": "^0.13.0",
         "vitepress": "^1.6.4",
         "vue": "^3.5.34"
+    },
+    "portless": {
+        "name": "writing.gocanto-sh",
+        "script": "dev:site"
     }
 }

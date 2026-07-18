@@ -6,10 +6,25 @@ data-driven: the post index is built from the files in `posts/` at build time.
 
 ## Local development
 
+Like the profile app, this package runs behind [portless](https://portless.sh), so it
+gets a stable HTTPS URL instead of a bare port. The `portless` key in `package.json`
+names it `writing.gocanto-sh` and runs the `dev:site` script through the proxy:
+
 ```sh
-pnpm --filter @gocanto/writing dev       # dev server with HMR
-pnpm --filter @gocanto/writing build     # static build -> .vitepress/dist
-pnpm --filter @gocanto/writing preview    # preview the built site
+pnpm --filter @gocanto/writing dev       # -> https://writing.gocanto-sh.localhost
+```
+
+This mirrors production: `writing.gocanto-sh.localhost` locally maps to the
+`writing.gocanto.sh` subdomain in prod, alongside the app's `gocanto-sh.localhost`.
+First run trusts a local CA and binds :443 (portless auto-elevates once). Running
+`pnpm dev` from the repo root starts every package's dev server, including this one.
+
+Escape hatches that skip the proxy (plain ports):
+
+```sh
+pnpm --filter @gocanto/writing dev:site   # vitepress dev on :5175 (no proxy)
+pnpm --filter @gocanto/writing build      # static build -> .vitepress/dist
+pnpm --filter @gocanto/writing preview     # preview the built site on :4175
 ```
 
 ## Adding a post
