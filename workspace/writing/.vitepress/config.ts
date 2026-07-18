@@ -8,6 +8,9 @@ export default defineConfig({
     title: "Gustavo Ocanto — Writing",
     description: DESCRIPTION,
 
+    // The landing page (gocanto.sh) is dark-only; match it and drop the toggle.
+    appearance: "force-dark",
+
     // Subdomain root; posts live in posts/ but resolve at clean top-level URLs.
     base: "/",
     cleanUrls: true,
@@ -24,6 +27,16 @@ export default defineConfig({
 
     head: [
         ["link", { rel: "icon", href: "/favicon.png" }],
+        // Design fonts: Hanken Grotesk (body) + JetBrains Mono (chrome/code).
+        ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
+        ["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
+        [
+            "link",
+            {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+            },
+        ],
         ["meta", { property: "og:type", content: "website" }],
         ["meta", { property: "og:site_name", content: "Gustavo Ocanto — Writing" }],
         ["meta", { property: "og:url", content: SITE_URL }],
@@ -53,6 +66,14 @@ export default defineConfig({
 
         search: {
             provider: "local",
+            options: {
+                translations: {
+                    button: {
+                        buttonText: "Search writing…",
+                        buttonAriaLabel: "Search writing",
+                    },
+                },
+            },
         },
     },
 });
