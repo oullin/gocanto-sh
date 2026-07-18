@@ -11,13 +11,17 @@ gets a stable HTTPS URL instead of a bare port. The `portless` key in `package.j
 names it `writing.gocanto-sh` and runs the `dev:site` script through the proxy:
 
 ```sh
-pnpm --filter @gocanto/writing dev       # -> https://writing.gocanto-sh.localhost
+pnpm --filter @gocanto/writing dev       # -> https://writing.gocanto-sh.localhost:1355
 ```
 
 This mirrors production: `writing.gocanto-sh.localhost` locally maps to the
 `writing.gocanto.sh` subdomain in prod, alongside the app's `gocanto-sh.localhost`.
-First run trusts a local CA and binds :443 (portless auto-elevates once). Running
-`pnpm dev` from the repo root starts every package's dev server, including this one.
+The dev scripts pin `PORTLESS_PORT=1355`, so the shared proxy runs on port `1355`
+(no sudo, no port `443`) — the URL carries the port. The proxy is shared with the
+app: whichever dev server starts first brings it up, and each package registers its
+own route on it (`portless list` shows them). The local CA is set up the first time
+you run the app; subsequent runs, including this site, reuse it. Running `pnpm dev`
+from the repo root starts every package's dev server on the one proxy.
 
 Escape hatches that skip the proxy (plain ports):
 
