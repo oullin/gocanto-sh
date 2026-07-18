@@ -1,7 +1,7 @@
 import type { LinksFixture } from "#store/types";
 
 export const links = {
-    version: "1.0.3",
+    version: "1.0.4",
     data: [
         {
             uuid: "a8a6d3a0-4a8d-4a1f-8a48-3c3b5b6f3a6e",
@@ -9,6 +9,13 @@ export const links = {
             url: "https://x.com/gocanto",
             description: "Follow Gustavo's updates on X.",
             name: "x",
+        },
+        {
+            uuid: "f7b1e2c3-9d4a-4b8e-a1c2-6f3d5e7a9b0c",
+            handle: "writing.gocanto.sh",
+            url: "https://writing.gocanto.sh",
+            description: "Gustavo's long-form engineering writing.",
+            name: "writing",
         },
         {
             uuid: "d1e9c8b2-3a4d-4e5f-b1a2-c3d4e5f6a7b8",

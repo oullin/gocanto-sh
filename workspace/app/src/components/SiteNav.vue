@@ -13,6 +13,7 @@ const navItems = [
     { href: "#about", label: "About" },
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
+    { href: "https://writing.gocanto.sh/", label: "Writing" },
     { href: "#testimonials", label: "Testimonials" },
     { href: "#bio", label: "Bio" },
     { href: "#skills", label: "Skills" },
