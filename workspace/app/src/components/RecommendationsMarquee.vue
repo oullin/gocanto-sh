@@ -11,7 +11,7 @@ import SearchResultDetail from "@components/SearchResultDetail.vue";
 import { useAsyncInView } from "@lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
-const recommendationsFixture = useAsyncInView(section, async () => {
+const { data: recommendationsFixture } = useAsyncInView(section, async () => {
     const store = await import("@gocanto/store/recommendations");
 
     return store.recommendations;

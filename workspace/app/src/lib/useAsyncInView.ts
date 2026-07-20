@@ -1,4 +1,4 @@
-import { ref, type Ref } from "vue";
+import { onScopeDispose, ref, type Ref } from "vue";
 import { useIntersectionObserver } from "@vueuse/core";
 
 type Options = {
@@ -8,8 +8,71 @@ type Options = {
     delayMs?: number;
 };
 
+/** The lifecycle states of an asynchronous in-view load. */
+export type AsyncInViewState = "idle" | "loading" | "ready" | "error";
+
+/** Reactive values and actions exposed by {@link useAsyncInView}. */
+export type AsyncInViewResult<T> = {
+    readonly data: Ref<T | null>;
+    readonly error: Ref<boolean>;
+    readonly retry: () => void;
+};
+
+/** Owns the load and retry state for asynchronous in-view content. */
+export class AsyncInViewController<T> {
+    private readonly dataState = ref<T | null>(null) as Ref<T | null>;
+    private readonly errorState = ref(false);
+    private currentState: AsyncInViewState = "idle";
+
+    /**
+     * Create an asynchronous in-view controller.
+     *
+     * @param loader - Loads the content when the target enters the viewport.
+     */
+    constructor(private readonly loader: () => T | Promise<T>) {}
+
+    /** The loaded data, or `null` before a successful load. */
+    get data(): Ref<T | null> {
+        return this.dataState;
+    }
+
+    /** Whether the latest load failed. */
+    get error(): Ref<boolean> {
+        return this.errorState;
+    }
+
+    /** The current load lifecycle state. */
+    get state(): AsyncInViewState {
+        return this.currentState;
+    }
+
+    /** Load the content while containing expected loader failures as state. */
+    async load(): Promise<void> {
+        if (this.currentState === "loading") {
+            return;
+        }
+
+        this.currentState = "loading";
+        this.dataState.value = null;
+        this.errorState.value = false;
+
+        try {
+            this.dataState.value = await this.loader();
+            this.currentState = "ready";
+        } catch {
+            this.currentState = "error";
+            this.errorState.value = true;
+        }
+    }
+
+    /** Retry the loader directly without re-arming viewport observation. */
+    retry(): Promise<void> {
+        return this.load();
+    }
+}
+
 /**
- * Returns a Ref that resolves to `loader()` only after:
+ * Returns reactive load state that resolves `data` to `loader()` only after:
  *   1. The component has mounted (never on first paint).
  *   2. The `target` element has entered (or is near) the viewport.
  *   3. An optional micro-delay has elapsed (lets skeletons render at least one frame).
@@ -20,9 +83,10 @@ export function useAsyncInView<T>(
     target: Ref<HTMLElement | null>,
     loader: () => T | Promise<T>,
     { rootMargin = "200px", delayMs = 200 }: Options = {},
-): Ref<T | null> {
-    const data = ref<T | null>(null) as Ref<T | null>;
+): AsyncInViewResult<T> {
+    const controller = new AsyncInViewController(loader);
     let resolved = false;
+    let timerId: number | undefined;
 
     const { stop } = useIntersectionObserver(
         target,
@@ -33,14 +97,26 @@ export function useAsyncInView<T>(
 
             resolved = true;
             stop();
-            window.setTimeout(async () => {
-                data.value = await loader();
+            timerId = window.setTimeout(() => {
+                void controller.load();
             }, delayMs);
         },
         { rootMargin },
     );
 
-    return data;
+    onScopeDispose(() => {
+        if (timerId !== undefined) {
+            window.clearTimeout(timerId);
+        }
+    });
+
+    return {
+        data: controller.data,
+        error: controller.error,
+        retry: () => {
+            void controller.retry();
+        },
+    };
 }
 
 /**
@@ -54,6 +130,7 @@ export function useInViewReady(
 ): Ref<boolean> {
     const ready = ref(false);
     let resolved = false;
+    let timerId: number | undefined;
 
     const { stop } = useIntersectionObserver(
         target,
@@ -64,12 +141,18 @@ export function useInViewReady(
 
             resolved = true;
             stop();
-            window.setTimeout(() => {
+            timerId = window.setTimeout(() => {
                 ready.value = true;
             }, delayMs);
         },
         { rootMargin },
     );
+
+    onScopeDispose(() => {
+        if (timerId !== undefined) {
+            window.clearTimeout(timerId);
+        }
+    });
 
     return ready;
 }
