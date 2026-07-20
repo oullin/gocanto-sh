@@ -5,6 +5,7 @@ import { countLabel, filterPosts, groupByYear, matchesQuery, topTags } from "../
 
 function makePost(overrides: Partial<Post> & { title: string; year: string }): Post {
     const { title, year, ...rest } = overrides;
+
     return {
         title,
         url: `/${title.toLowerCase().replace(/\s+/g, "-")}`,
@@ -17,9 +18,24 @@ function makePost(overrides: Partial<Post> & { title: string; year: string }): P
 }
 
 const posts: Post[] = [
-    makePost({ title: "Signed webhooks", year: "2026", tags: ["webhooks", "security", "go"], description: "HMAC and idempotency" }),
-    makePost({ title: "Edge caching", year: "2026", tags: ["cloudflare", "go"], description: "Workers at the edge" }),
-    makePost({ title: "Outbox pattern", year: "2025", tags: ["postgres", "go"], description: "transactional outbox" }),
+    makePost({
+        title: "Signed webhooks",
+        year: "2026",
+        tags: ["webhooks", "security", "go"],
+        description: "HMAC and idempotency",
+    }),
+    makePost({
+        title: "Edge caching",
+        year: "2026",
+        tags: ["cloudflare", "go"],
+        description: "Workers at the edge",
+    }),
+    makePost({
+        title: "Outbox pattern",
+        year: "2025",
+        tags: ["postgres", "go"],
+        description: "transactional outbox",
+    }),
 ];
 
 describe("matchesQuery", () => {
@@ -81,6 +97,7 @@ describe("countLabel", () => {
 describe("groupByYear", () => {
     it("groups posts by year with a plural-aware count", () => {
         const groups = groupByYear(posts);
+
         expect(groups.map((g) => g.year)).toEqual(["2026", "2025"]);
         expect(groups[0].count).toBe("2 posts");
         expect(groups[1].count).toBe("1 post");
@@ -89,6 +106,7 @@ describe("groupByYear", () => {
     it("drops the featured post so it isn't listed twice", () => {
         const groups = groupByYear(posts, posts[0]);
         const titles = groups.flatMap((g) => g.items.map((p) => p.title));
+
         expect(titles).not.toContain("Signed webhooks");
         expect(titles).toHaveLength(2);
     });
@@ -96,6 +114,7 @@ describe("groupByYear", () => {
     it("still lists the featured post when it is the only one", () => {
         const only = [posts[0]];
         const groups = groupByYear(only, posts[0]);
+
         expect(groups.flatMap((g) => g.items.map((p) => p.title))).toEqual(["Signed webhooks"]);
     });
 });

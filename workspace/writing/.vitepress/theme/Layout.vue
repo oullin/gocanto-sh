@@ -41,14 +41,13 @@ const countLabel = computed(() => toCountLabel(filtered.value.length));
 
 const currentPost = computed(() => {
     const path = cleanPath.value.replace(/\/$/, "");
+
     return posts.find((p) => p.url.replace(/\/$/, "") === path);
 });
 
 const articleTags = computed<string[]>(() => (frontmatter.value.tags as string[]) ?? []);
 
-const related = computed(() =>
-    posts.filter((p) => p.url !== currentPost.value?.url).slice(0, 2),
-);
+const related = computed(() => posts.filter((p) => p.url !== currentPost.value?.url).slice(0, 2));
 
 /* ---------------- reading progress + TOC ---------------- */
 
@@ -58,28 +57,42 @@ const toc = ref<{ id: string; label: string }[]>([]);
 
 function buildToc() {
     if (typeof document === "undefined") return;
+
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
-    toc.value = heads.map((h) => ({ id: h.id, label: h.textContent?.replace(/​/g, "").trim() ?? "" }));
+
+    toc.value = heads.map((h) => ({
+        id: h.id,
+        label: h.textContent?.replace(/​/g, "").trim() ?? "",
+    }));
     activeToc.value = toc.value[0]?.id ?? null;
 }
 
 function onScroll() {
     const doc = document.documentElement;
     const max = doc.scrollHeight - doc.clientHeight;
+
     progressPct.value = `${max > 0 ? Math.min(100, Math.round((doc.scrollTop / max) * 100)) : 0}%`;
 
     let active = toc.value[0]?.id ?? null;
+
     for (const t of toc.value) {
         const el = document.getElementById(t.id);
+
         if (el && el.getBoundingClientRect().top <= 120) active = t.id;
     }
+
     activeToc.value = active;
 }
 
 function scrollToHeading(id: string) {
     const el = document.getElementById(id);
+
     if (!el) return;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+
+    window.scrollTo({
+        top: el.getBoundingClientRect().top + window.scrollY - 80,
+        behavior: "smooth",
+    });
 }
 
 onContentUpdated(() => {
@@ -129,11 +142,31 @@ const year = new Date().getFullYear();
                         edge. Real code from real systems. No slop.
                     </p>
                     <div class="wr-actions">
-                        <a class="wr-subscribe" href="/feed.rss">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <!-- Force a native navigation; VitePress otherwise treats .rss as a page route. -->
+                        <a
+                            class="wr-subscribe"
+                            href="/feed.rss"
+                            target="_self"
+                            type="application/rss+xml"
+                        >
+                            <svg
+                                width="13"
+                                height="13"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                aria-hidden="true"
+                            >
                                 <path d="M4 11a9 9 0 0 1 9 9"></path>
                                 <path d="M4 4a16 16 0 0 1 16 16"></path>
-                                <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"></circle>
+                                <circle
+                                    cx="5"
+                                    cy="19"
+                                    r="1.5"
+                                    fill="currentColor"
+                                    stroke="none"
+                                ></circle>
                             </svg>
                             Subscribe
                         </a>
@@ -148,13 +181,20 @@ const year = new Date().getFullYear();
                             <div class="wr-featured__read">{{ featured.readingTime }} read</div>
                         </div>
                         <div class="wr-featured__tags">
-                            <span v-for="t in featured.tags.slice(0, 3)" :key="t" class="wr-chip-tag">{{ t }}</span>
+                            <span
+                                v-for="t in featured.tags.slice(0, 3)"
+                                :key="t"
+                                class="wr-chip-tag"
+                                >{{ t }}</span
+                            >
                         </div>
                     </div>
                     <div class="wr-featured__main">
                         <h2 class="wr-featured__title">{{ featured.title }}</h2>
                         <p class="wr-featured__excerpt">{{ featured.description }}</p>
-                        <span class="wr-featured__cta">Read the post <span class="wr-arrow">→</span></span>
+                        <span class="wr-featured__cta"
+                            >Read the post <span class="wr-arrow">→</span></span
+                        >
                     </div>
                 </a>
 
@@ -187,13 +227,16 @@ const year = new Date().getFullYear();
                                 <h4>{{ p.title }}</h4>
                                 <p>{{ p.description }}</p>
                                 <div class="wr-row__tags">
-                                    <span v-for="t in p.tags.slice(0, 3)" :key="t" class="wr-tag">{{ t }}</span>
+                                    <span v-for="t in p.tags.slice(0, 3)" :key="t" class="wr-tag">{{
+                                        t
+                                    }}</span>
                                 </div>
                             </div>
                         </a>
                     </section>
                     <div v-if="filtered.length === 0" class="wr-empty">
-                        No posts tagged <span>{{ tag }}</span>.
+                        No posts tagged <span>{{ tag }}</span
+                        >.
                     </div>
                 </div>
             </main>
@@ -229,13 +272,29 @@ const year = new Date().getFullYear();
 
                         <div class="wr-share">
                             <span class="wr-share__label">Share</span>
-                            <a href="https://x.com/gocanto" target="_blank" rel="noopener noreferrer">X / Twitter</a>
-                            <a href="https://news.ycombinator.com/" target="_blank" rel="noopener noreferrer">Hacker News</a>
+                            <a
+                                href="https://x.com/gocanto"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >X / Twitter</a
+                            >
+                            <a
+                                href="https://news.ycombinator.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >Hacker News</a
+                            >
                         </div>
 
                         <div class="wr-bio">
                             <span class="wr-bio__avatar" aria-hidden="true">
-                                <img src="/avatar-128.jpg" alt="" width="52" height="52" decoding="async" />
+                                <img
+                                    src="/avatar-128.jpg"
+                                    alt=""
+                                    width="52"
+                                    height="52"
+                                    decoding="async"
+                                />
                             </span>
                             <div>
                                 <div class="wr-bio__name">Gustavo Ocanto</div>
@@ -249,9 +308,16 @@ const year = new Date().getFullYear();
 
                         <div v-if="related.length" class="wr-related">
                             <div class="wr-related__label">Related</div>
-                            <a v-for="r in related" :key="r.url" :href="r.url" class="wr-related__item">
+                            <a
+                                v-for="r in related"
+                                :key="r.url"
+                                :href="r.url"
+                                class="wr-related__item"
+                            >
                                 <div class="wr-related__title">{{ r.title }}</div>
-                                <div class="wr-related__meta">{{ r.date.display }} · {{ r.readingTime }} read</div>
+                                <div class="wr-related__meta">
+                                    {{ r.date.display }} · {{ r.readingTime }} read
+                                </div>
                             </a>
                         </div>
                     </article>
@@ -286,14 +352,24 @@ const year = new Date().getFullYear();
                     <div>
                         <div class="wr-footer__head">OPEN SOURCE</div>
                         <div class="wr-footer__links">
-                            <a href="https://github.com/gocanto" target="_blank" rel="noopener noreferrer">GitHub · gocanto</a>
+                            <a
+                                href="https://github.com/gocanto"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub · gocanto</a
+                            >
                         </div>
                     </div>
                     <div>
                         <div class="wr-footer__head">CONNECT</div>
                         <div class="wr-footer__links">
                             <a href="mailto:gustavoocanto@gmail.com">Email</a>
-                            <a href="https://x.com/gocanto" target="_blank" rel="noopener noreferrer">X</a>
+                            <a
+                                href="https://x.com/gocanto"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >X</a
+                            >
                         </div>
                     </div>
                 </div>

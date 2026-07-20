@@ -31,6 +31,17 @@ pnpm --filter @gocanto/writing build      # static build -> .vitepress/dist
 pnpm --filter @gocanto/writing preview     # preview the built site on :4175
 ```
 
+The Subscribe button serves an RSS 2.0 feed at `/feed.rss`. It is generated from
+the same Markdown post metadata as the index and is available in both development
+and production preview:
+
+```sh
+curl -I http://localhost:5175/feed.rss
+pnpm --filter @gocanto/writing build
+pnpm --filter @gocanto/writing preview
+curl -I http://localhost:4175/feed.rss
+```
+
 ## Adding a post
 
 Drop a markdown file in `posts/`. Frontmatter drives the index and metadata:
@@ -60,12 +71,12 @@ page (`index.md`) lists all posts newest-first via `posts.data.ts`
 projects on one repo can't share a root `vercel.json`, so configure project B in the
 dashboard:
 
-| Setting | Value |
-| --- | --- |
-| Root Directory | `./` (repo root — needed for the pnpm workspace install) |
-| Install Command | `pnpm install --frozen-lockfile` |
-| Build Command | `pnpm turbo run build --filter=@gocanto/writing --cache-dir storage/.cache/turbo` |
-| Output Directory | `workspace/writing/.vitepress/dist` |
+| Setting          | Value                                                                             |
+| ---------------- | --------------------------------------------------------------------------------- |
+| Root Directory   | `./` (repo root — needed for the pnpm workspace install)                          |
+| Install Command  | `pnpm install --frozen-lockfile`                                                  |
+| Build Command    | `pnpm turbo run build --filter=@gocanto/writing --cache-dir storage/.cache/turbo` |
+| Output Directory | `workspace/writing/.vitepress/dist`                                               |
 
 Then add the domain:
 

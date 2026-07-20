@@ -17,9 +17,9 @@ sent again a thousand times.
 Real signed webhooks are three parts. Almost everyone ships part one and forgets parts
 two and three:
 
-1. **Signature** — proves *who* sent it and that the body wasn't modified.
-2. **Timestamp window** — proves the request is *fresh* (kills replays).
-3. **Idempotency** — proves each event is *processed once* (kills duplicate side effects).
+1. **Signature** — proves _who_ sent it and that the body wasn't modified.
+2. **Timestamp window** — proves the request is _fresh_ (kills replays).
+3. **Idempotency** — proves each event is _processed once_ (kills duplicate side effects).
 
 Drop any one and you have a hole: forgery, replay, or double-charges. All three, or
 it's theatre.
@@ -71,12 +71,12 @@ Sending it is then a matter of setting the signature header alongside the body:
 const signature = await Signature.create().sign(input.secret, input.body, input.nowSeconds);
 
 const headers: Record<string, string> = {
-  "Content-Type": "application/json",
-  [SIGNATURE_HEADER]: signature,
+    "Content-Type": "application/json",
+    [SIGNATURE_HEADER]: signature,
 };
 ```
 
-## Part 2 — Verify with a timestamp window *and* a constant-time compare
+## Part 2 — Verify with a timestamp window _and_ a constant-time compare
 
 Recomputing the HMAC is necessary but not sufficient. Two things get skipped constantly,
 and both are in this one function:
@@ -114,13 +114,13 @@ async verify(
 ```
 
 **The timestamp window** (`Math.abs(now - t) > tolerance`) is what turns a static
-signature into a *fresh* one. Without it, a captured request is valid forever — the
+signature into a _fresh_ one. Without it, a captured request is valid forever — the
 attacker doesn't need your secret, they just resend a request you already signed. Pick a
 tolerance that survives normal clock skew and network latency but nothing more; a few
 minutes is typical.
 
 **The constant-time compare** matters because `expected === got` leaks information
-through *how long the comparison takes*. A naive equality check bails on the first
+through _how long the comparison takes_. A naive equality check bails on the first
 differing byte, so an attacker can measure response times to recover the signature one
 byte at a time. Compare every byte regardless:
 
@@ -139,14 +139,14 @@ private timingSafeEqual(a: string, b: string): boolean {
 }
 ```
 
-Note the shape of both functions: they return a `Result` with a *named* error
+Note the shape of both functions: they return a `Result` with a _named_ error
 (`stale-timestamp`, `mismatch`, `missing-header`) rather than throwing a boolean. When a
 webhook silently stops arriving at 3am, "why did verification fail" is the first
 question — and a typed reason answers it without a debugger.
 
 ## Part 3 — Idempotency, because retries are guaranteed
 
-At-least-once delivery means the *same* event **will** arrive twice. A network blip
+At-least-once delivery means the _same_ event **will** arrive twice. A network blip
 between your `200` and their socket close, a receiver that 500s after committing, a
 manual redelivery — all of them produce duplicates. If processing an event has side
 effects (charge a card, insert a row, send a mail), duplicates are a correctness bug,
@@ -157,26 +157,26 @@ that operation, so the receiver can dedupe:
 
 ```ts
 export class IdempotencyCache {
-  private readonly cache = new Map<string, string>();
+    private readonly cache = new Map<string, string>();
 
-  /** The stable idempotency key for a logical operation, minting one on first use. */
-  keyFor(logicalKey: string): string {
-    const existing = this.cache.get(logicalKey);
+    /** The stable idempotency key for a logical operation, minting one on first use. */
+    keyFor(logicalKey: string): string {
+        const existing = this.cache.get(logicalKey);
 
-    if (existing) {
-      return existing;
+        if (existing) {
+            return existing;
+        }
+
+        const key = uid("idem");
+
+        this.cache.set(logicalKey, key);
+
+        return key;
     }
-
-    const key = uid("idem");
-
-    this.cache.set(logicalKey, key);
-
-    return key;
-  }
 }
 ```
 
-The subtle part is *"per logical operation."* If you mint a fresh key on every HTTP
+The subtle part is _"per logical operation."_ If you mint a fresh key on every HTTP
 attempt, dedup does nothing — each retry looks new. The key has to be derived from the
 operation, not the transmission, so all attempts of "sync session 42" carry one key. The
 sender attaches it as a header; the receiver records seen keys and drops repeats.
@@ -188,15 +188,15 @@ something stable to grab:
 
 ```ts
 export interface DeliveryEnvelope<TEvent> {
-  deliveryId: string;
-  subscriptionId: string;
-  event: TEvent;
+    deliveryId: string;
+    subscriptionId: string;
+    event: TEvent;
 }
 ```
 
 - `deliveryId` is a per-attempt handle — it's what you log, and what a dead-letter queue
   replays.
-- `subscriptionId` scopes *which* secret verifies the signature.
+- `subscriptionId` scopes _which_ secret verifies the signature.
 - `event` stays caller-specific; the wrapper is generic over `TEvent` so a server that
   ships hash-chained events and a CLI that re-emits raw ones can reuse it.
 
@@ -204,11 +204,11 @@ export interface DeliveryEnvelope<TEvent> {
 
 Three properties, three failures they prevent:
 
-| Mechanism | Proves | Without it |
-| --- | --- | --- |
-| HMAC signature | authenticity + integrity | **forgery** |
-| Timestamp window | freshness | **replay** |
-| Idempotency key | processed-once | **duplicate side effects** |
+| Mechanism        | Proves                   | Without it                 |
+| ---------------- | ------------------------ | -------------------------- |
+| HMAC signature   | authenticity + integrity | **forgery**                |
+| Timestamp window | freshness                | **replay**                 |
+| Idempotency key  | processed-once           | **duplicate side effects** |
 
 Signature without a timestamp window is replayable. A timestamp window without
 idempotency still double-processes on legitimate retries. Idempotency without a signature
@@ -216,7 +216,7 @@ trusts anyone who can guess a key. You need all three — or it's theatre.
 
 ---
 
-*This is drawn from the `signed-http` and crypto primitives in a Cloudflare Workers app
+_This is drawn from the `signed-http` and crypto primitives in a Cloudflare Workers app
 I maintain. If you want the wider architecture around it — hash-chained event logs,
 dead-letter fanout, SSRF-checked delivery — that's a future post. Find me on
-[X (@gocanto)](https://x.com/gocanto).*
+[X (@gocanto)](https://x.com/gocanto)._

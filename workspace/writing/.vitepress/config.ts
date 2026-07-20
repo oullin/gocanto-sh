@@ -1,7 +1,10 @@
 import { defineConfig } from "vitepress";
 
+import { RSS_PATH, serveRssRequest, writeRssFeed } from "./rss";
+
 const SITE_URL = "https://writing.gocanto.sh";
-const DESCRIPTION = "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+const DESCRIPTION =
+    "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
 
 export default defineConfig({
     lang: "en-US",
@@ -27,6 +30,15 @@ export default defineConfig({
 
     head: [
         ["link", { rel: "icon", href: "/favicon.png" }],
+        [
+            "link",
+            {
+                rel: "alternate",
+                type: "application/rss+xml",
+                title: "Gustavo Ocanto — Writing",
+                href: `${SITE_URL}${RSS_PATH}`,
+            },
+        ],
         // Design fonts: Hanken Grotesk (body) + JetBrains Mono (chrome/code).
         ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
         ["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
@@ -75,5 +87,25 @@ export default defineConfig({
                 },
             },
         },
+    },
+
+    vite: {
+        plugins: [
+            {
+                name: "writing-rss",
+                enforce: "pre",
+                configureServer(server) {
+                    server.middlewares.use((request, response, next) => {
+                        void serveRssRequest(request, response).then((handled) => {
+                            if (!handled) next();
+                        }, next);
+                    });
+                },
+            },
+        ],
+    },
+
+    async buildEnd(siteConfig) {
+        await writeRssFeed(siteConfig.outDir);
     },
 });

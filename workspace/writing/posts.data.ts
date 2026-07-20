@@ -15,6 +15,7 @@ export interface Post {
 }
 
 declare const data: Post[];
+
 export { data };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -68,6 +69,7 @@ export default createContentLoader("posts/*.md", {
         return raw
             .flatMap((page) => {
                 const raw = normalizeDate(page.frontmatter.date);
+
                 return raw ? [{ page, raw }] : [];
             })
             .map(({ page: { url, frontmatter, excerpt, src }, raw }) => ({

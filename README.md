@@ -24,12 +24,12 @@ Fork it as a template if useful — swap out my name, content, and likeness befo
 
 Related Oullin domains live in separate deployment targets:
 
-| Domain | Deployment target | Purpose |
-| --- | --- | --- |
-| [`gocanto.sh`](https://gocanto.sh) | Vercel project `gocanto-sh` | Gustavo Ocanto's personal profile site. |
+| Domain                                             | Deployment target                   | Purpose                                                                                      |
+| -------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
+| [`gocanto.sh`](https://gocanto.sh)                 | Vercel project `gocanto-sh`         | Gustavo Ocanto's personal profile site.                                                      |
 | [`writing.gocanto.sh`](https://writing.gocanto.sh) | Separate Vercel project (VitePress) | Long-form engineering writing. Source in [`workspace/writing`](workspace/writing/README.md). |
-| [`ollin.sh`](https://ollin.sh) | Vercel project `ollin-sh` | Short-domain redirect to [`oullin.io`](https://oullin.io). |
-| [`oullin.io`](https://oullin.io) | External site `oullin.io` | Boutique software engineering and architecture consultancy. |
+| [`ollin.sh`](https://ollin.sh)                     | Vercel project `ollin-sh`           | Short-domain redirect to [`oullin.io`](https://oullin.io).                                   |
+| [`oullin.io`](https://oullin.io)                   | External site `oullin.io`           | Boutique software engineering and architecture consultancy.                                  |
 
 Keep these projects separate. A deployment from the `ollin-sh` redirect repo must never target `gocanto-sh`.
 
