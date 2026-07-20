@@ -12,6 +12,9 @@
         },
         {
             "path": "./workspace/app"
+        },
+        {
+            "path": "./workspace/writing"
         }
     ]
 }

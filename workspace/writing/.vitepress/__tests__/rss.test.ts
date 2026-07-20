@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import type { Post } from "../../posts.data";
 import { renderRssFeed } from "../rss";
 
-function makePost(overrides: Partial<Post> & { title: string; date: string; url: string }): Post {
+function makePost(
+    overrides: Omit<Partial<Post>, "date"> & { title: string; date: string; url: string },
+): Post {
     const { title, date, url, ...rest } = overrides;
 
     return {

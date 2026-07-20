@@ -43,16 +43,24 @@ function readingTime(src: string): string {
 
 // YAML parses an unquoted `date: 2026-07-18` into a Date, and a quoted one
 // into a string. Normalize both to a YYYY-MM-DD string before formatting.
-function normalizeDate(value: unknown): string | null {
+function normalizeDate(value: unknown, url: string): string | null {
     if (value instanceof Date) {
+        if (Number.isNaN(value.getTime())) {
+            throw new Error(`Invalid date in post ${url}. Expected YYYY-MM-DD format.`);
+        }
+
         return value.toISOString().slice(0, 10);
     }
 
     return typeof value === "string" ? value : null;
 }
 
-function formatDate(raw: string): Post["date"] {
+function formatDate(raw: string, url: string): Post["date"] {
     const date = new Date(`${raw}T00:00:00Z`);
+
+    if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== raw) {
+        throw new Error(`Invalid date "${raw}" in post ${url}. Expected YYYY-MM-DD format.`);
+    }
 
     return {
         raw,
@@ -62,26 +70,38 @@ function formatDate(raw: string): Post["date"] {
     };
 }
 
+function normalizeTags(value: unknown): string[] {
+    if (Array.isArray(value)) {
+        return value.filter((tag): tag is string => typeof tag === "string");
+    }
+
+    return typeof value === "string" ? [value] : [];
+}
+
 export default createContentLoader("posts/*.md", {
     excerpt: true,
     includeSrc: true,
     transform(raw): Post[] {
         return raw
             .flatMap((page) => {
-                const raw = normalizeDate(page.frontmatter.date);
+                const raw = normalizeDate(page.frontmatter.date, page.url);
 
                 return raw ? [{ page, raw }] : [];
             })
-            .map(({ page: { url, frontmatter, excerpt, src }, raw }) => ({
-                title: frontmatter.title ?? url,
+            .map(({ page: { url, frontmatter, excerpt, src }, raw }) => {
                 // `rewrites` publishes posts/:slug at the top level, so strip the
                 // posts/ prefix to match the actual (clean) URL.
-                url: url.replace(/^\/posts\//, "/"),
-                date: formatDate(raw),
-                readingTime: readingTime(src ?? ""),
-                description: frontmatter.description ?? excerpt ?? "",
-                tags: frontmatter.tags ?? [],
-            }))
-            .sort((a, b) => +new Date(b.date.raw) - +new Date(a.date.raw));
+                const postUrl = url.replace(/^\/posts\//, "/");
+
+                return {
+                    title: frontmatter.title ?? url,
+                    url: postUrl,
+                    date: formatDate(raw, postUrl),
+                    readingTime: readingTime(src ?? ""),
+                    description: frontmatter.description ?? excerpt ?? "",
+                    tags: normalizeTags(frontmatter.tags),
+                };
+            })
+            .sort((a, b) => b.date.raw.localeCompare(a.date.raw));
     },
 });
