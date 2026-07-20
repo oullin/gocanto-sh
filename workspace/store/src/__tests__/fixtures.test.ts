@@ -78,7 +78,7 @@ describe("projects", () => {
     });
 
     it("sort indices are unique and form a contiguous range starting at 1", () => {
-        const sorts = [...projects.data.map((p) => p.sort)].sort((a, b) => a - b);
+        const sorts = projects.data.map((p) => p.sort).sort((a, b) => a - b);
 
         expect(new Set(sorts).size).toBe(sorts.length);
         expect(sorts).toEqual(Array.from({ length: sorts.length }, (_, i) => i + 1));
