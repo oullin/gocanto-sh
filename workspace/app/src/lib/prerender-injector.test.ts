@@ -30,4 +30,26 @@ describe("PrerenderInjector", () => {
             '[prerender] could not locate <div id="app"> in dist/index.html',
         );
     });
+
+    it("does not clobber sibling elements that follow the app div", () => {
+        const template =
+            '<html><body><div id="app"></div><div id="portal"></div><script src="/main.js"></script></body></html>';
+
+        const injected = new PrerenderInjector(template).inject("<p>hello</p>");
+
+        expect(injected).toBe(
+            '<html><body><div id="app"><p>hello</p></div><div id="portal"></div><script src="/main.js"></script></body></html>',
+        );
+    });
+
+    it("replaces the app div's own contents when it already contains nested divs", () => {
+        const template =
+            '<html><body><div id="app"><div class="shell"><div></div></div></div><script src="/main.js"></script></body></html>';
+
+        const injected = new PrerenderInjector(template).inject("<p>hello</p>");
+
+        expect(injected).toBe(
+            '<html><body><div id="app"><p>hello</p></div><script src="/main.js"></script></body></html>',
+        );
+    });
 });
