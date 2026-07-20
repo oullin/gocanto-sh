@@ -1,4 +1,5 @@
 import type {
+    BioFixture,
     EducationFixture,
     EducationRecord,
     ExperienceFixture,
@@ -15,6 +16,8 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 import { stripHtml } from "@gocanto/domain/text";
+
+import { BioFormatter } from "#llms/bio-formatter";
 
 const SITE_URL = "https://gocanto.sh";
 
@@ -210,6 +213,7 @@ export const formatLinks = (fixture: LinksFixture): string =>
 
 export type AllFixtures = {
     profile: ProfileFixture;
+    bio: BioFixture;
     projects: ProjectsFixture;
     experience: ExperienceFixture;
     education: EducationFixture;
@@ -221,6 +225,7 @@ export type AllFixtures = {
 export const formatAll = (data: AllFixtures): string =>
     [
         formatProfile(data.profile),
+        new BioFormatter(data.bio).format(),
         formatExperience(data.experience),
         formatProjects(data.projects),
         formatEducation(data.education),

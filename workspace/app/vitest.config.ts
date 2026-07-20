@@ -18,7 +18,6 @@ export default defineConfig({
         environment: "happy-dom",
         globals: false,
         include: ["src/**/*.test.ts"],
-        isolate: false,
         pool: "threads",
         sequence: {
             groupOrder: 0,

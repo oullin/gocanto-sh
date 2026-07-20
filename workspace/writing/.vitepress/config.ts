@@ -97,7 +97,9 @@ export default defineConfig({
                 configureServer(server) {
                     server.middlewares.use((request, response, next) => {
                         void serveRssRequest(request, response).then((handled) => {
-                            if (!handled) next();
+                            if (!handled) {
+                                next();
+                            }
                         }, next);
                     });
                 },

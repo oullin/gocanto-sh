@@ -1,66 +1,25 @@
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import { bio, education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
-import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
-import {
-    formatAll,
-    formatEducation,
-    formatExperience,
-    formatLinks,
-    formatProfile,
-    formatProjects,
-    formatRecommendations,
-    formatTalks,
-} from "#llms/formatters";
-import { renderLlmsTxt } from "#llms/llms-txt";
-import { computeLastmod, renderSitemap } from "#llms/sitemap";
+import { MarkdownBundle } from "#llms/markdown-bundle";
 
-const SITE_URL = "https://gocanto.sh";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(__dirname, "../../app/dist");
-
-mkdirSync(distDir, { recursive: true });
-
-const write = (name: string, body: string): void => {
-    const out = body.endsWith("\n") ? body : `${body}\n`;
-
-    writeFileSync(resolve(distDir, name), out, "utf8");
-};
-
-write("profile.md", formatProfile(profile));
-write("experience.md", formatExperience(experience));
-write("projects.md", formatProjects(projects));
-write("education.md", formatEducation(education));
-write("talks.md", formatTalks(talks));
-write("recommendations.md", formatRecommendations(recommendations));
-write("links.md", formatLinks(links));
-
-write(
-    "index.md",
-    formatAll({
-        profile,
-        projects,
-        experience,
-        education,
-        recommendations,
-        talks,
-        links,
-    }),
-);
-
-write("llms.txt", renderLlmsTxt(SITE_URL, profile));
-
-const lastmod = computeLastmod({
+const bundle = new MarkdownBundle({
+    profile,
+    bio,
     projects,
     experience,
+    education,
     recommendations,
     talks,
+    links,
 });
 
-write("sitemap.xml", renderSitemap(SITE_URL, lastmod));
+const files = bundle.files();
 
-console.log(
-    `[llms] wrote 8 markdown files, llms.txt, and sitemap.xml (lastmod=${lastmod}) into ${distDir}`,
-);
+bundle.writeTo(distDir);
+
+console.log(`[llms] wrote ${files.size} files into ${distDir}`);

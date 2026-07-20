@@ -1,7 +1,7 @@
 import type { LinksFixture } from "#store/types";
 
 export const links = {
-    version: "1.0.4",
+    version: "1.0.5",
     data: [
         {
             uuid: "a8a6d3a0-4a8d-4a1f-8a48-3c3b5b6f3a6e",
@@ -37,6 +37,20 @@ export const links = {
             url: "https://github.com/oullin",
             description: "Explore Oullin Labs' open source projects on GitHub.",
             name: "github_oullin",
+        },
+        {
+            uuid: "e4b7c2d1-8a3f-4e6b-9c5d-7f1a2b3c4d5e",
+            handle: "@gocanto",
+            url: "https://www.youtube.com/@gocanto",
+            description: "Watch Gustavo's videos on YouTube.",
+            name: "youtube",
+        },
+        {
+            uuid: "f5c8d3e2-9b4a-4f7c-8d6e-1a2b3c4d5e6f",
+            handle: "@gocanto",
+            url: "https://www.instagram.com/gocanto",
+            description: "Follow Gustavo on Instagram.",
+            name: "instagram",
         },
     ],
 } as const satisfies LinksFixture;
