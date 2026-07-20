@@ -31,7 +31,7 @@ const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
 
 // ~200 wpm is the conventional reading pace; round up so a stub still reads
 // "1 min".
-function readingTime(src: string): string {
+export function readingTime(src: string): string {
     const words = src
         .replace(/^---[\s\S]*?---/, "")
         .replace(/```[\s\S]*?```/g, "")
@@ -43,7 +43,7 @@ function readingTime(src: string): string {
 
 // YAML parses an unquoted `date: 2026-07-18` into a Date, and a quoted one
 // into a string. Normalize both to a YYYY-MM-DD string before formatting.
-function normalizeDate(value: unknown, url: string): string | null {
+export function normalizeDate(value: unknown, url: string): string | null {
     if (value instanceof Date) {
         if (Number.isNaN(value.getTime())) {
             throw new Error(`Invalid date in post ${url}. Expected YYYY-MM-DD format.`);
@@ -55,7 +55,7 @@ function normalizeDate(value: unknown, url: string): string | null {
     return typeof value === "string" ? value : null;
 }
 
-function formatDate(raw: string, url: string): Post["date"] {
+export function formatDate(raw: string, url: string): Post["date"] {
     const date = new Date(`${raw}T00:00:00Z`);
 
     if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== raw) {
@@ -70,7 +70,7 @@ function formatDate(raw: string, url: string): Post["date"] {
     };
 }
 
-function normalizeTags(value: unknown): string[] {
+export function normalizeTags(value: unknown): string[] {
     if (Array.isArray(value)) {
         return value.filter((tag): tag is string => typeof tag === "string");
     }
