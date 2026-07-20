@@ -22,11 +22,13 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
 });
 
 const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
+    timeZone: "UTC",
 });
 
 // ~200 wpm is the conventional reading pace; round up so a stub still reads

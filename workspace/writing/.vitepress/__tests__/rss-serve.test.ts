@@ -94,7 +94,7 @@ describe("serveRssRequest", () => {
         expect(response.setHeader).toHaveBeenCalledWith("Content-Type", RSS_CONTENT_TYPE);
         expect(response.setHeader).toHaveBeenCalledWith("Cache-Control", "no-cache");
         expect(response.end).toHaveBeenCalledTimes(1);
-        expect(response.end.mock.calls[0]?.[0]).toEqual(expect.stringContaining("<rss"));
+        expect(response.end).toHaveBeenCalledWith(expect.stringContaining("<rss"));
     });
 
     it("ends the response with no body on HEAD", async () => {
