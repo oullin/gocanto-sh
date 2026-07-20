@@ -75,7 +75,7 @@ Expected production response for `https://gocanto.sh/` is `HTTP/2 200`.
 
 #### GitHub Pages workflow (secondary/fallback, not production)
 
-[`.github/workflows/pages.yml`](.github/workflows/pages.yml) also builds `workspace/app/dist` and deploys it to GitHub Pages on every push to `main`. This is a fallback/mirror build check, not the production path — Vercel's git integration builds and deploys every push independently (visible as a "Vercel" check on PRs), and the `gocanto.sh` domain itself resolves to Vercel, not GitHub Pages. `vercel.json` carries the project's Vercel-specific config (currently just the `$schema` line plus, where noted below, response headers).
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) also builds `workspace/app/dist` and deploys it to GitHub Pages on every push to `main`. This is a fallback/mirror build check, not the production path — Vercel's git integration builds and deploys every push independently (visible as a "Vercel" check on PRs), and the `gocanto.sh` domain itself resolves to Vercel, not GitHub Pages. `vercel.json` carries the project's Vercel-specific config, including custom security headers.
 
 If Vercel shows an Instant Rollback warning, do not deploy from another repository to clear it. Vercel disables auto-assignment of production domains after a rollback. Restore normal behaviour by promoting a good `gocanto-sh` deployment, or by freshly redeploying from this checkout and then promoting that fresh deployment:
 
