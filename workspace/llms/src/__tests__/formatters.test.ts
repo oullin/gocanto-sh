@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { bio } from "@gocanto/store";
 import type {
+    BioFixture,
     EducationFixture,
     ExperienceFixture,
     LinksFixture,
@@ -21,6 +21,16 @@ import {
     formatRecommendations,
     formatTalks,
 } from "#llms/formatters";
+
+const bio: BioFixture = {
+    version: "1.0.0",
+    data: {
+        tagline: "A test biography.",
+        note: "Fixture note.",
+        paragraphs: ["<p>Fixture story.</p>"],
+        quick_facts: [{ key: "Based in", value: "Test City" }],
+    },
+};
 
 const profile: ProfileFixture = {
     version: "1.0.0",

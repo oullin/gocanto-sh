@@ -21,7 +21,7 @@
                     "value": "max-age=63072000; includeSubDomains"
                 },
                 {
-                    "key": "Content-Security-Policy-Report-Only",
+                    "key": "Content-Security-Policy",
                     "value": "default-src 'self'; script-src 'self' 'sha256-RTrHll8ihjVmaUACOjZrcYExsqV1JgLqcSOVuKHRPyY=' 'sha256-db0LEPBvXf/2CiWd7lMF1BJyZImu6Gx2K5wyV9CTKWg=' https://va.vercel-scripts.com; connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com; img-src 'self' https://oullin.io data:; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
                 }
             ]
