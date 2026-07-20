@@ -128,6 +128,9 @@ importers:
       '@types/jsdom':
         specifier: ^28.0.3
         version: 28.0.3
+      oxlint:
+        specifier: ^1.31.0
+        version: 1.63.0
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -150,6 +153,9 @@ importers:
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
+      oxlint:
+        specifier: ^1.31.0
+        version: 1.63.0
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -159,6 +165,9 @@ importers:
 
   workspace/store:
     devDependencies:
+      oxlint:
+        specifier: ^1.31.0
+        version: 1.63.0
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -171,6 +180,9 @@ importers:
       '@types/node':
         specifier: ^25.6.2
         version: 25.6.2
+      oxlint:
+        specifier: ^1.31.0
+        version: 1.63.0
       portless:
         specifier: ^0.13.0
         version: 0.13.0
