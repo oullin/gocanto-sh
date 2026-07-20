@@ -3,7 +3,8 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "../../posts.data";
-import { countLabel as toCountLabel, filterPosts, listPosts, tagCounts } from "./search";
+import { WritingIndexSearch } from "./search";
+import type { TopicSelection } from "./search";
 
 // Implements option 2a of the "Writing" redesign: a dark editorial index with
 // a sticky author rail and excerpted essay list. Articles retain their existing
@@ -21,20 +22,20 @@ const isIndex = computed(() => cleanPath.value === "/" || cleanPath.value === ""
 
 // Topics filter the visible list; full-text search is VitePress local search,
 // which navigates straight to a matching post.
-const tag = ref("all");
+const tag = ref<TopicSelection>(WritingIndexSearch.allTopics);
 
-const filtered = computed(() => filterPosts(posts, "", tag.value));
+const filtered = computed(() => WritingIndexSearch.filterPosts(posts, "", tag.value));
 
-const topics = computed(() => tagCounts(posts));
+const topics = computed(() => WritingIndexSearch.tagCounts(posts));
 
 // The featured essay always shows the newest post, independent of the tag
 // filter, so selecting a tag only changes the list below — the layout above it
 // stays put instead of collapsing.
 const featured = computed(() => posts[0]);
 
-const listedPosts = computed(() => listPosts(filtered.value, featured.value));
+const listedPosts = computed(() => WritingIndexSearch.listPosts(filtered.value, featured.value));
 
-const countLabel = computed(() => toCountLabel(filtered.value.length));
+const countLabel = computed(() => WritingIndexSearch.countLabel(filtered.value.length));
 const newestYear = computed(() => posts[0]?.date.year ?? String(new Date().getFullYear()));
 
 /* ---------------- article view model ---------------- */
@@ -54,9 +55,12 @@ const related = computed(() => posts.filter((p) => p.url !== currentPost.value?.
 const progressPct = ref("0%");
 const activeToc = ref<string | null>(null);
 const toc = ref<{ id: string; label: string }[]>([]);
+let scrollFrame: number | null = null;
 
 function buildToc() {
-    if (typeof document === "undefined") return;
+    if (typeof document === "undefined") {
+        return;
+    }
 
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
 
@@ -67,7 +71,7 @@ function buildToc() {
     activeToc.value = toc.value[0]?.id ?? null;
 }
 
-function onScroll() {
+function updateScrollState() {
     const doc = document.documentElement;
     const max = doc.scrollHeight - doc.clientHeight;
 
@@ -78,16 +82,31 @@ function onScroll() {
     for (const t of toc.value) {
         const el = document.getElementById(t.id);
 
-        if (el && el.getBoundingClientRect().top <= 120) active = t.id;
+        if (el && el.getBoundingClientRect().top <= 120) {
+            active = t.id;
+        }
     }
 
     activeToc.value = active;
 }
 
+function onScroll() {
+    if (scrollFrame !== null) {
+        return;
+    }
+
+    scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = null;
+        updateScrollState();
+    });
+}
+
 function scrollToHeading(id: string) {
     const el = document.getElementById(id);
 
-    if (!el) return;
+    if (!el) {
+        return;
+    }
 
     window.scrollTo({
         top: el.getBoundingClientRect().top + window.scrollY - 80,
@@ -105,11 +124,15 @@ onContentUpdated(() => {
 onMounted(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
     buildToc();
-    onScroll();
+    updateScrollState();
 });
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
+
+    if (scrollFrame !== null) {
+        window.cancelAnimationFrame(scrollFrame);
+    }
 });
 
 const year = new Date().getFullYear();
@@ -134,7 +157,12 @@ const year = new Date().getFullYear();
                             class="wr-topic"
                             :class="{ 'is-active': tag === topic.tag }"
                             :aria-pressed="tag === topic.tag"
-                            @click="tag = tag === topic.tag ? 'all' : topic.tag"
+                            @click="
+                                tag =
+                                    tag === topic.tag
+                                        ? WritingIndexSearch.allTopics
+                                        : topic.tag
+                            "
                         >
                             {{ topic.tag }} ({{ topic.count }})
                         </button>

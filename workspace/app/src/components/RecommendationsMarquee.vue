@@ -11,7 +11,7 @@ import SearchResultDetail from "@components/SearchResultDetail.vue";
 import { useAsyncInView } from "@lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
-const recommendationsFixture = useAsyncInView(section, async () => {
+const { data: recommendationsFixture, error, retry } = useAsyncInView(section, async () => {
     const store = await import("@gocanto/store/recommendations");
 
     return store.recommendations;
@@ -32,7 +32,7 @@ const byId = computed<Map<string, RecommendationRecord>>(
 const items = computed<Testimonial[]>(() =>
     recommendationsFixture.value ? [...listTestimonials(recommendationsFixture.value)] : [],
 );
-const loading = computed(() => recommendationsFixture.value === null);
+const loading = computed(() => recommendationsFixture.value === null && !error.value);
 
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchPayload | null>(null);
@@ -63,7 +63,17 @@ function handleSelect(item: Testimonial) {
             </div>
         </div>
 
-        <TestimonialMarquee :items="items" :speed="160" :loading="loading" @select="handleSelect" />
+        <div v-if="error" class="py-10 text-center text-sm text-muted-foreground">
+            Couldn't load testimonials.
+            <button type="button" class="underline" @click="retry">Retry</button>
+        </div>
+        <TestimonialMarquee
+            v-else
+            :items="items"
+            :speed="160"
+            :loading="loading"
+            @select="handleSelect"
+        />
     </section>
     <SearchResultDetail v-model:open="sheetOpen" :payload="activePayload" />
 </template>

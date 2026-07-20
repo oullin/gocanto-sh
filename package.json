@@ -6,7 +6,6 @@
         "build": "turbo run build --ui=stream --cache-dir storage/.cache/turbo",
         "dev": "turbo run dev --ui=stream --cache-dir storage/.cache/turbo",
         "format": "make format",
-        "format-all": "make format-all",
         "format:check": "make ui-format-check",
         "lint": "turbo run lint --ui=stream --cache-dir storage/.cache/turbo",
         "perf:lighthouse": "pnpm dlx lighthouse@13.0.2 \"${PERF_URL:-http://localhost:4173/}\" --preset=desktop --quiet --chrome-flags='--headless=new --disable-gpu --no-sandbox --disable-extensions' --output=json --output-path=\"${LIGHTHOUSE_OUTPUT:-/tmp/gocanto-local-lighthouse.json}\"",
@@ -14,8 +13,8 @@
         "typecheck": "turbo run typecheck --ui=stream --cache-dir storage/.cache/turbo"
     },
     "devDependencies": {
-        "oxc-parser": "latest",
-        "oxfmt": "latest",
+        "oxc-parser": "^0.130.0",
+        "oxfmt": "^0.49.0",
         "tsx": "^4.20.0",
         "turbo": "^2.9.12",
         "vitest": "^4.1.5"
@@ -24,7 +23,8 @@
     "pnpm": {
         "overrides": {
             "stylus": "^0.64.0",
-            "glob": "^13.0.6"
+            "glob": "^13.0.6",
+            "undici": "~7.28.0"
         }
     }
 }

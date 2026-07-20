@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { bio } from "@gocanto/store";
 import type {
     EducationFixture,
     ExperienceFixture,
@@ -262,6 +263,7 @@ describe("formatAll", () => {
     it("joins sections with --- separators", () => {
         const out = formatAll({
             profile,
+            bio,
             projects,
             experience,
             education,
@@ -271,10 +273,11 @@ describe("formatAll", () => {
         });
 
         const separators = out.match(/\n\n---\n\n/g) ?? [];
-        // 6 separators between the 7 top-level sections, plus one inside the
+        // 7 separators between the 8 top-level sections, plus one inside the
         // projects section because the fixture has two projects.
-        expect(separators.length).toBe(7);
+        expect(separators.length).toBe(8);
         expect(out).toContain("# Gustavo Ocanto");
+        expect(out).toContain("# Bio");
         expect(out).toContain("# Projects");
         expect(out).toContain("# Experience");
         expect(out).toContain("# Education");

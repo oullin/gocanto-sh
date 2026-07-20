@@ -112,15 +112,16 @@ describe("renderSitemap", () => {
         expect(xml.trimEnd().endsWith("</urlset>")).toBe(true);
     });
 
-    it("includes the root, all 8 markdown pages, and llms.txt (10 URLs)", () => {
+    it("includes the root, all 9 markdown pages, and llms.txt (11 URLs)", () => {
         const matches = xml.match(/<url>/g) ?? [];
 
-        expect(matches.length).toBe(10);
+        expect(matches.length).toBe(11);
 
         const expectedLocs = [
             "https://gocanto.sh/",
             "https://gocanto.sh/index.md",
             "https://gocanto.sh/profile.md",
+            "https://gocanto.sh/bio.md",
             "https://gocanto.sh/experience.md",
             "https://gocanto.sh/projects.md",
             "https://gocanto.sh/education.md",
@@ -138,6 +139,6 @@ describe("renderSitemap", () => {
     it("stamps the lastmod on every entry", () => {
         const matches = xml.match(/<lastmod>2025-05-19<\/lastmod>/g) ?? [];
 
-        expect(matches.length).toBe(10);
+        expect(matches.length).toBe(11);
     });
 });

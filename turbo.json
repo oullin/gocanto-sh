@@ -21,7 +21,7 @@
         "test": {
             "dependsOn": ["^test"],
             "outputs": [],
-            "inputs": ["src/**", "vitest.config.ts", "package.json", "tsconfig.json"]
+            "inputs": ["src/**", "scripts/**", "vitest.config.ts", "package.json", "tsconfig.json"]
         },
         "typecheck": {
             "dependsOn": ["^typecheck"],

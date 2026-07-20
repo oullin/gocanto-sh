@@ -31,6 +31,7 @@
     "scripts": {
         "format": "make -C ../.. ui-format",
         "format:check": "make -C ../.. ui-format",
+        "lint": "oxlint .",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },
@@ -41,6 +42,7 @@
     },
     "devDependencies": {
         "@types/jsdom": "^28.0.3",
+        "oxlint": "^1.31.0",
         "typescript": "^6.0.3",
         "vitest": "^4.1.5"
     }

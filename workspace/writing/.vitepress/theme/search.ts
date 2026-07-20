@@ -1,39 +1,86 @@
 import type { Post } from "../../posts.data";
 
-/** Pure filter/list helpers for the writing index, kept free of Vue and the DOM. */
+/** A topic tag attached to a writing post. */
+export type TopicTag = string & { readonly __brand: "TopicTag" };
 
-/** Case-insensitive match of a query against a post's title, description and tags. */
-export function matchesQuery(post: Post, query: string): boolean {
-    const q = query.trim().toLowerCase();
+/** The active topic filter, including the sentinel that selects every topic. */
+export type TopicSelection = "all" | TopicTag;
 
-    if (!q) return true;
+/** A topic and the number of posts tagged with it. */
+export type TopicCount = {
+    readonly tag: TopicTag;
+    readonly count: number;
+};
 
-    return `${post.title} ${post.description} ${post.tags.join(" ")}`.toLowerCase().includes(q);
-}
+/** Pure search and list behavior for the writing index, kept free of Vue and the DOM. */
+export class WritingIndexSearch {
+    /** The topic selection that disables topic filtering. */
+    static readonly allTopics: TopicSelection = "all";
 
-/** Filter posts by the active tag ("all" = no tag filter) and the search query. */
-export function filterPosts(posts: readonly Post[], query: string, tag: string): Post[] {
-    return posts.filter((p) => (tag === "all" || p.tags.includes(tag)) && matchesQuery(p, query));
-}
+    private constructor() {}
 
-/** All topic counts, ordered by frequency and then alphabetically. */
-export function tagCounts(posts: readonly Post[]): { tag: string; count: number }[] {
-    const counts = new Map<string, number>();
+    /** Construct a topic tag from post metadata. */
+    static topicTag(value: string): TopicTag {
+        // SAFETY: Every post metadata tag is a valid topic tag; the brand prevents unrelated strings at callsites.
+        return value as TopicTag;
+    }
 
-    for (const p of posts) for (const t of p.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+    /** Case-insensitively match a query against a post's title, description, and tags. */
+    static matchesQuery(post: Post, query: string): boolean {
+        const normalizedQuery = query.trim().toLowerCase();
 
-    return [...counts]
-        .map(([tag, count]) => ({ tag, count }))
-        .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
-}
+        if (!normalizedQuery) {
+            return true;
+        }
 
-export function countLabel(n: number): string {
-    return `${n} ${n === 1 ? "post" : "posts"}`;
-}
+        return `${post.title} ${post.description} ${post.tags.join(" ")}`
+            .toLowerCase()
+            .includes(normalizedQuery);
+    }
 
-/** Exclude the featured post unless doing so would leave an existing list empty. */
-export function listPosts(posts: readonly Post[], featured?: Post): Post[] {
-    const withoutFeatured = posts.filter((p) => !(featured && p.url === featured.url));
+    /** Filter posts by the active topic and search query. */
+    static filterPosts(
+        posts: readonly Post[],
+        query: string,
+        topic: TopicSelection,
+    ): Post[] {
+        return posts.filter(
+            (post) =>
+                (topic === WritingIndexSearch.allTopics || post.tags.includes(topic)) &&
+                WritingIndexSearch.matchesQuery(post, query),
+        );
+    }
 
-    return withoutFeatured.length ? withoutFeatured : [...posts];
+    /** Return all topic counts, ordered by frequency and then alphabetically. */
+    static tagCounts(posts: readonly Post[]): TopicCount[] {
+        const counts = new Map<TopicTag, number>();
+
+        for (const post of posts) {
+            for (const rawTag of new Set(post.tags)) {
+                const tag = WritingIndexSearch.topicTag(rawTag);
+
+                counts.set(tag, (counts.get(tag) ?? 0) + 1);
+            }
+        }
+
+        return [...counts]
+            .map(([tag, count]) => ({ tag, count }))
+            .sort((left, right) =>
+                right.count - left.count || left.tag.localeCompare(right.tag),
+            );
+    }
+
+    /** Format a post count with the correct singular or plural noun. */
+    static countLabel(count: number): string {
+        return `${count} ${count === 1 ? "post" : "posts"}`;
+    }
+
+    /** Exclude the featured post unless doing so would leave an existing list empty. */
+    static listPosts(posts: readonly Post[], featured?: Post): Post[] {
+        const withoutFeatured = posts.filter(
+            (post) => !(featured && post.url === featured.url),
+        );
+
+        return withoutFeatured.length ? withoutFeatured : [...posts];
+    }
 }
