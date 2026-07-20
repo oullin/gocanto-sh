@@ -10,5 +10,8 @@ export default defineConfig({
         isolate: false,
         fileParallelism: false,
         pool: "threads",
+        sequence: {
+            groupOrder: 4,
+        },
     },
 });

@@ -20,6 +20,9 @@ export default defineConfig({
         include: ["src/**/*.test.ts"],
         isolate: false,
         pool: "threads",
+        sequence: {
+            groupOrder: 0,
+        },
         singleThread: true,
     },
 });
