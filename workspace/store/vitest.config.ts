@@ -10,7 +10,7 @@ export default defineConfig({
         isolate: false,
         pool: "threads",
         sequence: {
-            groupOrder: 3,
+            groupOrder: 0,
         },
         singleThread: true,
     },
