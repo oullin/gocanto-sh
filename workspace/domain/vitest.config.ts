@@ -7,5 +7,8 @@ export default defineConfig({
         environment: "node",
         globals: false,
         include: ["src/**/*.test.ts"],
+        sequence: {
+            groupOrder: 1,
+        },
     },
 });
