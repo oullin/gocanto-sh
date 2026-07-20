@@ -373,3 +373,15 @@ chunk, merging hosts into the main sitemap, and routing writing results through
 the internal detail Sheet. Each either duplicates content, couples independent
 deployments, depends on an unstable implementation artifact, adds unnecessary
 verification, or misrepresents the result behavior.
+
+## Post-delivery addendum (2026-07-20, review finding)
+
+Vercel root-directory caveat: if the writing project's Root Directory were ever
+set to the repository root (`./`), it would inherit the root `vercel.json` —
+including the ENFORCING `Content-Security-Policy` whose script hash is
+generated for the main app's inline scripts — and the VitePress site's own
+inline scripts would be blocked. Verified 2026-07-20: `writing.gocanto.sh`
+serves none of the root headers, so its project root is `workspace/writing`
+and no inheritance occurs today. Keep it that way, or give the writing
+project its own `workspace/writing/vercel.json` before changing the root
+directory.

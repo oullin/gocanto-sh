@@ -215,3 +215,12 @@ Stop and report back (do not improvise) if:
 - Reviewer: diff the built JSON-LD against the pre-change version — the ONLY
   intended deltas are formatting and store-derived values; jobTitle/worksFor/
   knowsAbout must be unchanged.
+
+## Post-delivery addendum (2026-07-20, review finding)
+
+`<script type="application/ld+json">` is a data block, not executable script —
+CSP `script-src` does not apply to it, so it never needed a hash. The JSON-LD
+hash was removed from `vercel.json` in the follow-ups PR (#28), which also
+eliminates the recompute-hash-on-content-change maintenance step this plan's
+notes warned about. Only the executable theme-bootstrap inline script keeps a
+CSP hash.
