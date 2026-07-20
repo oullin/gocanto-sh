@@ -47,7 +47,7 @@ if (!injected.includes(jsonLdMarker)) {
     throw new Error("[prerender] could not locate JSON-LD marker in dist/index.html");
 }
 
-const completed = injected.replace(jsonLdMarker, structuredData);
+const completed = injected.replace(jsonLdMarker, () => structuredData);
 
 await writeFile(distIndex, completed);
 await rm(ssrOutDir, { recursive: true, force: true });

@@ -51,4 +51,39 @@ describe("StructuredDataBuilder", () => {
         expect(JSON.parse(builder.toScriptContents())).toEqual(builder.build());
         expect(builder.toScriptContents()).toContain('\n    "@context"');
     });
+
+    it("preserves replacement patterns when its output is spliced into the build template", () => {
+        const marker = "<!--__JSONLD__-->";
+        const profileWithReplacementPattern = {
+            ...profile,
+            data: { ...profile.data, name: "Gustavo $& Ocanto" },
+        };
+        const scriptContents = new StructuredDataBuilder({
+            profile: profileWithReplacementPattern,
+            links,
+        }).toScriptContents();
+
+        const completed = `<script type="application/ld+json">${marker}</script>`.replace(
+            marker,
+            () => scriptContents,
+        );
+
+        expect(completed).toBe(`<script type="application/ld+json">${scriptContents}</script>`);
+        expect(completed).toContain("Gustavo $& Ocanto");
+    });
+
+    it("escapes script-closing sequences and round-trips the original data", () => {
+        const profileWithClosingScript = {
+            ...profile,
+            data: { ...profile.data, name: "Gustavo </script> Ocanto" },
+        };
+        const closingScriptBuilder = new StructuredDataBuilder({
+            profile: profileWithClosingScript,
+            links,
+        });
+        const scriptContents = closingScriptBuilder.toScriptContents();
+
+        expect(scriptContents.toLowerCase()).not.toContain("</script");
+        expect(JSON.parse(scriptContents)).toEqual(closingScriptBuilder.build());
+    });
 });

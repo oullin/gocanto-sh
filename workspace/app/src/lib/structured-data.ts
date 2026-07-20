@@ -114,7 +114,7 @@ export class StructuredDataBuilder {
      * @returns Pretty-printed JSON without surrounding script tags.
      */
     toScriptContents(): string {
-        return JSON.stringify(this.build(), null, 4);
+        return JSON.stringify(this.build(), null, 4).replaceAll("<", "\\u003c");
     }
 
     private buildSameAs(): readonly string[] {
