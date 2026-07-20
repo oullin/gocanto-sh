@@ -1,4 +1,4 @@
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import { bio, education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,7 @@ import {
     formatRecommendations,
     formatTalks,
 } from "#llms/formatters";
+import { BioFormatter } from "#llms/bio-formatter";
 import { renderLlmsTxt } from "#llms/llms-txt";
 import { computeLastmod, renderSitemap } from "#llms/sitemap";
 
@@ -30,6 +31,7 @@ const write = (name: string, body: string): void => {
 };
 
 write("profile.md", formatProfile(profile));
+write("bio.md", new BioFormatter(bio).format());
 write("experience.md", formatExperience(experience));
 write("projects.md", formatProjects(projects));
 write("education.md", formatEducation(education));
@@ -41,6 +43,7 @@ write(
     "index.md",
     formatAll({
         profile,
+        bio,
         projects,
         experience,
         education,
@@ -62,5 +65,5 @@ const lastmod = computeLastmod({
 write("sitemap.xml", renderSitemap(SITE_URL, lastmod));
 
 console.log(
-    `[llms] wrote 8 markdown files, llms.txt, and sitemap.xml (lastmod=${lastmod}) into ${distDir}`,
+    `[llms] wrote 9 markdown files, llms.txt, and sitemap.xml (lastmod=${lastmod}) into ${distDir}`,
 );
