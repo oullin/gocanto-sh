@@ -42,6 +42,7 @@ const open = globalSearchOpen;
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchResult["payload"] | null>(null);
 const corpus = shallowRef<SearchCorpus | null>(null);
+const corpusError = ref(false);
 const selectedKind = ref<SearchKind | null>(null);
 let corpusLoading = false;
 
@@ -67,6 +68,24 @@ async function buildCorpus(): Promise<SearchCorpus> {
     });
 }
 
+function loadCorpus(): void {
+    if (corpus.value || corpusLoading) {
+        return;
+    }
+
+    corpusLoading = true;
+    corpusError.value = false;
+    void buildCorpus()
+        .then((nextCorpus) => {
+            corpus.value = nextCorpus;
+            corpusLoading = false;
+        })
+        .catch(() => {
+            corpusError.value = true;
+            corpusLoading = false;
+        });
+}
+
 watch(
     open,
     (v) => {
@@ -76,19 +95,7 @@ watch(
             return;
         }
 
-        if (corpus.value || corpusLoading) {
-            return;
-        }
-
-        corpusLoading = true;
-        void buildCorpus()
-            .then((nextCorpus) => {
-                corpus.value = nextCorpus;
-                corpusLoading = false;
-            })
-            .catch(() => {
-                corpusLoading = false;
-            });
+        loadCorpus();
     },
     { immediate: true },
 );
@@ -185,6 +192,12 @@ watch(sheetOpen, (v) => {
                         </CommandItem>
                     </CommandGroup>
                 </template>
+            </template>
+            <template v-else-if="corpusError">
+                <div class="px-5 py-10 text-center text-sm text-muted-foreground">
+                    Couldn't load search results.
+                    <button type="button" class="underline" @click="loadCorpus">Retry</button>
+                </div>
             </template>
         </CommandList>
     </CommandDialog>
