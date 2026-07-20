@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Post } from "../../../posts.data";
-import { countLabel, filterPosts, groupByYear, matchesQuery, topTags } from "../search";
+import { countLabel, filterPosts, listPosts, matchesQuery, tagCounts } from "../search";
 
 function makePost(overrides: Partial<Post> & { title: string; year: string }): Post {
     const { title, year, ...rest } = overrides;
@@ -74,15 +74,19 @@ describe("filterPosts", () => {
     });
 });
 
-describe("topTags", () => {
-    it("puts 'all' first, then tags ordered by frequency", () => {
-        // go appears 3x, so it must lead the real tags after 'all'
-        expect(topTags(posts)[0]).toBe("all");
-        expect(topTags(posts)[1]).toBe("go");
+describe("tagCounts", () => {
+    it("orders every tag by count descending", () => {
+        expect(tagCounts(posts)[0]).toEqual({ tag: "go", count: 3 });
+        expect(tagCounts(posts)).toHaveLength(5);
     });
 
-    it("respects the limit (excluding the leading 'all')", () => {
-        expect(topTags(posts, 2)).toHaveLength(3); // 'all' + 2 tags
+    it("orders equal counts alphabetically", () => {
+        expect(tagCounts(posts).slice(1).map(({ tag }) => tag)).toEqual([
+            "cloudflare",
+            "postgres",
+            "security",
+            "webhooks",
+        ]);
     });
 });
 
@@ -94,18 +98,9 @@ describe("countLabel", () => {
     });
 });
 
-describe("groupByYear", () => {
-    it("groups posts by year with a plural-aware count", () => {
-        const groups = groupByYear(posts);
-
-        expect(groups.map((g) => g.year)).toEqual(["2026", "2025"]);
-        expect(groups[0].count).toBe("2 posts");
-        expect(groups[1].count).toBe("1 post");
-    });
-
+describe("listPosts", () => {
     it("drops the featured post so it isn't listed twice", () => {
-        const groups = groupByYear(posts, posts[0]);
-        const titles = groups.flatMap((g) => g.items.map((p) => p.title));
+        const titles = listPosts(posts, posts[0]).map((p) => p.title);
 
         expect(titles).not.toContain("Signed webhooks");
         expect(titles).toHaveLength(2);
@@ -113,8 +108,17 @@ describe("groupByYear", () => {
 
     it("still lists the featured post when it is the only one", () => {
         const only = [posts[0]];
-        const groups = groupByYear(only, posts[0]);
 
-        expect(groups.flatMap((g) => g.items.map((p) => p.title))).toEqual(["Signed webhooks"]);
+        expect(listPosts(only, posts[0]).map((p) => p.title)).toEqual(["Signed webhooks"]);
+    });
+
+    it("preserves tag-filtered matches and applies the featured fallback", () => {
+        const nonFeatured = filterPosts(posts, "", "cloudflare");
+        const featuredOnly = filterPosts(posts, "", "webhooks");
+
+        expect(listPosts(nonFeatured, posts[0]).map((p) => p.title)).toEqual(["Edge caching"]);
+        expect(listPosts(featuredOnly, posts[0]).map((p) => p.title)).toEqual([
+            "Signed webhooks",
+        ]);
     });
 });
