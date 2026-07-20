@@ -3,6 +3,8 @@ import { readFile, writeFile, rm } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve } from "node:path";
 
+import { PrerenderInjector } from "@lib/prerender-injector";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
 const ssrOutDir = resolve(appRoot, ".prerender-ssr");
@@ -35,17 +37,7 @@ const appHtml = await render();
 
 console.log("[prerender] injecting into dist/index.html…");
 const template = await readFile(distIndex, "utf8");
-const appStart = template.indexOf('<div id="app">');
-const bodyEnd = template.lastIndexOf("</body>");
-const appEnd = bodyEnd > appStart ? template.lastIndexOf("</div>", bodyEnd) : -1;
-
-if (appStart === -1 || appEnd === -1) {
-    throw new Error('[prerender] could not locate <div id="app"> in dist/index.html');
-}
-
-const injected = `${template.slice(0, appStart)}<div id="app">${appHtml}</div>${template.slice(
-    appEnd + "</div>".length,
-)}`;
+const injected = new PrerenderInjector(template).inject(appHtml);
 
 await writeFile(distIndex, injected);
 await rm(ssrOutDir, { recursive: true, force: true });
