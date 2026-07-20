@@ -15,7 +15,9 @@ export interface YearGroup {
 export function matchesQuery(post: Post, query: string): boolean {
     const q = query.trim().toLowerCase();
 
-    if (!q) return true;
+    if (!q) {
+        return true;
+    }
 
     return `${post.title} ${post.description} ${post.tags.join(" ")}`.toLowerCase().includes(q);
 }
@@ -29,7 +31,11 @@ export function filterPosts(posts: readonly Post[], query: string, tag: string):
 export function topTags(posts: readonly Post[], limit = 8): string[] {
     const counts = new Map<string, number>();
 
-    for (const p of posts) for (const t of p.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+    for (const p of posts) {
+        for (const t of p.tags) {
+            counts.set(t, (counts.get(t) ?? 0) + 1);
+        }
+    }
 
     const top = [...counts.keys()].sort((a, b) => counts.get(b)! - counts.get(a)!).slice(0, limit);
 

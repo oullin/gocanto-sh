@@ -54,9 +54,12 @@ const related = computed(() => posts.filter((p) => p.url !== currentPost.value?.
 const progressPct = ref("0%");
 const activeToc = ref<string | null>(null);
 const toc = ref<{ id: string; label: string }[]>([]);
+let scrollFrame: number | null = null;
 
 function buildToc() {
-    if (typeof document === "undefined") return;
+    if (typeof document === "undefined") {
+        return;
+    }
 
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
 
@@ -67,7 +70,7 @@ function buildToc() {
     activeToc.value = toc.value[0]?.id ?? null;
 }
 
-function onScroll() {
+function updateScrollState() {
     const doc = document.documentElement;
     const max = doc.scrollHeight - doc.clientHeight;
 
@@ -78,16 +81,31 @@ function onScroll() {
     for (const t of toc.value) {
         const el = document.getElementById(t.id);
 
-        if (el && el.getBoundingClientRect().top <= 120) active = t.id;
+        if (el && el.getBoundingClientRect().top <= 120) {
+            active = t.id;
+        }
     }
 
     activeToc.value = active;
 }
 
+function onScroll() {
+    if (scrollFrame !== null) {
+        return;
+    }
+
+    scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = null;
+        updateScrollState();
+    });
+}
+
 function scrollToHeading(id: string) {
     const el = document.getElementById(id);
 
-    if (!el) return;
+    if (!el) {
+        return;
+    }
 
     window.scrollTo({
         top: el.getBoundingClientRect().top + window.scrollY - 80,
@@ -105,11 +123,15 @@ onContentUpdated(() => {
 onMounted(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
     buildToc();
-    onScroll();
+    updateScrollState();
 });
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
+
+    if (scrollFrame !== null) {
+        window.cancelAnimationFrame(scrollFrame);
+    }
 });
 
 const year = new Date().getFullYear();
