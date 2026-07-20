@@ -9,21 +9,16 @@ GO_FMT_SUPPORT_ROOT := /opt/go-fmt
 GO_FMT_SUPPORT_VITE_NODE := $(GO_FMT_SUPPORT_ROOT)/packages/support/node_modules/.bin/vite-node
 GO_FMT_SUPPORT_OXFMT := $(GO_FMT_SUPPORT_ROOT)/packages/support/node_modules/.bin/oxfmt
 
-.PHONY: dev format format-all ui-format ui-format-check ui-format-start ui-format-stop
+.PHONY: dev format format-code ui-format ui-format-check ui-format-start ui-format-stop
 
 dev:
 	pnpm dev
 
-format:
+format-code:
 	pnpm --filter @gocanto/app exec oxlint . --fix
 	$(MAKE) ui-format
-	pnpm lint
-	pnpm typecheck
-	pnpm test
 
-format-all:
-	pnpm --filter @gocanto/app exec oxlint . --fix
-	$(MAKE) ui-format
+format: format-code
 	pnpm lint
 	pnpm typecheck
 	pnpm test
