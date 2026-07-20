@@ -152,6 +152,14 @@ const year = new Date().getFullYear();
                     <div class="wr-topics__label">Topics</div>
                     <div class="wr-topics__list">
                         <button
+                            class="wr-topic"
+                            :class="{ 'is-active': tag === WritingIndexSearch.allTopics }"
+                            :aria-pressed="tag === WritingIndexSearch.allTopics"
+                            @click="tag = WritingIndexSearch.allTopics"
+                        >
+                            All ({{ posts.length }})
+                        </button>
+                        <button
                             v-for="topic in topics"
                             :key="topic.tag"
                             class="wr-topic"
@@ -200,7 +208,9 @@ const year = new Date().getFullYear();
                     <h2><a :href="featured.url">{{ featured.title }}</a></h2>
                     <p>{{ featured.description }}</p>
                     <div class="wr-essay__meta">
-                        {{ featured.readingTime }} read · {{ featured.tags.join(", ") }}
+                        {{ featured.readingTime }} read<span v-if="featured.tags.length">
+                            · {{ featured.tags.join(", ") }}</span
+                        >
                     </div>
                 </article>
 
@@ -209,8 +219,8 @@ const year = new Date().getFullYear();
                         <h2><a :href="post.url">{{ post.title }}</a></h2>
                         <p>{{ post.description }}</p>
                         <div class="wr-essay__meta">
-                            {{ post.date.short }} · {{ post.readingTime }} ·
-                            {{ post.tags.join(", ") }}
+                            {{ post.date.short }} · {{ post.readingTime
+                            }}<span v-if="post.tags.length"> · {{ post.tags.join(", ") }}</span>
                         </div>
                     </article>
 
