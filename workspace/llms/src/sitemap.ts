@@ -39,19 +39,25 @@ export const computeLastmod = (sources: LastmodSources): string => {
     for (const project of sources.projects.data) {
         const iso = isoDate(project.published_at);
 
-        if (iso) candidates.push(iso);
+        if (iso) {
+            candidates.push(iso);
+        }
     }
 
     for (const rec of sources.recommendations.data) {
         const iso = isoDate(rec.updated_at);
 
-        if (iso) candidates.push(iso);
+        if (iso) {
+            candidates.push(iso);
+        }
     }
 
     for (const talk of sources.talks.data) {
         const iso = isoDate(talk.updated_at);
 
-        if (iso) candidates.push(iso);
+        if (iso) {
+            candidates.push(iso);
+        }
     }
 
     if (candidates.length === 0) {

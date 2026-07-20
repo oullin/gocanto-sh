@@ -56,7 +56,9 @@ const activeToc = ref<string | null>(null);
 const toc = ref<{ id: string; label: string }[]>([]);
 
 function buildToc() {
-    if (typeof document === "undefined") return;
+    if (typeof document === "undefined") {
+        return;
+    }
 
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
 
@@ -78,7 +80,9 @@ function onScroll() {
     for (const t of toc.value) {
         const el = document.getElementById(t.id);
 
-        if (el && el.getBoundingClientRect().top <= 120) active = t.id;
+        if (el && el.getBoundingClientRect().top <= 120) {
+            active = t.id;
+        }
     }
 
     activeToc.value = active;
@@ -87,7 +91,9 @@ function onScroll() {
 function scrollToHeading(id: string) {
     const el = document.getElementById(id);
 
-    if (!el) return;
+    if (!el) {
+        return;
+    }
 
     window.scrollTo({
         top: el.getBoundingClientRect().top + window.scrollY - 80,
