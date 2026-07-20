@@ -1,8 +1,16 @@
 import { describe, expect, it } from "vitest";
 
 declare global {
-    // `var` is required by TypeScript's ambient global-variable syntax.
-    var VITEPRESS_CONFIG: { srcDir: string } | undefined;
+    // `var` is required by TypeScript's ambient global-variable syntax. Kept
+    // identical to the declaration in `rss-serve.test.ts` — TypeScript
+    // requires ambient global declarations to match across files.
+    var VITEPRESS_CONFIG:
+        | {
+              srcDir: string;
+              site: { base: string };
+              cleanUrls: boolean;
+          }
+        | undefined;
 }
 
 // `posts.data.ts`'s default export calls VitePress's `createContentLoader`
@@ -12,7 +20,11 @@ declare global {
 // so we seed the minimal config the framework checks for — real framework
 // state, not a module mock — and import the module dynamically afterward so
 // the seed runs before evaluation (a static import would be hoisted ahead of it).
-globalThis.VITEPRESS_CONFIG = { srcDir: process.cwd() };
+globalThis.VITEPRESS_CONFIG = {
+    srcDir: process.cwd(),
+    site: { base: "/" },
+    cleanUrls: true,
+};
 
 const { formatDate, normalizeDate, normalizeTags, readingTime } = await import("../../posts.data");
 
