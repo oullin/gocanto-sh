@@ -48,6 +48,8 @@ pnpm typecheck
 pnpm build
 ```
 
+`pnpm dev` serves the profile at `https://gocanto-sh.localhost:1355` and the writing site at `https://writing.gocanto-sh.localhost:1355` behind portless's shared HTTPS proxy. Portless sets up its local CA the first time it runs. To bypass the proxy, use `pnpm --filter @gocanto/app dev:app` on port 5173 or `pnpm --filter @gocanto/writing dev:site` on port 5175.
+
 Local formatting uses Docker Compose to run the upstream [`go-fmt`](https://github.com/oullin/go-fmt) support formatter for TypeScript/Vue files:
 
 ```sh
@@ -113,6 +115,7 @@ Built from [@gocanto/store](workspace/store/) by [workspace/llms/src/generate-ma
 
 - [`llms.txt`](https://gocanto.sh/llms.txt) — index
 - [`index.md`](https://gocanto.sh/index.md) — full profile in one file
+- [`bio.md`](https://gocanto.sh/bio.md) — short biography
 - [`profile.md`](https://gocanto.sh/profile.md) · [`experience.md`](https://gocanto.sh/experience.md) · [`projects.md`](https://gocanto.sh/projects.md) · [`education.md`](https://gocanto.sh/education.md) · [`talks.md`](https://gocanto.sh/talks.md) · [`recommendations.md`](https://gocanto.sh/recommendations.md) · [`links.md`](https://gocanto.sh/links.md)
 - [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — 10 URLs with `lastmod` from latest content update
 
