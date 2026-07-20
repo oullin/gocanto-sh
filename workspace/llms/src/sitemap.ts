@@ -8,6 +8,7 @@ import type {
 const MD_PAGES = [
     "index.md",
     "profile.md",
+    "bio.md",
     "experience.md",
     "projects.md",
     "education.md",
