@@ -1,7 +1,11 @@
-import { effectScope, ref } from "vue";
+import { computed, effectScope, ref } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useAsyncInView, type AsyncInViewResult } from "@lib/useAsyncInView";
+import {
+    AsyncInViewController,
+    useAsyncInView,
+    type AsyncInViewResult,
+} from "@lib/useAsyncInView";
 
 const intersectionObserver = vi.hoisted(() => {
     class IntersectionObserverHarness {
@@ -72,6 +76,28 @@ describe("useAsyncInView", () => {
     afterEach(() => {
         vi.clearAllTimers();
         vi.useRealTimers();
+    });
+
+    it("tracks controller state reactively across a load", async () => {
+        let resolveLoader!: (value: string) => void;
+        const controller = new AsyncInViewController(
+            () =>
+                new Promise<string>((resolve) => {
+                    resolveLoader = resolve;
+                }),
+        );
+        const state = computed(() => controller.state);
+
+        expect(state.value).toBe("idle");
+
+        const load = controller.load();
+
+        expect(state.value).toBe("loading");
+
+        resolveLoader("loaded");
+        await load;
+
+        expect(state.value).toBe("ready");
     });
 
     it("does not resolve before intersection", async () => {

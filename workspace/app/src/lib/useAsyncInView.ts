@@ -22,7 +22,7 @@ export type AsyncInViewResult<T> = {
 export class AsyncInViewController<T> {
     private readonly dataState = ref<T | null>(null) as Ref<T | null>;
     private readonly errorState = ref(false);
-    private currentState: AsyncInViewState = "idle";
+    private readonly currentState = ref<AsyncInViewState>("idle");
 
     /**
      * Create an asynchronous in-view controller.
@@ -43,24 +43,24 @@ export class AsyncInViewController<T> {
 
     /** The current load lifecycle state. */
     get state(): AsyncInViewState {
-        return this.currentState;
+        return this.currentState.value;
     }
 
     /** Load the content while containing expected loader failures as state. */
     async load(): Promise<void> {
-        if (this.currentState === "loading") {
+        if (this.currentState.value === "loading") {
             return;
         }
 
-        this.currentState = "loading";
+        this.currentState.value = "loading";
         this.dataState.value = null;
         this.errorState.value = false;
 
         try {
             this.dataState.value = await this.loader();
-            this.currentState = "ready";
+            this.currentState.value = "ready";
         } catch {
-            this.currentState = "error";
+            this.currentState.value = "error";
             this.errorState.value = true;
         }
     }
