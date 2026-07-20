@@ -10,6 +10,7 @@ export type VitalsLoader = () => Promise<void>;
 
 /** Defers Vercel vitals injection until the browser is idle or the user leaves or interacts. */
 export class VitalsInjector {
+    private armed = false;
     private injected = false;
 
     constructor(
@@ -36,14 +37,18 @@ export class VitalsInjector {
         }
 
         this.injected = true;
-        void this.loader();
+        this.loader().catch((err) => {
+            console.warn("Failed to load Vercel vitals", err);
+        });
     }
 
     /** Register deferred and lifecycle triggers when vitals injection is permitted. */
     arm(env: VitalsEnvironment): void {
-        if (!this.shouldInject(env)) {
+        if (this.armed || !this.shouldInject(env)) {
             return;
         }
+
+        this.armed = true;
 
         const inject = () => this.inject();
 

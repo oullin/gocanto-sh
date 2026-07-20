@@ -150,6 +150,32 @@ describe("VitalsInjector", () => {
         expect(harness.loader).toHaveBeenCalledOnce();
     });
 
+    it("contains loader failures without an unhandled rejection", async () => {
+        const harness = new BrowserHarness();
+        const error = new Error("chunk failed");
+        const unhandledRejection = vi.fn();
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        harness.loader.mockRejectedValueOnce(error);
+        process.on("unhandledRejection", unhandledRejection);
+
+        try {
+            const injector = new VitalsInjector(
+                harness.loader,
+                harness.createWindow(),
+                harness.createDocument(),
+            );
+
+            injector.inject();
+            await Promise.resolve();
+
+            expect(unhandledRejection).not.toHaveBeenCalled();
+            expect(warn).toHaveBeenCalledWith("Failed to load Vercel vitals", error);
+        } finally {
+            process.off("unhandledRejection", unhandledRejection);
+            warn.mockRestore();
+        }
+    });
+
     it("does not arm when gated off", () => {
         const harness = new BrowserHarness();
         const injector = new VitalsInjector(
@@ -163,6 +189,28 @@ describe("VitalsInjector", () => {
         expect(harness.requestIdleCallback).not.toHaveBeenCalled();
         expect(harness.addWindowEventListener).not.toHaveBeenCalled();
         expect(harness.addDocumentEventListener).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("arms idempotently", () => {
+        const harness = new BrowserHarness();
+        const injector = new VitalsInjector(
+            harness.loader,
+            harness.createWindow(true),
+            harness.createDocument(),
+        );
+
+        injector.arm(enabledEnvironment);
+
+        expect(harness.requestIdleCallback).toHaveBeenCalledOnce();
+        expect(harness.addWindowEventListener).toHaveBeenCalledTimes(3);
+        expect(harness.addDocumentEventListener).toHaveBeenCalledOnce();
+
+        injector.arm(enabledEnvironment);
+
+        expect(harness.requestIdleCallback).toHaveBeenCalledOnce();
+        expect(harness.addWindowEventListener).toHaveBeenCalledTimes(3);
+        expect(harness.addDocumentEventListener).toHaveBeenCalledOnce();
         expect(vi.getTimerCount()).toBe(0);
     });
 
