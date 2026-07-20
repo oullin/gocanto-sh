@@ -6,6 +6,25 @@ import { recommendations } from "@gocanto/store/recommendations";
 import { MarkdownBundle } from "#llms/markdown-bundle";
 
 describe("MarkdownBundle", () => {
+    it("returns the same unchanged file map on repeated calls", () => {
+        const bundle = new MarkdownBundle({
+            profile,
+            bio,
+            projects,
+            experience,
+            education,
+            recommendations,
+            talks,
+            links,
+        });
+        const first = bundle.files();
+        const contents = [...first];
+        const second = bundle.files();
+
+        expect(second).toBe(first);
+        expect([...second]).toEqual(contents);
+    });
+
     it("builds the complete newline-terminated bundle", () => {
         const files = new MarkdownBundle({
             profile,

@@ -20,10 +20,16 @@ const SITE_URL = "https://gocanto.sh";
 
 /** Builds and writes the complete machine-readable site bundle. */
 export class MarkdownBundle {
+    private cache?: ReadonlyMap<string, string>;
+
     constructor(private readonly sources: AllFixtures) {}
 
     /** Returns every bundle filename and its newline-terminated contents. */
     files(): ReadonlyMap<string, string> {
+        return (this.cache ??= this.build());
+    }
+
+    private build(): ReadonlyMap<string, string> {
         const files = new Map<string, string>();
 
         files.set("profile.md", this.withTrailingNewline(formatProfile(this.sources.profile)));
