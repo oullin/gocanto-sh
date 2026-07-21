@@ -1,10 +1,17 @@
 import { defineConfig } from "vitepress";
 
-import { RSS_PATH, serveRssRequest, writeRssFeed } from "#writing/rss";
+import { RssFeed } from "#writing/rss";
 
 const SITE_URL = "https://writing.gocanto.sh";
 const DESCRIPTION =
     "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+const rssFeed = new RssFeed({
+    loadPosts: async () => {
+        const { default: loader } = await import("#writing/posts-data");
+
+        return loader.load();
+    },
+});
 
 export default defineConfig({
     lang: "en-US",
@@ -36,7 +43,7 @@ export default defineConfig({
                 rel: "alternate",
                 type: "application/rss+xml",
                 title: "Gustavo Ocanto — Writing",
-                href: `${SITE_URL}${RSS_PATH}`,
+                href: `${SITE_URL}${RssFeed.PATH}`,
             },
         ],
         // Design fonts: Hanken Grotesk (body) + JetBrains Mono (chrome/code).
@@ -96,7 +103,7 @@ export default defineConfig({
                 enforce: "pre",
                 configureServer(server) {
                     server.middlewares.use((request, response, next) => {
-                        void serveRssRequest(request, response).then((handled) => {
+                        void rssFeed.serve(request, response).then((handled) => {
                             if (!handled) next();
                         }, next);
                     });
@@ -106,6 +113,6 @@ export default defineConfig({
     },
 
     async buildEnd(siteConfig) {
-        await writeRssFeed(siteConfig.outDir);
+        await rssFeed.write(siteConfig.outDir);
     },
 });

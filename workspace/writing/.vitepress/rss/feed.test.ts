@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { Post } from "#writing/posts-data";
-import { renderRssFeed } from "#writing/rss";
+import type { Post } from "#writing/posts";
+import { RssFeed } from "#writing/rss";
 
 function makePost(
     overrides: Omit<Partial<Post>, "date"> & { title: string; date: string; url: string },
@@ -24,9 +24,9 @@ function makePost(
     };
 }
 
-describe("renderRssFeed", () => {
+describe("RssFeed.render", () => {
     it("renders channel metadata and the canonical self link", () => {
-        const rss = renderRssFeed([]);
+        const rss = RssFeed.render([]);
 
         expect(rss).toContain("<title>Gustavo Ocanto — Writing</title>");
         expect(rss).toContain("<link>https://writing.gocanto.sh/</link>");
@@ -37,7 +37,7 @@ describe("renderRssFeed", () => {
     });
 
     it("orders posts newest first and uses stable canonical GUIDs", () => {
-        const rss = renderRssFeed([
+        const rss = RssFeed.render([
             makePost({ title: "Older", date: "2025-01-01", url: "/older" }),
             makePost({ title: "Newer", date: "2026-07-18", url: "/newer" }),
         ]);
@@ -51,7 +51,7 @@ describe("renderRssFeed", () => {
     });
 
     it("escapes XML text and preserves descriptions with CDATA boundaries", () => {
-        const rss = renderRssFeed([
+        const rss = RssFeed.render([
             makePost({
                 title: `Shipping & scaling <safely> "today"`,
                 date: "2026-07-18",
@@ -75,8 +75,8 @@ describe("renderRssFeed", () => {
     it("is deterministic and omits post-specific fields for an empty collection", () => {
         const posts = [makePost({ title: "One", date: "2026-07-18", url: "/one" })];
 
-        expect(renderRssFeed(posts)).toBe(renderRssFeed(posts));
-        expect(renderRssFeed([])).not.toContain("<lastBuildDate>");
-        expect(renderRssFeed([])).not.toContain("<item>");
+        expect(RssFeed.render(posts)).toBe(RssFeed.render(posts));
+        expect(RssFeed.render([])).not.toContain("<lastBuildDate>");
+        expect(RssFeed.render([])).not.toContain("<item>");
     });
 });

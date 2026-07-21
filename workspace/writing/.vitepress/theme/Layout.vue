@@ -3,12 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "#writing/posts-data";
-import {
-    countLabel as toCountLabel,
-    filterPosts,
-    groupByYear,
-    topTags,
-} from "#writing/theme/search";
+import { PostSearch } from "#writing/search";
 
 // Implements the "Writing" blog redesign (Writing.dc.html): framed 1180px shell,
 // sticky header with VitePress local (full-text) search + ⌘K, reading-progress
@@ -29,18 +24,18 @@ const isIndex = computed(() => cleanPath.value === "/" || cleanPath.value === ""
 // (the header palette), which navigates straight to a matching post.
 const tag = ref("all");
 
-const filtered = computed(() => filterPosts(posts, "", tag.value));
+const filtered = computed(() => PostSearch.filter(posts, "", tag.value));
 
-const chips = computed(() => topTags(posts));
+const chips = computed(() => PostSearch.topTags(posts));
 
 // The "Latest" card always shows the newest post, independent of the tag
 // filter, so selecting a tag only changes the list below — the layout above it
 // stays put instead of collapsing.
 const featured = computed(() => posts[0]);
 
-const groups = computed(() => groupByYear(filtered.value, featured.value));
+const groups = computed(() => PostSearch.groupByYear(filtered.value, featured.value));
 
-const countLabel = computed(() => toCountLabel(filtered.value.length));
+const countLabel = computed(() => PostSearch.countLabel(filtered.value.length));
 
 /* ---------------- article view model ---------------- */
 
