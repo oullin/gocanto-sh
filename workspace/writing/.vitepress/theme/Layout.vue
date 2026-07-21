@@ -3,12 +3,12 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "../../posts.data";
-import { countLabel as toCountLabel, filterPosts, groupByYear, topTags } from "./search";
+import { WritingIndexSearch } from "./search";
+import type { TopicSelection } from "./search";
 
-// Implements the "Writing" blog redesign (Writing.dc.html): framed 1180px shell,
-// sticky header with VitePress local (full-text) search + ⌘K, reading-progress
-// bar, an index view (featured card + tag chips + year groups) and an article
-// view (prose + sticky "On this page" TOC + author card + related).
+// Implements option 2a of the "Writing" redesign: a dark editorial index with
+// a sticky author rail and excerpted essay list. Articles retain their existing
+// header, reading progress, TOC, author card, related posts, and footer.
 
 const { page, frontmatter } = useData();
 const route = useRoute();
@@ -20,22 +20,23 @@ const isIndex = computed(() => cleanPath.value === "/" || cleanPath.value === ""
 
 /* ---------------- index view model (see ./search) ---------------- */
 
-// Tag chips filter the visible list; full-text search is VitePress local search
-// (the header palette), which navigates straight to a matching post.
-const tag = ref("all");
+// Topics filter the visible list; full-text search is VitePress local search,
+// which navigates straight to a matching post.
+const tag = ref<TopicSelection>(WritingIndexSearch.allTopics);
 
-const filtered = computed(() => filterPosts(posts, "", tag.value));
+const filtered = computed(() => WritingIndexSearch.filterPosts(posts, "", tag.value));
 
-const chips = computed(() => topTags(posts));
+const topics = computed(() => WritingIndexSearch.tagCounts(posts));
 
-// The "Latest" card always shows the newest post, independent of the tag
+// The featured essay always shows the newest post, independent of the tag
 // filter, so selecting a tag only changes the list below — the layout above it
 // stays put instead of collapsing.
 const featured = computed(() => posts[0]);
 
-const groups = computed(() => groupByYear(filtered.value, featured.value));
+const listedPosts = computed(() => WritingIndexSearch.listPosts(filtered.value, featured.value));
 
-const countLabel = computed(() => toCountLabel(filtered.value.length));
+const countLabel = computed(() => WritingIndexSearch.countLabel(filtered.value.length));
+const newestYear = computed(() => posts[0]?.date.year ?? String(new Date().getFullYear()));
 
 /* ---------------- article view model ---------------- */
 
@@ -139,267 +140,261 @@ const year = new Date().getFullYear();
 
 <template>
     <div class="wr">
-        <div class="wr-progress" :style="{ width: progressPct }"></div>
+        <div v-if="isIndex" class="wr-index-shell">
+            <aside class="wr-index-rail">
+                <a href="/" class="wr-rail-name">Gustavo<br />Ocanto</a>
+                <p class="wr-lede">
+                    Engineering notes from things I've actually shipped — Go, Laravel, and the
+                    edge. Real code from real systems. No slop.
+                </p>
 
-        <div class="wr-shell">
-            <!-- Header -->
-            <header class="wr-header">
-                <div class="wr-brand">
-                    <span class="wr-avatar" aria-hidden="true">
-                        <img src="/avatar-128.jpg" alt="" width="30" height="30" decoding="async" />
-                    </span>
-                    <a href="/" class="wr-home">Home</a>
-                </div>
-                <div class="wr-search">
-                    <VPNavBarSearch />
-                </div>
-            </header>
-
-            <!-- Index view -->
-            <main v-if="isIndex" class="wr-index">
-                <div class="wr-hero">
-                    <h1 class="wr-h1">Writing</h1>
-                    <p class="wr-lede">
-                        Engineering notes from things I've actually shipped — Go, Laravel, and the
-                        edge. Real code from real systems. No slop.
-                    </p>
-                    <div class="wr-actions">
-                        <!-- Force a native navigation; VitePress otherwise treats .rss as a page route. -->
-                        <a
-                            class="wr-subscribe"
-                            href="/feed.rss"
-                            target="_self"
-                            type="application/rss+xml"
-                        >
-                            <svg
-                                width="13"
-                                height="13"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                                aria-hidden="true"
-                            >
-                                <path d="M4 11a9 9 0 0 1 9 9"></path>
-                                <path d="M4 4a16 16 0 0 1 16 16"></path>
-                                <circle
-                                    cx="5"
-                                    cy="19"
-                                    r="1.5"
-                                    fill="currentColor"
-                                    stroke="none"
-                                ></circle>
-                            </svg>
-                            Subscribe
-                        </a>
-                    </div>
-                </div>
-
-                <a v-if="featured" :href="featured.url" class="wr-featured">
-                    <div class="wr-featured__side">
-                        <div class="wr-featured__kicker">Latest</div>
-                        <div>
-                            <div class="wr-featured__date">{{ featured.date.display }}</div>
-                            <div class="wr-featured__read">{{ featured.readingTime }} read</div>
-                        </div>
-                        <div class="wr-featured__tags">
-                            <span
-                                v-for="t in featured.tags.slice(0, 3)"
-                                :key="t"
-                                class="wr-chip-tag"
-                                >{{ t }}</span
-                            >
-                        </div>
-                    </div>
-                    <div class="wr-featured__main">
-                        <h2 class="wr-featured__title">{{ featured.title }}</h2>
-                        <p class="wr-featured__excerpt">{{ featured.description }}</p>
-                        <span class="wr-featured__cta"
-                            >Read the post <span class="wr-arrow">→</span></span
-                        >
-                    </div>
-                </a>
-
-                <div class="wr-filter">
-                    <div class="wr-chips">
+                <div class="wr-topics">
+                    <div class="wr-topics__label">Topics</div>
+                    <div class="wr-topics__list">
                         <button
-                            v-for="c in chips"
-                            :key="c"
-                            class="wr-chip"
-                            :class="{ 'is-active': tag === c }"
-                            @click="tag = tag === c ? 'all' : c"
+                            class="wr-topic"
+                            :class="{ 'is-active': tag === WritingIndexSearch.allTopics }"
+                            :aria-pressed="tag === WritingIndexSearch.allTopics"
+                            @click="tag = WritingIndexSearch.allTopics"
                         >
-                            {{ c === "all" ? "All" : c }}
+                            All ({{ posts.length }})
+                        </button>
+                        <button
+                            v-for="topic in topics"
+                            :key="topic.tag"
+                            class="wr-topic"
+                            :class="{ 'is-active': tag === topic.tag }"
+                            :aria-pressed="tag === topic.tag"
+                            @click="
+                                tag =
+                                    tag === topic.tag
+                                        ? WritingIndexSearch.allTopics
+                                        : topic.tag
+                            "
+                        >
+                            {{ topic.tag }} ({{ topic.count }})
                         </button>
                     </div>
-                    <div class="wr-count">{{ countLabel }}</div>
                 </div>
 
-                <div class="wr-groups">
-                    <section v-for="g in groups" :key="g.year" class="wr-year">
-                        <div class="wr-year__head">
-                            <h3>{{ g.year }}</h3>
-                            <span>{{ g.count }}</span>
+                <div class="wr-search wr-rail-search">
+                    <VPNavBarSearch />
+                </div>
+
+                <div class="wr-rail-bottom">
+                    <!-- Force native navigation; VitePress otherwise treats .rss as a page route. -->
+                    <a
+                        class="wr-subscribe"
+                        href="/feed.rss"
+                        target="_self"
+                        type="application/rss+xml"
+                        >Subscribe via RSS</a
+                    >
+                    <div>
+                        <a href="https://gocanto.sh" class="wr-site-link">gocanto.sh</a>
+                        <span> · Singapore</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="wr-index-main">
+                <div class="wr-index-head">
+                    <h1>Writing</h1>
+                    <span>{{ countLabel }} · {{ newestYear }}</span>
+                </div>
+
+                <article v-if="featured" class="wr-essay wr-essay--featured">
+                    <div class="wr-essay__latest">Latest — {{ featured.date.display }}</div>
+                    <h2><a :href="featured.url">{{ featured.title }}</a></h2>
+                    <p>{{ featured.description }}</p>
+                    <div class="wr-essay__meta">
+                        {{ featured.readingTime }} read<span v-if="featured.tags.length">
+                            · {{ featured.tags.join(", ") }}</span
+                        >
+                    </div>
+                </article>
+
+                <div class="wr-essay-list">
+                    <article v-for="post in listedPosts" :key="post.url" class="wr-essay">
+                        <h2><a :href="post.url">{{ post.title }}</a></h2>
+                        <p>{{ post.description }}</p>
+                        <div class="wr-essay__meta">
+                            {{ post.date.short }} · {{ post.readingTime
+                            }}<span v-if="post.tags.length"> · {{ post.tags.join(", ") }}</span>
                         </div>
-                        <a v-for="p in g.items" :key="p.url" :href="p.url" class="wr-row">
-                            <div class="wr-row__date">
-                                {{ p.date.short }}<br /><span>{{ p.readingTime }}</span>
-                            </div>
-                            <div class="wr-row__body">
-                                <h4>{{ p.title }}</h4>
-                                <p>{{ p.description }}</p>
-                                <div class="wr-row__tags">
-                                    <span v-for="t in p.tags.slice(0, 3)" :key="t" class="wr-tag">{{
-                                        t
-                                    }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </section>
+                    </article>
+
                     <div v-if="filtered.length === 0" class="wr-empty">
                         No posts tagged <span>{{ tag }}</span
                         >.
                     </div>
                 </div>
-            </main>
 
-            <!-- Article view -->
-            <main v-else class="wr-article-wrap">
-                <a href="/" class="wr-back">← All writing</a>
-                <div class="wr-article-grid">
-                    <article class="wr-article">
-                        <header class="wr-article__head">
-                            <div class="wr-article__tags">
-                                <span
-                                    v-for="(t, i) in articleTags"
-                                    :key="t"
-                                    class="wr-tag"
-                                    :class="{ 'wr-tag--accent': i === 0 }"
-                                    >{{ t }}</span
+                <footer class="wr-index-footer">
+                    <span><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</span>
+                    <span>© {{ year }} Gustavo Ocanto</span>
+                </footer>
+            </main>
+        </div>
+
+        <template v-else>
+            <div class="wr-progress" :style="{ width: progressPct }"></div>
+
+            <div class="wr-shell">
+                <header class="wr-header">
+                    <div class="wr-brand">
+                        <span class="wr-avatar" aria-hidden="true">
+                            <img
+                                src="/avatar-128.jpg"
+                                alt=""
+                                width="30"
+                                height="30"
+                                decoding="async"
+                            />
+                        </span>
+                        <a href="/" class="wr-home">Home</a>
+                    </div>
+                    <div class="wr-search">
+                        <VPNavBarSearch />
+                    </div>
+                </header>
+
+                <main class="wr-article-wrap">
+                    <a href="/" class="wr-back">← All writing</a>
+                    <div class="wr-article-grid">
+                        <article class="wr-article">
+                            <header class="wr-article__head">
+                                <div class="wr-article__tags">
+                                    <span
+                                        v-for="(t, i) in articleTags"
+                                        :key="t"
+                                        class="wr-tag"
+                                        :class="{ 'wr-tag--accent': i === 0 }"
+                                        >{{ t }}</span
+                                    >
+                                </div>
+                                <h1 class="wr-article__title">{{ frontmatter.title }}</h1>
+                                <div class="wr-article__meta">
+                                    <span>{{ currentPost?.date.display }}</span>
+                                    <span class="wr-sep">/</span>
+                                    <span>{{ currentPost?.readingTime }} read</span>
+                                    <span class="wr-sep">/</span>
+                                    <span>Gustavo Ocanto</span>
+                                </div>
+                            </header>
+
+                            <div class="vp-doc">
+                                <Content />
+                            </div>
+
+                            <div class="wr-share">
+                                <span class="wr-share__label">Share</span>
+                                <a
+                                    href="https://x.com/gocanto"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >X / Twitter</a
+                                >
+                                <a
+                                    href="https://news.ycombinator.com/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Hacker News</a
                                 >
                             </div>
-                            <h1 class="wr-article__title">{{ frontmatter.title }}</h1>
-                            <div class="wr-article__meta">
-                                <span>{{ currentPost?.date.display }}</span>
-                                <span class="wr-sep">/</span>
-                                <span>{{ currentPost?.readingTime }} read</span>
-                                <span class="wr-sep">/</span>
-                                <span>Gustavo Ocanto</span>
-                            </div>
-                        </header>
 
-                        <div class="vp-doc">
-                            <Content />
-                        </div>
-
-                        <div class="wr-share">
-                            <span class="wr-share__label">Share</span>
-                            <a
-                                href="https://x.com/gocanto"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >X / Twitter</a
-                            >
-                            <a
-                                href="https://news.ycombinator.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >Hacker News</a
-                            >
-                        </div>
-
-                        <div class="wr-bio">
-                            <span class="wr-bio__avatar" aria-hidden="true">
-                                <img
-                                    src="/avatar-128.jpg"
-                                    alt=""
-                                    width="52"
-                                    height="52"
-                                    decoding="async"
-                                />
-                            </span>
-                            <div>
-                                <div class="wr-bio__name">Gustavo Ocanto</div>
-                                <p>
-                                    Staff engineer working across Go, Laravel, and the edge. I write
-                                    down the things that only make sense after they've broken in
-                                    production.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div v-if="related.length" class="wr-related">
-                            <div class="wr-related__label">Related</div>
-                            <a
-                                v-for="r in related"
-                                :key="r.url"
-                                :href="r.url"
-                                class="wr-related__item"
-                            >
-                                <div class="wr-related__title">{{ r.title }}</div>
-                                <div class="wr-related__meta">
-                                    {{ r.date.display }} · {{ r.readingTime }} read
+                            <div class="wr-bio">
+                                <span class="wr-bio__avatar" aria-hidden="true">
+                                    <img
+                                        src="/avatar-128.jpg"
+                                        alt=""
+                                        width="52"
+                                        height="52"
+                                        decoding="async"
+                                    />
+                                </span>
+                                <div>
+                                    <div class="wr-bio__name">Gustavo Ocanto</div>
+                                    <p>
+                                        Staff engineer working across Go, Laravel, and the edge. I
+                                        write down the things that only make sense after they've
+                                        broken in production.
+                                    </p>
                                 </div>
-                            </a>
-                        </div>
-                    </article>
+                            </div>
 
-                    <aside class="wr-aside">
-                        <div class="wr-aside__label">On this page</div>
-                        <nav class="wr-toc">
-                            <a
-                                v-for="item in toc"
-                                :key="item.id"
-                                href="#"
-                                :class="{ 'is-active': activeToc === item.id }"
-                                @click.prevent="scrollToHeading(item.id)"
-                            >
-                                <span class="wr-toc__marker"></span>{{ item.label }}
-                            </a>
-                        </nav>
-                    </aside>
-                </div>
-            </main>
+                            <div v-if="related.length" class="wr-related">
+                                <div class="wr-related__label">Related</div>
+                                <a
+                                    v-for="r in related"
+                                    :key="r.url"
+                                    :href="r.url"
+                                    class="wr-related__item"
+                                >
+                                    <div class="wr-related__title">{{ r.title }}</div>
+                                    <div class="wr-related__meta">
+                                        {{ r.date.display }} · {{ r.readingTime }} read
+                                    </div>
+                                </a>
+                            </div>
+                        </article>
 
-            <!-- Footer -->
-            <footer class="wr-footer">
-                <div class="wr-footer__cols">
-                    <div>
-                        <div class="wr-footer__head">WRITING</div>
-                        <div class="wr-footer__links">
-                            <a href="/">All posts</a>
-                            <a href="https://gocanto.sh">gocanto.sh</a>
+                        <aside class="wr-aside">
+                            <div class="wr-aside__label">On this page</div>
+                            <nav class="wr-toc">
+                                <a
+                                    v-for="item in toc"
+                                    :key="item.id"
+                                    href="#"
+                                    :class="{ 'is-active': activeToc === item.id }"
+                                    @click.prevent="scrollToHeading(item.id)"
+                                >
+                                    <span class="wr-toc__marker"></span>{{ item.label }}
+                                </a>
+                            </nav>
+                        </aside>
+                    </div>
+                </main>
+
+                <footer class="wr-footer">
+                    <div class="wr-footer__cols">
+                        <div>
+                            <div class="wr-footer__head">WRITING</div>
+                            <div class="wr-footer__links">
+                                <a href="/">All posts</a>
+                                <a href="https://gocanto.sh">gocanto.sh</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="wr-footer__head">OPEN SOURCE</div>
+                            <div class="wr-footer__links">
+                                <a
+                                    href="https://github.com/gocanto"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >GitHub · gocanto</a
+                                >
+                            </div>
+                        </div>
+                        <div>
+                            <div class="wr-footer__head">CONNECT</div>
+                            <div class="wr-footer__links">
+                                <a href="mailto:gustavoocanto@gmail.com">Email</a>
+                                <a
+                                    href="https://x.com/gocanto"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >X</a
+                                >
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="wr-footer__head">OPEN SOURCE</div>
-                        <div class="wr-footer__links">
-                            <a
-                                href="https://github.com/gocanto"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >GitHub · gocanto</a
-                            >
-                        </div>
+                    <div class="wr-footer__bottom">
+                        <div><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</div>
+                        <div>© {{ year }} Gustavo Ocanto</div>
                     </div>
-                    <div>
-                        <div class="wr-footer__head">CONNECT</div>
-                        <div class="wr-footer__links">
-                            <a href="mailto:gustavoocanto@gmail.com">Email</a>
-                            <a
-                                href="https://x.com/gocanto"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >X</a
-                            >
-                        </div>
-                    </div>
-                </div>
-                <div class="wr-footer__bottom">
-                    <div><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</div>
-                    <div>© {{ year }} Gustavo Ocanto</div>
-                </div>
-            </footer>
-        </div>
+                </footer>
+            </div>
+        </template>
     </div>
 </template>

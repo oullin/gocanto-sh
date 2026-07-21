@@ -1,64 +1,86 @@
 import type { Post } from "../../posts.data";
 
-/**
- * Pure search/filter helpers for the writing index. Kept free of Vue/DOM so the
- * behaviour that drives the header search + tag filter is unit-testable.
- */
+/** A topic tag attached to a writing post. */
+export type TopicTag = string & { readonly __brand: "TopicTag" };
 
-export interface YearGroup {
-    year: string;
-    count: string;
-    items: Post[];
-}
+/** The active topic filter, including the sentinel that selects every topic. */
+export type TopicSelection = "all" | TopicTag;
 
-/** Case-insensitive match of a query against a post's title, description and tags. */
-export function matchesQuery(post: Post, query: string): boolean {
-    const q = query.trim().toLowerCase();
+/** A topic and the number of posts tagged with it. */
+export type TopicCount = {
+    readonly tag: TopicTag;
+    readonly count: number;
+};
 
-    if (!q) {
-        return true;
+/** Pure search and list behavior for the writing index, kept free of Vue and the DOM. */
+export class WritingIndexSearch {
+    /** The topic selection that disables topic filtering. */
+    static readonly allTopics: TopicSelection = "all";
+
+    private constructor() {}
+
+    /** Construct a topic tag from post metadata. */
+    static topicTag(value: string): TopicTag {
+        // SAFETY: Every post metadata tag is a valid topic tag; the brand prevents unrelated strings at callsites.
+        return value as TopicTag;
     }
 
-    return `${post.title} ${post.description} ${post.tags.join(" ")}`.toLowerCase().includes(q);
-}
+    /** Case-insensitively match a query against a post's title, description, and tags. */
+    static matchesQuery(post: Post, query: string): boolean {
+        const normalizedQuery = query.trim().toLowerCase();
 
-/** Filter posts by the active tag ("all" = no tag filter) and the search query. */
-export function filterPosts(posts: readonly Post[], query: string, tag: string): Post[] {
-    return posts.filter((p) => (tag === "all" || p.tags.includes(tag)) && matchesQuery(p, query));
-}
-
-/** Chip labels: "all" first, then the most-used tags, capped at `limit`. */
-export function topTags(posts: readonly Post[], limit = 8): string[] {
-    const counts = new Map<string, number>();
-
-    for (const p of posts) {
-        for (const t of p.tags) {
-            counts.set(t, (counts.get(t) ?? 0) + 1);
+        if (!normalizedQuery) {
+            return true;
         }
+
+        return `${post.title} ${post.description} ${post.tags.join(" ")}`
+            .toLowerCase()
+            .includes(normalizedQuery);
     }
 
-    const top = [...counts.keys()].sort((a, b) => counts.get(b)! - counts.get(a)!).slice(0, limit);
+    /** Filter posts by the active topic and search query. */
+    static filterPosts(
+        posts: readonly Post[],
+        query: string,
+        topic: TopicSelection,
+    ): Post[] {
+        return posts.filter(
+            (post) =>
+                (topic === WritingIndexSearch.allTopics || post.tags.includes(topic)) &&
+                WritingIndexSearch.matchesQuery(post, query),
+        );
+    }
 
-    return ["all", ...top];
-}
+    /** Return all topic counts, ordered by frequency and then alphabetically. */
+    static tagCounts(posts: readonly Post[]): TopicCount[] {
+        const counts = new Map<TopicTag, number>();
 
-export function countLabel(n: number): string {
-    return `${n} ${n === 1 ? "post" : "posts"}`;
-}
+        for (const post of posts) {
+            for (const rawTag of new Set(post.tags)) {
+                const tag = WritingIndexSearch.topicTag(rawTag);
 
-/**
- * Group posts by year (newest years first, as ordered in `posts`). The featured
- * post is dropped so it isn't shown twice — unless it's the only post, in which
- * case it's still listed rather than leaving the list empty.
- */
-export function groupByYear(posts: readonly Post[], featured?: Post): YearGroup[] {
-    const withoutFeatured = posts.filter((p) => !(featured && p.url === featured.url));
-    const list = withoutFeatured.length ? withoutFeatured : [...posts];
-    const years = [...new Set(list.map((p) => p.date.year))];
+                counts.set(tag, (counts.get(tag) ?? 0) + 1);
+            }
+        }
 
-    return years.map((year) => {
-        const items = list.filter((p) => p.date.year === year);
+        return [...counts]
+            .map(([tag, count]) => ({ tag, count }))
+            .sort((left, right) =>
+                right.count - left.count || left.tag.localeCompare(right.tag),
+            );
+    }
 
-        return { year, count: countLabel(items.length), items };
-    });
+    /** Format a post count with the correct singular or plural noun. */
+    static countLabel(count: number): string {
+        return `${count} ${count === 1 ? "post" : "posts"}`;
+    }
+
+    /** Exclude the featured post unless doing so would leave an existing list empty. */
+    static listPosts(posts: readonly Post[], featured?: Post): Post[] {
+        const withoutFeatured = posts.filter(
+            (post) => !(featured && post.url === featured.url),
+        );
+
+        return withoutFeatured.length ? withoutFeatured : [...posts];
+    }
 }
