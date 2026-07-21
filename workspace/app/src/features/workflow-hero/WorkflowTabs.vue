@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { Workflow } from "@features/workflow-hero/types";
+import type { WorkflowId, WorkflowMetadata } from "@features/workflow-hero/types";
 
 defineProps<{
-    activeTab: string;
-    workflows: readonly Workflow[];
+    activeTab: WorkflowId;
+    workflows: readonly WorkflowMetadata[];
 }>();
 
 const emit = defineEmits<{
     keydown: [event: KeyboardEvent, index: number];
-    select: [id: string];
+    select: [id: WorkflowId];
     setTabRef: [el: HTMLButtonElement | null, index: number];
 }>();
 </script>

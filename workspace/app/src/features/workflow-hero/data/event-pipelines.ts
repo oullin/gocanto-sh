@@ -9,12 +9,10 @@ import {
     Wand2,
 } from "lucide-vue-next";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { WorkflowPayload } from "@features/workflow-hero/types";
 
-export const eventPipelinesWorkflow: Workflow = {
-    id: "data-sync",
-    label: "Event Pipelines",
-    icon: Cable,
+/** Deferred canvas payload for the event pipelines workflow. */
+export const eventPipelinesPayload: WorkflowPayload = {
     connectors: [
         {
             x: 300,

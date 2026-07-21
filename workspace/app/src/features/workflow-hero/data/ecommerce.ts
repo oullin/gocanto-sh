@@ -1,11 +1,9 @@
 import { FileText, PackageCheck, PenLine, ShieldCheck, ShoppingCart, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { WorkflowPayload } from "@features/workflow-hero/types";
 
-export const ecommerceWorkflow: Workflow = {
-    id: "reporting",
-    label: "Ecommerce",
-    icon: ShoppingCart,
+/** Deferred canvas payload for the ecommerce workflow. */
+export const ecommercePayload: WorkflowPayload = {
     connectors: [
         {
             x: 424,
