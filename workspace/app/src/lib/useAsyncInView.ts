@@ -21,6 +21,9 @@ export function useAsyncInView<T>(
     loader: () => T | Promise<T>,
     { rootMargin = "200px", delayMs = 200 }: Options = {},
 ): Ref<T | null> {
+    // SAFETY: `ref` widens T to UnwrapRef<T>, which is identical for the values
+    // this composable loads; the cast restores the caller-facing Ref<T | null>
+    // type that Vue cannot infer through the generic.
     const data = ref<T | null>(null) as Ref<T | null>;
     let resolved = false;
 

@@ -2,6 +2,7 @@ import { FileText, Gauge, Landmark, PenLine, ServerCog, Wand2 } from "lucide-vue
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** Banking case study shown in the workflow hero. */
 export const bankingWorkflow: Workflow = {
     id: "follow-ups",
     label: "Banking",

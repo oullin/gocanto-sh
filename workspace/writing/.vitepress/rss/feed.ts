@@ -45,6 +45,11 @@ export class RssFeed {
     // cannot erase TS parameter properties — assign the field explicitly.
     private readonly deps: RssFeedDeps;
 
+    /**
+     * Creates a feed instance around a posts source.
+     *
+     * @param deps - The injected posts loader.
+     */
     public constructor(deps: RssFeedDeps) {
         this.deps = deps;
     }

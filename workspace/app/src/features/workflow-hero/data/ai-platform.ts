@@ -2,6 +2,7 @@ import { Bot, FileText, PackageCheck, PenLine, Wand2 } from "lucide-vue-next";
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** AI-platform case study shown in the workflow hero. */
 export const aiPlatformWorkflow: Workflow = {
     id: "lead-qualifier",
     label: "AI Platform",

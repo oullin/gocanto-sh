@@ -2,6 +2,7 @@ import { FileText, PackageCheck, PenLine, ShieldCheck, ShoppingCart, Wand2 } fro
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** E-commerce case study shown in the workflow hero. */
 export const ecommerceWorkflow: Workflow = {
     id: "reporting",
     label: "Ecommerce",

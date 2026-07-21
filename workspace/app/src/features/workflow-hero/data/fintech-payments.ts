@@ -2,6 +2,7 @@ import { CreditCard, FileText, PackageCheck, PenLine, ShieldCheck, Wand2 } from 
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** Fintech-payments case study shown in the workflow hero. */
 export const fintechPaymentsWorkflow: Workflow = {
     id: "meeting-prep",
     label: "Fintech Payments",

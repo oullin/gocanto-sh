@@ -11,6 +11,7 @@ import {
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** Query-tuning case study shown in the workflow hero. */
 export const queryTuningWorkflow: Workflow = {
     id: "content-drafting",
     label: "Query Tuning",

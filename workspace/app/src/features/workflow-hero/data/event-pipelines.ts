@@ -11,6 +11,7 @@ import {
 
 import type { Workflow } from "#app/features/workflow-hero";
 
+/** Event-pipelines case study shown in the workflow hero. */
 export const eventPipelinesWorkflow: Workflow = {
     id: "data-sync",
     label: "Event Pipelines",
