@@ -39,13 +39,39 @@ export type WorkflowConnector = {
     readonly delay: Exclude<WorkflowDelay, "early">;
 };
 
-export type Workflow = {
-    readonly id: string;
+/** Stable identifiers for workflow tabs and their deferred payloads. */
+export type WorkflowId =
+    | "lead-qualifier"
+    | "meeting-prep"
+    | "follow-ups"
+    | "data-sync"
+    | "reporting"
+    | "content-drafting";
+
+/** Lightweight data required to render one workflow tab. */
+export type WorkflowMetadata = {
+    readonly id: WorkflowId;
     readonly label: string;
     readonly icon: Component;
+};
+
+/** Deferred canvas data for one workflow. */
+export type WorkflowPayload = {
     readonly connectors: readonly WorkflowConnector[];
     readonly steps: readonly WorkflowStep[];
 };
+
+/** A complete workflow ready to render in the canvas. */
+export type Workflow = WorkflowMetadata & WorkflowPayload;
+
+/** Loads the deferred canvas data for one workflow. */
+export type WorkflowPayloadLoader = () => Promise<WorkflowPayload>;
+
+/** Loader registry keyed by workflow ID. */
+export type WorkflowPayloadLoaders = Readonly<Partial<Record<WorkflowId, WorkflowPayloadLoader>>>;
+
+/** Lifecycle state for the currently selected workflow panel. */
+export type WorkflowPanelState = "loading" | "ready" | "error";
 
 export type ProofAvatar = {
     readonly src: string;

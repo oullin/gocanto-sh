@@ -1,11 +1,9 @@
 import { CreditCard, FileText, PackageCheck, PenLine, ShieldCheck, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { WorkflowPayload } from "@features/workflow-hero/types";
 
-export const fintechPaymentsWorkflow: Workflow = {
-    id: "meeting-prep",
-    label: "Fintech Payments",
-    icon: CreditCard,
+/** Deferred canvas payload for the fintech payments workflow. */
+export const fintechPaymentsPayload: WorkflowPayload = {
     connectors: [
         {
             x: 404,
