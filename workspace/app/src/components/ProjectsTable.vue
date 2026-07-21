@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { filterProjectRows, listProjectLanguages, listProjectRows } from "@gocanto/domain";
+import { Projects } from "@gocanto/domain";
 import { projects } from "@gocanto/store";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,14 +10,14 @@ import { useInViewReady } from "@lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
 
-const allRows = listProjectRows(projects);
-const languages = listProjectLanguages(allRows);
+const allRows = Projects.rows(projects);
+const languages = Projects.languages(allRows);
 
 const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
 const filtering = ref(false);
 
-const filteredRows = computed(() => filterProjectRows(allRows, selected.value));
+const filteredRows = computed(() => Projects.filter(allRows, selected.value));
 
 const toggleLanguage = (lang: string) => {
     const next = new Set(selected.value);

@@ -17,13 +17,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command";
-import {
-    buildSearchCorpus,
-    SEARCH_KINDS,
-    type SearchCorpus,
-    type SearchKind,
-    type SearchResult,
-} from "@gocanto/domain";
+import { SearchCorpus, type SearchKind, type SearchResult } from "@gocanto/domain";
 import { education, experience, links, profile, projects, talks } from "@gocanto/store";
 import SearchResultDetail from "@components/SearchResultDetail.vue";
 import { globalSearchOpen } from "@lib/globalSearch";
@@ -47,7 +41,7 @@ let corpusLoading = false;
 
 const isKindVisible = (k: SearchKind) => selectedKind.value === null || selectedKind.value === k;
 
-const visibleKinds = computed(() => SEARCH_KINDS.filter((k) => isKindVisible(k.key)));
+const visibleKinds = computed(() => SearchCorpus.KINDS.filter((k) => isKindVisible(k.key)));
 
 const toggleKind = (k: SearchKind) => {
     selectedKind.value = selectedKind.value === k ? null : k;
@@ -56,7 +50,7 @@ const toggleKind = (k: SearchKind) => {
 async function buildCorpus(): Promise<SearchCorpus> {
     const { recommendations } = await import("@gocanto/store/recommendations");
 
-    return buildSearchCorpus({
+    return SearchCorpus.from({
         education,
         experience,
         links,
@@ -154,7 +148,7 @@ watch(sheetOpen, (v) => {
         <CommandInput placeholder="What are you searching for?" />
         <div class="search-filters" role="group" aria-label="Filter by kind">
             <button
-                v-for="k in SEARCH_KINDS"
+                v-for="k in SearchCorpus.KINDS"
                 :key="k.key"
                 type="button"
                 class="search-filters__chip"

@@ -7,25 +7,18 @@
         "#domain/*": "./src/*.ts"
     },
     "exports": {
-        ".": {
-            "types": "./src/index.ts",
-            "default": "./src/index.ts"
-        },
-        "./text": {
-            "types": "./src/text.ts",
-            "default": "./src/text.ts"
-        },
+        ".": "./src/index.ts",
+        "./kernel": "./src/kernel/index.ts",
+        "./text": "./src/text/index.ts",
+        "./search": "./src/search/index.ts",
+        "./projects": "./src/projects/index.ts",
+        "./work": "./src/work/index.ts",
+        "./skills": "./src/skills/index.ts",
+        "./recommendations": "./src/recommendations/index.ts",
+        "./detail": "./src/detail/index.ts",
         "./purify": {
-            "browser": {
-                "types": "./src/purify.browser.ts",
-                "default": "./src/purify.browser.ts"
-            },
-            "types": "./src/purify.node.ts",
-            "default": "./src/purify.node.ts"
-        },
-        "./search": {
-            "types": "./src/search.ts",
-            "default": "./src/search.ts"
+            "browser": "./src/purify/sanitizer.browser.ts",
+            "default": "./src/purify/sanitizer.node.ts"
         }
     },
     "scripts": {

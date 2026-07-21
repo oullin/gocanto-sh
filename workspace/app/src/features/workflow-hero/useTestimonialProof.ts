@@ -1,9 +1,5 @@
 import { computed, onMounted, ref } from "vue";
-import {
-    AVATAR_BASE_URL,
-    sortRecommendationsNewestFirst,
-    uniqueRecommendations,
-} from "@gocanto/domain";
+import { AVATAR_BASE_URL, Recommendations } from "@gocanto/domain";
 
 import type { ProofAvatar } from "@features/workflow-hero/types";
 
@@ -15,8 +11,8 @@ export const useTestimonialProof = () => {
 
     onMounted(async () => {
         const { recommendations } = await import("@gocanto/store/recommendations");
-        const unique = uniqueRecommendations(recommendations.data);
-        const sorted = sortRecommendationsNewestFirst(unique);
+        const unique = Recommendations.unique(recommendations.data);
+        const sorted = Recommendations.sortNewestFirst(unique);
 
         testimonialCount.value = unique.length;
         proofAvatars.value = sorted.slice(0, 4).map((r) => ({

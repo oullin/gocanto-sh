@@ -18,13 +18,7 @@ import {
     Quote,
     Sparkles,
 } from "lucide-vue-next";
-import {
-    commaList,
-    detailHeaderFor,
-    detailParagraphs,
-    stripHtml,
-    type SearchPayload,
-} from "@gocanto/domain";
+import { DetailView, TextFormatter, type SearchPayload } from "@gocanto/domain";
 
 const props = defineProps<{
     open: boolean;
@@ -40,7 +34,7 @@ const isOpen = computed({
     set: (v) => emit("update:open", v),
 });
 
-const header = computed(() => detailHeaderFor(props.payload));
+const header = computed(() => DetailView.headerFor(props.payload));
 
 const kindIcon = computed(() => {
     switch (header.value?.kind) {
@@ -107,7 +101,7 @@ const kindIcon = computed(() => {
             <div class="px-6 pb-8 pt-2 text-[15px] leading-relaxed text-foreground/90 space-y-4">
                 <template v-if="payload?.kind === 'Work'">
                     <p
-                        v-for="(para, i) in detailParagraphs(payload.data.summary)"
+                        v-for="(para, i) in DetailView.paragraphs(payload.data.summary)"
                         :key="i"
                         class="whitespace-pre-line"
                     >
@@ -119,7 +113,7 @@ const kindIcon = computed(() => {
                         </h3>
                         <div class="flex flex-wrap gap-2">
                             <span
-                                v-for="skill in commaList(payload.data.skills)"
+                                v-for="skill in DetailView.commaList(payload.data.skills)"
                                 :key="skill"
                                 class="pill"
                             >
@@ -167,7 +161,9 @@ const kindIcon = computed(() => {
                 </template>
 
                 <template v-else-if="payload?.kind === 'Education'">
-                    <p class="whitespace-pre-line">{{ stripHtml(payload.data.description) }}</p>
+                    <p class="whitespace-pre-line">
+                        {{ TextFormatter.stripHtml(payload.data.description) }}
+                    </p>
                 </template>
 
                 <template v-else-if="payload?.kind === 'Talk'">
@@ -194,7 +190,9 @@ const kindIcon = computed(() => {
                 </template>
 
                 <template v-else-if="payload?.kind === 'Recommendation'">
-                    <p class="whitespace-pre-line italic">"{{ stripHtml(payload.data.text) }}"</p>
+                    <p class="whitespace-pre-line italic">
+                        "{{ TextFormatter.stripHtml(payload.data.text) }}"
+                    </p>
                     <p class="pt-4 border-t border-border text-sm text-muted-foreground">
                         {{ payload.data.relation }}
                     </p>

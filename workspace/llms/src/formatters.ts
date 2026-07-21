@@ -14,7 +14,7 @@ import type {
     TalkRecord,
     TalksFixture,
 } from "@gocanto/store";
-import { stripHtml } from "@gocanto/domain/text";
+import { TextFormatter } from "@gocanto/domain/text";
 
 const SITE_URL = "https://gocanto.sh";
 
@@ -29,10 +29,10 @@ const renderSkill = (skill: ProfileSkillRecord): string => {
         lines.push(`- Years: ${skill.years}`);
     }
 
-    lines.push("", stripHtml(skill.description));
+    lines.push("", TextFormatter.stripHtml(skill.description));
 
     if (skill.long_description) {
-        lines.push("", stripHtml(skill.long_description));
+        lines.push("", TextFormatter.stripHtml(skill.long_description));
     }
 
     if (skill.related_tech?.length) {
@@ -99,7 +99,7 @@ const renderProject = (project: ProjectRecord): string => {
         `- Published: ${project.published_at}`,
         `- URL: <${project.url}>`,
         "",
-        stripHtml(project.excerpt),
+        TextFormatter.stripHtml(project.excerpt),
     ];
 
     return lines.join("\n");
@@ -125,7 +125,7 @@ const renderExperience = (entry: ExperienceRecord): string => {
         `- Employment: ${entry.employment_type} (${entry.location_type})`,
         `- Location: ${entry.city}, ${entry.country}`,
         "",
-        stripHtml(entry.summary),
+        TextFormatter.stripHtml(entry.summary),
         "",
         `**Skills:** ${entry.skills}`,
     ];
@@ -150,7 +150,7 @@ const renderEducation = (entry: EducationRecord): string => {
         `- Graduated: ${entry.graduated_at}`,
         `- Country: ${entry.issuing_country}`,
         "",
-        stripHtml(entry.description),
+        TextFormatter.stripHtml(entry.description),
     ];
 
     return lines.join("\n");
@@ -160,7 +160,7 @@ export const formatEducation = (fixture: EducationFixture): string =>
     ["# Education", "", fixture.data.map(renderEducation).join("\n\n---\n\n")].join("\n");
 
 const renderRecommendation = (rec: RecommendationRecord): string => {
-    const body = stripHtml(rec.text)
+    const body = TextFormatter.stripHtml(rec.text)
         .split("\n")
         .map((line) => (line ? `> ${line}` : ">"))
         .join("\n");
@@ -197,7 +197,7 @@ export const formatTalks = (fixture: TalksFixture): string =>
     ["# Talks", "", fixture.data.map(renderTalk).join("\n\n---\n\n")].join("\n");
 
 const renderLink = (link: LinkRecord): string =>
-    `- [${link.name} (${link.handle})](${link.url}) — ${stripHtml(link.description)}`;
+    `- [${link.name} (${link.handle})](${link.url}) — ${TextFormatter.stripHtml(link.description)}`;
 
 export const formatLinks = (fixture: LinksFixture): string =>
     [

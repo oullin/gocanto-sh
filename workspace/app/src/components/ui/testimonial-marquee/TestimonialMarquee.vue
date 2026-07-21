@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { stripHtml } from "@gocanto/domain";
+import { TextFormatter } from "@gocanto/domain";
 import { cn } from "@lib/utils";
 import TestimonialCard from "@components/ui/testimonial-marquee/TestimonialCard.vue";
 import type { Testimonial } from "@components/ui/testimonial-marquee/types";
@@ -23,7 +23,7 @@ const emit = defineEmits<{
 const itemsToDisplay = computed<Testimonial[]>(() => {
     const sanitized = props.items.map((item) => ({
         ...item,
-        text: stripHtml(item.text),
+        text: TextFormatter.stripHtml(item.text),
     }));
     let result = [...sanitized];
 

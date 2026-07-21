@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from "vue";
-import {
-    listRecommendationsNewestFirst,
-    listTestimonials,
-    type SearchPayload,
-} from "@gocanto/domain";
+import { Recommendations, type SearchPayload } from "@gocanto/domain";
 import type { RecommendationRecord } from "@gocanto/store";
 import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
 import SearchResultDetail from "@components/SearchResultDetail.vue";
@@ -22,7 +18,7 @@ const picked = computed<RecommendationRecord[]>(() => {
         return [];
     }
 
-    return [...listRecommendationsNewestFirst(recommendationsFixture.value)];
+    return [...Recommendations.listNewestFirst(recommendationsFixture.value)];
 });
 
 const byId = computed<Map<string, RecommendationRecord>>(
@@ -30,7 +26,9 @@ const byId = computed<Map<string, RecommendationRecord>>(
 );
 
 const items = computed<Testimonial[]>(() =>
-    recommendationsFixture.value ? [...listTestimonials(recommendationsFixture.value)] : [],
+    recommendationsFixture.value
+        ? [...Recommendations.testimonials(recommendationsFixture.value)]
+        : [],
 );
 const loading = computed(() => recommendationsFixture.value === null);
 
