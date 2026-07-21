@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts",
+        "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts && tsx scripts/bundle-guard.ts",
         "dev": "PORTLESS_PORT=${PORTLESS_PORT:-1355} PORTLESS_HTTPS=${PORTLESS_HTTPS:-1} PORTLESS_SYNC_HOSTS=${PORTLESS_SYNC_HOSTS:-0} portless",
         "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
         "format": "make -C ../.. ui-format",

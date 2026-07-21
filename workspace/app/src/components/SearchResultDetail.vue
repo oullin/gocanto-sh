@@ -24,6 +24,7 @@ import {
     detailParagraphs,
     stripHtml,
     type SearchPayload,
+    UrlGuard,
 } from "@gocanto/domain";
 
 const props = defineProps<{
@@ -137,7 +138,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.published_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -182,7 +183,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.created_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -203,7 +204,7 @@ const kindIcon = computed(() => {
                 <template v-else-if="payload?.kind === 'Link'">
                     <p class="text-muted-foreground">{{ payload.data.description }}</p>
                     <a
-                        :href="payload.data.url"
+                        :href="UrlGuard.safeHref(payload.data.url)"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 text-foreground hover:underline"
