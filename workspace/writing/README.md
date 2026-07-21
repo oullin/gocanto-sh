@@ -64,24 +64,17 @@ The file `posts/<slug>.md` publishes at the clean URL `writing.gocanto.sh/<slug>
 page (`index.md`) lists all posts newest-first via `posts.data.ts`
 (`createContentLoader`).
 
-## Deployment (separate Vercel project)
+## Deployment
 
-`writing.gocanto.sh` deploys as its **own** Vercel project, distinct from the
-`gocanto-sh` project that serves the profile site. Both point at this repo; Vercel
-projects on one repo can't share a root `vercel.json`, so configure project B in the
-dashboard:
+`writing.gocanto.sh` is served by the same `gocanto-sh` Vercel project as the profile
+site, not a separate one. `pnpm build:vercel` builds both and mounts this site's output
+at `dist/writing`; `vercel.json` rewrites requests whose `Host` is `writing.gocanto.sh`
+to that directory. See the
+[Vercel operations](../../README.md#vercel-operations) section for the full routing
+rules and why neither site may sit at the output root.
 
-| Setting          | Value                                                                             |
-| ---------------- | --------------------------------------------------------------------------------- |
-| Root Directory   | `./` (repo root — needed for the pnpm workspace install)                          |
-| Install Command  | `pnpm install --frozen-lockfile`                                                  |
-| Build Command    | `pnpm turbo run build --filter=@gocanto/writing --cache-dir storage/.cache/turbo` |
-| Output Directory | `workspace/writing/.vitepress/dist`                                               |
+Adding a post needs no deploy config: push to `main` and the project rebuilds both
+sites.
 
-Then add the domain:
-
-1. Project B → Settings → Domains → add `writing.gocanto.sh`.
-2. Create a DNS `CNAME` record: `writing` → the target Vercel shows (typically
-   `cname.vercel-dns.com`).
-
-The profile site (`gocanto.sh`) links here from its top nav.
+The profile site (`gocanto.sh`) links here from its top nav, and `gocanto.sh/writing/*`
+redirects here so the writing site keeps one canonical origin.

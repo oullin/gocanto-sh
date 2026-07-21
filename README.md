@@ -27,7 +27,7 @@ Related Oullin domains live in separate deployment targets:
 | Domain                                             | Deployment target                   | Purpose                                                                                      |
 | -------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
 | [`gocanto.sh`](https://gocanto.sh)                 | Vercel project `gocanto-sh`         | Gustavo Ocanto's personal profile site.                                                      |
-| [`writing.gocanto.sh`](https://writing.gocanto.sh) | Separate Vercel project (VitePress) | Long-form engineering writing. Source in [`workspace/writing`](workspace/writing/README.md). |
+| [`writing.gocanto.sh`](https://writing.gocanto.sh) | Vercel project `gocanto-sh`         | Long-form engineering writing. Source in [`workspace/writing`](workspace/writing/README.md). |
 | [`ollin.sh`](https://ollin.sh)                     | Vercel project `ollin-sh`           | Short-domain redirect to [`oullin.io`](https://oullin.io).                                   |
 | [`oullin.io`](https://oullin.io)                   | External site `oullin.io`           | Boutique software engineering and architecture consultancy.                                  |
 
@@ -75,7 +75,24 @@ curl -I https://gocanto.sh/
 
 Expected production response for `https://gocanto.sh/` is `HTTP/2 200`.
 
-`writing.gocanto.sh` (the VitePress site in [`workspace/writing`](workspace/writing/README.md)) deploys as its own, separate Vercel project — confirmed by the same `server: Vercel` / `x-vercel-id` header evidence above. It is not built or served by this repo's Vercel project or by `pages.yml`.
+#### Both domains, one project
+
+`gocanto.sh` and `writing.gocanto.sh` are served by the single `gocanto-sh` project. `pnpm build:vercel` builds both sites and [`infra/scripts/assemble-dist.ts`](infra/scripts/assemble-dist.ts) mounts them side by side:
+
+```
+dist/
+  app/      <- workspace/app/dist          -> gocanto.sh
+  writing/  <- workspace/writing/.vitepress/dist -> writing.gocanto.sh
+```
+
+Neither site may sit at the `dist/` root. Vercel resolves the filesystem *before* rewrites, so a root-level `/index.html` or `/assets/*` would be served on both hosts and shadow whichever site did not own it. With the root empty, the host rewrites in `vercel.json` always decide. The build fails if anything else appears at the root.
+
+`vercel.json` then routes by `Host`:
+
+- `writing.gocanto.sh/(.*)` rewrites to `/writing/$1`; everything else rewrites to `/app/$1`.
+- `gocanto.sh/writing/*` permanently redirects to `writing.gocanto.sh/*`, so the writing site has one canonical origin. Preview deployments skip this redirect, which is how you verify the writing side before a domain is attached.
+- Security headers are per-host. The writing host needs `script-src 'unsafe-inline'`: VitePress emits an inline `__VP_HASH_MAP__` script whose hash changes with every post, so a pinned hash would break the site on the next publish.
+- `cleanUrls` serves `posts/<slug>.md` at `/<slug>` without the `.html` suffix.
 
 #### GitHub Pages workflow (secondary/fallback, not production)
 
