@@ -8,11 +8,13 @@ export class Posts {
         year: "numeric",
         month: "short",
         day: "numeric",
+        timeZone: "UTC",
     });
 
     private static readonly shortDateFormatter = new Intl.DateTimeFormat("en-US", {
         month: "short",
         day: "2-digit",
+        timeZone: "UTC",
     });
 
     private constructor() {}
@@ -44,7 +46,7 @@ export class Posts {
 
     // ~200 wpm is the conventional reading pace; round up so a stub still reads
     // "1 min".
-    private static readingTime(src: string): string {
+    public static readingTime(src: string): string {
         const words = src
             .replace(/^---[\s\S]*?---/, "")
             .replace(/```[\s\S]*?```/g, "")
@@ -56,7 +58,7 @@ export class Posts {
 
     // YAML parses an unquoted `date: 2026-07-18` into a Date, and a quoted one
     // into a string. Normalize both to a YYYY-MM-DD string before formatting.
-    private static normalizeDate(value: unknown, url: string): string | null {
+    public static normalizeDate(value: unknown, url: string): string | null {
         if (value instanceof Date) {
             if (Number.isNaN(value.getTime())) {
                 throw new Error(`Invalid date in post ${url}. Expected YYYY-MM-DD format.`);
@@ -68,7 +70,7 @@ export class Posts {
         return typeof value === "string" ? value : null;
     }
 
-    private static formatDate(raw: string, url: string): Post["date"] {
+    public static formatDate(raw: string, url: string): Post["date"] {
         const date = new Date(`${raw}T00:00:00Z`);
 
         if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== raw) {
@@ -85,7 +87,7 @@ export class Posts {
         };
     }
 
-    private static normalizeTags(value: unknown): string[] {
+    public static normalizeTags(value: unknown): string[] {
         if (Array.isArray(value)) {
             return value.filter((tag): tag is string => typeof tag === "string");
         }

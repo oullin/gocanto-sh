@@ -11,7 +11,7 @@
         "#writing/rss": "./.vitepress/rss/index.ts",
         "#writing/rss/feed": "./.vitepress/rss/feed.ts",
         "#writing/search": "./.vitepress/search/index.ts",
-        "#writing/search/post-search": "./.vitepress/search/post-search.ts",
+        "#writing/search/index-search": "./.vitepress/search/index-search.ts",
         "#writing/*": "./.vitepress/*"
     },
     "scripts": {
@@ -19,7 +19,7 @@
         "dev:site": "vitepress dev --host 0.0.0.0 --port ${PORT:-5175}",
         "build": "vitepress build",
         "preview": "vitepress preview --host 0.0.0.0 --port ${PORT:-4175}",
-        "lint": "exit 0",
+        "lint": "make -C ../.. lint",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc --noEmit"
     },

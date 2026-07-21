@@ -31,6 +31,7 @@ export class MarkdownBundleWriter {
 
         const generated: GeneratedFile[] = [
             { name: "profile.md", body: FixtureMarkdown.profile(fixtures.profile) },
+            { name: "bio.md", body: FixtureMarkdown.bio(fixtures.bio) },
             { name: "experience.md", body: FixtureMarkdown.experience(fixtures.experience) },
             { name: "projects.md", body: FixtureMarkdown.projects(fixtures.projects) },
             { name: "education.md", body: FixtureMarkdown.education(fixtures.education) },

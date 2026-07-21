@@ -8,9 +8,9 @@ export default defineConfig(
 	        environment: "node",
 	        globals: false,
 	        include: ["src/**/*.test.ts"],
-	        isolate: false,
-	        fileParallelism: false,
-	        pool: "threads",
+	        sequence: {
+	            groupOrder: 1,
+	        },
 	    },
 	},
 );

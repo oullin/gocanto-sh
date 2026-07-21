@@ -1,3 +1,30 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json"
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "Referrer-Policy",
+                    "value": "strict-origin-when-cross-origin"
+                },
+                {
+                    "key": "X-Frame-Options",
+                    "value": "DENY"
+                },
+                {
+                    "key": "Strict-Transport-Security",
+                    "value": "max-age=63072000; includeSubDomains"
+                },
+                {
+                    "key": "Content-Security-Policy",
+                    "value": "default-src 'self'; script-src 'self' 'sha256-db0LEPBvXf/2CiWd7lMF1BJyZImu6Gx2K5wyV9CTKWg=' https://va.vercel-scripts.com; connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com; img-src 'self' https://oullin.io data:; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
+                }
+            ]
+        }
+    ]
 }

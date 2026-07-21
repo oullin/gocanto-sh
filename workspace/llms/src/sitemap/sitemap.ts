@@ -8,6 +8,7 @@ import type {
 const MD_PAGES = [
     "index.md",
     "profile.md",
+    "bio.md",
     "experience.md",
     "projects.md",
     "education.md",
@@ -101,7 +102,11 @@ export class Sitemap {
     }
 
     private static isoDate(input: string): string | null {
-        const parsed = new Date(input);
+        if (!input) {
+            return null;
+        }
+
+        const parsed = new Date(/^\d{4}-\d{2}-\d{2}$/.test(input) ? `${input}T00:00:00Z` : input);
 
         if (Number.isNaN(parsed.getTime())) {
             return null;

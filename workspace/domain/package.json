@@ -16,6 +16,7 @@
         "./skills": "./src/skills/index.ts",
         "./recommendations": "./src/recommendations/index.ts",
         "./detail": "./src/detail/index.ts",
+        "./url-guard": "./src/url-guard/index.ts",
         "./purify": {
             "browser": "./src/purify/sanitizer.browser.ts",
             "default": "./src/purify/sanitizer.node.ts"
@@ -24,6 +25,7 @@
     "scripts": {
         "format": "make -C ../.. ui-format",
         "format:check": "make -C ../.. ui-format",
+        "lint": "make -C ../.. lint",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },

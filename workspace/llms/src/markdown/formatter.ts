@@ -3,6 +3,7 @@ import { SITE_URL } from "#llms/kernel/constants";
 import type { AllFixtures } from "#llms/markdown/types";
 
 import type {
+    BioFixture,
     EducationFixture,
     EducationRecord,
     ExperienceFixture,
@@ -164,9 +165,36 @@ export class FixtureMarkdown {
      * @param data - Complete fixture collection to render.
      * @returns Combined markdown.
      */
+    /**
+     * Renders the biography fixture.
+     *
+     * @param fixture - Biography fixture to render.
+     * @returns Biography markdown.
+     */
+    public static bio(fixture: BioFixture): string {
+        const { tagline, note, paragraphs, quick_facts } = fixture.data;
+
+        return [
+            "# Bio",
+            "",
+            `> ${tagline}`,
+            "",
+            note,
+            "",
+            "## Story",
+            "",
+            paragraphs.map((paragraph) => TextFormatter.stripHtml(paragraph)).join("\n\n"),
+            "",
+            "## Quick facts",
+            "",
+            quick_facts.map(({ key, value }) => `- **${key}:** ${value}`).join("\n"),
+        ].join("\n");
+    }
+
     public static all(data: AllFixtures): string {
         return [
             FixtureMarkdown.profile(data.profile),
+            FixtureMarkdown.bio(data.bio),
             FixtureMarkdown.experience(data.experience),
             FixtureMarkdown.projects(data.projects),
             FixtureMarkdown.education(data.education),

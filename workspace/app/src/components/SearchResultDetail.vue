@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { DetailView, TextFormatter, type SearchPayload } from "@gocanto/domain";
+import { DetailView, TextFormatter, UrlGuard, type SearchPayload } from "@gocanto/domain";
 
 import {
     Sheet,
@@ -142,7 +142,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.published_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -189,7 +189,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.created_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -212,7 +212,7 @@ const kindIcon = computed(() => {
                 <template v-else-if="payload?.kind === 'Link'">
                     <p class="text-muted-foreground">{{ payload.data.description }}</p>
                     <a
-                        :href="payload.data.url"
+                        :href="UrlGuard.safeHref(payload.data.url)"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 text-foreground hover:underline"

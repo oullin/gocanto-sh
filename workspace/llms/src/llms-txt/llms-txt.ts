@@ -25,6 +25,7 @@ export class LlmsTxt {
 ## Sections
 
 - [Profile & skills](${siteUrl}/profile.md)
+- [Bio](${siteUrl}/bio.md)
 - [Experience](${siteUrl}/experience.md)
 - [Projects](${siteUrl}/projects.md)
 - [Education](${siteUrl}/education.md)

@@ -19,6 +19,7 @@
     "scripts": {
         "format": "make -C ../.. ui-format",
         "format:check": "make -C ../.. ui-format",
+        "lint": "make -C ../.. lint",
         "test": "vitest run --passWithNoTests",
         "typecheck": "tsc -p tsconfig.json"
     },

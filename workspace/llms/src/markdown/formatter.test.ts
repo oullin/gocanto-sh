@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { FixtureMarkdown } from "#llms/markdown/formatter";
 
 import type {
+    BioFixture,
     EducationFixture,
     ExperienceFixture,
     LinksFixture,
@@ -10,6 +11,16 @@ import type {
     RecommendationsFixture,
     TalksFixture,
 } from "@gocanto/store";
+
+const bio: BioFixture = {
+    version: "1.0.0",
+    data: {
+        tagline: "A test biography.",
+        note: "Fixture note.",
+        paragraphs: ["<p>Fixture story.</p>"],
+        quick_facts: [{ key: "Based in", value: "Test City" }],
+    },
+};
 
 const profile: ProfileFixture = {
     version: "1.0.0",
@@ -254,6 +265,7 @@ describe("FixtureMarkdown.all", () => {
     it("joins sections with --- separators", () => {
         const out = FixtureMarkdown.all({
             profile,
+            bio,
             projects,
             experience,
             education,
@@ -263,10 +275,11 @@ describe("FixtureMarkdown.all", () => {
         });
 
         const separators = out.match(/\n\n---\n\n/g) ?? [];
-        // 6 separators between the 7 top-level sections, plus one inside the
+        // 7 separators between the 8 top-level sections, plus one inside the
         // projects section because the fixture has two projects.
-        expect(separators.length).toBe(7);
+        expect(separators.length).toBe(8);
         expect(out).toContain("# Gustavo Ocanto");
+        expect(out).toContain("# Bio");
         expect(out).toContain("# Projects");
         expect(out).toContain("# Experience");
         expect(out).toContain("# Education");

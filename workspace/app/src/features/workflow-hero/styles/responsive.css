@@ -127,4 +127,18 @@
     .wf-card--mobile-only {
         animation-delay: 3600ms;
     }
+    .wf-canvas-status {
+        min-height: 360px;
+    }
+    .wf-canvas-skeleton {
+        width: 100%;
+        grid-template-columns: 1fr;
+        padding-inline: 0;
+        gap: 16px;
+    }
+    .wf-canvas-skeleton__card {
+        width: min(100%, 330px);
+        height: 132px;
+        margin-inline: auto;
+    }
 }

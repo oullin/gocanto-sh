@@ -1,12 +1,9 @@
 import { Bot, FileText, PackageCheck, PenLine, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "#app/features/workflow-hero";
+import type { WorkflowPayload } from "#app/features/workflow-hero/types";
 
-/** AI-platform case study shown in the workflow hero. */
-export const aiPlatformWorkflow: Workflow = {
-    id: "lead-qualifier",
-    label: "AI Platform",
-    icon: Bot,
+/** Canvas payload bundled eagerly for the default workflow. */
+export const aiPlatformPayload: WorkflowPayload = {
     connectors: [
         {
             x: 394,

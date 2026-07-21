@@ -1,18 +1,29 @@
-import { aiPlatformWorkflow } from "#app/features/workflow-hero/data/ai-platform";
-import { bankingWorkflow } from "#app/features/workflow-hero/data/banking";
-import { ecommerceWorkflow } from "#app/features/workflow-hero/data/ecommerce";
-import { eventPipelinesWorkflow } from "#app/features/workflow-hero/data/event-pipelines";
-import { fintechPaymentsWorkflow } from "#app/features/workflow-hero/data/fintech-payments";
-import { queryTuningWorkflow } from "#app/features/workflow-hero/data/query-tuning";
+import { aiPlatformPayload } from "#app/features/workflow-hero/data/ai-platform";
+import type { Workflow, WorkflowPayloadLoaders } from "#app/features/workflow-hero/types";
 
-import type { Workflow } from "#app/features/workflow-hero";
+import {
+    defaultWorkflowMetadata,
+    workflowMetadata,
+} from "#app/features/workflow-hero/data/metadata";
 
-/** Curated workflow definitions displayed by the workflow hero. */
-export const workflows = [
-    aiPlatformWorkflow,
-    fintechPaymentsWorkflow,
-    bankingWorkflow,
-    eventPipelinesWorkflow,
-    ecommerceWorkflow,
-    queryTuningWorkflow,
-] as const satisfies readonly Workflow[];
+/** Complete default workflow, kept synchronous for first paint and SSR. */
+export const defaultWorkflow: Workflow = {
+    ...defaultWorkflowMetadata,
+    ...aiPlatformPayload,
+};
+
+/** Deferred payload loaders for every inactive workflow tab. */
+export const workflowPayloadLoaders: WorkflowPayloadLoaders = {
+    "meeting-prep": async () =>
+        (await import("#app/features/workflow-hero/data/fintech-payments")).fintechPaymentsPayload,
+    "follow-ups": async () =>
+        (await import("#app/features/workflow-hero/data/banking")).bankingPayload,
+    "data-sync": async () =>
+        (await import("#app/features/workflow-hero/data/event-pipelines")).eventPipelinesPayload,
+    reporting: async () =>
+        (await import("#app/features/workflow-hero/data/ecommerce")).ecommercePayload,
+    "content-drafting": async () =>
+        (await import("#app/features/workflow-hero/data/query-tuning")).queryTuningPayload,
+};
+
+export { workflowMetadata };

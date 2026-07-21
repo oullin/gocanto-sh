@@ -1,12 +1,9 @@
 import { FileText, Gauge, Landmark, PenLine, ServerCog, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "#app/features/workflow-hero";
+import type { WorkflowPayload } from "#app/features/workflow-hero/types";
 
-/** Banking case study shown in the workflow hero. */
-export const bankingWorkflow: Workflow = {
-    id: "follow-ups",
-    label: "Banking",
-    icon: Landmark,
+/** Deferred canvas payload for the banking workflow. */
+export const bankingPayload: WorkflowPayload = {
     connectors: [
         {
             x: 404,

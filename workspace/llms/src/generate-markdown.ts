@@ -1,4 +1,4 @@
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import { bio, education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,7 @@ const distDir = resolve(__dirname, "../../app/dist");
 
 const { files, lastmod } = new MarkdownBundleWriter(new NodeFileSystem()).generate(distDir, {
     profile,
+    bio,
     projects,
     experience,
     education,

@@ -6,4 +6,5 @@ export * from "@gocanto/domain/recommendations";
 export * from "@gocanto/domain/search";
 export * from "@gocanto/domain/skills";
 export * from "@gocanto/domain/text";
+export * from "@gocanto/domain/url-guard";
 export * from "@gocanto/domain/work";

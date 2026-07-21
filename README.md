@@ -48,6 +48,8 @@ pnpm typecheck
 pnpm build
 ```
 
+`pnpm dev` serves the profile at `https://gocanto-sh.localhost:1355` and the writing site at `https://writing.gocanto-sh.localhost:1355` behind portless's shared HTTPS proxy. Portless sets up its local CA the first time it runs. To bypass the proxy, use `pnpm --filter @gocanto/app dev:app` on port 5173 or `pnpm --filter @gocanto/writing dev:site` on port 5175.
+
 Formatting and linting run through the locally installed [`fmtkit`](https://github.com/oullin/fmtkit) binary (`brew tap oullin/fmtkit && brew install --cask fmtkit`) via `infra/scripts/fmtkit.sh`:
 
 ```sh
@@ -58,7 +60,7 @@ make lint        # check mode, no writes
 
 ### Vercel operations
 
-Production deploys for this repo should target the `oullin/gocanto-sh` Vercel project from this checkout:
+**Vercel is the authoritative production target for `gocanto.sh` and `writing.gocanto.sh`.** Confirmed by response headers: `curl -sI https://gocanto.sh/` and `curl -sI https://writing.gocanto.sh/` both return `server: Vercel` and an `x-vercel-id` header. Production deploys for this repo should target the `oullin/gocanto-sh` Vercel project from this checkout:
 
 ```sh
 npx vercel@latest deploy --prod --project gocanto-sh --scope oullin
@@ -72,6 +74,12 @@ curl -I https://gocanto.sh/
 ```
 
 Expected production response for `https://gocanto.sh/` is `HTTP/2 200`.
+
+`writing.gocanto.sh` (the VitePress site in [`workspace/writing`](workspace/writing/README.md)) deploys as its own, separate Vercel project — confirmed by the same `server: Vercel` / `x-vercel-id` header evidence above. It is not built or served by this repo's Vercel project or by `pages.yml`.
+
+#### GitHub Pages workflow (secondary/fallback, not production)
+
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) also builds `workspace/app/dist` and deploys it to GitHub Pages on every push to `main`. This is a fallback/mirror build check, not the production path — Vercel's git integration builds and deploys every push independently (visible as a "Vercel" check on PRs), and the `gocanto.sh` domain itself resolves to Vercel, not GitHub Pages. `vercel.json` carries the project's Vercel-specific config, including custom security headers.
 
 If Vercel shows an Instant Rollback warning, do not deploy from another repository to clear it. Vercel disables auto-assignment of production domains after a rollback. Restore normal behaviour by promoting a good `gocanto-sh` deployment, or by freshly redeploying from this checkout and then promoting that fresh deployment:
 
@@ -105,10 +113,11 @@ If a third-party component crashes during prerender, gate it behind an `onMounte
 
 ### LLMs & machine-readable content
 
-Built from [@gocanto/store](workspace/store/) by [workspace/llms/src/generate-markdown.ts](workspace/llms/src/generate-markdown.ts), emitted into `workspace/app/dist/` alongside the prerendered HTML. Every file is served as raw markdown/XML — no SPA fallback — so agents can `GET` directly:
+Built from [@gocanto/store](workspace/store/) by [workspace/llms/src/generate-markdown.ts](workspace/llms/src/generate-markdown.ts), emitted into `workspace/app/dist/` alongside the prerendered HTML. Every file is served as raw markdown/XML — no SPA fallback — so agents can `GET` directly. Confirmed in production: `curl -sI https://gocanto.sh/profile.md` returns `content-type: text/markdown; charset=utf-8` (served by Vercel, not re-wrapped in HTML):
 
 - [`llms.txt`](https://gocanto.sh/llms.txt) — index
 - [`index.md`](https://gocanto.sh/index.md) — full profile in one file
+- [`bio.md`](https://gocanto.sh/bio.md) — short biography
 - [`profile.md`](https://gocanto.sh/profile.md) · [`experience.md`](https://gocanto.sh/experience.md) · [`projects.md`](https://gocanto.sh/projects.md) · [`education.md`](https://gocanto.sh/education.md) · [`talks.md`](https://gocanto.sh/talks.md) · [`recommendations.md`](https://gocanto.sh/recommendations.md) · [`links.md`](https://gocanto.sh/links.md)
 - [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — 10 URLs with `lastmod` from latest content update
 

@@ -3,7 +3,8 @@
     "extends": ["//"],
     "tasks": {
         "build": {
-            "outputs": []
+            "dependsOn": ["@gocanto/app#build"],
+            "cache": false
         }
     }
 }

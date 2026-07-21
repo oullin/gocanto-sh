@@ -7,7 +7,7 @@
         "#app/*": "./src/*"
     },
     "scripts": {
-        "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts",
+        "build": "vue-tsc -b && vite build --configLoader runner && tsx scripts/prerender.ts && tsx scripts/bundle-guard.ts",
         "dev": "PORTLESS_PORT=${PORTLESS_PORT:-1355} PORTLESS_HTTPS=${PORTLESS_HTTPS:-1} PORTLESS_SYNC_HOSTS=${PORTLESS_SYNC_HOSTS:-0} portless",
         "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
         "format": "make -C ../.. ui-format",
@@ -38,12 +38,12 @@
         "@types/node": "^25.6.2",
         "@vue/server-renderer": "^3.5.34",
         "@vue/test-utils": "^2.4.6",
-        "happy-dom": "^15.11.7",
+        "happy-dom": "^20.8.9",
         "jsdom": "^29.1.1",
         "portless": "^0.13.0",
         "shadcn-vue": "^2.6.2",
         "typescript": "^6.0.3",
-        "vite": "^8.0.11",
+        "vite": "^8.0.16",
         "vitest": "^4.1.5",
         "vue-tsc": "^3.1.8"
     },

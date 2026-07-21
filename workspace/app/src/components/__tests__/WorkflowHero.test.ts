@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { workflows } from "#app/features/workflow-hero";
+import { workflowMetadata } from "#app/features/workflow-hero/data";
 import WorkflowHero from "#app/components/WorkflowHero.vue";
 
 describe("WorkflowHero", () => {
@@ -29,7 +29,7 @@ describe("WorkflowHero", () => {
         expect(
         	wrapper.findAll('[role="tab"]').map((tab) => tab.text()),
         ).toEqual(
-            workflows.map((workflow) => workflow.label),
+            workflowMetadata.map((workflow) => workflow.label),
         );
     });
 
@@ -44,11 +44,14 @@ describe("WorkflowHero", () => {
 
         await fintechTab?.trigger("click");
 
+        await vi.waitFor(() => {
+            expect(
+            	wrapper.text(),
+            ).toContain("Sandbox in 30 Minutes");
+        });
+
         expect(
         	wrapper.get('[role="tabpanel"]').attributes("id"),
         ).toBe("wf-panel-meeting-prep");
-        expect(
-        	wrapper.text(),
-        ).toContain("Sandbox in 30 Minutes");
     });
 });

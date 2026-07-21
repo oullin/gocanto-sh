@@ -76,6 +76,80 @@ describe("Sitemap.lastmod", () => {
         expect(out).toBe("2025-03-10");
     });
 
+    it("normalizes date-only values as UTC", () => {
+        const out = Sitemap.lastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "2024-06-01",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        expect(out).toBe("2024-06-01");
+    });
+
+    it("normalizes datetime values with offsets as UTC", () => {
+        const out = Sitemap.lastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "2024-06-01T23:30:00-02:00",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        expect(out).toBe("2024-06-02");
+    });
+
+    it("excludes empty-string dates from the candidates", () => {
+        const out = Sitemap.lastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        const today = new Date().toISOString().slice(0, 10);
+
+        expect(out).toBe(today);
+    });
+
     it("skips entries that are not parseable dates", () => {
         const out = Sitemap.lastmod({
             ...emptySources,
@@ -115,15 +189,16 @@ describe("Sitemap.render", () => {
         ).toBe(true);
     });
 
-    it("includes the root, all 8 markdown pages, and llms.txt (10 URLs)", () => {
+    it("includes the root, all 9 markdown pages, and llms.txt (11 URLs)", () => {
         const matches = xml.match(/<url>/g) ?? [];
 
-        expect(matches.length).toBe(10);
+        expect(matches.length).toBe(11);
 
         const expectedLocs = [
             "https://gocanto.sh/",
             "https://gocanto.sh/index.md",
             "https://gocanto.sh/profile.md",
+            "https://gocanto.sh/bio.md",
             "https://gocanto.sh/experience.md",
             "https://gocanto.sh/projects.md",
             "https://gocanto.sh/education.md",
@@ -141,6 +216,6 @@ describe("Sitemap.render", () => {
     it("stamps the lastmod on every entry", () => {
         const matches = xml.match(/<lastmod>2025-05-19<\/lastmod>/g) ?? [];
 
-        expect(matches.length).toBe(10);
+        expect(matches.length).toBe(11);
     });
 });

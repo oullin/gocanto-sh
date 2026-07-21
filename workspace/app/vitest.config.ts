@@ -10,9 +10,11 @@ export default defineConfig(
 	        environment: "happy-dom",
 	        globals: false,
 	        include: ["src/**/*.test.ts"],
-	        isolate: false,
-	        fileParallelism: false,
 	        pool: "threads",
+	        sequence: {
+	            groupOrder: 0,
+	        },
+	        singleThread: true,
 	    },
 	},
 );

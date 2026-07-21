@@ -1,4 +1,4 @@
-import type { Workflow } from "#app/features/workflow-hero";
+import type { WorkflowPayload } from "#app/features/workflow-hero/types";
 
 import {
     Cable,
@@ -11,11 +11,8 @@ import {
     Wand2,
 } from "lucide-vue-next";
 
-/** Event-pipelines case study shown in the workflow hero. */
-export const eventPipelinesWorkflow: Workflow = {
-    id: "data-sync",
-    label: "Event Pipelines",
-    icon: Cable,
+/** Deferred canvas payload for the event pipelines workflow. */
+export const eventPipelinesPayload: WorkflowPayload = {
     connectors: [
         {
             x: 300,

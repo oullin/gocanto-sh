@@ -1,4 +1,5 @@
 import type {
+    BioFixture,
     EducationFixture,
     ExperienceFixture,
     LinksFixture,
@@ -11,6 +12,7 @@ import type {
 /** Groups every fixture required to render the complete markdown bundle. */
 export type AllFixtures = {
     profile: ProfileFixture;
+    bio: BioFixture;
     projects: ProjectsFixture;
     experience: ExperienceFixture;
     education: EducationFixture;

@@ -27,24 +27,24 @@ const SearchHarness = defineComponent(
 	        };
 	    },
 	    template: `
-		        <Command>
-		            <CommandInput placeholder="Search" />
-		            <button type="button" data-test="show-late" @click="showLateItem = true">Show late item</button>
-		            <CommandList>
-		                <CommandGroup heading="Projects">
-		                    <CommandItem value="visible-only" search-value="python data pipelines">
-		                        Payments Platform
-		                    </CommandItem>
-		                    <CommandItem value="hidden-only" search-value="golang services">
-		                        Ledger Service
-		                    </CommandItem>
-		                    <CommandItem v-if="showLateItem" value="late-only" search-value="python automations">
-		                        Automation Toolkit
-		                    </CommandItem>
-		                </CommandGroup>
-		            </CommandList>
-		        </Command>
-		    `,
+				        <Command>
+				            <CommandInput placeholder="Search" />
+				            <button type="button" data-test="show-late" @click="showLateItem = true">Show late item</button>
+				            <CommandList>
+				                <CommandGroup heading="Projects">
+				                    <CommandItem value="visible-only" search-value="python data pipelines">
+				                        Payments Platform
+				                    </CommandItem>
+				                    <CommandItem value="hidden-only" search-value="golang services">
+				                        Ledger Service
+				                    </CommandItem>
+				                    <CommandItem v-if="showLateItem" value="late-only" search-value="python automations">
+				                        Automation Toolkit
+				                    </CommandItem>
+				                </CommandGroup>
+				            </CommandList>
+				        </Command>
+				    `,
 	},
 );
 

@@ -33,6 +33,7 @@ describe("LlmsTxt.render", () => {
         const links = [
             "https://gocanto.sh/index.md",
             "https://gocanto.sh/profile.md",
+            "https://gocanto.sh/bio.md",
             "https://gocanto.sh/experience.md",
             "https://gocanto.sh/projects.md",
             "https://gocanto.sh/education.md",

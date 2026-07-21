@@ -1,2 +1,2 @@
-export { PostSearch } from "#writing/search/post-search";
-export type { YearGroup } from "#writing/search/post-search";
+export { WritingIndexSearch } from "#writing/search/index-search";
+export type { TopicCount, TopicSelection, TopicTag } from "#writing/search/index-search";

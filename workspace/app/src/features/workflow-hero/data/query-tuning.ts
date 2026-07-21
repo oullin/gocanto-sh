@@ -1,4 +1,4 @@
-import type { Workflow } from "#app/features/workflow-hero";
+import type { WorkflowPayload } from "#app/features/workflow-hero/types";
 
 import {
     Clipboard,
@@ -7,15 +7,11 @@ import {
     Gauge,
     PackageCheck,
     PenLine,
-    TrendingUp,
     Wand2,
 } from "lucide-vue-next";
 
-/** Query-tuning case study shown in the workflow hero. */
-export const queryTuningWorkflow: Workflow = {
-    id: "content-drafting",
-    label: "Query Tuning",
-    icon: TrendingUp,
+/** Deferred canvas payload for the query tuning workflow. */
+export const queryTuningPayload: WorkflowPayload = {
     connectors: [
         {
             x: 226,

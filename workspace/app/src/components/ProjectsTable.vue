@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { Projects } from "@gocanto/domain";
 import { projects } from "@gocanto/store";
 import { Popover, PopoverContent, PopoverTrigger } from "#app/components/ui/popover";
@@ -17,6 +17,8 @@ const selected = ref<Set<string>>(new Set());
 const popoverOpen = ref(false);
 
 const filtering = ref(false);
+
+let filterTimer: number | undefined;
 
 const filteredRows = computed(() => Projects.filter(allRows, selected.value));
 
@@ -52,12 +54,15 @@ watch(
 	selected,
 	() => {
 	        filtering.value = true;
-	        window.setTimeout(() => {
+	        window.clearTimeout(filterTimer);
+	        filterTimer = window.setTimeout(() => {
 	            filtering.value = false;
 	        }, 220);
 	    },
 	{ deep: true },
 );
+
+onBeforeUnmount(() => window.clearTimeout(filterTimer));
 
 const ready = useInViewReady(section);
 

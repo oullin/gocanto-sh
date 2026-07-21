@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import { bio, education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
 
 import { MarkdownBundleWriter } from "#llms/bundle/bundle-writer";
@@ -25,6 +25,7 @@ describe("MarkdownBundleWriter.generate", () => {
 
         const summary = new MarkdownBundleWriter(fs).generate("/dist", {
             profile,
+            bio,
             projects,
             experience,
             education,
@@ -35,6 +36,7 @@ describe("MarkdownBundleWriter.generate", () => {
 
         const expectedFiles = [
             "profile.md",
+            "bio.md",
             "experience.md",
             "projects.md",
             "education.md",

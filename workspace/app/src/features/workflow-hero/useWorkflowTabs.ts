@@ -1,24 +1,43 @@
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, ref, shallowRef } from "vue";
+import type { WorkflowLoader } from "#app/features/workflow-hero/WorkflowLoader";
 
-import type { Workflow } from "#app/features/workflow-hero";
+import type {
+    Workflow,
+    WorkflowId,
+    WorkflowMetadata,
+    WorkflowPanelState,
+} from "#app/features/workflow-hero/types";
 
-/** Coordinates active workflow tabs, focus movement, and panel refreshes. */
-export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
+/** Vue bindings for workflow tab selection, focus, and deferred panel state. */
+export const useWorkflowTabs = (
+    workflows: readonly WorkflowMetadata[],
+    workflowLoader: WorkflowLoader,
+) => {
     const fallbackWorkflow = workflows[0];
 
     if (!fallbackWorkflow) {
         throw new Error("WorkflowHero requires at least one workflow");
     }
 
-    const activeTab = ref(fallbackWorkflow.id);
+    const initialWorkflow = workflowLoader.get(fallbackWorkflow.id);
+
+    if (!initialWorkflow) {
+        throw new Error("WorkflowHero requires its default workflow synchronously");
+    }
+
+    const activeTab = ref<WorkflowId>(fallbackWorkflow.id);
+
+    const activeWorkflow = shallowRef<Workflow | null>(initialWorkflow);
 
     const panelKey = ref(0);
+
+    const panelState = ref<WorkflowPanelState>("ready");
 
     const tabRefs = ref<HTMLButtonElement[]>(
     	[],
     );
 
-    const activeWorkflow = computed(
+    const activeMetadata = computed(
         () => workflows.find((workflow) => workflow.id === activeTab.value) ?? fallbackWorkflow,
     );
 
@@ -28,17 +47,58 @@ export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
         }
     };
 
-    const selectTab = async (id: string, focusIndex?: number) => {
+    const loadWorkflow = async (id: WorkflowId) => {
+        const cached = workflowLoader.get(id);
+
+        if (cached) {
+            activeWorkflow.value = cached;
+            panelState.value = "ready";
+
+            return;
+        }
+
+        activeWorkflow.value = null;
+        panelState.value = "loading";
+
+        const result = await workflowLoader.load(id);
+
+        if (activeTab.value !== id) {
+            return;
+        }
+
+        if (result._tag === "loaded") {
+            activeWorkflow.value = result.workflow;
+            panelState.value = "ready";
+
+            return;
+        }
+
+        panelState.value = "error";
+    };
+
+    const selectTab = async (id: WorkflowId, focusIndex?: number) => {
+        if (!workflows.some((workflow) => workflow.id === id)) {
+            return;
+        }
+
         if (activeTab.value !== id) {
             activeTab.value = id;
             panelKey.value += 1;
         }
+
+        const load = loadWorkflow(id);
 
         if (typeof focusIndex === "number") {
             await nextTick();
 
             tabRefs.value[focusIndex]?.focus();
         }
+
+        await load;
+    };
+
+    const retryActiveWorkflow = () => {
+        void loadWorkflow(activeTab.value);
     };
 
     const onTabKeydown = (event: KeyboardEvent, index: number) => {
@@ -57,16 +117,25 @@ export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
         }
 
         if (nextIndex !== null) {
+            const nextWorkflow = workflows[nextIndex];
+
+            if (!nextWorkflow) {
+                return;
+            }
+
             event.preventDefault();
-            void selectTab(workflows[nextIndex].id, nextIndex);
+            void selectTab(nextWorkflow.id, nextIndex);
         }
     };
 
     return {
+        activeMetadata,
         activeTab,
         activeWorkflow,
         onTabKeydown,
         panelKey,
+        panelState,
+        retryActiveWorkflow,
         selectTab,
         setTabRef,
     };

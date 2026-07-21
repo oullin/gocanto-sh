@@ -48,14 +48,14 @@ export default defineConfig({
                 href: `${SITE_URL}${RssFeed.PATH}`,
             },
         ],
-        // Design fonts: Hanken Grotesk (body) + JetBrains Mono (chrome/code).
+        // Design fonts: IBM Plex Sans (body) + IBM Plex Mono (chrome/code).
         ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
         ["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
         [
             "link",
             {
                 rel: "stylesheet",
-                href: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+                href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
             },
         ],
         ["meta", { property: "og:type", content: "website" }],

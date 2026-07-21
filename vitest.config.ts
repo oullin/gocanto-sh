@@ -5,9 +5,9 @@ export default defineConfig(
 	    test: {
 	        projects: [
 	            "workspace/app",
-	            "workspace/store",
 	            "workspace/domain",
 	            "workspace/llms",
+	            "workspace/store",
 	            "workspace/writing",
 	        ],
 	    },
