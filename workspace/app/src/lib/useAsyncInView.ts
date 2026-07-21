@@ -25,22 +25,23 @@ export function useAsyncInView<T>(
     // this composable loads; the cast restores the caller-facing Ref<T | null>
     // type that Vue cannot infer through the generic.
     const data = ref<T | null>(null) as Ref<T | null>;
+
     let resolved = false;
 
     const { stop } = useIntersectionObserver(
-        target,
-        ([entry]) => {
-            if (!entry?.isIntersecting || resolved) {
-                return;
-            }
+    	target,
+    	([entry]) => {
+    	        if (!entry?.isIntersecting || resolved) {
+    	            return;
+    	        }
 
-            resolved = true;
-            stop();
-            window.setTimeout(async () => {
-                data.value = await loader();
-            }, delayMs);
-        },
-        { rootMargin },
+    	        resolved = true;
+    	        stop();
+    	        window.setTimeout(async () => {
+    	            data.value = await loader();
+    	        }, delayMs);
+    	    },
+    	{ rootMargin },
     );
 
     return data;
@@ -56,22 +57,23 @@ export function useInViewReady(
     { rootMargin = "200px", delayMs = 200 }: Options = {},
 ): Ref<boolean> {
     const ready = ref(false);
+
     let resolved = false;
 
     const { stop } = useIntersectionObserver(
-        target,
-        ([entry]) => {
-            if (!entry?.isIntersecting || resolved) {
-                return;
-            }
+    	target,
+    	([entry]) => {
+    	        if (!entry?.isIntersecting || resolved) {
+    	            return;
+    	        }
 
-            resolved = true;
-            stop();
-            window.setTimeout(() => {
-                ready.value = true;
-            }, delayMs);
-        },
-        { rootMargin },
+    	        resolved = true;
+    	        stop();
+    	        window.setTimeout(() => {
+    	            ready.value = true;
+    	        }, delayMs);
+    	    },
+    	{ rootMargin },
     );
 
     return ready;

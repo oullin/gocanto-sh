@@ -7,6 +7,7 @@ import SearchResultDetail from "#app/components/SearchResultDetail.vue";
 import { useAsyncInView } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
+
 const recommendationsFixture = useAsyncInView(section, async () => {
     const store = await import("@gocanto/store/recommendations");
 
@@ -30,9 +31,11 @@ const items = computed<Testimonial[]>(() =>
         ? [...Recommendations.testimonials(recommendationsFixture.value)]
         : [],
 );
+
 const loading = computed(() => recommendationsFixture.value === null);
 
 const sheetOpen = ref(false);
+
 const activePayload = shallowRef<SearchPayload | null>(null);
 
 function handleSelect(item: Testimonial) {

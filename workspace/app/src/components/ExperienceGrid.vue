@@ -14,6 +14,7 @@ const guides = Work.listFeaturedCards(experience, PLACEHOLDER_COUNT);
 const ready = useInViewReady(section);
 
 const sheetOpen = ref(false);
+
 const activePayload = shallowRef<SearchPayload | null>(null);
 
 function openExperience(e: ExperienceRecord) {

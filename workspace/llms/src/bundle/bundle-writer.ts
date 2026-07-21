@@ -28,6 +28,7 @@ export class MarkdownBundleWriter {
      */
     public generate(distDir: string, fixtures: AllFixtures): { files: string[]; lastmod: string } {
         const lastmod = Sitemap.lastmod(fixtures);
+
         const generated: GeneratedFile[] = [
             { name: "profile.md", body: FixtureMarkdown.profile(fixtures.profile) },
             { name: "experience.md", body: FixtureMarkdown.experience(fixtures.experience) },

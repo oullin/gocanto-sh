@@ -11,8 +11,12 @@ export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
     }
 
     const activeTab = ref(fallbackWorkflow.id);
+
     const panelKey = ref(0);
-    const tabRefs = ref<HTMLButtonElement[]>([]);
+
+    const tabRefs = ref<HTMLButtonElement[]>(
+    	[],
+    );
 
     const activeWorkflow = computed(
         () => workflows.find((workflow) => workflow.id === activeTab.value) ?? fallbackWorkflow,
@@ -32,12 +36,14 @@ export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
 
         if (typeof focusIndex === "number") {
             await nextTick();
+
             tabRefs.value[focusIndex]?.focus();
         }
     };
 
     const onTabKeydown = (event: KeyboardEvent, index: number) => {
         const lastIndex = workflows.length - 1;
+
         let nextIndex: number | null = null;
 
         if (event.key === "ArrowRight") {

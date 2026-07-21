@@ -13,8 +13,11 @@ export type { Post } from "#writing/posts";
  */
 export const data: Post[] = [];
 
-export default createContentLoader("posts/*.md", {
-    excerpt: true,
-    includeSrc: true,
-    transform: (raw) => Posts.transform(raw),
-});
+export default createContentLoader(
+	"posts/*.md",
+	{
+	    excerpt: true,
+	    includeSrc: true,
+	    transform: (raw) => Posts.transform(raw),
+	},
+);

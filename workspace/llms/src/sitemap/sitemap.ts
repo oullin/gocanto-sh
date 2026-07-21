@@ -46,19 +46,25 @@ export class Sitemap {
         for (const project of sources.projects.data) {
             const iso = Sitemap.isoDate(project.published_at);
 
-            if (iso) candidates.push(iso);
+            if (iso) {
+                candidates.push(iso);
+            }
         }
 
         for (const rec of sources.recommendations.data) {
             const iso = Sitemap.isoDate(rec.updated_at);
 
-            if (iso) candidates.push(iso);
+            if (iso) {
+                candidates.push(iso);
+            }
         }
 
         for (const talk of sources.talks.data) {
             const iso = Sitemap.isoDate(talk.updated_at);
 
-            if (iso) candidates.push(iso);
+            if (iso) {
+                candidates.push(iso);
+            }
         }
 
         candidates.sort();

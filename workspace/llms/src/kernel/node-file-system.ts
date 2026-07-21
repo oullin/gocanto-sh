@@ -10,7 +10,10 @@ export class NodeFileSystem implements FileSystem {
      * @param path - Directory path to create.
      */
     public ensureDir(path: string): void {
-        mkdirSync(path, { recursive: true });
+        mkdirSync(
+        	path,
+        	{ recursive: true },
+        );
     }
 
     /**

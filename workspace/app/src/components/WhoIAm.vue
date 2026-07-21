@@ -18,6 +18,7 @@ const EM_TAG_RE = /<em>([\s\S]*?)<\/em>/gi;
 
 const tokenizeParagraph = (input: string): ParagraphToken[] => {
     const out: ParagraphToken[] = [];
+
     let cursor = 0;
 
     for (const match of input.matchAll(EM_TAG_RE)) {

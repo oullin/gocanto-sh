@@ -27,6 +27,7 @@ export class DetailView {
                     title: `${payload.data.position} · ${payload.data.company}`,
                     description: `${payload.data.start_date} – ${payload.data.end_date} · ${payload.data.employment_type} · ${payload.data.city}, ${payload.data.country}`,
                 };
+
             case "Project":
                 return {
                     kind: "project",
@@ -34,6 +35,7 @@ export class DetailView {
                     title: payload.data.title,
                     description: `${payload.data.language}${payload.data.is_open_source ? " · Open source" : ""}`,
                 };
+
             case "Skill":
                 return {
                     kind: "skill",
@@ -41,6 +43,7 @@ export class DetailView {
                     title: payload.data.item,
                     description: `Proficiency ${payload.data.percentage}%`,
                 };
+
             case "Education":
                 return {
                     kind: "education",
@@ -48,6 +51,7 @@ export class DetailView {
                     title: `${payload.data.degree} · ${payload.data.field}`,
                     description: `${payload.data.school} · Graduated ${payload.data.graduated_at} · ${payload.data.issuing_country}`,
                 };
+
             case "Talk":
                 return {
                     kind: "talk",
@@ -55,6 +59,7 @@ export class DetailView {
                     title: payload.data.title,
                     description: `${payload.data.subject} · ${payload.data.location}`,
                 };
+
             case "Recommendation":
                 return {
                     kind: "recommendation",
@@ -66,6 +71,7 @@ export class DetailView {
                         alt: payload.data.person.full_name,
                     },
                 };
+
             case "Link":
                 return {
                     kind: "link",
@@ -83,7 +89,9 @@ export class DetailView {
      * @returns Plain-text paragraphs.
      */
     public static paragraphs(html: string): readonly string[] {
-        return TextFormatter.stripHtml(html).split("\n\n").filter(Boolean);
+        return TextFormatter.stripHtml(html)
+            .split("\n\n")
+            .filter(Boolean);
     }
 
     /**

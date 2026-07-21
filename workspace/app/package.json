@@ -12,7 +12,7 @@
         "dev:app": "vite --configLoader runner --host 0.0.0.0 --port ${PORT:-5173}",
         "format": "make -C ../.. ui-format",
         "format:check": "make -C ../.. ui-format",
-        "lint": "oxlint .",
+        "lint": "make -C ../.. lint",
         "preview": "vite preview --configLoader runner --host 0.0.0.0",
         "test": "vitest run --passWithNoTests",
         "typecheck": "vue-tsc -b"
@@ -40,7 +40,6 @@
         "@vue/test-utils": "^2.4.6",
         "happy-dom": "^15.11.7",
         "jsdom": "^29.1.1",
-        "oxlint": "^1.31.0",
         "portless": "^0.13.0",
         "shadcn-vue": "^2.6.2",
         "typescript": "^6.0.3",

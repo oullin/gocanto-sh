@@ -42,7 +42,9 @@ describe("RssFeed.render", () => {
             makePost({ title: "Newer", date: "2026-07-18", url: "/newer" }),
         ]);
 
-        expect(rss.indexOf("<title>Newer</title>")).toBeLessThan(
+        expect(
+        	rss.indexOf("<title>Newer</title>"),
+        ).toBeLessThan(
             rss.indexOf("<title>Older</title>"),
         );
         expect(rss).toContain('<guid isPermaLink="true">https://writing.gocanto.sh/newer</guid>');
@@ -73,10 +75,18 @@ describe("RssFeed.render", () => {
     });
 
     it("is deterministic and omits post-specific fields for an empty collection", () => {
-        const posts = [makePost({ title: "One", date: "2026-07-18", url: "/one" })];
+        const posts = [makePost(
+        	{ title: "One", date: "2026-07-18", url: "/one" },
+        )];
 
-        expect(RssFeed.render(posts)).toBe(RssFeed.render(posts));
-        expect(RssFeed.render([])).not.toContain("<lastBuildDate>");
-        expect(RssFeed.render([])).not.toContain("<item>");
+        expect(
+        	RssFeed.render(posts),
+        ).toBe(RssFeed.render(posts));
+        expect(
+        	RssFeed.render([]),
+        ).not.toContain("<lastBuildDate>");
+        expect(
+        	RssFeed.render([]),
+        ).not.toContain("<item>");
     });
 });

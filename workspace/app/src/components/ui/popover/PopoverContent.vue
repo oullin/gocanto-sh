@@ -5,21 +5,22 @@ import { reactiveOmit } from "@vueuse/core";
 import { PopoverContent, PopoverPortal, useForwardPropsEmits } from "reka-ui";
 import { cn } from "#app/lib/utils";
 
-defineOptions({
-    inheritAttrs: false,
-});
+defineOptions(
+	{
+	    inheritAttrs: false,
+	},
+);
 
 const props = withDefaults(
-    defineProps<PopoverContentProps & { class?: HTMLAttributes["class"] }>(),
-    {
-        align: "center",
-        sideOffset: 4,
-    },
+	defineProps<PopoverContentProps & { class?: HTMLAttributes["class"] }>(),
+	{
+	        align: "center",
+	        sideOffset: 4,
+	    },
 );
+
 const emits = defineEmits<PopoverContentEmits>();
-
 const delegatedProps = reactiveOmit(props, "class");
-
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 

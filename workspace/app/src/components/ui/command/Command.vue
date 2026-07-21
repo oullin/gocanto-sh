@@ -7,21 +7,26 @@ import { reactive, ref, watch } from "vue";
 import { cn } from "#app/lib/utils";
 import { provideCommandContext } from ".";
 
-const props = withDefaults(defineProps<ListboxRootProps & { class?: HTMLAttributes["class"] }>(), {
-    modelValue: "",
-    highlightOnHover: true,
-});
+const props = withDefaults(
+	defineProps<ListboxRootProps & { class?: HTMLAttributes["class"] }>(),
+	{
+	    modelValue: "",
+	    highlightOnHover: true,
+	},
+);
 
 const emits = defineEmits<ListboxRootEmits>();
-
 const delegatedProps = reactiveOmit(props, "class");
-
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 const allItems = ref<Map<string, string>>(new Map());
+
 const allGroups = ref<Map<string, Set<string>>>(new Map());
 
-const { contains } = useFilter({ sensitivity: "base" });
+const { contains } = useFilter(
+	{ sensitivity: "base" },
+);
+
 const filterState = reactive({
     search: "",
     filtered: {
@@ -46,6 +51,7 @@ function filterItems() {
     // Reset the groups
     filterState.filtered.items = new Map();
     filterState.filtered.groups = new Set();
+
     let itemCount = 0;
 
     // Check which items should be included
@@ -78,12 +84,14 @@ watch(
     },
 );
 
-provideCommandContext({
-    allItems,
-    allGroups,
-    refreshFilter: filterItems,
-    filterState,
-});
+provideCommandContext(
+	{
+	    allItems,
+	    allGroups,
+	    refreshFilter: filterItems,
+	    filterState,
+	},
+);
 </script>
 
 <template>

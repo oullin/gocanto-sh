@@ -48,10 +48,12 @@ pnpm typecheck
 pnpm build
 ```
 
-Local formatting uses Docker Compose to run the upstream [`go-fmt`](https://github.com/oullin/go-fmt) support formatter for TypeScript/Vue files:
+Formatting and linting run through the locally installed [`fmtkit`](https://github.com/oullin/fmtkit) binary (`brew tap oullin/fmtkit && brew install --cask fmtkit`) via `infra/scripts/fmtkit.sh`:
 
 ```sh
-make format
+make format      # format changed files
+make format-all  # format the whole repository
+make lint        # check mode, no writes
 ```
 
 ### Vercel operations

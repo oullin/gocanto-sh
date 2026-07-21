@@ -6,7 +6,9 @@ import { cn } from "#app/lib/utils";
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 
 const root = ref<HTMLDivElement | null>(null);
+
 const viewport = ref<HTMLDivElement | null>(null);
+
 const thumb = ref<HTMLDivElement | null>(null);
 
 const FADE_PX = 64;
@@ -90,7 +92,9 @@ onBeforeUnmount(() => {
     scrollHandler = null;
 });
 
-defineExpose({ root, viewport });
+defineExpose(
+	{ root, viewport },
+);
 </script>
 
 <template>

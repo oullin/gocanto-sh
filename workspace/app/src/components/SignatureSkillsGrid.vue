@@ -3,6 +3,8 @@ import { computed, ref, type Component } from "vue";
 import { Skills } from "@gocanto/domain";
 import { profile, type ProfileSkillRecord } from "@gocanto/store";
 import { useInViewReady } from "#app/lib/useAsyncInView";
+import { ScrollFade } from "#app/components/ui/scroll-fade";
+
 import {
     Binary,
     Server,
@@ -17,6 +19,7 @@ import {
     ExternalLink,
     ArrowUpRight,
 } from "lucide-vue-next";
+
 import {
     Sheet,
     SheetContent,
@@ -24,9 +27,9 @@ import {
     SheetHeader,
     SheetTitle,
 } from "#app/components/ui/sheet";
-import { ScrollFade } from "#app/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
+
 const moreSection = ref<HTMLElement | null>(null);
 
 const iconFor: Record<string, Component> = {
@@ -42,12 +45,13 @@ const iconFor: Record<string, Component> = {
 };
 
 const signatureCells = computed(() => Skills.signatureCells(profile));
-const moreCells = computed(() => Skills.supportingCells(profile));
 
+const moreCells = computed(() => Skills.supportingCells(profile));
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
 
 const open = ref(false);
+
 const activeSkill = ref<ProfileSkillRecord | null>(null);
 
 function openSkill(s: ProfileSkillRecord) {

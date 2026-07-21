@@ -5,13 +5,13 @@ import { cn } from "#app/lib/utils";
 import { Button } from "#app/components/ui/button";
 
 const props = withDefaults(
-    defineProps<{
-        class?: HTMLAttributes["class"];
-        showCloseButton?: boolean;
-    }>(),
-    {
-        showCloseButton: false,
-    },
+	defineProps<{
+	        class?: HTMLAttributes["class"];
+	        showCloseButton?: boolean;
+	    }>(),
+	{
+	        showCloseButton: false,
+	    },
 );
 </script>
 

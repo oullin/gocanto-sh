@@ -34,13 +34,19 @@ describe("project domain", () => {
     it("sorts rows and derives languages", () => {
         const rows = Projects.rows(projectFixture);
 
-        expect(rows.map((row) => row.title)).toEqual(["First", "Second"]);
-        expect(Projects.languages(rows)).toEqual(["Go", "TypeScript"]);
+        expect(
+        	rows.map((row) => row.title),
+        ).toEqual(["First", "Second"]);
+        expect(
+        	Projects.languages(rows),
+        ).toEqual(["Go", "TypeScript"]);
     });
 
     it("filters by selected language", () => {
         const rows = Projects.rows(projectFixture);
 
-        expect(Projects.filter(rows, new Set(["Go"])).map((row) => row.title)).toEqual(["First"]);
+        expect(
+        	Projects.filter(rows, new Set(["Go"])).map((row) => row.title),
+        ).toEqual(["First"]);
     });
 });

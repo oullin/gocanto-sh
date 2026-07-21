@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { DetailView, TextFormatter, type SearchPayload } from "@gocanto/domain";
+
 import {
     Sheet,
     SheetContent,
@@ -7,6 +9,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "#app/components/ui/sheet";
+
 import {
     BookOpen,
     Calendar,
@@ -18,7 +21,6 @@ import {
     Quote,
     Sparkles,
 } from "lucide-vue-next";
-import { DetailView, TextFormatter, type SearchPayload } from "@gocanto/domain";
 
 const props = defineProps<{
     open: boolean;
@@ -29,10 +31,12 @@ const emit = defineEmits<{
     "update:open": [value: boolean];
 }>();
 
-const isOpen = computed({
-    get: () => props.open,
-    set: (v) => emit("update:open", v),
-});
+const isOpen = computed(
+	{
+	    get: () => props.open,
+	    set: (v) => emit("update:open", v),
+	},
+);
 
 const header = computed(() => DetailView.headerFor(props.payload));
 
@@ -40,18 +44,25 @@ const kindIcon = computed(() => {
     switch (header.value?.kind) {
         case "work":
             return BookOpen;
+
         case "project":
             return FileText;
+
         case "skill":
             return Sparkles;
+
         case "education":
             return GraduationCap;
+
         case "talk":
             return Mic;
+
         case "recommendation":
             return Quote;
+
         case "link":
             return LinkIcon;
+
         default:
             return BookOpen;
     }

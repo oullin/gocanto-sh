@@ -7,9 +7,11 @@ import { ListboxFilter, useForwardProps } from "reka-ui";
 import { cn } from "#app/lib/utils";
 import { useCommand } from ".";
 
-defineOptions({
-    inheritAttrs: false,
-});
+defineOptions(
+	{
+	    inheritAttrs: false,
+	},
+);
 
 const props = defineProps<
     ListboxFilterProps & {
@@ -18,9 +20,7 @@ const props = defineProps<
 >();
 
 const delegatedProps = reactiveOmit(props, "class");
-
 const forwardedProps = useForwardProps(delegatedProps);
-
 const { filterState } = useCommand();
 </script>
 

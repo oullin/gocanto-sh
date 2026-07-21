@@ -13,31 +13,21 @@ import { PostSearch } from "#writing/search";
 const { page, frontmatter } = useData();
 const route = useRoute();
 
-// `rewrites` rewrites posts/:slug.md → :slug, so relativePath is unreliable;
-// derive the view from the (clean-URL-normalized) route path instead.
 const cleanPath = computed(() => route.path.replace(/index\.html$/, "").replace(/\.html$/, ""));
+
 const isIndex = computed(() => cleanPath.value === "/" || cleanPath.value === "");
 
-/* ---------------- index view model (see ./search) ---------------- */
-
-// Tag chips filter the visible list; full-text search is VitePress local search
-// (the header palette), which navigates straight to a matching post.
 const tag = ref("all");
 
 const filtered = computed(() => PostSearch.filter(posts, "", tag.value));
 
 const chips = computed(() => PostSearch.topTags(posts));
 
-// The "Latest" card always shows the newest post, independent of the tag
-// filter, so selecting a tag only changes the list below — the layout above it
-// stays put instead of collapsing.
 const featured = computed(() => posts[0]);
 
 const groups = computed(() => PostSearch.groupByYear(filtered.value, featured.value));
 
 const countLabel = computed(() => PostSearch.countLabel(filtered.value.length));
-
-/* ---------------- article view model ---------------- */
 
 const currentPost = computed(() => {
     const path = cleanPath.value.replace(/\/$/, "");
@@ -49,14 +39,18 @@ const articleTags = computed<string[]>(() => (frontmatter.value.tags as string[]
 
 const related = computed(() => posts.filter((p) => p.url !== currentPost.value?.url).slice(0, 2));
 
-/* ---------------- reading progress + TOC ---------------- */
-
 const progressPct = ref("0%");
+
 const activeToc = ref<string | null>(null);
-const toc = ref<{ id: string; label: string }[]>([]);
+
+const toc = ref<{ id: string; label: string }[]>(
+	[],
+);
 
 function buildToc() {
-    if (typeof document === "undefined") return;
+    if (typeof document === "undefined") {
+        return;
+    }
 
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
 
@@ -78,7 +72,9 @@ function onScroll() {
     for (const t of toc.value) {
         const el = document.getElementById(t.id);
 
-        if (el && el.getBoundingClientRect().top <= 120) active = t.id;
+        if (el && el.getBoundingClientRect().top <= 120) {
+            active = t.id;
+        }
     }
 
     activeToc.value = active;
@@ -87,7 +83,9 @@ function onScroll() {
 function scrollToHeading(id: string) {
     const el = document.getElementById(id);
 
-    if (!el) return;
+    if (!el) {
+        return;
+    }
 
     window.scrollTo({
         top: el.getBoundingClientRect().top + window.scrollY - 80,

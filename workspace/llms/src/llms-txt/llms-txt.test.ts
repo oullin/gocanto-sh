@@ -20,7 +20,9 @@ describe("LlmsTxt.render", () => {
     const out = LlmsTxt.render("https://gocanto.sh", profile);
 
     it("opens with the H1 for the profile name", () => {
-        expect(out.startsWith("# Gustavo Ocanto\n")).toBe(true);
+        expect(
+        	out.startsWith("# Gustavo Ocanto\n"),
+        ).toBe(true);
     });
 
     it("contains a profession blockquote", () => {

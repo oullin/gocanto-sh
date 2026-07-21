@@ -5,6 +5,7 @@ import { useGlobalSearch } from "#app/lib/globalSearch";
 
 const GlobalSearch = defineAsyncComponent(() => import("#app/components/GlobalSearch.vue"));
 const { open } = useGlobalSearch();
+
 const shouldLoad = ref(open.value);
 
 watch(open, (isOpen) => {

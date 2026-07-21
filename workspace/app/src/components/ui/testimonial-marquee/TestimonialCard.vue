@@ -3,14 +3,14 @@ import { Star } from "lucide-vue-next";
 import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 
 withDefaults(
-    defineProps<{
-        item: Testimonial;
-        interactive: boolean;
-        loading: boolean;
-        cardClass: string;
-        focusable?: boolean;
-    }>(),
-    { focusable: true },
+	defineProps<{
+	        item: Testimonial;
+	        interactive: boolean;
+	        loading: boolean;
+	        cardClass: string;
+	        focusable?: boolean;
+	    }>(),
+	{ focusable: true },
 );
 
 defineEmits<{

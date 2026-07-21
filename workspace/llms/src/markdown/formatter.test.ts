@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { FixtureMarkdown } from "#llms/markdown/formatter";
 
 import type {
     EducationFixture,
@@ -9,8 +10,6 @@ import type {
     RecommendationsFixture,
     TalksFixture,
 } from "@gocanto/store";
-
-import { FixtureMarkdown } from "#llms/markdown/formatter";
 
 const profile: ProfileFixture = {
     version: "1.0.0",
@@ -161,7 +160,9 @@ describe("FixtureMarkdown.profile", () => {
     const out = FixtureMarkdown.profile(profile);
 
     it("renders the name as an H1", () => {
-        expect(out.startsWith("# Gustavo Ocanto\n")).toBe(true);
+        expect(
+        	out.startsWith("# Gustavo Ocanto\n"),
+        ).toBe(true);
     });
 
     it("marks signature skills", () => {

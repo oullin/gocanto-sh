@@ -22,6 +22,7 @@ class MemoryFileSystem implements FileSystem {
 describe("MarkdownBundleWriter.generate", () => {
     it("writes the complete normalized bundle and returns its summary", () => {
         const fs = new MemoryFileSystem();
+
         const summary = new MarkdownBundleWriter(fs).generate("/dist", {
             profile,
             projects,
@@ -31,6 +32,7 @@ describe("MarkdownBundleWriter.generate", () => {
             talks,
             links,
         });
+
         const expectedFiles = [
             "profile.md",
             "experience.md",
@@ -45,10 +47,14 @@ describe("MarkdownBundleWriter.generate", () => {
         ];
 
         expect(fs.directories).toEqual(["/dist"]);
-        expect([...fs.writes.keys()]).toEqual(expectedFiles.map((file) => `/dist/${file}`));
+        expect(
+        	[...fs.writes.keys()],
+        ).toEqual(expectedFiles.map((file) => `/dist/${file}`));
 
         for (const body of fs.writes.values()) {
-            expect(body.endsWith("\n")).toBe(true);
+            expect(
+            	body.endsWith("\n"),
+            ).toBe(true);
         }
 
         expect(summary).toEqual({

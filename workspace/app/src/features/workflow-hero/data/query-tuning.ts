@@ -1,3 +1,5 @@
+import type { Workflow } from "#app/features/workflow-hero";
+
 import {
     Clipboard,
     DatabaseZap,
@@ -8,8 +10,6 @@ import {
     TrendingUp,
     Wand2,
 } from "lucide-vue-next";
-
-import type { Workflow } from "#app/features/workflow-hero";
 
 /** Query-tuning case study shown in the workflow hero. */
 export const queryTuningWorkflow: Workflow = {

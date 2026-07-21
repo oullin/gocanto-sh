@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch } from "vue";
+import { SearchCorpus, type SearchKind, type SearchResult } from "@gocanto/domain";
+import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import SearchResultDetail from "#app/components/SearchResultDetail.vue";
+import { useGlobalSearch } from "#app/lib/globalSearch";
+
 import {
     BookOpen,
     FileText,
@@ -9,6 +14,7 @@ import {
     Quote,
     Sparkles,
 } from "lucide-vue-next";
+
 import {
     CommandDialog,
     CommandEmpty,
@@ -17,10 +23,6 @@ import {
     CommandItem,
     CommandList,
 } from "#app/components/ui/command";
-import { SearchCorpus, type SearchKind, type SearchResult } from "@gocanto/domain";
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
-import SearchResultDetail from "#app/components/SearchResultDetail.vue";
-import { useGlobalSearch } from "#app/lib/globalSearch";
 
 const groupIcons = {
     work: BookOpen,
@@ -33,10 +35,15 @@ const groupIcons = {
 } as const;
 
 const { open } = useGlobalSearch();
+
 const sheetOpen = ref(false);
+
 const activePayload = shallowRef<SearchResult["payload"] | null>(null);
+
 const corpus = shallowRef<SearchCorpus | null>(null);
+
 const selectedKind = ref<SearchKind | null>(null);
+
 let corpusLoading = false;
 
 const isKindVisible = (k: SearchKind) => selectedKind.value === null || selectedKind.value === k;
@@ -62,29 +69,29 @@ async function buildCorpus(): Promise<SearchCorpus> {
 }
 
 watch(
-    open,
-    (v) => {
-        if (!v) {
-            selectedKind.value = null;
+	open,
+	(v) => {
+	        if (!v) {
+	            selectedKind.value = null;
 
-            return;
-        }
+	            return;
+	        }
 
-        if (corpus.value || corpusLoading) {
-            return;
-        }
+	        if (corpus.value || corpusLoading) {
+	            return;
+	        }
 
-        corpusLoading = true;
-        void buildCorpus()
-            .then((nextCorpus) => {
-                corpus.value = nextCorpus;
-                corpusLoading = false;
-            })
-            .catch(() => {
-                corpusLoading = false;
-            });
-    },
-    { immediate: true },
+	        corpusLoading = true;
+	        void buildCorpus()
+	            .then((nextCorpus) => {
+	                corpus.value = nextCorpus;
+	                corpusLoading = false;
+	            })
+	            .catch(() => {
+	                corpusLoading = false;
+	            });
+	    },
+	{ immediate: true },
 );
 
 const activeKey = ref<string | null>(null);
@@ -124,6 +131,7 @@ watch(sheetOpen, (v) => {
         }
 
         const rect = target.getBoundingClientRect();
+
         const init = {
             bubbles: true,
             cancelable: true,

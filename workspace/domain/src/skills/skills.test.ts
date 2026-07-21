@@ -25,7 +25,11 @@ describe("skills domain", () => {
         } as const;
 
         expect(Skills.signatureCells(fixture)[0]?.iconKey).toBe("layers");
-        expect(Skills.initials("Go (Programming Language)")).toBe("GP");
-        expect(["green", "blue", "purple", "amber"]).toContain(Skills.chipVariant("Kafka"));
+        expect(
+        	Skills.initials("Go (Programming Language)"),
+        ).toBe("GP");
+        expect(
+        	["green", "blue", "purple", "amber"],
+        ).toContain(Skills.chipVariant("Kafka"));
     });
 });

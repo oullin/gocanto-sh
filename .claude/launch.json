@@ -4,8 +4,9 @@
         {
             "name": "web",
             "runtimeExecutable": "sh",
-            "runtimeArgs": ["-c", "PORT=5273 pnpm --dir workspace/app dev:app"],
-            "port": 5273
+            "runtimeArgs": ["-c", "pnpm --dir workspace/app dev:app"],
+            "port": 5273,
+            "autoPort": true
         }
     ]
 }

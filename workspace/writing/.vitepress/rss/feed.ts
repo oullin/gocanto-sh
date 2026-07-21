@@ -6,6 +6,7 @@ import type { Post } from "#writing/posts";
 
 const SITE_URL = "https://writing.gocanto.sh";
 const FEED_TITLE = "Gustavo Ocanto — Writing";
+
 const FEED_DESCRIPTION =
     "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
 
@@ -58,6 +59,7 @@ export class RssFeed {
     public static render(posts: Post[]): string {
         const items = RssFeed.toRssItems(posts);
         const lastBuildDate = items[0]?.publishedAt;
+
         const lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
             '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
@@ -121,7 +123,14 @@ export class RssFeed {
 
     /** Writes the rendered RSS feed into a VitePress output directory. */
     public async write(outDir: string): Promise<void> {
-        await writeFile(join(outDir, RssFeed.PATH.slice(1)), await this.load(), "utf8");
+        await writeFile(
+        	join(
+        		outDir,
+        		RssFeed.PATH.slice(1),
+        	),
+        	await this.load(),
+        	"utf8",
+        );
     }
 
     private static escapeXml(value: string): string {

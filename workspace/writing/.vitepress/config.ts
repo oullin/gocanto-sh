@@ -3,8 +3,10 @@ import { defineConfig } from "vitepress";
 import { RssFeed } from "#writing/rss";
 
 const SITE_URL = "https://writing.gocanto.sh";
+
 const DESCRIPTION =
     "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+
 const rssFeed = new RssFeed({
     loadPosts: async () => {
         const { default: loader } = await import("#writing/posts-data");
@@ -104,7 +106,9 @@ export default defineConfig({
                 configureServer(server) {
                     server.middlewares.use((request, response, next) => {
                         void rssFeed.serve(request, response).then((handled) => {
-                            if (!handled) next();
+                            if (!handled) {
+                                next();
+                            }
                         }, next);
                     });
                 },

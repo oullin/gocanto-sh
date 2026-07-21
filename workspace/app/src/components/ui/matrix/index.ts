@@ -17,6 +17,7 @@ export function ensureFrameSize(frame: Frame, rows: number, cols: number): Frame
         const row = frame[r] || [];
 
         result.push([]);
+
         for (let c = 0; c < cols; c++) {
             result[r][c] = row[c] ?? 0;
         }

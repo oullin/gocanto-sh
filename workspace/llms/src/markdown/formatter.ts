@@ -1,4 +1,7 @@
 import { TextFormatter } from "@gocanto/domain/text";
+import { SITE_URL } from "#llms/kernel/constants";
+import type { AllFixtures } from "#llms/markdown/types";
+
 import type {
     EducationFixture,
     EducationRecord,
@@ -15,9 +18,6 @@ import type {
     TalkRecord,
     TalksFixture,
 } from "@gocanto/store";
-
-import { SITE_URL } from "#llms/kernel/constants";
-import type { AllFixtures } from "#llms/markdown/types";
 
 /** Renders fixture data as byte-compatible markdown resources. */
 export class FixtureMarkdown {
@@ -201,6 +201,7 @@ export class FixtureMarkdown {
 
         if (skill.example_projects?.length) {
             lines.push("", "**Example projects:**");
+
             for (const project of skill.example_projects) {
                 if (typeof project === "string") {
                     lines.push(`- ${project}`);

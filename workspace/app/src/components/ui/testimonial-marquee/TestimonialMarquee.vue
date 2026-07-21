@@ -8,12 +8,12 @@ import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 export type { Testimonial };
 
 const props = withDefaults(
-    defineProps<{
-        items: readonly Testimonial[];
-        speed?: number;
-        loading?: boolean;
-    }>(),
-    { speed: 40, loading: false },
+	defineProps<{
+	        items: readonly Testimonial[];
+	        speed?: number;
+	        loading?: boolean;
+	    }>(),
+	{ speed: 40, loading: false },
 );
 
 const emit = defineEmits<{
@@ -25,6 +25,7 @@ const itemsToDisplay = computed<Testimonial[]>(() => {
         ...item,
         text: TextFormatter.stripHtml(item.text),
     }));
+
     let result = [...sanitized];
 
     while (result.length > 0 && result.length < 10) {
@@ -35,13 +36,16 @@ const itemsToDisplay = computed<Testimonial[]>(() => {
 });
 
 const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
+
 const isTouchPaused = ref(false);
 
 const cardBase =
     "tm-card group/card relative flex h-[260px] w-[clamp(260px,82vw,350px)] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
+
 const cardSurface = "border-[var(--border-strong)] bg-background";
 const cardSurfaceFeatured = "tm-card--featured border-[var(--border-strong)] bg-background";
 const cardInteractiveHover = "hover:border-[var(--btn-ghost-ring-hover)]";
+
 const cardFocus =
     "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--btn-ghost-ring-hover)]";
 

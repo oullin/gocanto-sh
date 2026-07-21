@@ -6,9 +6,11 @@ import { DialogContent, DialogPortal, useForwardPropsEmits } from "reka-ui";
 import { cn } from "#app/lib/utils";
 import DialogOverlay from "#app/components/ui/dialog/DialogOverlay.vue";
 
-defineOptions({
-    inheritAttrs: false,
-});
+defineOptions(
+	{
+	    inheritAttrs: false,
+	},
+);
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>();
 const emits = defineEmits<DialogContentEmits>();

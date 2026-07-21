@@ -1,3 +1,5 @@
+import type { Workflow } from "#app/features/workflow-hero";
+
 import {
     Cable,
     Clipboard,
@@ -8,8 +10,6 @@ import {
     PenLine,
     Wand2,
 } from "lucide-vue-next";
-
-import type { Workflow } from "#app/features/workflow-hero";
 
 /** Event-pipelines case study shown in the workflow hero. */
 export const eventPipelinesWorkflow: Workflow = {

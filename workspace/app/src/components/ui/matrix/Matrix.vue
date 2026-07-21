@@ -8,23 +8,23 @@ interface Palette {
 }
 
 const props = withDefaults(
-    defineProps<{
-        rows: number;
-        cols: number;
-        levels: number[];
-        size?: number;
-        gap?: number;
-        brightness?: number;
-        palette?: Palette;
-        ariaLabel?: string;
-    }>(),
-    {
-        size: 10,
-        gap: 2,
-        brightness: 1,
-        palette: () => ({ on: "currentColor", off: "var(--muted-foreground)" }),
-        ariaLabel: "matrix display",
-    },
+	defineProps<{
+	        rows: number;
+	        cols: number;
+	        levels: number[];
+	        size?: number;
+	        gap?: number;
+	        brightness?: number;
+	        palette?: Palette;
+	        ariaLabel?: string;
+	    }>(),
+	{
+	        size: 10,
+	        gap: 2,
+	        brightness: 1,
+	        palette: () => ({ on: "currentColor", off: "var(--muted-foreground)" }),
+	        ariaLabel: "matrix display",
+	    },
 );
 
 const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -33,7 +33,11 @@ const offGradId = `matrix-pixel-off-${uid}`;
 const glowId = `matrix-glow-${uid}`;
 
 const currentFrame = computed<Frame>(() =>
-    ensureFrameSize(vu(props.cols, props.levels), props.rows, props.cols),
+    ensureFrameSize(
+    	vu(props.cols, props.levels),
+    	props.rows,
+    	props.cols,
+    ),
 );
 
 const svgDimensions = computed(() => ({

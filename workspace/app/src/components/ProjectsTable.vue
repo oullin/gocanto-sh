@@ -9,12 +9,13 @@ import { ScrollFade } from "#app/components/ui/scroll-fade";
 import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
-
 const allRows = Projects.rows(projects);
 const languages = Projects.languages(allRows);
 
 const selected = ref<Set<string>>(new Set());
+
 const popoverOpen = ref(false);
+
 const filtering = ref(false);
 
 const filteredRows = computed(() => Projects.filter(allRows, selected.value));
@@ -48,17 +49,18 @@ const buttonLabel = computed(() => {
 });
 
 watch(
-    selected,
-    () => {
-        filtering.value = true;
-        window.setTimeout(() => {
-            filtering.value = false;
-        }, 220);
-    },
-    { deep: true },
+	selected,
+	() => {
+	        filtering.value = true;
+	        window.setTimeout(() => {
+	            filtering.value = false;
+	        }, 220);
+	    },
+	{ deep: true },
 );
 
 const ready = useInViewReady(section);
+
 const isLoading = computed(() => !ready.value || filtering.value);
 </script>
 

@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 import { MarkdownBundleWriter } from "#llms/bundle/bundle-writer";
 import { NodeFileSystem } from "#llms/kernel/node-file-system";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(
+	fileURLToPath(import.meta.url),
+);
+
 const distDir = resolve(__dirname, "../../app/dist");
 
 const { files, lastmod } = new MarkdownBundleWriter(new NodeFileSystem()).generate(distDir, {

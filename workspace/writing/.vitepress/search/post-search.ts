@@ -15,7 +15,9 @@ export class PostSearch {
     public static matchesQuery(post: Post, query: string): boolean {
         const normalizedQuery = query.trim().toLowerCase();
 
-        if (!normalizedQuery) return true;
+        if (!normalizedQuery) {
+            return true;
+        }
 
         return `${post.title} ${post.description} ${post.tags.join(" ")}`
             .toLowerCase()

@@ -13,12 +13,10 @@ const props = defineProps<
         searchValue?: string;
     }
 >();
+
 const emits = defineEmits<ListboxItemEmits>();
-
 const delegatedProps = reactiveOmit(props, "class");
-
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
-
 const id = useId();
 const { filterState, allItems, allGroups, refreshFilter } = useCommand();
 const groupContext = useCommandGroup();
@@ -91,6 +89,7 @@ watch(currentElement, () => {
     allItems.value.set(id, itemSearchValue());
     refreshFilter();
 });
+
 onUnmounted(() => {
     allItems.value.delete(id);
 

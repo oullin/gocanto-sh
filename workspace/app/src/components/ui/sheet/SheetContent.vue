@@ -12,17 +12,21 @@ interface SheetContentProps extends DialogContentProps {
     side?: "top" | "right" | "bottom" | "left";
 }
 
-defineOptions({
-    inheritAttrs: false,
-});
+defineOptions(
+	{
+	    inheritAttrs: false,
+	},
+);
 
-const props = withDefaults(defineProps<SheetContentProps>(), {
-    side: "right",
-});
+const props = withDefaults(
+	defineProps<SheetContentProps>(),
+	{
+	    side: "right",
+	},
+);
+
 const emits = defineEmits<DialogContentEmits>();
-
 const delegatedProps = reactiveOmit(props, "class", "side");
-
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 

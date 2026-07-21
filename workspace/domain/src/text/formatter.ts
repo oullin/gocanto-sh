@@ -83,6 +83,7 @@ export class TextFormatter {
         const clean = TextFormatter.compactWhitespace(
             TextFormatter.stripHtml(parts.filter(Boolean).join(" ")),
         );
+
         const compact = clean.replace(/[^A-Za-z0-9]+/g, "");
 
         return `${clean} ${compact}`;

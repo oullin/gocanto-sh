@@ -117,9 +117,15 @@ export type BioRecord = {
 export type BioFixture = FixtureEnvelope<BioRecord>;
 
 export type EducationFixture = FixtureEnvelope<readonly EducationRecord[]>;
+
 export type ExperienceFixture = FixtureEnvelope<readonly ExperienceRecord[]>;
+
 export type LinksFixture = FixtureEnvelope<readonly LinkRecord[]>;
+
 export type ProfileFixture = FixtureEnvelope<ProfileRecord>;
+
 export type ProjectsFixture = FixtureEnvelope<readonly ProjectRecord[]>;
+
 export type RecommendationsFixture = FixtureEnvelope<readonly RecommendationRecord[]>;
+
 export type TalksFixture = FixtureEnvelope<readonly TalkRecord[]>;

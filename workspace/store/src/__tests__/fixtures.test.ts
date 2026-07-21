@@ -17,7 +17,10 @@ const assertUniqueUuids = (records: readonly WithUuid[], label: string) => {
 
     for (const record of records) {
         expect(record.uuid, `${label} record missing uuid`).toBeTruthy();
-        expect(seen.has(record.uuid), `duplicate uuid in ${label}: ${record.uuid}`).toBe(false);
+        expect(
+        	seen.has(record.uuid),
+        	`duplicate uuid in ${label}: ${record.uuid}`,
+        ).toBe(false);
         seen.add(record.uuid);
     }
 };

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { Sitemap } from "#llms/sitemap/sitemap";
 
 import type {
     ExperienceFixture,
@@ -6,8 +7,6 @@ import type {
     RecommendationsFixture,
     TalksFixture,
 } from "@gocanto/store";
-
-import { Sitemap } from "#llms/sitemap/sitemap";
 
 const emptySources = {
     projects: { version: "1.0.0", data: [] } satisfies ProjectsFixture,
@@ -108,8 +107,12 @@ describe("Sitemap.render", () => {
     const xml = Sitemap.render("https://gocanto.sh", "2025-05-19");
 
     it("opens with the XML prolog and urlset", () => {
-        expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>\n<urlset')).toBe(true);
-        expect(xml.trimEnd().endsWith("</urlset>")).toBe(true);
+        expect(
+        	xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>\n<urlset'),
+        ).toBe(true);
+        expect(
+        	xml.trimEnd().endsWith("</urlset>"),
+        ).toBe(true);
     });
 
     it("includes the root, all 8 markdown pages, and llms.txt (10 URLs)", () => {

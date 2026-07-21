@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Menu, Search } from "lucide-vue-next";
 import { useGlobalSearch } from "#app/lib/globalSearch";
+
 import {
     Sheet,
     SheetClose,

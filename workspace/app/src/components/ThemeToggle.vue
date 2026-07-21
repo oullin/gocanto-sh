@@ -6,6 +6,7 @@ type ThemeMode = "system" | "light" | "dark";
 const STORAGE_KEY = "theme";
 
 const mode = ref<ThemeMode>("system");
+
 let mediaQuery: MediaQueryList | null = null;
 
 function resolveTheme(m: ThemeMode): "light" | "dark" {
