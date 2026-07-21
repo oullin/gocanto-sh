@@ -41,7 +41,7 @@ export const supportingSkills = [
         percentage: 95,
         item: "Complex 3rd Party System Integrations",
         description:
-            "Stripe, Adyen, NETS, PayPal, WeChat, PayDollar, schema registries, banking cores. Contract tests, failover paths, idempotent sync jobs — checkout that doesn't fall over.",
+            "Stripe, Adyen, NETS, PayPal, WeChat, PayDollar, schema registries, banking cores. Contract tests, failover paths, idempotent sync jobs, checkout that doesn't fall over.",
     },
     {
         uuid: "e5f6a1b2-c3d4-7890-1234-ef1234567890",
@@ -241,7 +241,7 @@ export const supportingSkills = [
         percentage: 95,
         item: "Audit-Trail Architecture",
         description:
-            "Append-only event logs with cryptographic signatures and replay tooling. Compliance designed in at architecture stage, not retrofitted — every step reproducible, every record permanent.",
+            "Append-only event logs with cryptographic signatures and replay tooling. Compliance designed in at architecture stage, not retrofitted: every step reproducible, every record permanent.",
     },
     {
         uuid: "9d4e2f7a-8c1b-4530-a692-d3e4f50617c8",

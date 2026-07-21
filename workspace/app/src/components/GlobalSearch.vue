@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch } from "vue";
+import { SearchCorpus, type SearchKind, type SearchResult } from "@gocanto/domain";
+import { education, experience, links, profile, projects, talks } from "@gocanto/store";
+import SearchResultDetail from "#app/components/SearchResultDetail.vue";
+import { useGlobalSearch } from "#app/lib/globalSearch";
+
 import {
     BookOpen,
     FileText,
@@ -9,6 +14,7 @@ import {
     Quote,
     Sparkles,
 } from "lucide-vue-next";
+
 import {
     CommandDialog,
     CommandEmpty,
@@ -16,17 +22,7 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
-import {
-    buildSearchCorpus,
-    SEARCH_KINDS,
-    type SearchCorpus,
-    type SearchKind,
-    type SearchResult,
-} from "@gocanto/domain";
-import { education, experience, links, profile, projects, talks } from "@gocanto/store";
-import SearchResultDetail from "@components/SearchResultDetail.vue";
-import { globalSearchOpen } from "@lib/globalSearch";
+} from "#app/components/ui/command";
 
 const groupIcons = {
     work: BookOpen,
@@ -38,16 +34,23 @@ const groupIcons = {
     links: LinkIcon,
 } as const;
 
-const open = globalSearchOpen;
+const { open } = useGlobalSearch();
+
 const sheetOpen = ref(false);
+
 const activePayload = shallowRef<SearchResult["payload"] | null>(null);
+
 const corpus = shallowRef<SearchCorpus | null>(null);
+
+const corpusError = ref(false);
+
 const selectedKind = ref<SearchKind | null>(null);
+
 let corpusLoading = false;
 
 const isKindVisible = (k: SearchKind) => selectedKind.value === null || selectedKind.value === k;
 
-const visibleKinds = computed(() => SEARCH_KINDS.filter((k) => isKindVisible(k.key)));
+const visibleKinds = computed(() => SearchCorpus.KINDS.filter((k) => isKindVisible(k.key)));
 
 const toggleKind = (k: SearchKind) => {
     selectedKind.value = selectedKind.value === k ? null : k;
@@ -56,7 +59,7 @@ const toggleKind = (k: SearchKind) => {
 async function buildCorpus(): Promise<SearchCorpus> {
     const { recommendations } = await import("@gocanto/store/recommendations");
 
-    return buildSearchCorpus({
+    return SearchCorpus.from({
         education,
         experience,
         links,
@@ -65,6 +68,24 @@ async function buildCorpus(): Promise<SearchCorpus> {
         recommendations,
         talks,
     });
+}
+
+function loadCorpus(): void {
+    if (corpus.value || corpusLoading) {
+        return;
+    }
+
+    corpusLoading = true;
+    corpusError.value = false;
+    void buildCorpus()
+        .then((nextCorpus) => {
+            corpus.value = nextCorpus;
+            corpusLoading = false;
+        })
+        .catch(() => {
+            corpusError.value = true;
+            corpusLoading = false;
+        });
 }
 
 watch(
@@ -76,19 +97,7 @@ watch(
             return;
         }
 
-        if (corpus.value || corpusLoading) {
-            return;
-        }
-
-        corpusLoading = true;
-        void buildCorpus()
-            .then((nextCorpus) => {
-                corpus.value = nextCorpus;
-                corpusLoading = false;
-            })
-            .catch(() => {
-                corpusLoading = false;
-            });
+        loadCorpus();
     },
     { immediate: true },
 );
@@ -130,6 +139,7 @@ watch(sheetOpen, (v) => {
         }
 
         const rect = target.getBoundingClientRect();
+
         const init = {
             bubbles: true,
             cancelable: true,
@@ -154,7 +164,7 @@ watch(sheetOpen, (v) => {
         <CommandInput placeholder="What are you searching for?" />
         <div class="search-filters" role="group" aria-label="Filter by kind">
             <button
-                v-for="k in SEARCH_KINDS"
+                v-for="k in SearchCorpus.KINDS"
                 :key="k.key"
                 type="button"
                 class="search-filters__chip"
@@ -185,6 +195,12 @@ watch(sheetOpen, (v) => {
                         </CommandItem>
                     </CommandGroup>
                 </template>
+            </template>
+            <template v-else-if="corpusError">
+                <div class="px-5 py-10 text-center text-sm text-muted-foreground">
+                    Couldn't load search results.
+                    <button type="button" class="underline" @click="loadCorpus">Retry</button>
+                </div>
             </template>
         </CommandList>
     </CommandDialog>

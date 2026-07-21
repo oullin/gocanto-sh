@@ -1,1 +1,2 @@
-export { default as Checkbox } from "@components/ui/checkbox/Checkbox.vue";
+/** Accessible checkbox control. */
+export { default as Checkbox } from "#app/components/ui/checkbox/Checkbox.vue";

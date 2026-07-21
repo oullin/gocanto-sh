@@ -6,7 +6,7 @@ export const goProjects = [
         language: "Go",
         title: "users-grpc-service",
         excerpt:
-            "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind — structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
+            "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind: structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
         url: "https://github.com/gocanto/users-grpc-service",
         is_open_source: true,
         icon: "Users",
@@ -18,7 +18,7 @@ export const goProjects = [
         language: "Go",
         title: "converter-go",
         excerpt:
-            "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library — intentionally, to validate that the interface held up across languages and runtime models.",
+            "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library, intentionally, to validate that the interface held up across languages and runtime models.",
         url: "https://github.com/gocanto/go-converter",
         is_open_source: true,
         icon: "ArrowLeftRight",
@@ -88,10 +88,10 @@ export const goProjects = [
     {
         uuid: "02dbdd7d-12fe-4aa1-ba46-e5d250fa7a7d",
         language: "Go",
-        title: "go-fmt",
+        title: "fmtkit",
         excerpt:
-            "A semantic formatting engine and CLI for Go that goes beyond gofmt, enforcing rule-based structure around control flow, declaration ordering, and spacing before handing code off to gofmt and goimports. Built to make human-written, generated, and agent-written Go converge on the same house style in a single pass. Ships as both a reusable engine and a standalone fmt command, with config-driven file discovery, exclusion rules, and agent-friendly output formats for CI and automation workflows.",
-        url: "https://github.com/oullin/go-fmt",
+            "A rule-driven formatting pipeline for Go and TypeScript/Vue that goes beyond gofmt, enforcing structure around control flow, declaration ordering, and spacing before handing code off to gofmt and goimports, with an embedded oxfmt/oxlint toolchain for the TS side. Built to make human-written, generated, and agent-written code converge on the same house style in a single pass. Ships as one self-contained binary (Homebrew or GitHub Releases) and a reusable Go engine, with config-driven file discovery, exclusion rules, and agent-friendly output formats for CI and automation workflows.",
+        url: "https://github.com/oullin/fmtkit",
         is_open_source: true,
         icon: "Wand2",
         published_at: "2026-03-18",

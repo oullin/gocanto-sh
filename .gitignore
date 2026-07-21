@@ -4,6 +4,7 @@ dist/
 storage/
 .turbo/
 .vite/
+**/.vitepress/cache/
 *.tsbuildinfo
 .playwright-mcp/
 # Code coverage profiles and other test artifacts

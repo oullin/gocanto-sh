@@ -3,6 +3,8 @@ import type { DialogContentEmits, DialogContentProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { X as Cross2Icon } from "lucide-vue-next";
+import { cn } from "#app/lib/utils";
+
 import {
     DialogClose,
     DialogContent,
@@ -10,11 +12,12 @@ import {
     DialogPortal,
     useForwardPropsEmits,
 } from "reka-ui";
-import { cn } from "@/lib/utils";
 
-defineOptions({
-    inheritAttrs: false,
-});
+defineOptions(
+    {
+        inheritAttrs: false,
+    },
+);
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>();
 const emits = defineEmits<DialogContentEmits>();

@@ -18,16 +18,8 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "ignoreDeprecations": "6.0",
-        "baseUrl": ".",
         "paths": {
-            "@": ["./src"],
-            "@/*": ["./src/*"],
-            "@components": ["./src/components"],
-            "@components/*": ["./src/components/*"],
-            "@lib": ["./src/lib"],
-            "@lib/*": ["./src/lib/*"],
-            "@features": ["./src/features"],
-            "@features/*": ["./src/features/*"]
+            "#app/*": ["./src/*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "scripts/**/*.ts"]

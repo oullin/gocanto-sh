@@ -1,7 +1,7 @@
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import ThemeToggle from "@components/ThemeToggle.vue";
+import ThemeToggle from "#app/components/ThemeToggle.vue";
 
 const stubMatchMedia = (matches: boolean) => {
     const mql: Partial<MediaQueryList> = {
@@ -64,6 +64,7 @@ describe("ThemeToggle", () => {
 
     it("hydrates from localStorage when a theme is stored", async () => {
         localStorage.setItem("theme", "dark");
+
         const wrapper = mount(ThemeToggle);
 
         await flushPromises();
@@ -80,11 +81,17 @@ describe("ThemeToggle", () => {
         await flushPromises();
 
         await wrapper.get('input[value="dark"]').setValue();
-        expect(localStorage.getItem("theme")).toBe("dark");
+
+        expect(
+            localStorage.getItem("theme"),
+        ).toBe("dark");
         expect(document.documentElement.dataset.theme).toBe("dark");
 
         await wrapper.get('input[value="system"]').setValue();
-        expect(localStorage.getItem("theme")).toBeNull();
+
+        expect(
+            localStorage.getItem("theme"),
+        ).toBeNull();
         expect(document.documentElement.dataset.theme).toBe("light");
     });
 });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Star } from "lucide-vue-next";
-import type { Testimonial } from "@components/ui/testimonial-marquee/types";
+import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 
 withDefaults(
     defineProps<{

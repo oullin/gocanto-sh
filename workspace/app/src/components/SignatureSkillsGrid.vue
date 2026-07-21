@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, type Component } from "vue";
-import {
-    iconKeyForSkill,
-    listSignatureSkillCells,
-    listSupportingSkillCells,
-    skillChipVariant,
-    skillInitials,
-} from "@gocanto/domain";
+import { Skills } from "@gocanto/domain";
 import { profile, type ProfileSkillRecord } from "@gocanto/store";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useInViewReady } from "#app/lib/useAsyncInView";
+import { ScrollFade } from "#app/components/ui/scroll-fade";
+
 import {
     Binary,
     Server,
@@ -23,16 +19,17 @@ import {
     ExternalLink,
     ArrowUpRight,
 } from "lucide-vue-next";
+
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
     SheetTitle,
-} from "@/components/ui/sheet";
-import { ScrollFade } from "@/components/ui/scroll-fade";
+} from "#app/components/ui/sheet";
 
 const section = ref<HTMLElement | null>(null);
+
 const moreSection = ref<HTMLElement | null>(null);
 
 const iconFor: Record<string, Component> = {
@@ -47,13 +44,14 @@ const iconFor: Record<string, Component> = {
     waypoints: Waypoints,
 };
 
-const signatureCells = computed(() => listSignatureSkillCells(profile));
-const moreCells = computed(() => listSupportingSkillCells(profile));
+const signatureCells = computed(() => Skills.signatureCells(profile));
 
+const moreCells = computed(() => Skills.supportingCells(profile));
 const ready = useInViewReady(section);
 const moreReady = useInViewReady(moreSection);
 
 const open = ref(false);
+
 const activeSkill = ref<ProfileSkillRecord | null>(null);
 
 function openSkill(s: ProfileSkillRecord) {
@@ -80,7 +78,7 @@ const activeHasIcon = computed<boolean>(() => {
 });
 
 function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
-    return iconKeyForSkill(skill.item);
+    return Skills.iconKey(skill.item);
 }
 </script>
 
@@ -89,7 +87,7 @@ function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
         <div class="explore-head">
             <h2>Signature skills</h2>
             <p>
-                Hands-on craft I lean on across every engagement — agentic platforms, payment cores,
+                Hands-on craft I lean on across every engagement: agentic platforms, payment cores,
                 streaming pipelines, banking legacy.
             </p>
         </div>
@@ -186,7 +184,7 @@ function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
                                 :stroke-width="1.5"
                             />
                             <span v-else class="skill-sheet__initials">{{
-                                activeSkill ? skillInitials(activeSkill.item) : ""
+                                activeSkill ? Skills.initials(activeSkill.item) : ""
                             }}</span>
                         </span>
                         <span v-if="activeSkill?.signature" class="skill-sheet__badge"
@@ -238,7 +236,7 @@ function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
                                 v-for="t in activeSkill.related_tech"
                                 :key="t"
                                 class="skill-sheet__chip"
-                                :class="`skill-sheet__chip--${skillChipVariant(t)}`"
+                                :class="`skill-sheet__chip--${Skills.chipVariant(t)}`"
                             >
                                 {{ t }}
                             </li>

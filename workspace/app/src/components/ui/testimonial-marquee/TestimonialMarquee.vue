@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { stripHtml } from "@gocanto/domain";
-import { cn } from "@lib/utils";
-import TestimonialCard from "@components/ui/testimonial-marquee/TestimonialCard.vue";
-import type { Testimonial } from "@components/ui/testimonial-marquee/types";
+import { useIntersectionObserver } from "@vueuse/core";
+import { TextFormatter } from "@gocanto/domain";
+import { cn } from "#app/lib/utils";
+import TestimonialCard from "#app/components/ui/testimonial-marquee/TestimonialCard.vue";
+import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 
 export type { Testimonial };
 
@@ -23,8 +24,9 @@ const emit = defineEmits<{
 const itemsToDisplay = computed<Testimonial[]>(() => {
     const sanitized = props.items.map((item) => ({
         ...item,
-        text: stripHtml(item.text),
+        text: TextFormatter.stripHtml(item.text),
     }));
+
     let result = [...sanitized];
 
     while (result.length > 0 && result.length < 10) {
@@ -35,13 +37,28 @@ const itemsToDisplay = computed<Testimonial[]>(() => {
 });
 
 const durationStyle = computed(() => ({ "--duration": `${props.speed}s` }));
+
 const isTouchPaused = ref(false);
 
-const cardBase =
-    "tm-card group/card relative flex h-[260px] w-[clamp(260px,82vw,350px)] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
+const rowElement = ref<HTMLElement>();
+
+const isRowVisible = ref(true);
+
+useIntersectionObserver(rowElement, (entries) => {
+    const entry = entries[0];
+
+    if (entry) {
+        isRowVisible.value = entry.isIntersecting;
+    }
+});
+
 const cardSurface = "border-[var(--border-strong)] bg-background";
 const cardSurfaceFeatured = "tm-card--featured border-[var(--border-strong)] bg-background";
 const cardInteractiveHover = "hover:border-[var(--btn-ghost-ring-hover)]";
+
+const cardBase =
+    "tm-card group/card relative flex h-[260px] w-[clamp(260px,82vw,350px)] shrink-0 flex-col justify-between overflow-hidden rounded-md border p-[16px] text-left transition-[border-color] duration-150 transform-gpu [backface-visibility:hidden]";
+
 const cardFocus =
     "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--btn-ghost-ring-hover)]";
 
@@ -76,7 +93,9 @@ function resumeFromTouch() {
 <template>
     <div class="tm-root flex flex-col gap-4 py-8 overflow-hidden" :aria-busy="loading || undefined">
         <div
+            ref="rowElement"
             class="tm-row group flex overflow-hidden p-2 [--gap:1rem] [--tm-mask:48px] [mask-image:linear-gradient(to_right,transparent,#000_var(--tm-mask),#000_calc(100%-var(--tm-mask)),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_var(--tm-mask),#000_calc(100%-var(--tm-mask)),transparent)]"
+            :class="{ 'tm-row--offscreen': !isRowVisible }"
             @pointerdown="pauseForTouch"
             @pointerup="resumeFromTouch"
             @pointercancel="resumeFromTouch"
@@ -125,6 +144,7 @@ function resumeFromTouch() {
 }
 .tm-row:hover .tm-track,
 .tm-row:focus-within .tm-track,
+.tm-row.tm-row--offscreen .tm-track,
 .tm-track.tm-track--paused {
     animation-play-state: paused;
 }

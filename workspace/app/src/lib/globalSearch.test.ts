@@ -1,19 +1,21 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { globalSearchOpen, openGlobalSearch } from "@lib/globalSearch";
+import { useGlobalSearch } from "#app/lib/globalSearch";
+
+const { open, openSearch } = useGlobalSearch();
 
 describe("globalSearch", () => {
     beforeEach(() => {
-        globalSearchOpen.value = false;
+        open.value = false;
     });
 
     it("starts closed", () => {
-        expect(globalSearchOpen.value).toBe(false);
+        expect(open.value).toBe(false);
     });
 
-    it("openGlobalSearch flips the flag to true", () => {
-        openGlobalSearch();
-        expect(globalSearchOpen.value).toBe(true);
+    it("openSearch flips the flag to true", () => {
+        openSearch();
+        expect(open.value).toBe(true);
     });
 });

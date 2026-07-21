@@ -8,7 +8,7 @@ export const profile = {
         nickname: "gus",
         handle: "gocanto",
         name: "Gustavo Ocanto",
-        email: "gus@oullin.io",
+        email: "hi@ollin.sh",
         profession: "Software Architect & Principal Engineer",
         skills: profileSkills,
     },

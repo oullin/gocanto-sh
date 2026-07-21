@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { DetailView, TextFormatter, UrlGuard, type SearchPayload } from "@gocanto/domain";
+
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
     SheetTitle,
-} from "@/components/ui/sheet";
+} from "#app/components/ui/sheet";
+
 import {
     BookOpen,
     Calendar,
@@ -18,13 +21,6 @@ import {
     Quote,
     Sparkles,
 } from "lucide-vue-next";
-import {
-    commaList,
-    detailHeaderFor,
-    detailParagraphs,
-    stripHtml,
-    type SearchPayload,
-} from "@gocanto/domain";
 
 const props = defineProps<{
     open: boolean;
@@ -35,29 +31,38 @@ const emit = defineEmits<{
     "update:open": [value: boolean];
 }>();
 
-const isOpen = computed({
-    get: () => props.open,
-    set: (v) => emit("update:open", v),
-});
+const isOpen = computed(
+    {
+        get: () => props.open,
+        set: (v) => emit("update:open", v),
+    },
+);
 
-const header = computed(() => detailHeaderFor(props.payload));
+const header = computed(() => DetailView.headerFor(props.payload));
 
 const kindIcon = computed(() => {
     switch (header.value?.kind) {
         case "work":
             return BookOpen;
+
         case "project":
             return FileText;
+
         case "skill":
             return Sparkles;
+
         case "education":
             return GraduationCap;
+
         case "talk":
             return Mic;
+
         case "recommendation":
             return Quote;
+
         case "link":
             return LinkIcon;
+
         default:
             return BookOpen;
     }
@@ -107,7 +112,7 @@ const kindIcon = computed(() => {
             <div class="px-6 pb-8 pt-2 text-[15px] leading-relaxed text-foreground/90 space-y-4">
                 <template v-if="payload?.kind === 'Work'">
                     <p
-                        v-for="(para, i) in detailParagraphs(payload.data.summary)"
+                        v-for="(para, i) in DetailView.paragraphs(payload.data.summary)"
                         :key="i"
                         class="whitespace-pre-line"
                     >
@@ -119,7 +124,7 @@ const kindIcon = computed(() => {
                         </h3>
                         <div class="flex flex-wrap gap-2">
                             <span
-                                v-for="skill in commaList(payload.data.skills)"
+                                v-for="skill in DetailView.commaList(payload.data.skills)"
                                 :key="skill"
                                 class="pill"
                             >
@@ -137,7 +142,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.published_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -167,7 +172,9 @@ const kindIcon = computed(() => {
                 </template>
 
                 <template v-else-if="payload?.kind === 'Education'">
-                    <p class="whitespace-pre-line">{{ stripHtml(payload.data.description) }}</p>
+                    <p class="whitespace-pre-line">
+                        {{ TextFormatter.stripHtml(payload.data.description) }}
+                    </p>
                 </template>
 
                 <template v-else-if="payload?.kind === 'Talk'">
@@ -182,7 +189,7 @@ const kindIcon = computed(() => {
                             <span>{{ payload.data.created_at }}</span>
                         </div>
                         <a
-                            :href="payload.data.url"
+                            :href="UrlGuard.safeHref(payload.data.url)"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
@@ -194,7 +201,9 @@ const kindIcon = computed(() => {
                 </template>
 
                 <template v-else-if="payload?.kind === 'Recommendation'">
-                    <p class="whitespace-pre-line italic">"{{ stripHtml(payload.data.text) }}"</p>
+                    <p class="whitespace-pre-line italic">
+                        "{{ TextFormatter.stripHtml(payload.data.text) }}"
+                    </p>
                     <p class="pt-4 border-t border-border text-sm text-muted-foreground">
                         {{ payload.data.relation }}
                     </p>
@@ -203,7 +212,7 @@ const kindIcon = computed(() => {
                 <template v-else-if="payload?.kind === 'Link'">
                     <p class="text-muted-foreground">{{ payload.data.description }}</p>
                     <a
-                        :href="payload.data.url"
+                        :href="UrlGuard.safeHref(payload.data.url)"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 text-foreground hover:underline"

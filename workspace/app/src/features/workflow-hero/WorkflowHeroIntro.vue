@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ArrowUpRight, Handshake } from "lucide-vue-next";
-import { Button } from "@/components/ui/button";
+import { Button } from "#app/components/ui/button";
 import { profile } from "@gocanto/store";
 
-import { useTestimonialProof } from "@features/workflow-hero/useTestimonialProof";
-import WorkflowProof from "@features/workflow-hero/WorkflowProof.vue";
+import { useTestimonialProof } from "#app/features/workflow-hero";
+import WorkflowProof from "#app/features/workflow-hero/WorkflowProof.vue";
 
 const mailto = "mailto:" + profile.data.email;
 const { proofAvatars, proofLoaded, proofSkeletons, testimonialCount } = useTestimonialProof();

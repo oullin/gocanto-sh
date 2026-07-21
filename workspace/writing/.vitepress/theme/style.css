@@ -1,0 +1,1267 @@
+/**
+ * "Writing" — the Blog Home design: a near-black editorial canvas with a sticky
+ * author rail and a dense archive list.
+ *
+ * The #0a0a0a canvas and #f4433c accent use IBM Plex Sans with JetBrains Mono
+ * for chrome/code. Tokens bridge onto VitePress so articles inherit the same
+ * palette while retaining their existing layout.
+ */
+
+:root,
+.dark {
+    --wr-bg: #0a0a0a;
+    --wr-ink: #e8e8e6;
+    --wr-muted: #a8a8a3;
+    --wr-dim: #8a8a86;
+    --wr-faint: #5a5a56;
+    --wr-legal: #6a6a66;
+    --wr-accent: #f4433c;
+    --wr-accent-hover: #ff6259;
+    --wr-accent-soft: rgba(244, 67, 60, 0.35);
+    --wr-accent-wash: rgba(244, 67, 60, 0.07);
+    --wr-line: #181816;
+    --wr-line-2: #222220;
+    --wr-line-3: #2a2a26;
+    --wr-line-4: #3a3a36;
+    --wr-code-bg: #0d0d0c;
+    --wr-code-head: #101010;
+    --wr-surface: #111110;
+    --wr-inline-code: #ff9a94;
+
+    --wr-sans: "IBM Plex Sans", system-ui, sans-serif;
+    --wr-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    /* VitePress bridge */
+    --vp-font-family-base: var(--wr-sans);
+    --vp-font-family-mono: var(--wr-mono);
+    --vp-c-bg: var(--wr-bg);
+    --vp-c-bg-alt: var(--wr-bg);
+    --vp-c-bg-soft: var(--wr-code-head);
+    --vp-c-text-1: var(--wr-ink);
+    --vp-c-text-2: var(--wr-muted);
+    --vp-c-text-3: var(--wr-faint);
+    --vp-c-divider: var(--wr-line);
+    --vp-c-border: var(--wr-line-2);
+    --vp-c-brand-1: var(--wr-accent);
+    --vp-c-brand-2: var(--wr-accent-hover);
+    --vp-c-brand-3: var(--wr-accent);
+    --vp-c-brand-soft: rgba(244, 67, 60, 0.14);
+    --vp-code-bg: var(--wr-line);
+    --vp-code-block-bg: var(--wr-code-bg);
+    color-scheme: dark;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: var(--wr-bg);
+    /* Always reserve the scrollbar gutter so short/filtered pages don't add or
+       drop a scrollbar and shift the layout horizontally. */
+    scrollbar-gutter: stable;
+    overflow-y: scroll;
+}
+
+body {
+    margin: 0;
+    background: var(--wr-bg);
+    color: var(--wr-ink);
+    font-family: var(--wr-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+.wr a {
+    color: var(--wr-accent);
+    text-decoration: none;
+}
+
+.wr a:hover {
+    color: var(--wr-accent-hover);
+}
+
+::selection {
+    background: rgba(244, 67, 60, 0.25);
+    color: #fff;
+}
+
+::placeholder {
+    color: var(--wr-faint);
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--wr-line-2);
+    border-radius: 6px;
+    border: 3px solid var(--wr-bg);
+}
+
+@keyframes wr-fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------------- Reading progress ---------------- */
+
+.wr-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--wr-accent), var(--wr-accent-hover));
+    z-index: 200;
+    transition: width 0.1s linear;
+    width: 0;
+}
+
+/* ---------------- Back to top ---------------- */
+
+.wr-top {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 150;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--wr-line-3);
+    border-radius: 50%;
+    background: #141412;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    color: var(--wr-accent);
+    font-family: var(--wr-mono);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+        opacity 0.2s,
+        transform 0.2s,
+        visibility 0.2s,
+        color 0.15s,
+        border-color 0.15s;
+}
+
+.wr-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.wr-top:hover {
+    background: #1a1a18;
+    border-color: var(--wr-accent);
+}
+
+.wr-top:focus-visible {
+    outline: 2px solid var(--wr-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wr-top {
+        transition: none;
+        transform: none;
+    }
+}
+
+/* ---------------- Shell ---------------- */
+
+.wr-shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    border-left: 1px solid var(--wr-line);
+    border-right: 1px solid var(--wr-line);
+    /* Content-driven height with a non-sticky footer: the footer simply flows
+       after the content. No flex growth, so filtering can't reflow/jump it. */
+    background: radial-gradient(120% 60% at 50% -10%, rgba(255, 77, 94, 0.05), transparent 60%);
+}
+
+/* ---------------- Header ---------------- */
+
+.wr-header {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--wr-line);
+    position: sticky;
+    top: 0;
+    background: rgba(14, 15, 17, 0.82);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+}
+
+.wr-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.wr-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--wr-line-3);
+    flex-shrink: 0;
+    display: inline-flex;
+}
+
+.wr-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wr-home {
+    font-family: var(--wr-mono);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--wr-ink) !important;
+    letter-spacing: -0.01em;
+}
+
+.wr-search {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    margin-left: auto;
+}
+
+/* Restyle VitePress's local-search button to match the design's search input. */
+.wr-search .VPNavBarSearch {
+    position: static;
+    flex: 1;
+    display: flex;
+    min-width: 0;
+    padding: 0;
+}
+
+.wr-search .VPNavBarSearch > div {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.wr-search .DocSearch-Button {
+    margin: 0;
+    width: 100%;
+    height: auto;
+    gap: 8px;
+    padding: 9px 12px 9px 14px;
+    background: var(--wr-code-head);
+    border: 1px solid var(--wr-line-2);
+    border-radius: 9px;
+    color: var(--wr-faint);
+    font-family: var(--wr-mono);
+    font-size: 13.5px;
+    transition: border-color 0.15s;
+}
+
+.wr-search .DocSearch-Button:hover,
+.wr-search .DocSearch-Button:focus-visible {
+    box-shadow: none;
+    border-color: rgba(255, 77, 94, 0.5);
+    background: var(--wr-code-head);
+    color: var(--wr-ink);
+}
+
+.wr-search .DocSearch-Button-Container {
+    flex: 1;
+    gap: 8px;
+}
+
+/* VitePress adds its own margin-right on the icon, which doubles up with the
+   container's gap and pushes the placeholder off. */
+.wr-search .DocSearch-Search-Icon {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    color: var(--wr-faint);
+}
+
+/* Same story on the placeholder: VitePress nudges it down 2px, which knocks it
+   off the button's vertical centre. */
+.wr-search .DocSearch-Button-Placeholder {
+    margin: 0;
+    padding: 0;
+    font-size: 13.5px;
+    font-family: var(--wr-mono);
+    line-height: 1;
+}
+
+.wr-search .DocSearch-Button-Keys {
+    gap: 6px;
+    min-width: auto;
+}
+
+/* The sticky header (z-index 100) and progress bar (200) must sit *below* the
+   local-search modal, otherwise they float over it and it looks broken. */
+.VPLocalSearchBox {
+    z-index: 300 !important;
+}
+
+/* VitePress styles the trailing key as the right half of a joined pill (no left
+   border, squared left corners, lopsided padding) with a selector that outranks
+   a plain `.wr-search .DocSearch-Button-Key`, so the K has to be named twice to
+   come out as its own square key. */
+.wr-search .DocSearch-Button-Key,
+.wr-search .DocSearch-Button .DocSearch-Button-Key + .DocSearch-Button-Key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    border: 1px solid var(--wr-line-3);
+    border-radius: 5px;
+    box-shadow: none;
+    background: transparent;
+    color: var(--wr-faint);
+    font-family: var(--wr-mono);
+    font-size: 11px;
+    line-height: 1;
+}
+
+/* VitePress draws the ⌘ as a ::after pseudo-element with a line-height taller
+   than the key box, so the glyph paints over the pill border. */
+.wr-search .DocSearch-Button-Key::after {
+    height: auto;
+    line-height: 1;
+}
+
+.wr-search .DocSearch-Button-Key svg {
+    width: 11px;
+    height: 11px;
+}
+
+/* ---------------- Index ---------------- */
+
+.wr-index-shell {
+    max-width: 1280px;
+    min-height: 100vh;
+    margin: 0 auto;
+    border-left: 1px solid var(--wr-line);
+    border-right: 1px solid var(--wr-line);
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+}
+
+.wr-index-rail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 52px 40px 36px;
+    border-right: 1px solid var(--wr-line);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    animation: wr-fadeUp 0.5s ease both;
+}
+
+.wr-index-rail::-webkit-scrollbar {
+    display: none;
+}
+
+.wr-rail-name {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 14px;
+    color: var(--wr-ink) !important;
+}
+
+.wr-rail-avatar {
+    width: 46px;
+    height: 46px;
+    border-color: var(--wr-line-3);
+}
+
+.wr-rail-avatar img {
+    filter: grayscale(1) contrast(1.1);
+}
+
+.wr-rail-name__text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.wr-rail-name__label {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.wr-rail-name__role {
+    color: var(--wr-dim);
+    font: 400 11px/1 var(--wr-mono);
+    letter-spacing: 0.02em;
+}
+
+.wr-rail-name:hover .wr-rail-name__label {
+    color: var(--wr-accent);
+}
+
+.wr-lede {
+    margin: 26px 0 0;
+    color: var(--wr-muted);
+    font-size: 14.5px;
+    line-height: 1.65;
+    text-wrap: pretty;
+}
+
+.wr-topics {
+    margin-top: 38px;
+    font-family: var(--wr-mono);
+}
+
+.wr-topics__label {
+    margin-bottom: 10px;
+    color: var(--wr-faint);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.wr-topics__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: -10px;
+}
+
+.wr-topic {
+    appearance: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 5px 10px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--wr-dim);
+    font: 400 12.5px/1.4 var(--wr-mono);
+    cursor: pointer;
+    text-align: left;
+    transition:
+        color 0.15s,
+        background 0.15s;
+}
+
+.wr-topic__count {
+    font-size: 11px;
+    opacity: 0.55;
+}
+
+.wr-topic:hover {
+    color: var(--wr-accent);
+    background: rgba(244, 67, 60, 0.06);
+}
+
+.wr-topic.is-active {
+    color: var(--wr-accent);
+    background: rgba(244, 67, 60, 0.08);
+}
+
+/* ---------------- "Now" card ---------------- */
+
+.wr-now {
+    margin-top: 40px;
+    padding: 16px 18px;
+    border: 1px solid #1e1e1b;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #101010, #0c0c0c);
+}
+
+.wr-now__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--wr-accent);
+    font: 400 10px/1 var(--wr-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.wr-now__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--wr-accent);
+    box-shadow: 0 0 8px rgba(244, 67, 60, 0.8);
+}
+
+.wr-now p {
+    margin: 10px 0 0;
+    color: var(--wr-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.wr-now a {
+    color: var(--wr-ink) !important;
+    border-bottom: 1px solid var(--wr-line-4);
+}
+
+.wr-now a:hover {
+    color: var(--wr-accent) !important;
+    border-bottom-color: var(--wr-accent-soft);
+}
+
+.wr-rail-bottom {
+    margin-top: auto;
+    padding-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    color: var(--wr-dim);
+    font: 400 11.5px/1.5 var(--wr-mono);
+}
+
+.wr-rail-legal {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--wr-line-2);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: var(--wr-legal);
+    font: 400 11px/1.5 var(--wr-mono);
+}
+
+.wr-rail-legal > div:last-child {
+    color: #4a4a46;
+}
+
+.wr-subscribe {
+    color: var(--wr-accent) !important;
+    font-size: 12.5px;
+    border-bottom: 1px dashed var(--wr-accent-soft);
+    padding-bottom: 2px;
+}
+
+.wr-subscribe:hover {
+    border-bottom-style: solid;
+}
+
+.wr-site-link {
+    color: #c8c8c4 !important;
+}
+
+.wr-site-link:hover {
+    color: var(--wr-accent) !important;
+}
+
+.wr-dot {
+    color: var(--wr-line-4);
+    margin: 0 4px;
+}
+
+/* ---------------- Index main ---------------- */
+
+.wr-index-main {
+    min-width: 0;
+    padding: 52px 64px 80px;
+    animation: wr-fadeUp 0.5s ease 0.08s both;
+}
+
+.wr-index-head {
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--wr-line);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.wr-index-head h1 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.wr-index-head__count {
+    color: var(--wr-faint);
+    font: 400 11.5px var(--wr-mono);
+    white-space: nowrap;
+}
+
+.wr-index-search {
+    position: relative;
+    margin-left: auto;
+    width: 300px;
+    max-width: 40%;
+}
+
+.wr-index-search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 58px 9px 34px;
+    background: var(--wr-code-head);
+    border: 1px solid var(--wr-line-2);
+    border-radius: 6px;
+    color: var(--wr-ink);
+    font: 400 12.5px var(--wr-mono);
+    transition: border-color 0.15s;
+    appearance: none;
+}
+
+.wr-index-search input:focus {
+    outline: none;
+    border-color: var(--wr-line-4);
+}
+
+.wr-index-search input::-webkit-search-cancel-button {
+    appearance: none;
+}
+
+.wr-index-search__icon,
+.wr-index-search__key {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--wr-faint);
+    pointer-events: none;
+}
+
+.wr-index-search__icon {
+    left: 12px;
+    font-size: 13px;
+}
+
+.wr-index-search__key {
+    right: 10px;
+    padding: 2px 6px;
+    border: 1px solid var(--wr-line-3);
+    border-radius: 4px;
+    font: 400 10px/1.4 var(--wr-mono);
+}
+
+/* ---------------- Featured post ---------------- */
+
+.wr-essay--featured {
+    padding: 40px 0 44px;
+    border-bottom: 1px solid var(--wr-line);
+}
+
+/* Until a second post lands there is no archive below, so the rule would hang
+   under the card with nothing to separate. */
+.wr-essay--featured:last-child {
+    border-bottom: none;
+}
+
+.wr-essay__lead {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font: 400 11px var(--wr-mono);
+    letter-spacing: 0.14em;
+}
+
+.wr-essay__latest {
+    padding: 3px 8px;
+    border: 1px solid var(--wr-accent-soft);
+    border-radius: 3px;
+    background: var(--wr-accent-wash);
+    color: var(--wr-accent);
+    text-transform: uppercase;
+}
+
+.wr-essay__date {
+    color: var(--wr-faint);
+    text-transform: uppercase;
+}
+
+.wr-essay--featured h2 {
+    margin: 18px 0 0;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+}
+
+.wr-essay h2 a {
+    color: var(--wr-ink);
+    transition: color 0.15s;
+}
+
+.wr-essay h2 a:hover {
+    color: var(--wr-accent);
+}
+
+.wr-essay--featured p {
+    max-width: 620px;
+    margin: 16px 0 0;
+    color: var(--wr-muted);
+    font-size: 16px;
+    line-height: 1.65;
+    text-wrap: pretty;
+}
+
+.wr-essay__meta {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--wr-faint);
+    font: 400 11px var(--wr-mono);
+}
+
+.wr-essay__more {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--wr-accent) !important;
+}
+
+.wr-tag {
+    padding: 3px 8px;
+    border: 1px solid var(--wr-line-2);
+    border-radius: 3px;
+    color: var(--wr-dim);
+    font-family: var(--wr-mono);
+    font-size: 11px;
+}
+
+.wr-tag--accent {
+    border-color: var(--wr-accent-soft);
+    color: var(--wr-accent);
+}
+
+/* ---------------- Archive rows ---------------- */
+
+.wr-archive {
+    display: flex;
+    flex-direction: column;
+    padding-top: 24px;
+}
+
+.wr-row {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: baseline;
+    padding: 12px 14px;
+    margin: 0 -14px;
+    border-radius: 6px;
+    color: inherit !important;
+    transition:
+        background 0.15s,
+        padding-left 0.15s;
+}
+
+.wr-row:hover {
+    background: var(--wr-surface);
+    padding-left: 20px;
+}
+
+.wr-row__date {
+    color: var(--wr-faint);
+    font: 400 11.5px var(--wr-mono);
+}
+
+.wr-row__body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.wr-row__title {
+    color: var(--wr-ink);
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+
+.wr-row__tags {
+    color: var(--wr-faint);
+    font: 400 11px var(--wr-mono);
+}
+
+.wr-row__end {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    color: var(--wr-faint);
+    font: 400 11px var(--wr-mono);
+}
+
+.wr-row__arrow {
+    color: var(--wr-accent);
+}
+
+/* ---------------- Empty state ---------------- */
+
+.wr-empty {
+    padding: 64px 0;
+    text-align: center;
+    font-family: var(--wr-mono);
+    color: var(--wr-dim);
+    font-size: 13px;
+}
+
+.wr-empty span {
+    color: var(--wr-accent);
+}
+
+.wr-empty__clear {
+    appearance: none;
+    margin-top: 14px;
+    padding: 0 0 2px;
+    border: 0;
+    border-bottom: 1px dashed var(--wr-accent-soft);
+    background: transparent;
+    color: var(--wr-accent);
+    font: 400 12px var(--wr-mono);
+    cursor: pointer;
+}
+
+.wr-empty__clear:hover {
+    border-bottom-style: solid;
+}
+
+/* ---------------- Article ---------------- */
+
+.wr-article-wrap {
+    padding: 40px;
+    animation: wr-fadeUp 0.4s ease;
+}
+
+.wr-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--wr-mono);
+    font-size: 13px;
+    color: var(--wr-muted) !important;
+    margin-bottom: 40px;
+}
+
+.wr-back:hover {
+    color: var(--wr-ink) !important;
+}
+
+.wr-article-grid {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 56px;
+    align-items: start;
+}
+
+.wr-article {
+    max-width: 720px;
+    min-width: 0;
+}
+
+.wr-article__tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.wr-article__title {
+    font-size: 44px;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    margin: 0 0 20px;
+    text-wrap: balance;
+}
+
+.wr-article__meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--wr-mono);
+    font-size: 13px;
+    color: var(--wr-faint);
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--wr-line);
+    margin-bottom: 36px;
+}
+
+.wr-article__meta .wr-sep {
+    color: var(--wr-line-3);
+}
+
+/* Aside / TOC */
+.wr-aside {
+    position: sticky;
+    top: 90px;
+    font-family: var(--wr-mono);
+}
+
+.wr-aside__label {
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wr-faint);
+    margin-bottom: 16px;
+}
+
+.wr-toc {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.wr-toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    padding: 5px 0;
+    color: var(--wr-muted) !important;
+    font-weight: 400;
+    transition: color 0.15s;
+}
+
+.wr-toc a.is-active {
+    color: var(--wr-accent) !important;
+    font-weight: 600;
+}
+
+.wr-toc__marker {
+    width: 2px;
+    height: 13px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    background: var(--wr-line-3);
+    transition: background 0.15s;
+}
+
+.wr-toc a.is-active .wr-toc__marker {
+    background: var(--wr-accent);
+}
+
+/* Related */
+.wr-related {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--wr-line);
+}
+
+.wr-related__label {
+    font-family: var(--wr-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wr-faint);
+    margin-bottom: 18px;
+}
+
+.wr-related__item {
+    display: block;
+    padding: 16px 0;
+    border-top: 1px solid var(--wr-line);
+    cursor: pointer;
+    color: inherit !important;
+}
+
+.wr-related__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wr-ink);
+    margin-bottom: 4px;
+}
+
+.wr-related__meta {
+    font-family: var(--wr-mono);
+    font-size: 12px;
+    color: var(--wr-faint);
+}
+
+/* ---------------- Footer ---------------- */
+
+.wr-footer {
+    border-top: 1px solid var(--wr-line);
+    padding: 28px 40px;
+    margin-top: 40px;
+}
+
+.wr-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--wr-mono);
+    font-size: 12.5px;
+    color: var(--wr-faint);
+}
+
+.wr-heart {
+    color: var(--wr-accent);
+}
+
+/* ---------------- Rendered markdown (.vp-doc) ---------------- */
+
+/* The article header (tags/title/meta) is rendered from frontmatter, so drop
+   the markdown's own H1 to avoid a duplicate title. (Content is wrapped in
+   divs, so this can't rely on :first-child.) */
+.wr-article .vp-doc h1 {
+    display: none;
+}
+
+.wr-article .vp-doc {
+    font-family: var(--wr-sans);
+    color: var(--wr-muted);
+}
+
+.wr-article .vp-doc p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--wr-muted);
+    margin: 0 0 20px;
+}
+
+.wr-article .vp-doc h2 {
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--wr-ink);
+    margin: 44px 0 16px;
+    padding-top: 0;
+    border-top: 0;
+    scroll-margin-top: 90px;
+}
+
+.wr-article .vp-doc h3 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--wr-ink);
+    margin: 32px 0 14px;
+    scroll-margin-top: 90px;
+}
+
+.wr-article .vp-doc h2 .header-anchor,
+.wr-article .vp-doc h3 .header-anchor {
+    color: var(--wr-accent);
+}
+
+.wr-article .vp-doc a {
+    color: var(--wr-accent);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.wr-article .vp-doc a:hover {
+    color: var(--wr-accent-hover);
+    text-decoration: underline;
+}
+
+.wr-article .vp-doc strong {
+    color: var(--wr-ink);
+    font-weight: 700;
+}
+
+.wr-article .vp-doc em {
+    color: var(--wr-muted);
+}
+
+.wr-article .vp-doc blockquote {
+    margin: 28px 0;
+    padding: 4px 0 4px 24px;
+    border-left: 2px solid var(--wr-accent);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--wr-ink);
+    font-style: italic;
+}
+
+.wr-article .vp-doc blockquote p {
+    font-size: 18px;
+    color: var(--wr-ink);
+    margin: 0;
+}
+
+.wr-article .vp-doc ul,
+.wr-article .vp-doc ol {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--wr-muted);
+    margin: 0 0 24px;
+    padding-left: 22px;
+}
+
+.wr-article .vp-doc li + li {
+    margin-top: 6px;
+}
+
+/* Inline code */
+.wr-article .vp-doc :not(pre) > code {
+    font-family: var(--wr-mono);
+    font-size: 14px;
+    background: var(--wr-line);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: var(--wr-inline-code);
+}
+
+/* Fenced code blocks — mirror the design's code card */
+.vp-doc div[class*="language-"] {
+    border: 1px solid var(--wr-line-2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 24px 0;
+    background: var(--wr-code-bg);
+}
+
+.vp-doc div[class*="language-"] pre {
+    margin: 0;
+    padding: 18px 20px;
+    background: var(--wr-code-bg);
+    font-family: var(--wr-mono);
+    font-size: 13.5px;
+    line-height: 1.75;
+}
+
+.vp-doc div[class*="language-"] .lang {
+    font-family: var(--wr-mono);
+    font-size: 11px;
+    color: var(--wr-faint);
+}
+
+.vp-doc [class*="language-"] code {
+    font-family: var(--wr-mono);
+}
+
+/* ---------------- Responsive ---------------- */
+
+/* Above this the shell is narrower than the viewport, so the floating
+   back-to-top button clears the footer text on its own. Below it, reserve a
+   lane under the footer so the button never sits on top of the copyright. */
+@media (max-width: 1340px) {
+    .wr-footer {
+        padding-bottom: 96px;
+    }
+}
+
+@media (max-width: 960px) {
+    .wr-index-shell {
+        grid-template-columns: 1fr;
+    }
+    .wr-index-rail {
+        position: static;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+        padding: 48px 40px;
+        border-right: 0;
+        border-bottom: 1px solid var(--wr-line);
+    }
+    .wr-lede {
+        max-width: 620px;
+        font-size: 15.5px;
+    }
+    .wr-topics {
+        margin-top: 36px;
+    }
+    /* Stacked above the archive rather than beside it, the rail has the width to
+       lay the topics out as a wrapping row instead of a tall column. */
+    .wr-topics__list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .wr-now {
+        max-width: 620px;
+    }
+    .wr-rail-bottom {
+        margin-top: 32px;
+        padding-top: 0;
+    }
+    .wr-index-main {
+        padding: 56px 40px 64px;
+    }
+}
+
+@media (max-width: 860px) {
+    .wr-article-grid {
+        grid-template-columns: 1fr;
+    }
+    .wr-aside {
+        display: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .wr-header {
+        gap: 16px;
+        padding: 14px 20px;
+    }
+    .wr-article-wrap,
+    .wr-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    /* Narrow enough that the footer's two columns collide, so stack them. */
+    .wr-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .wr-index-rail {
+        padding: 40px 20px;
+    }
+    .wr-index-main {
+        padding: 44px 20px 48px;
+    }
+    .wr-index-head {
+        flex-wrap: wrap;
+    }
+    /* The 40%-wide search can't hold its placeholder here, so give it the full
+       row under the title and count. */
+    .wr-index-search {
+        order: 3;
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+    }
+    .wr-essay--featured h2 {
+        font-size: 31px;
+    }
+    .wr-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 6px;
+    }
+    .wr-row__date {
+        grid-column: 1 / -1;
+    }
+    .wr-article__title {
+        font-size: 32px;
+    }
+    .wr-top {
+        right: 16px;
+        bottom: 16px;
+    }
+}

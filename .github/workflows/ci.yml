@@ -33,6 +33,13 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Install fmtkit
+              run: |
+                  curl -fsSL "https://github.com/oullin/fmtkit/releases/download/v0.5.9/fmtkit_0.5.9_linux_amd64.tar.gz" | tar -xz fmtkit
+                  sudo install -m 0755 fmtkit /usr/local/bin/fmtkit
+                  rm fmtkit
+                  fmtkit version
+
             - name: Cache turbo
               uses: actions/cache@v4
               with:

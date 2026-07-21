@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 
 type Pillar = {
     sub: string;

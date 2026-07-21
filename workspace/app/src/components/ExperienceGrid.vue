@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { ref, shallowRef } from "vue";
-import { listFeaturedWorkCards, type SearchPayload } from "@gocanto/domain";
+import { Work, type SearchPayload } from "@gocanto/domain";
 import { experience, type ExperienceRecord } from "@gocanto/store";
-import { useInViewReady } from "@lib/useAsyncInView";
-import SearchResultDetail from "@components/SearchResultDetail.vue";
+import { useInViewReady } from "#app/lib/useAsyncInView";
+import SearchResultDetail from "#app/components/SearchResultDetail.vue";
 
 const PLACEHOLDER_COUNT = 6;
 
 const section = ref<HTMLElement | null>(null);
 
-const guides = listFeaturedWorkCards(experience, PLACEHOLDER_COUNT);
+const guides = Work.listFeaturedCards(experience, PLACEHOLDER_COUNT);
 
 const ready = useInViewReady(section);
 
 const sheetOpen = ref(false);
+
 const activePayload = shallowRef<SearchPayload | null>(null);
 
 function openExperience(e: ExperienceRecord) {

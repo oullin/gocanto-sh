@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { bio } from "@gocanto/store";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
 const ready = useInViewReady(section);
@@ -18,6 +18,7 @@ const EM_TAG_RE = /<em>([\s\S]*?)<\/em>/gi;
 
 const tokenizeParagraph = (input: string): ParagraphToken[] => {
     const out: ParagraphToken[] = [];
+
     let cursor = 0;
 
     for (const match of input.matchAll(EM_TAG_RE)) {

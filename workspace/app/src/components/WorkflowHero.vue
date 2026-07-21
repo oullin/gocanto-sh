@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WorkflowHero from "@/features/workflow-hero/WorkflowHero.vue";
+import WorkflowHero from "#app/features/workflow-hero/WorkflowHero.vue";
 </script>
 
 <template>

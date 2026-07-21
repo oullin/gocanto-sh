@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import { defineAsyncComponent, hydrateOnInteraction, onBeforeUnmount, onMounted, ref } from "vue";
 import { Search } from "lucide-vue-next";
-import { openGlobalSearch } from "@lib/globalSearch";
+import { useGlobalSearch } from "#app/lib/globalSearch";
 
 const scrolled = ref(false);
-const MobileNavSheet = defineAsyncComponent({
-    loader: () => import("@components/MobileNavSheet.vue"),
-    hydrate: hydrateOnInteraction("click"),
-});
+const { openSearch } = useGlobalSearch();
+
+const MobileNavSheet = defineAsyncComponent(
+    {
+        loader: () => import("#app/components/MobileNavSheet.vue"),
+        hydrate: hydrateOnInteraction("click"),
+    },
+);
 
 const navItems = [
     { href: "#about", label: "About" },
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
+    { href: "https://writing.gocanto.sh/", label: "Writing" },
     { href: "#testimonials", label: "Testimonials" },
     { href: "#bio", label: "Bio" },
     { href: "#skills", label: "Skills" },
@@ -20,10 +25,6 @@ const navItems = [
 
 const onScroll = () => {
     scrolled.value = window.scrollY > 8;
-};
-
-const openSearch = () => {
-    openGlobalSearch();
 };
 
 onMounted(() => {

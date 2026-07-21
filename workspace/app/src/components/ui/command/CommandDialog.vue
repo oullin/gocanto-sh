@@ -2,15 +2,16 @@
 import type { DialogRootEmits, DialogRootProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
 import { useForwardPropsEmits } from "reka-ui";
+import { cn } from "#app/lib/utils";
+import Command from "#app/components/ui/command/Command.vue";
+
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import Command from "@components/ui/command/Command.vue";
+} from "#app/components/ui/dialog";
 
 const props = withDefaults(
     defineProps<
@@ -25,8 +26,8 @@ const props = withDefaults(
         description: "Search for a command to run...",
     },
 );
-const emits = defineEmits<DialogRootEmits>();
 
+const emits = defineEmits<DialogRootEmits>();
 const forwarded = useForwardPropsEmits(props, emits);
 </script>
 

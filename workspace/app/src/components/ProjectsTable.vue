@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { filterProjectRows, listProjectLanguages, listProjectRows } from "@gocanto/domain";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { Projects } from "@gocanto/domain";
 import { projects } from "@gocanto/store";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { ScrollFade } from "@/components/ui/scroll-fade";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { Popover, PopoverContent, PopoverTrigger } from "#app/components/ui/popover";
+import { Checkbox } from "#app/components/ui/checkbox";
+import { Button } from "#app/components/ui/button";
+import { ScrollFade } from "#app/components/ui/scroll-fade";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
-
-const allRows = listProjectRows(projects);
-const languages = listProjectLanguages(allRows);
+const allRows = Projects.rows(projects);
+const languages = Projects.languages(allRows);
 
 const selected = ref<Set<string>>(new Set());
+
 const popoverOpen = ref(false);
+
 const filtering = ref(false);
 
-const filteredRows = computed(() => filterProjectRows(allRows, selected.value));
+let filterTimer: number | undefined;
+
+const filteredRows = computed(() => Projects.filter(allRows, selected.value));
 
 const toggleLanguage = (lang: string) => {
     const next = new Set(selected.value);
@@ -51,14 +54,18 @@ watch(
     selected,
     () => {
         filtering.value = true;
-        window.setTimeout(() => {
+        window.clearTimeout(filterTimer);
+        filterTimer = window.setTimeout(() => {
             filtering.value = false;
         }, 220);
     },
     { deep: true },
 );
 
+onBeforeUnmount(() => window.clearTimeout(filterTimer));
+
 const ready = useInViewReady(section);
+
 const isLoading = computed(() => !ready.value || filtering.value);
 </script>
 

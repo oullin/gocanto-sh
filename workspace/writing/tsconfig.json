@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "tsBuildInfoFile": "../../storage/.cache/typescript/writing.tsbuildinfo",
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "ignoreDeprecations": "6.0",
+        "types": ["node", "vitepress/client"],
+        "paths": {
+            "#writing/posts-data": ["./posts.data.ts"],
+            "#writing/article": ["./.vitepress/article/index.ts"],
+            "#writing/article/article-page": ["./.vitepress/article/article-page.ts"],
+            "#writing/posts": ["./.vitepress/posts/index.ts"],
+            "#writing/posts/posts": ["./.vitepress/posts/posts.ts"],
+            "#writing/posts/types": ["./.vitepress/posts/types.ts"],
+            "#writing/rss": ["./.vitepress/rss/index.ts"],
+            "#writing/rss/feed": ["./.vitepress/rss/feed.ts"],
+            "#writing/search": ["./.vitepress/search/index.ts"],
+            "#writing/search/index-search": ["./.vitepress/search/index-search.ts"],
+            "#writing/*": ["./.vitepress/*"]
+        }
+    },
+    "include": [".vitepress/**/*.ts", "posts.data.ts", "vite-env.d.ts", "vitest.config.ts"]
+}
