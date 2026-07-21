@@ -15,6 +15,10 @@
             "types": "./src/text.ts",
             "default": "./src/text.ts"
         },
+        "./url-guard": {
+            "types": "./src/url-guard.ts",
+            "default": "./src/url-guard.ts"
+        },
         "./purify": {
             "browser": {
                 "types": "./src/purify.browser.ts",
