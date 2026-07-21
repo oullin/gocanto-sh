@@ -14,7 +14,12 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "ignoreDeprecations": "6.0",
-        "types": ["node", "vitepress/client"]
+        "types": ["node", "vitepress/client"],
+        "paths": {
+            "#writing/posts-data": ["./posts.data.ts"],
+            "#writing/rss": ["./.vitepress/rss.ts"],
+            "#writing/*": ["./.vitepress/*"]
+        }
     },
     "include": [".vitepress/**/*.ts", "posts.data.ts", "vite-env.d.ts", "vitest.config.ts"]
 }

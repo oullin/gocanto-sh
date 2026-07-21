@@ -8,7 +8,7 @@ export default defineConfig({
         globals: false,
         include: [".vitepress/**/*.test.ts"],
         isolate: false,
+        fileParallelism: false,
         pool: "threads",
-        singleThread: true,
     },
 });

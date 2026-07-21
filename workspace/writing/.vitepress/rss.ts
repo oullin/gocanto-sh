@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
 
-import type { Post } from "../posts.data";
+import type { Post } from "#writing/posts-data";
 
 export const RSS_PATH = "/feed.rss";
 export const RSS_CONTENT_TYPE = "application/rss+xml; charset=utf-8";
@@ -121,7 +121,7 @@ export function renderRssFeed(posts: Post[]): string {
 }
 
 export async function loadRssFeed(): Promise<string> {
-    const { default: postsLoader } = await import("../posts.data");
+    const { default: postsLoader } = await import("#writing/posts-data");
 
     return renderRssFeed(await postsLoader.load());
 }

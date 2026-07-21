@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { Post } from "../../posts.data";
-import { renderRssFeed } from "../rss";
+import type { Post } from "#writing/posts-data";
+import { renderRssFeed } from "#writing/rss";
 
 function makePost(
     overrides: Omit<Partial<Post>, "date"> & { title: string; date: string; url: string },

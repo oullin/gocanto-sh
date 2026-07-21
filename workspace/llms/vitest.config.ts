@@ -8,7 +8,7 @@ export default defineConfig({
         globals: false,
         include: ["src/**/*.test.ts"],
         isolate: false,
+        fileParallelism: false,
         pool: "threads",
-        singleThread: true,
     },
 });

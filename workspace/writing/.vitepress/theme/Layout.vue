@@ -2,8 +2,13 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { VPNavBarSearch } from "vitepress/theme";
-import { data as posts } from "../../posts.data";
-import { countLabel as toCountLabel, filterPosts, groupByYear, topTags } from "./search";
+import { data as posts } from "#writing/posts-data";
+import {
+    countLabel as toCountLabel,
+    filterPosts,
+    groupByYear,
+    topTags,
+} from "#writing/theme/search";
 
 // Implements the "Writing" blog redesign (Writing.dc.html): framed 1180px shell,
 // sticky header with VitePress local (full-text) search + ⌘K, reading-progress

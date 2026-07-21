@@ -1,6 +1,6 @@
 import { defineConfig } from "vitepress";
 
-import { RSS_PATH, serveRssRequest, writeRssFeed } from "./rss";
+import { RSS_PATH, serveRssRequest, writeRssFeed } from "#writing/rss";
 
 const SITE_URL = "https://writing.gocanto.sh";
 const DESCRIPTION =

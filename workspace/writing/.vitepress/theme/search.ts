@@ -1,4 +1,4 @@
-import type { Post } from "../../posts.data";
+import type { Post } from "#writing/posts-data";
 
 /**
  * Pure search/filter helpers for the writing index. Kept free of Vue/DOM so the

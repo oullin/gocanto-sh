@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import type { Post } from "../../../posts.data";
-import { countLabel, filterPosts, groupByYear, matchesQuery, topTags } from "../search";
+import type { Post } from "#writing/posts-data";
+import {
+    countLabel,
+    filterPosts,
+    groupByYear,
+    matchesQuery,
+    topTags,
+} from "#writing/theme/search";
 
 function makePost(overrides: Partial<Post> & { title: string; year: string }): Post {
     const { title, year, ...rest } = overrides;
