@@ -91,7 +91,7 @@ Neither site may sit at the `dist/` root. Vercel resolves the filesystem *before
 
 - `writing.gocanto.sh/(.*)` rewrites to `/writing/$1`; everything else rewrites to `/app/$1`.
 - `gocanto.sh/writing/*` permanently redirects to `writing.gocanto.sh/*`, so the writing site has one canonical origin. Preview deployments skip this redirect, which is how you verify the writing side before a domain is attached.
-- Security headers are per-host. The writing host needs `script-src 'unsafe-inline'`: VitePress emits an inline `__VP_HASH_MAP__` script whose hash changes with every post, so a pinned hash would break the site on the next publish.
+- Security headers are per-host, and both hosts ship `script-src 'self'` with no `'unsafe-inline'`. VitePress emits its bootstrap as inline `<script>` blocks, so [`externalize-inline-scripts.ts`](workspace/writing/.vitepress/scripts/externalize-inline-scripts.ts) moves them into `assets/` after each build. Pinning CSP hashes instead would be a trap: one of those blocks carries `__VP_HASH_MAP__`, whose contents change whenever a post is added, so the hash would stop matching on the next publish. That pass fails the build if any inline script survives it, so a VitePress upgrade breaks the build rather than production.
 - `cleanUrls` serves `posts/<slug>.md` at `/<slug>` without the `.html` suffix.
 
 #### GitHub Pages workflow (secondary/fallback, not production)
