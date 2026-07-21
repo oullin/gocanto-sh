@@ -10,10 +10,10 @@ export type { Testimonial };
 
 const props = withDefaults(
     defineProps<{
-            items: readonly Testimonial[];
-            speed?: number;
-            loading?: boolean;
-        }>(),
+        items: readonly Testimonial[];
+        speed?: number;
+        loading?: boolean;
+    }>(),
     { speed: 40, loading: false },
 );
 

@@ -10,26 +10,23 @@ import {
     CommandList,
 } from "#app/components/ui/command";
 
-const SearchHarness = defineComponent({
-    components: {
-        Command,
-        CommandGroup,
-        CommandInput,
-        CommandItem,
-        CommandList,
-    },
-    setup() {
-        const showLateItem = ref(false);
+const SearchHarness = defineComponent(
+    {
+        components: {
+            Command,
+            CommandGroup,
+            CommandInput,
+            CommandItem,
+            CommandList,
+        },
+        setup() {
+            const showLateItem = ref(false);
 
-        return {
-            showLateItem,
-        };
-    },
-    // The fmtkit sidecar re-indents multiline template literals
-    // non-idempotently (one extra indent unit per pass, still present in
-    // v0.5.8), so freeze this block's formatting until that converges.
-    // prettier-ignore
-    template: `
+            return {
+                showLateItem,
+            };
+        },
+        template: `
             <Command>
                 <CommandInput placeholder="Search" />
                 <button type="button" data-test="show-late" @click="showLateItem = true">Show late item</button>
@@ -48,7 +45,8 @@ const SearchHarness = defineComponent({
                 </CommandList>
             </Command>
         `,
-});
+    },
+);
 
 describe("Command", () => {
     it("filters items using explicit search values instead of visible labels", async () => {

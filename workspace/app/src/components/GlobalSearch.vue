@@ -91,14 +91,14 @@ function loadCorpus(): void {
 watch(
     open,
     (v) => {
-            if (!v) {
-                selectedKind.value = null;
+        if (!v) {
+            selectedKind.value = null;
 
-                return;
-            }
+            return;
+        }
 
-            loadCorpus();
-        },
+        loadCorpus();
+    },
     { immediate: true },
 );
 

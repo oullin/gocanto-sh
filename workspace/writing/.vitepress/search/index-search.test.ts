@@ -121,8 +121,8 @@ describe("WritingIndexSearch.tagCounts", () => {
     it("orders equal counts alphabetically", () => {
         expect(
             WritingIndexSearch.tagCounts(posts)
-                    .slice(1)
-                    .map(({ tag }) => tag),
+                .slice(1)
+                .map(({ tag }) => tag),
         ).toEqual(["cloudflare", "postgres", "security", "webhooks"]);
     });
 

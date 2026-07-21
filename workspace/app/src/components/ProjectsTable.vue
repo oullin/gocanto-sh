@@ -53,12 +53,12 @@ const buttonLabel = computed(() => {
 watch(
     selected,
     () => {
-            filtering.value = true;
-            window.clearTimeout(filterTimer);
-            filterTimer = window.setTimeout(() => {
-                filtering.value = false;
-            }, 220);
-        },
+        filtering.value = true;
+        window.clearTimeout(filterTimer);
+        filterTimer = window.setTimeout(() => {
+            filtering.value = false;
+        }, 220);
+    },
     { deep: true },
 );
 

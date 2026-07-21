@@ -15,16 +15,16 @@ import {
 
 const props = withDefaults(
     defineProps<
-            DialogRootProps & {
-                title?: string;
-                description?: string;
-                contentClass?: HTMLAttributes["class"];
-            }
-        >(),
+        DialogRootProps & {
+            title?: string;
+            description?: string;
+            contentClass?: HTMLAttributes["class"];
+        }
+    >(),
     {
-            title: "Command Palette",
-            description: "Search for a command to run...",
-        },
+        title: "Command Palette",
+        description: "Search for a command to run...",
+    },
 );
 
 const emits = defineEmits<DialogRootEmits>();

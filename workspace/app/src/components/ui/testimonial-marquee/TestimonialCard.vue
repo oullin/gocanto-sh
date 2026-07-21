@@ -4,12 +4,12 @@ import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 
 withDefaults(
     defineProps<{
-            item: Testimonial;
-            interactive: boolean;
-            loading: boolean;
-            cardClass: string;
-            focusable?: boolean;
-        }>(),
+        item: Testimonial;
+        interactive: boolean;
+        loading: boolean;
+        cardClass: string;
+        focusable?: boolean;
+    }>(),
     { focusable: true },
 );
 

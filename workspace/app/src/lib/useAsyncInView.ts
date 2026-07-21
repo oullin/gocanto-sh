@@ -93,16 +93,16 @@ export function useAsyncInView<T>(
     const { stop } = useIntersectionObserver(
         target,
         ([entry]) => {
-                if (!entry?.isIntersecting || resolved) {
-                    return;
-                }
+            if (!entry?.isIntersecting || resolved) {
+                return;
+            }
 
-                resolved = true;
-                stop();
-                timerId = window.setTimeout(() => {
-                    void controller.load();
-                }, delayMs);
-            },
+            resolved = true;
+            stop();
+            timerId = window.setTimeout(() => {
+                void controller.load();
+            }, delayMs);
+        },
         { rootMargin },
     );
 
@@ -138,16 +138,16 @@ export function useInViewReady(
     const { stop } = useIntersectionObserver(
         target,
         ([entry]) => {
-                if (!entry?.isIntersecting || resolved) {
-                    return;
-                }
+            if (!entry?.isIntersecting || resolved) {
+                return;
+            }
 
-                resolved = true;
-                stop();
-                timerId = window.setTimeout(() => {
-                    ready.value = true;
-                }, delayMs);
-            },
+            resolved = true;
+            stop();
+            timerId = window.setTimeout(() => {
+                ready.value = true;
+            }, delayMs);
+        },
         { rootMargin },
     );
 
