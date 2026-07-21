@@ -6,6 +6,14 @@
     "imports": {
         "#llms/*": "./src/*.ts"
     },
+    "exports": {
+        ".": "./src/index.ts",
+        "./kernel": "./src/kernel/index.ts",
+        "./markdown": "./src/markdown/index.ts",
+        "./llms-txt": "./src/llms-txt/index.ts",
+        "./sitemap": "./src/sitemap/index.ts",
+        "./bundle": "./src/bundle/index.ts"
+    },
     "scripts": {
         "build": "tsx src/generate-markdown.ts",
         "format": "make -C ../.. ui-format",

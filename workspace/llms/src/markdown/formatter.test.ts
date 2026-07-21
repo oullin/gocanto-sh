@@ -10,16 +10,7 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 
-import {
-    formatAll,
-    formatEducation,
-    formatExperience,
-    formatLinks,
-    formatProfile,
-    formatProjects,
-    formatRecommendations,
-    formatTalks,
-} from "#llms/formatters";
+import { FixtureMarkdown } from "#llms/markdown/formatter";
 
 const profile: ProfileFixture = {
     version: "1.0.0",
@@ -166,8 +157,8 @@ const links: LinksFixture = {
     ],
 };
 
-describe("formatProfile", () => {
-    const out = formatProfile(profile);
+describe("FixtureMarkdown.profile", () => {
+    const out = FixtureMarkdown.profile(profile);
 
     it("renders the name as an H1", () => {
         expect(out.startsWith("# Gustavo Ocanto\n")).toBe(true);
@@ -195,9 +186,9 @@ describe("formatProfile", () => {
     });
 });
 
-describe("formatProjects", () => {
+describe("FixtureMarkdown.projects", () => {
     it("sorts ascending by sort and produces no HTML in excerpts", () => {
-        const out = formatProjects(projects);
+        const out = FixtureMarkdown.projects(projects);
         const firstIdx = out.indexOf("### First");
         const secondIdx = out.indexOf("### Second");
 
@@ -207,9 +198,9 @@ describe("formatProjects", () => {
     });
 });
 
-describe("formatExperience", () => {
+describe("FixtureMarkdown.experience", () => {
     it("strips HTML from summary", () => {
-        const out = formatExperience(experience);
+        const out = FixtureMarkdown.experience(experience);
 
         expect(out).toContain("### Staff Engineer — ACME");
         expect(out).toContain("Did things.");
@@ -217,17 +208,17 @@ describe("formatExperience", () => {
     });
 });
 
-describe("formatEducation", () => {
+describe("FixtureMarkdown.education", () => {
     it("renders heading", () => {
-        const out = formatEducation(education);
+        const out = FixtureMarkdown.education(education);
 
         expect(out).toContain("### BSc, CS");
         expect(out).not.toMatch(/<[a-z]+>/i);
     });
 });
 
-describe("formatRecommendations", () => {
-    const out = formatRecommendations(recommendations);
+describe("FixtureMarkdown.recommendations", () => {
+    const out = FixtureMarkdown.recommendations(recommendations);
 
     it("escapes `|` in the relation line", () => {
         expect(out).toContain("_Reported \\| directly_");
@@ -239,18 +230,18 @@ describe("formatRecommendations", () => {
     });
 });
 
-describe("formatTalks", () => {
+describe("FixtureMarkdown.talks", () => {
     it("renders heading and URL", () => {
-        const out = formatTalks(talks);
+        const out = FixtureMarkdown.talks(talks);
 
         expect(out).toContain("### Title");
         expect(out).toContain("<https://example.com/t>");
     });
 });
 
-describe("formatLinks", () => {
+describe("FixtureMarkdown.links", () => {
     it("decodes HTML entities in description", () => {
-        const out = formatLinks(links);
+        const out = FixtureMarkdown.links(links);
 
         expect(out).toContain("[GitHub (@gocanto)](https://example.com/gh)");
         expect(out).toContain("Code & PRs.");
@@ -258,9 +249,9 @@ describe("formatLinks", () => {
     });
 });
 
-describe("formatAll", () => {
+describe("FixtureMarkdown.all", () => {
     it("joins sections with --- separators", () => {
-        const out = formatAll({
+        const out = FixtureMarkdown.all({
             profile,
             projects,
             experience,

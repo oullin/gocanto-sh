@@ -1,9 +1,20 @@
 import type { ProfileFixture } from "@gocanto/store";
 
-export const renderLlmsTxt = (siteUrl: string, profile: ProfileFixture): string => {
-    const { name, profession } = profile.data;
+/** Renders the discovery document for LLM-oriented site resources. */
+export class LlmsTxt {
+    private constructor() {}
 
-    return `# ${name}
+    /**
+     * Renders the llms.txt discovery document.
+     *
+     * @param siteUrl - Canonical site URL without a trailing slash.
+     * @param profile - Profile fixture providing the site identity.
+     * @returns Complete llms.txt contents.
+     */
+    public static render(siteUrl: string, profile: ProfileFixture): string {
+        const { name, profession } = profile.data;
+
+        return `# ${name}
 
 > ${profession} — full profile, projects, experience, talks, recommendations, and links. Static markdown bundles for LLM agents and direct human consumption.
 
@@ -21,4 +32,5 @@ export const renderLlmsTxt = (siteUrl: string, profile: ProfileFixture): string 
 - [Recommendations](${siteUrl}/recommendations.md)
 - [Links](${siteUrl}/links.md)
 `;
-};
+    }
+}

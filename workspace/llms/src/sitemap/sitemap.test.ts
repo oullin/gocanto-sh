@@ -7,7 +7,7 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 
-import { computeLastmod, renderSitemap } from "#llms/sitemap";
+import { Sitemap } from "#llms/sitemap/sitemap";
 
 const emptySources = {
     projects: { version: "1.0.0", data: [] } satisfies ProjectsFixture,
@@ -16,16 +16,16 @@ const emptySources = {
     talks: { version: "1.0.0", data: [] } satisfies TalksFixture,
 };
 
-describe("computeLastmod", () => {
+describe("Sitemap.lastmod", () => {
     it("falls back to today when there are no candidates", () => {
-        const out = computeLastmod(emptySources);
+        const out = Sitemap.lastmod(emptySources);
         const today = new Date().toISOString().slice(0, 10);
 
         expect(out).toBe(today);
     });
 
     it("picks the latest date across projects, recommendations, and talks", () => {
-        const out = computeLastmod({
+        const out = Sitemap.lastmod({
             projects: {
                 version: "1.0.0",
                 data: [
@@ -78,7 +78,7 @@ describe("computeLastmod", () => {
     });
 
     it("skips entries that are not parseable dates", () => {
-        const out = computeLastmod({
+        const out = Sitemap.lastmod({
             ...emptySources,
             projects: {
                 version: "1.0.0",
@@ -104,8 +104,8 @@ describe("computeLastmod", () => {
     });
 });
 
-describe("renderSitemap", () => {
-    const xml = renderSitemap("https://gocanto.sh", "2025-05-19");
+describe("Sitemap.render", () => {
+    const xml = Sitemap.render("https://gocanto.sh", "2025-05-19");
 
     it("opens with the XML prolog and urlset", () => {
         expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>\n<urlset')).toBe(true);

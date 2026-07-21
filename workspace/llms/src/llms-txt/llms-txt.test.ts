@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ProfileFixture } from "@gocanto/store";
 
-import { renderLlmsTxt } from "#llms/llms-txt";
+import { LlmsTxt } from "#llms/llms-txt/llms-txt";
 
 const profile: ProfileFixture = {
     version: "1.0.0",
@@ -16,8 +16,8 @@ const profile: ProfileFixture = {
     },
 };
 
-describe("renderLlmsTxt", () => {
-    const out = renderLlmsTxt("https://gocanto.sh", profile);
+describe("LlmsTxt.render", () => {
+    const out = LlmsTxt.render("https://gocanto.sh", profile);
 
     it("opens with the H1 for the profile name", () => {
         expect(out.startsWith("# Gustavo Ocanto\n")).toBe(true);
