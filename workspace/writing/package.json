@@ -19,7 +19,7 @@
     "scripts": {
         "dev": "PORTLESS_PORT=${PORTLESS_PORT:-1355} PORTLESS_HTTPS=${PORTLESS_HTTPS:-1} PORTLESS_SYNC_HOSTS=${PORTLESS_SYNC_HOSTS:-0} portless",
         "dev:site": "vitepress dev --host 0.0.0.0 --port ${PORT:-5175}",
-        "build": "vitepress build",
+        "build": "vitepress build && node .vitepress/scripts/externalize-inline-scripts.ts",
         "preview": "vitepress preview --host 0.0.0.0 --port ${PORT:-4175}",
         "lint": "make -C ../.. lint",
         "test": "vitest run --passWithNoTests",
