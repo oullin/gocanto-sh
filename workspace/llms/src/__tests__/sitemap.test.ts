@@ -77,6 +77,54 @@ describe("computeLastmod", () => {
         expect(out).toBe("2025-03-10");
     });
 
+    it("normalizes date-only values as UTC", () => {
+        const out = computeLastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "2024-06-01",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        expect(out).toBe("2024-06-01");
+    });
+
+    it("normalizes datetime values with offsets as UTC", () => {
+        const out = computeLastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "2024-06-01T23:30:00-02:00",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        expect(out).toBe("2024-06-02");
+    });
+
     it("skips entries that are not parseable dates", () => {
         const out = computeLastmod({
             ...emptySources,

@@ -18,7 +18,7 @@ const MD_PAGES = [
 ] as const;
 
 const isoDate = (input: string): string | null => {
-    const parsed = new Date(input);
+    const parsed = new Date(/^\d{4}-\d{2}-\d{2}$/.test(input) ? `${input}T00:00:00Z` : input);
 
     if (Number.isNaN(parsed.getTime())) {
         return null;
