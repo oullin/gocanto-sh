@@ -4,9 +4,26 @@ import { fileURLToPath } from "node:url";
 /** Detects server-only DOM dependencies that leak into browser bundles. */
 class BundleGuard {
     private static readonly forbiddenStrings = ["jsdom", "JSDOM"] as const;
-    private static readonly safeVueUserAgentProbe = /\.userAgent\)\?\.includes\([`"']jsdom[`"']\)/;
+    private static readonly safeVueUserAgentProbe = /\.userAgent\)\?\.includes\([`"']jsdom[`"']\)/g;
 
     private constructor() {}
+
+    /**
+     * Reports whether an asset's contents contain a forbidden server-only DOM marker.
+     *
+     * The benign Vue jsdom user-agent probe is stripped first (globally, so repeated
+     * occurrences do not leak through) to avoid false positives.
+     *
+     * @param contents - The emitted JavaScript asset contents to scan.
+     * @returns `true` when a forbidden marker remains after stripping safe probes.
+     */
+    private static containsForbiddenMarker(contents: string): boolean {
+        const contentsWithoutSafeProbe = contents.replace(BundleGuard.safeVueUserAgentProbe, "");
+
+        return BundleGuard.forbiddenStrings.some((marker) =>
+            contentsWithoutSafeProbe.includes(marker),
+        );
+    }
 
     /**
      * Scans emitted JavaScript assets and fails when server-only DOM markers are present.
@@ -27,15 +44,8 @@ class BundleGuard {
                         new URL(`../dist/assets/${file}`, import.meta.url),
                         "utf8",
                     );
-                    const contentsWithoutSafeProbe = contents.replace(
-                        BundleGuard.safeVueUserAgentProbe,
-                        "",
-                    );
-                    const isOffending = BundleGuard.forbiddenStrings.some((marker) =>
-                        contentsWithoutSafeProbe.includes(marker),
-                    );
 
-                    return isOffending ? file : undefined;
+                    return BundleGuard.containsForbiddenMarker(contents) ? file : undefined;
                 }),
             )
         ).filter((file): file is string => file !== undefined);

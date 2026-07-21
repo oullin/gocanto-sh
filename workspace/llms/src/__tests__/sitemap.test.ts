@@ -125,6 +125,32 @@ describe("computeLastmod", () => {
         expect(out).toBe("2024-06-02");
     });
 
+    it("excludes empty-string dates from the candidates", () => {
+        const out = computeLastmod({
+            ...emptySources,
+            projects: {
+                version: "1.0.0",
+                data: [
+                    {
+                        uuid: "p",
+                        language: "Go",
+                        title: "T",
+                        excerpt: "",
+                        url: "u",
+                        is_open_source: true,
+                        icon: "i",
+                        published_at: "",
+                        sort: 1,
+                    },
+                ],
+            },
+        });
+
+        const today = new Date().toISOString().slice(0, 10);
+
+        expect(out).toBe(today);
+    });
+
     it("skips entries that are not parseable dates", () => {
         const out = computeLastmod({
             ...emptySources,
