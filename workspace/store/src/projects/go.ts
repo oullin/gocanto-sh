@@ -6,7 +6,7 @@ export const goProjects = [
         language: "Go",
         title: "users-grpc-service",
         excerpt:
-            "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind — structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
+            "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind: structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
         url: "https://github.com/gocanto/users-grpc-service",
         is_open_source: true,
         icon: "Users",
@@ -18,7 +18,7 @@ export const goProjects = [
         language: "Go",
         title: "converter-go",
         excerpt:
-            "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library — intentionally, to validate that the interface held up across languages and runtime models.",
+            "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library, intentionally, to validate that the interface held up across languages and runtime models.",
         url: "https://github.com/gocanto/go-converter",
         is_open_source: true,
         icon: "ArrowLeftRight",

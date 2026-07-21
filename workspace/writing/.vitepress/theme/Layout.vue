@@ -3,51 +3,72 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
 import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "#writing/posts-data";
+import { WritingArticlePage } from "#writing/article";
+import type { Heading } from "#writing/article";
 import { WritingIndexSearch } from "#writing/search";
 import type { TopicSelection } from "#writing/search";
 
-// Implements option 2a of the "Writing" redesign: a dark editorial index with
-// a sticky author rail and excerpted essay list. Articles retain their existing
-// header, reading progress, TOC, author card, related posts, and footer.
+// Implements the "Blog Home" design: a dark editorial index with a sticky
+// author rail (identity, topic counts, "Now" card) and a promoted latest post
+// above a dense archive list. Articles retain their existing header, reading
+// progress, TOC, related posts, and footer.
 
 const { page, frontmatter } = useData();
 const route = useRoute();
 
-const cleanPath = computed(() => route.path.replace(/index\.html$/, "").replace(/\.html$/, ""));
-
-const isIndex = computed(() => cleanPath.value === "/" || cleanPath.value === "");
+const isIndex = computed(() => WritingArticlePage.isIndex(route.path));
 
 const tag = ref<TopicSelection>(WritingIndexSearch.allTopics);
 
-const filtered = computed(() => WritingIndexSearch.filterPosts(posts, "", tag.value));
+const query = ref("");
 
-const topics = computed(() => WritingIndexSearch.tagCounts(posts));
+const searchInput = ref<HTMLInputElement | null>(null);
+
+const filtering = computed(() => WritingIndexSearch.isFiltering(query.value, tag.value));
+
+const filtered = computed(() => WritingIndexSearch.filterPosts(posts, query.value, tag.value));
+
+const topics = computed(() => WritingIndexSearch.topTopics(posts));
 
 const featured = computed(() => posts[0]);
 
-const listedPosts = computed(() => WritingIndexSearch.listPosts(filtered.value, featured.value));
+const listedPosts = computed(() =>
+    WritingIndexSearch.archivePosts(filtered.value, featured.value, filtering.value),
+);
 
-const countLabel = computed(() => WritingIndexSearch.countLabel(filtered.value.length));
+const countLabel = computed(() =>
+    WritingIndexSearch.countLabel(posts.length, filtering.value ? filtered.value.length : null),
+);
 
-const newestYear = computed(() => posts[0]?.date.year ?? String(
-    new Date().getFullYear(),
-));
+const yearRange = computed(() => WritingIndexSearch.yearRange(posts));
 
-const currentPost = computed(() => {
-    const path = cleanPath.value.replace(/\/$/, "");
+function clearFilters() {
+    tag.value = WritingIndexSearch.allTopics;
+    query.value = "";
+}
 
-    return posts.find((p) => p.url.replace(/\/$/, "") === path);
-});
+function onSearchHotkey(event: KeyboardEvent) {
+    if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") {
+        return;
+    }
 
-const articleTags = computed<string[]>(() => (frontmatter.value.tags as string[]) ?? []);
+    event.preventDefault();
+    searchInput.value?.focus();
+}
 
-const related = computed(() => posts.filter((p) => p.url !== currentPost.value?.url).slice(0, 2));
+const currentPost = computed(() => WritingArticlePage.currentPost(posts, route.path));
+
+const articleTags = computed<string[]>(() => WritingArticlePage.tags(frontmatter.value.tags));
+
+const related = computed(() => WritingArticlePage.relatedPosts(posts, currentPost.value));
 
 const progressPct = ref("0%");
 
 const activeToc = ref<string | null>(null);
 
-const toc = ref<{ id: string; label: string }[]>(
+const showBackToTop = ref(false);
+
+const toc = ref<Heading[]>(
     [],
 );
 
@@ -62,28 +83,29 @@ function buildToc() {
 
     toc.value = heads.map((h) => ({
         id: h.id,
-        label: h.textContent?.replace(/​/g, "").trim() ?? "",
+        label: WritingArticlePage.headingLabel(h.textContent),
     }));
     activeToc.value = toc.value[0]?.id ?? null;
 }
 
 function updateScrollState() {
     const doc = document.documentElement;
-    const max = doc.scrollHeight - doc.clientHeight;
 
-    progressPct.value = `${max > 0 ? Math.min(100, Math.round((doc.scrollTop / max) * 100)) : 0}%`;
+    progressPct.value = WritingArticlePage.progress(
+        doc.scrollTop,
+        doc.scrollHeight,
+        doc.clientHeight,
+    );
 
-    let active = toc.value[0]?.id ?? null;
+    showBackToTop.value = WritingArticlePage.showBackToTop(doc.scrollTop);
 
-    for (const t of toc.value) {
+    const offsets = toc.value.flatMap((t) => {
         const el = document.getElementById(t.id);
 
-        if (el && el.getBoundingClientRect().top <= 120) {
-            active = t.id;
-        }
-    }
+        return el ? [{ id: t.id, top: el.getBoundingClientRect().top }] : [];
+    });
 
-    activeToc.value = active;
+    activeToc.value = WritingArticlePage.activeHeading(offsets);
 }
 
 function onScroll() {
@@ -95,6 +117,10 @@ function onScroll() {
         scrollFrame = null;
         updateScrollState();
     });
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function scrollToHeading(id: string) {
@@ -119,12 +145,14 @@ onContentUpdated(() => {
 
 onMounted(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", onSearchHotkey);
     buildToc();
     updateScrollState();
 });
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("keydown", onSearchHotkey);
 
     if (scrollFrame !== null) {
         window.cancelAnimationFrame(scrollFrame);
@@ -136,15 +164,37 @@ const year = new Date().getFullYear();
 
 <template>
     <div class="wr">
+        <button
+            class="wr-top"
+            :class="{ 'is-visible': showBackToTop }"
+            type="button"
+            title="Back to top"
+            aria-label="Back to top"
+            :tabindex="showBackToTop ? 0 : -1"
+            :aria-hidden="!showBackToTop"
+            @click="scrollToTop"
+        >
+            <span aria-hidden="true">↑</span>
+        </button>
+
         <div v-if="isIndex" class="wr-index-shell">
             <aside class="wr-index-rail">
-                <a href="/" class="wr-rail-name">Gustavo<br />Ocanto</a>
+                <a href="/" class="wr-rail-name">
+                    <span class="wr-avatar wr-rail-avatar" aria-hidden="true">
+                        <img src="/avatar-128.jpg" alt="" width="46" height="46" decoding="async" />
+                    </span>
+                    <span class="wr-rail-name__text">
+                        <span class="wr-rail-name__label">Gus</span>
+                        <span class="wr-rail-name__role">software architect</span>
+                    </span>
+                </a>
                 <p class="wr-lede">
-                    Engineering notes from things I've actually shipped — Go, Laravel, and the edge.
-                    Real code from real systems. No slop.
+                    Hands-on software architect. 20 years shipping regulated backends: payments,
+                    banking cores, Kafka pipelines, AS/400 modernisation. Now building AI-agentic
+                    systems in Go.
                 </p>
 
-                <div class="wr-topics">
+                <nav class="wr-topics" aria-label="Topics">
                     <div class="wr-topics__label">Topics</div>
                     <div class="wr-topics__list">
                         <button
@@ -153,7 +203,8 @@ const year = new Date().getFullYear();
                             :aria-pressed="tag === WritingIndexSearch.allTopics"
                             @click="tag = WritingIndexSearch.allTopics"
                         >
-                            All ({{ posts.length }})
+                            <span>All</span>
+                            <span class="wr-topic__count">{{ posts.length }}</span>
                         </button>
                         <button
                             v-for="topic in topics"
@@ -165,13 +216,21 @@ const year = new Date().getFullYear();
                                 tag = tag === topic.tag ? WritingIndexSearch.allTopics : topic.tag
                             "
                         >
-                            {{ topic.tag }} ({{ topic.count }})
+                            <span>{{ topic.tag }}</span>
+                            <span class="wr-topic__count">{{ topic.count }}</span>
                         </button>
                     </div>
-                </div>
+                </nav>
 
-                <div class="wr-search wr-rail-search">
-                    <VPNavBarSearch />
+                <div class="wr-now">
+                    <div class="wr-now__label">
+                        <span class="wr-now__dot" aria-hidden="true"></span>
+                        Now
+                    </div>
+                    <p>
+                        Building <a href="https://github.com/oullin">oag</a>, an AI agent platform
+                        in Go for regulated systems, at Oullin.
+                    </p>
                 </div>
 
                 <div class="wr-rail-bottom">
@@ -185,52 +244,78 @@ const year = new Date().getFullYear();
                     >
                     <div>
                         <a href="https://gocanto.sh" class="wr-site-link">gocanto.sh</a>
-                        <span> · Singapore</span>
+                        <span class="wr-dot" aria-hidden="true">·</span>
+                        <span>Singapore</span>
                     </div>
+                </div>
+
+                <div class="wr-rail-legal">
+                    <div><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</div>
+                    <div>© {{ year }} Gustavo Ocanto</div>
                 </div>
             </aside>
 
             <main class="wr-index-main">
                 <div class="wr-index-head">
                     <h1>Writing</h1>
-                    <span>{{ countLabel }} · {{ newestYear }}</span>
+                    <span class="wr-index-head__count">{{ countLabel }} · {{ yearRange }}</span>
+                    <div class="wr-index-search">
+                        <span class="wr-index-search__icon" aria-hidden="true">⌕</span>
+                        <input
+                            ref="searchInput"
+                            v-model="query"
+                            type="search"
+                            aria-label="Search writing"
+                            placeholder="Search writing…"
+                        />
+                        <span class="wr-index-search__key" aria-hidden="true">⌘K</span>
+                    </div>
                 </div>
 
-                <article v-if="featured" class="wr-essay wr-essay--featured">
-                    <div class="wr-essay__latest">Latest — {{ featured.date.display }}</div>
+                <article v-if="featured && !filtering" class="wr-essay wr-essay--featured">
+                    <div class="wr-essay__lead">
+                        <span class="wr-essay__latest">Latest</span>
+                        <span class="wr-essay__date">{{ featured.date.display }}</span>
+                    </div>
                     <h2>
                         <a :href="featured.url">{{ featured.title }}</a>
                     </h2>
                     <p>{{ featured.description }}</p>
                     <div class="wr-essay__meta">
-                        {{ featured.readingTime }} read<span v-if="featured.tags.length">
-                            · {{ featured.tags.join(", ") }}</span
-                        >
+                        <span>{{ featured.readingTime }} read</span>
+                        <span class="wr-dot" aria-hidden="true">·</span>
+                        <span v-for="t in featured.tags" :key="t" class="wr-tag">{{ t }}</span>
+                        <a :href="featured.url" class="wr-essay__more">Read →</a>
                     </div>
                 </article>
 
-                <div class="wr-essay-list">
-                    <article v-for="post in listedPosts" :key="post.url" class="wr-essay">
-                        <h2>
-                            <a :href="post.url">{{ post.title }}</a>
-                        </h2>
-                        <p>{{ post.description }}</p>
-                        <div class="wr-essay__meta">
-                            {{ post.date.short }} · {{ post.readingTime
-                            }}<span v-if="post.tags.length"> · {{ post.tags.join(", ") }}</span>
-                        </div>
-                    </article>
-
-                    <div v-if="filtered.length === 0" class="wr-empty">
-                        No posts tagged <span>{{ tag }}</span
-                        >.
-                    </div>
+                <div v-if="listedPosts.length" class="wr-archive">
+                    <a v-for="post in listedPosts" :key="post.url" :href="post.url" class="wr-row">
+                        <span class="wr-row__date"
+                            >{{ post.date.short }}, {{ post.date.year }}</span
+                        >
+                        <span class="wr-row__body">
+                            <span class="wr-row__title">{{ post.title }}</span>
+                            <span v-if="post.tags.length" class="wr-row__tags">{{
+                                post.tags.join(" · ")
+                            }}</span>
+                        </span>
+                        <span class="wr-row__end">
+                            <span>{{ post.readingTime }}</span>
+                            <span class="wr-row__arrow" aria-hidden="true">→</span>
+                        </span>
+                    </a>
                 </div>
 
-                <footer class="wr-index-footer">
-                    <span><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</span>
-                    <span>© {{ year }} Gustavo Ocanto</span>
-                </footer>
+                <div v-else-if="filtering" class="wr-empty">
+                    <div>
+                        Nothing matches
+                        <span>{{ query.trim() ? `“${query.trim()}”` : "this filter" }}</span>
+                    </div>
+                    <button type="button" class="wr-empty__clear" @click="clearFilters">
+                        Clear filters
+                    </button>
+                </div>
             </main>
         </div>
 
@@ -284,42 +369,6 @@ const year = new Date().getFullYear();
                                 <Content />
                             </div>
 
-                            <div class="wr-share">
-                                <span class="wr-share__label">Share</span>
-                                <a
-                                    href="https://x.com/gocanto"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >X / Twitter</a
-                                >
-                                <a
-                                    href="https://news.ycombinator.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >Hacker News</a
-                                >
-                            </div>
-
-                            <div class="wr-bio">
-                                <span class="wr-bio__avatar" aria-hidden="true">
-                                    <img
-                                        src="/avatar-128.jpg"
-                                        alt=""
-                                        width="52"
-                                        height="52"
-                                        decoding="async"
-                                    />
-                                </span>
-                                <div>
-                                    <div class="wr-bio__name">Gustavo Ocanto</div>
-                                    <p>
-                                        Staff engineer working across Go, Laravel, and the edge. I
-                                        write down the things that only make sense after they've
-                                        broken in production.
-                                    </p>
-                                </div>
-                            </div>
-
                             <div v-if="related.length" class="wr-related">
                                 <div class="wr-related__label">Related</div>
                                 <a
@@ -354,38 +403,6 @@ const year = new Date().getFullYear();
                 </main>
 
                 <footer class="wr-footer">
-                    <div class="wr-footer__cols">
-                        <div>
-                            <div class="wr-footer__head">WRITING</div>
-                            <div class="wr-footer__links">
-                                <a href="/">All posts</a>
-                                <a href="https://gocanto.sh">gocanto.sh</a>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="wr-footer__head">OPEN SOURCE</div>
-                            <div class="wr-footer__links">
-                                <a
-                                    href="https://github.com/gocanto"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >GitHub · gocanto</a
-                                >
-                            </div>
-                        </div>
-                        <div>
-                            <div class="wr-footer__head">CONNECT</div>
-                            <div class="wr-footer__links">
-                                <a href="mailto:gustavoocanto@gmail.com">Email</a>
-                                <a
-                                    href="https://x.com/gocanto"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >X</a
-                                >
-                            </div>
-                        </div>
-                    </div>
                     <div class="wr-footer__bottom">
                         <div><span class="wr-heart">♥</span> Husband, Father, Brother, and Son</div>
                         <div>© {{ year }} Gustavo Ocanto</div>

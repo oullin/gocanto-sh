@@ -49,7 +49,7 @@ export class StructuredDataBuilder {
     private static readonly PERSON_ID = "https://gocanto.sh/#person";
     private static readonly WEBSITE_ID = "https://gocanto.sh/#website";
     private static readonly DESCRIPTION =
-        "Hands-on software architect with 20 years building regulated backends — payments, banking cores, Kafka pipelines, AS/400 modernisation. Now architecting AI-agentic systems in Go.";
+        "Hands-on software architect with 20 years building regulated backends: payments, banking cores, Kafka pipelines, AS/400 modernisation. Now architecting AI-agentic systems in Go.";
     private static readonly KNOWS_ABOUT = [
         "Software Architecture",
         "AI-Agentic Systems",

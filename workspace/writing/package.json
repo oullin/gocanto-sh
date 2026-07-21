@@ -5,6 +5,8 @@
     "type": "module",
     "imports": {
         "#writing/posts-data": "./posts.data.ts",
+        "#writing/article": "./.vitepress/article/index.ts",
+        "#writing/article/article-page": "./.vitepress/article/article-page.ts",
         "#writing/posts": "./.vitepress/posts/index.ts",
         "#writing/posts/posts": "./.vitepress/posts/posts.ts",
         "#writing/posts/types": "./.vitepress/posts/types.ts",

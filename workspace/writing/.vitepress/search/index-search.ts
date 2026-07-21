@@ -47,6 +47,11 @@ export class WritingIndexSearch {
         );
     }
 
+    /** True when a topic or a query narrows the index away from its default view. */
+    static isFiltering(query: string, topic: TopicSelection): boolean {
+        return topic !== WritingIndexSearch.allTopics || query.trim() !== "";
+    }
+
     /** Return all topic counts, ordered by frequency and then alphabetically. */
     static tagCounts(posts: readonly Post[]): TopicCount[] {
         const counts = new Map<TopicTag, number>();
@@ -64,15 +69,46 @@ export class WritingIndexSearch {
             .sort((left, right) => right.count - left.count || left.tag.localeCompare(right.tag));
     }
 
-    /** Format a post count with the correct singular or plural noun. */
-    static countLabel(count: number): string {
-        return `${count} ${count === 1 ? "post" : "posts"}`;
+    /** Return the most-used topics, capped so the rail stays a short scan list. */
+    static topTopics(posts: readonly Post[], limit = 8): TopicCount[] {
+        return WritingIndexSearch.tagCounts(posts).slice(0, limit);
     }
 
-    /** Exclude the featured post unless doing so would leave an existing list empty. */
-    static listPosts(posts: readonly Post[], featured?: Post): Post[] {
-        const withoutFeatured = posts.filter((post) => !(featured && post.url === featured.url));
+    /**
+     * Format a post count with the correct singular or plural noun. Pass `matched`
+     * while filtering to render the design's "3 of 12 posts" form.
+     */
+    static countLabel(total: number, matched: number | null = null): string {
+        const noun = total === 1 ? "post" : "posts";
 
-        return withoutFeatured.length ? withoutFeatured : [...posts];
+        return matched === null ? `${total} ${noun}` : `${matched} of ${total} ${noun}`;
+    }
+
+    /** The oldest–newest year span covered by the archive, collapsed when it is one year. */
+    static yearRange(posts: readonly Post[]): string {
+        const years = posts.map((post) => post.date.year).sort();
+        const oldest = years[0];
+        const newest = years[years.length - 1];
+
+        if (!oldest || !newest) {
+            return String(
+                new Date().getFullYear(),
+            );
+        }
+
+        return oldest === newest ? newest : `${oldest}–${newest}`;
+    }
+
+    /**
+     * The archive rows. The featured post is promoted above the list on the
+     * default view, so it is dropped here; while filtering there is no featured
+     * card and every match is listed.
+     */
+    static archivePosts(posts: readonly Post[], featured?: Post, filtering = false): Post[] {
+        if (filtering || !featured) {
+            return [...posts];
+        }
+
+        return posts.filter((post) => post.url !== featured.url);
     }
 }

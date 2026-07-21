@@ -1,6 +1,6 @@
 ---
 title: Writing
-description: Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge.
+description: "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge."
 ---
 
 <!--

@@ -28,7 +28,7 @@ describe("RssFeed.render", () => {
     it("renders channel metadata and the canonical self link", () => {
         const rss = RssFeed.render([]);
 
-        expect(rss).toContain("<title>Gustavo Ocanto — Writing</title>");
+        expect(rss).toContain("<title>Gustavo Ocanto: Writing</title>");
         expect(rss).toContain("<link>https://writing.gocanto.sh/</link>");
         expect(rss).toContain(
             '<atom:link href="https://writing.gocanto.sh/feed.rss" rel="self" type="application/rss+xml" />',

@@ -87,7 +87,7 @@ function iconKeyForActiveSkill(skill: ProfileSkillRecord): string | null {
         <div class="explore-head">
             <h2>Signature skills</h2>
             <p>
-                Hands-on craft I lean on across every engagement — agentic platforms, payment cores,
+                Hands-on craft I lean on across every engagement: agentic platforms, payment cores,
                 streaming pipelines, banking legacy.
             </p>
         </div>

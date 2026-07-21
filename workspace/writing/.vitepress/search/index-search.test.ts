@@ -144,6 +144,43 @@ describe("WritingIndexSearch.tagCounts", () => {
     });
 });
 
+describe("WritingIndexSearch.topTopics", () => {
+    it("caps the rail at the most-used topics", () => {
+        expect(
+            WritingIndexSearch.topTopics(posts, 2).map(({ tag }) => tag),
+        ).toEqual([
+            "go",
+            "cloudflare",
+        ]);
+    });
+
+    it("returns every topic when there are fewer than the limit", () => {
+        expect(
+            WritingIndexSearch.topTopics(posts),
+        ).toHaveLength(5);
+    });
+});
+
+describe("WritingIndexSearch.isFiltering", () => {
+    it("is false only on the unfiltered default view", () => {
+        expect(
+            WritingIndexSearch.isFiltering("", WritingIndexSearch.allTopics),
+        ).toBe(false);
+        expect(
+            WritingIndexSearch.isFiltering("   ", WritingIndexSearch.allTopics),
+        ).toBe(false);
+    });
+
+    it("is true for a query or a topic", () => {
+        expect(
+            WritingIndexSearch.isFiltering("kafka", WritingIndexSearch.allTopics),
+        ).toBe(true);
+        expect(
+            WritingIndexSearch.isFiltering("", WritingIndexSearch.topicTag("go")),
+        ).toBe(true);
+    });
+});
+
 describe("WritingIndexSearch.countLabel", () => {
     it("pluralizes", () => {
         expect(
@@ -156,41 +193,57 @@ describe("WritingIndexSearch.countLabel", () => {
             WritingIndexSearch.countLabel(3),
         ).toBe("3 posts");
     });
+
+    it("reports the matched subset while filtering", () => {
+        expect(
+            WritingIndexSearch.countLabel(3, 1),
+        ).toBe("1 of 3 posts");
+        expect(
+            WritingIndexSearch.countLabel(3, 0),
+        ).toBe("0 of 3 posts");
+    });
 });
 
-describe("WritingIndexSearch.listPosts", () => {
+describe("WritingIndexSearch.yearRange", () => {
+    it("spans oldest to newest", () => {
+        expect(
+            WritingIndexSearch.yearRange(posts),
+        ).toBe("2025–2026");
+    });
+
+    it("collapses a single year", () => {
+        expect(
+            WritingIndexSearch.yearRange([posts[0], posts[1]]),
+        ).toBe("2026");
+    });
+
+    it("falls back to the current year with no posts", () => {
+        expect(
+            WritingIndexSearch.yearRange([]),
+        ).toBe(String(new Date().getFullYear()));
+    });
+});
+
+describe("WritingIndexSearch.archivePosts", () => {
     it("drops the featured post so it isn't listed twice", () => {
-        const titles = WritingIndexSearch.listPosts(posts, posts[0]).map((p) => p.title);
+        const titles = WritingIndexSearch.archivePosts(posts, posts[0]).map((p) => p.title);
 
         expect(titles).not.toContain("Signed webhooks");
         expect(titles).toHaveLength(2);
     });
 
-    it("still lists the featured post when it is the only one", () => {
-        const only = [posts[0]];
-
+    it("leaves the archive empty when the featured post is the only one", () => {
         expect(
-            WritingIndexSearch.listPosts(only, posts[0]).map((p) => p.title),
-        ).toEqual([
-            "Signed webhooks",
-        ]);
+            WritingIndexSearch.archivePosts([posts[0]], posts[0]),
+        ).toEqual([]);
     });
 
-    it("preserves tag-filtered matches and applies the featured fallback", () => {
-        const cloudflare = WritingIndexSearch.topicTag("cloudflare");
+    it("lists every match while filtering, featured included", () => {
         const webhooks = WritingIndexSearch.topicTag("webhooks");
-        const nonFeatured = WritingIndexSearch.filterPosts(posts, "", cloudflare);
-        const featuredOnly = WritingIndexSearch.filterPosts(posts, "", webhooks);
+        const matches = WritingIndexSearch.filterPosts(posts, "", webhooks);
 
         expect(
-            WritingIndexSearch.listPosts(nonFeatured, posts[0]).map((p) => p.title),
-        ).toEqual([
-            "Edge caching",
-        ]);
-        expect(
-            WritingIndexSearch.listPosts(featuredOnly, posts[0]).map((p) => p.title),
-        ).toEqual([
-            "Signed webhooks",
-        ]);
+            WritingIndexSearch.archivePosts(matches, posts[0], true).map((p) => p.title),
+        ).toEqual(["Signed webhooks"]);
     });
 });

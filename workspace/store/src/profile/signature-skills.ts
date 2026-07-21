@@ -6,7 +6,7 @@ export const signatureSkills = [
         percentage: 92,
         item: "Leadership",
         description:
-            "Engineering leadership across banking, fintech and SaaS — squads, SLOs, hiring bar, on-call, growth plans. Hands-on enough to land technical decisions, structured enough to scale teams.",
+            "Engineering leadership across banking, fintech and SaaS: squads, SLOs, hiring bar, on-call, growth plans. Hands-on enough to land technical decisions, structured enough to scale teams.",
         signature: true,
         long_description:
             "I lead engineering teams the way I write services: with clear contracts, predictable cadence, and observability built in. Scaled groups from 10 to 20+ at Aspire and ran a 12-person APAC team at BeMyGuest, building open communication across DevOps, Infra, Data, FE/BE and Support. I set SLOs, runbooks and post-mortems with clear owners; partner with CEOs and C-level on expansion plans; and stay hands-on enough that architecture decisions hold up under code review.",
@@ -41,7 +41,7 @@ export const signatureSkills = [
         percentage: 95,
         item: "Go (Programming Language)",
         description:
-            "Hands-on Go for production backends — reverse proxies, high-throughput pipelines, agent platforms, idempotent payment cores. The default for new work.",
+            "Hands-on Go for production backends: reverse proxies, high-throughput pipelines, agent platforms, idempotent payment cores. The default for new work.",
         signature: true,
         long_description:
             "Go is my default for new backend work. I lean on it for reverse proxies that wrap legacy banking cores, high-throughput streaming pipelines, agent orchestration platforms, and idempotent payment modules. The toolchain (testing, profiling, race detector, build determinism) lets me ship regulated systems with confidence, and the runtime keeps tail latencies predictable under load.",
@@ -79,7 +79,7 @@ export const signatureSkills = [
             "Architecting regulated backends end-to-end: contracts, boundaries, data flow, failure modes. Designed for audit and operated under load.",
         signature: true,
         long_description:
-            "Software architecture treated as a working contract, not a diagram. I design regulated backends end-to-end — bounded contexts, typed contracts at every boundary, explicit data flow, named failure modes, and SLOs that travel with the service. The result holds up under audit and under load: monolith-to-microservices at Aspire, multi-protocol ingress layers at Silverlake, platform-agnostic UI/SDK at Perx. Every decision shows its work in an RFC, then in code.",
+            "Software architecture treated as a working contract, not a diagram. I design regulated backends end-to-end: bounded contexts, typed contracts at every boundary, explicit data flow, named failure modes, and SLOs that travel with the service. The result holds up under audit and under load: monolith-to-microservices at Aspire, multi-protocol ingress layers at Silverlake, platform-agnostic UI/SDK at Perx. Every decision shows its work in an RFC, then in code.",
         related_tech: [
             "RFCs",
             "DDD",
@@ -115,7 +115,7 @@ export const signatureSkills = [
             "Multi-tenant checkout, modular payment adapters, idempotent flows, OpenAPI-driven partner integrations. SaaS commerce designed to scale without breaking reconciliation.",
         signature: true,
         long_description:
-            "End-to-end commerce platforms designed for SaaS multi-tenancy. I’ve owned subscription billing with proration and upgrade/downgrade rules, modular payment adapters across 10+ gateways, eTicket lifecycle with audit trails, OpenAPI partner integrations with contract tests, and a multi-currency eWallet with clean ledgering and finance reports. Checkout is idempotent, capacity-aware and resilient to provider blips — without trading off UX.",
+            "End-to-end commerce platforms designed for SaaS multi-tenancy. I’ve owned subscription billing with proration and upgrade/downgrade rules, modular payment adapters across 10+ gateways, eTicket lifecycle with audit trails, OpenAPI partner integrations with contract tests, and a multi-currency eWallet with clean ledgering and finance reports. Checkout is idempotent, capacity-aware and resilient to provider blips, without trading off UX.",
         related_tech: [
             "Vue.js",
             "TypeScript",
@@ -151,7 +151,7 @@ export const signatureSkills = [
             "Hands-on agentic engineering: orchestrators, tool registries, prompt caching, structured output, knowledge bases. Shipping AI products in regulated contexts, not slideware.",
         signature: true,
         long_description:
-            "AI shipped as product, not as a demo. I architect agentic systems with typed tool registries (MCP), prompt caching, streaming structured output, JSON-mode validation and knowledge bases that respect data boundaries. Provider abstraction so models swap without product changes. Guidance for SMBs through pragmatic AI adoption — translating capabilities into clear, operational tools — with the same hardening I apply to regulated banking systems.",
+            "AI shipped as product, not as a demo. I architect agentic systems with typed tool registries (MCP), prompt caching, streaming structured output, JSON-mode validation and knowledge bases that respect data boundaries. Provider abstraction so models swap without product changes. Guidance for SMBs through pragmatic AI adoption, translating capabilities into clear, operational tools, with the same hardening I apply to regulated banking systems.",
         related_tech: [
             "MCP",
             "Anthropic SDK",
@@ -183,7 +183,7 @@ export const signatureSkills = [
         percentage: 90,
         item: "AS/400 Modernisation",
         description:
-            "Wrapping legacy banking cores (AS/400, VCOS, COBOL/RPG) with Go reverse proxies — auth, caching, rate limiting, circuit breakers, audit log on every call. Modernise the surface, leave the core.",
+            "Wrapping legacy banking cores (AS/400, VCOS, COBOL/RPG) with Go reverse proxies: auth, caching, rate limiting, circuit breakers, audit log on every call. Modernise the surface, leave the core.",
         signature: true,
         long_description:
             "Modernising legacy banking cores without touching them. I wrap AS/400, VCOS, and COBOL/RPG systems with Go reverse proxies that own authentication, caching, rate limiting, circuit breakers, and an audit log on every call. The core stays where it is; the surface gets a modern contract, observability, and graceful degradation. Migration risk drops because we never rip-and-replace.",
@@ -221,7 +221,7 @@ export const signatureSkills = [
             "Internal agent platforms with orchestrators, tool registries, audit logs, and reproducible runs. Fail-closed validators, signed event chains, no silent failures.",
         signature: true,
         long_description:
-            "Internal agent platforms designed for regulated environments. Orchestrators schedule tool calls against a typed registry, every step writes to a tamper-evident audit log, and runs are reproducible from the original event stream. Validators fail closed by default, event chains are cryptographically signed, and silent failures are treated as bugs — not as resilience.",
+            "Internal agent platforms designed for regulated environments. Orchestrators schedule tool calls against a typed registry, every step writes to a tamper-evident audit log, and runs are reproducible from the original event stream. Validators fail closed by default, event chains are cryptographically signed, and silent failures are treated as bugs, not as resilience.",
         related_tech: [
             "MCP",
             "Go",
@@ -290,7 +290,7 @@ export const signatureSkills = [
             "Kafka producer/consumer pairs with exactly-once consumer semantics, DLQ with replay tooling, transactional outbox patterns, and Helm + Grafana shipped together.",
         signature: true,
         long_description:
-            "Kafka pipelines built for at-least-once worlds. Producer/consumer pairs are designed for exactly-once consumer semantics on top of the transactional outbox pattern. Dead-letter queues come with first-class replay tooling so incidents are recoverable, not just observable. Deploys ship as Helm charts with Grafana dashboards and SLO alerts — the pipeline is operable from day one.",
+            "Kafka pipelines built for at-least-once worlds. Producer/consumer pairs are designed for exactly-once consumer semantics on top of the transactional outbox pattern. Dead-letter queues come with first-class replay tooling so incidents are recoverable, not just observable. Deploys ship as Helm charts with Grafana dashboards and SLO alerts: the pipeline is operable from day one.",
         related_tech: [
             "Apache Kafka",
             "Go",

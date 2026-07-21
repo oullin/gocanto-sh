@@ -5,7 +5,7 @@ import { RssFeed } from "#writing/rss";
 const SITE_URL = "https://writing.gocanto.sh";
 
 const DESCRIPTION =
-    "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+    "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge. Real code from shipped systems, not slop.";
 
 const rssFeed = new RssFeed({
     loadPosts: async () => {
@@ -17,7 +17,7 @@ const rssFeed = new RssFeed({
 
 export default defineConfig({
     lang: "en-US",
-    title: "Gustavo Ocanto — Writing",
+    title: "Gustavo Ocanto: Writing",
     description: DESCRIPTION,
 
     // The landing page (gocanto.sh) is dark-only; match it and drop the toggle.
@@ -44,22 +44,22 @@ export default defineConfig({
             {
                 rel: "alternate",
                 type: "application/rss+xml",
-                title: "Gustavo Ocanto — Writing",
+                title: "Gustavo Ocanto: Writing",
                 href: `${SITE_URL}${RssFeed.PATH}`,
             },
         ],
-        // Design fonts: IBM Plex Sans (body) + IBM Plex Mono (chrome/code).
+        // Design fonts: IBM Plex Sans (body) + JetBrains Mono (chrome/code).
         ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
         ["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
         [
             "link",
             {
                 rel: "stylesheet",
-                href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
+                href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap",
             },
         ],
         ["meta", { property: "og:type", content: "website" }],
-        ["meta", { property: "og:site_name", content: "Gustavo Ocanto — Writing" }],
+        ["meta", { property: "og:site_name", content: "Gustavo Ocanto: Writing" }],
         ["meta", { property: "og:url", content: SITE_URL }],
         ["meta", { property: "og:image", content: `${SITE_URL}/og-image.png` }],
         ["meta", { name: "twitter:card", content: "summary_large_image" }],

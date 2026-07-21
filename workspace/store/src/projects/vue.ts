@@ -4,9 +4,9 @@ export const vueProjects = [
     {
         uuid: "2d178e11-a584-4e20-a493-3b84007dd358",
         language: "Vue / TypeScript",
-        title: "gocanto.dev — Portfolio",
+        title: "gocanto.dev: Portfolio",
         excerpt:
-            "An earlier iteration of my personal portfolio, built in Vue 3 and TypeScript as a deliberate exercise in shipping something polished without over-engineering it. Documents two decades of full-stack engineering across fintech, insurance, and SaaS — explained in plain language rather than keyword lists. The project also served as the testbed where I first established the design token system, composable SEO utilities, and API store patterns that later carried forward into the Oullin platform.",
+            "An earlier iteration of my personal portfolio, built in Vue 3 and TypeScript as a deliberate exercise in shipping something polished without over-engineering it. Documents two decades of full-stack engineering across fintech, insurance, and SaaS, explained in plain language rather than keyword lists. The project also served as the testbed where I first established the design token system, composable SEO utilities, and API store patterns that later carried forward into the Oullin platform.",
         url: "https://github.com/oullin-link/gocanto-dev-client",
         is_open_source: true,
         icon: "Briefcase",
@@ -18,7 +18,7 @@ export const vueProjects = [
         language: "Vue / JS",
         title: "vuemit",
         excerpt:
-            "A zero-dependency event bus for Vue.js that keeps inter-component communication explicit, traceable, and free of global state pollution. At the time of release, Vue's built-in event system didn't scale well beyond simple parent-child communication — vuemit filled that gap with a clean subscribe/publish API that worked across component trees without forcing a full state management solution. Shipped to npm and used in production across multiple client engagements where the overhead of Vuex was unjustifiable for the problem size.",
+            "A zero-dependency event bus for Vue.js that keeps inter-component communication explicit, traceable, and free of global state pollution. At the time of release, Vue's built-in event system didn't scale well beyond simple parent-child communication: vuemit filled that gap with a clean subscribe/publish API that worked across component trees without forcing a full state management solution. Shipped to npm and used in production across multiple client engagements where the overhead of Vuex was unjustifiable for the problem size.",
         url: "https://github.com/gocanto/vuemit",
         is_open_source: true,
         icon: "Zap",
@@ -30,7 +30,7 @@ export const vueProjects = [
         language: "Vue / JS",
         title: "google-autocomplete",
         excerpt:
-            "A Vue component that wraps the Google Places Autocomplete API into a clean, accessible, and configurable input. The component exposes individual address fields — street, city, postcode, country — as distinct mapped outputs rather than forcing consumers to parse a raw Places response themselves. Country restrictions, field mappings, and bias regions are all configurable via props. Addresses the common pain point where Google's SDK API and Vue's reactivity model pull in opposite directions, resolving that tension with a thin but principled adapter layer.",
+            "A Vue component that wraps the Google Places Autocomplete API into a clean, accessible, and configurable input. The component exposes individual address fields: street, city, postcode, country, as distinct mapped outputs rather than forcing consumers to parse a raw Places response themselves. Country restrictions, field mappings, and bias regions are all configurable via props. Addresses the common pain point where Google's SDK API and Vue's reactivity model pull in opposite directions, resolving that tension with a thin but principled adapter layer.",
         url: "https://github.com/gocanto/google-autocomplete",
         is_open_source: true,
         icon: "MapPin",

@@ -5,10 +5,10 @@ import { join } from "node:path";
 import type { Post } from "#writing/posts";
 
 const SITE_URL = "https://writing.gocanto.sh";
-const FEED_TITLE = "Gustavo Ocanto — Writing";
+const FEED_TITLE = "Gustavo Ocanto: Writing";
 
 const FEED_DESCRIPTION =
-    "Engineering notes by Gustavo Ocanto — Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+    "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge. Real code from shipped systems, not slop.";
 
 interface RssChannel {
     title: string;
