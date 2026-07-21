@@ -39,7 +39,7 @@ const recommendationFixture = {
 describe("recommendation domain", () => {
     it("dedupes, sorts, and maps testimonials", () => {
         expect(
-        	Recommendations.unique([recommendationFixture.data[0], recommendationFixture.data[0]]),
+            Recommendations.unique([recommendationFixture.data[0], recommendationFixture.data[0]]),
         ).toHaveLength(1);
         expect(Recommendations.listNewestFirst(recommendationFixture)[0]?.uuid).toBe("new");
         expect(Recommendations.testimonials(recommendationFixture)[0]?.avatar).toBe(

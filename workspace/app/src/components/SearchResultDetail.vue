@@ -32,10 +32,10 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = computed(
-	{
-	    get: () => props.open,
-	    set: (v) => emit("update:open", v),
-	},
+    {
+        get: () => props.open,
+        set: (v) => emit("update:open", v),
+    },
 );
 
 const header = computed(() => DetailView.headerFor(props.payload));

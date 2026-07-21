@@ -51,15 +51,15 @@ const buttonLabel = computed(() => {
 });
 
 watch(
-	selected,
-	() => {
-	        filtering.value = true;
-	        window.clearTimeout(filterTimer);
-	        filterTimer = window.setTimeout(() => {
-	            filtering.value = false;
-	        }, 220);
-	    },
-	{ deep: true },
+    selected,
+    () => {
+            filtering.value = true;
+            window.clearTimeout(filterTimer);
+            filterTimer = window.setTimeout(() => {
+                filtering.value = false;
+            }, 220);
+        },
+    { deep: true },
 );
 
 onBeforeUnmount(() => window.clearTimeout(filterTimer));

@@ -7,9 +7,9 @@ import { cn } from "#app/lib/utils";
 import DialogOverlay from "#app/components/ui/dialog/DialogOverlay.vue";
 
 defineOptions(
-	{
-	    inheritAttrs: false,
-	},
+    {
+        inheritAttrs: false,
+    },
 );
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>();

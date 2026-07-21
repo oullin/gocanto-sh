@@ -83,14 +83,14 @@ describe("ThemeToggle", () => {
         await wrapper.get('input[value="dark"]').setValue();
 
         expect(
-        	localStorage.getItem("theme"),
+            localStorage.getItem("theme"),
         ).toBe("dark");
         expect(document.documentElement.dataset.theme).toBe("dark");
 
         await wrapper.get('input[value="system"]').setValue();
 
         expect(
-        	localStorage.getItem("theme"),
+            localStorage.getItem("theme"),
         ).toBeNull();
         expect(document.documentElement.dataset.theme).toBe("light");
     });

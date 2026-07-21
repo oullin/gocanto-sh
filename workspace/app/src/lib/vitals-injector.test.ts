@@ -65,10 +65,10 @@ class BrowserHarness {
         }
 
         callback(
-        	{
-        	    didTimeout: false,
-        	    timeRemaining: () => 50,
-        	},
+            {
+                didTimeout: false,
+                timeRemaining: () => 50,
+            },
         );
     }
 
@@ -140,7 +140,7 @@ describe("VitalsInjector", () => {
 
         for (const testCase of cases) {
             expect(
-            	injector.shouldInject(testCase.environment),
+                injector.shouldInject(testCase.environment),
             ).toBe(testCase.expected);
         }
     });
@@ -203,7 +203,7 @@ describe("VitalsInjector", () => {
         expect(harness.addWindowEventListener).not.toHaveBeenCalled();
         expect(harness.addDocumentEventListener).not.toHaveBeenCalled();
         expect(
-        	vi.getTimerCount(),
+            vi.getTimerCount(),
         ).toBe(0);
     });
 
@@ -228,7 +228,7 @@ describe("VitalsInjector", () => {
         expect(harness.addWindowEventListener).toHaveBeenCalledTimes(3);
         expect(harness.addDocumentEventListener).toHaveBeenCalledOnce();
         expect(
-        	vi.getTimerCount(),
+            vi.getTimerCount(),
         ).toBe(0);
     });
 

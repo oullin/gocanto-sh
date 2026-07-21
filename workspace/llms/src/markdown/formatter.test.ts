@@ -172,7 +172,7 @@ describe("FixtureMarkdown.profile", () => {
 
     it("renders the name as an H1", () => {
         expect(
-        	out.startsWith("# Gustavo Ocanto\n"),
+            out.startsWith("# Gustavo Ocanto\n"),
         ).toBe(true);
     });
 

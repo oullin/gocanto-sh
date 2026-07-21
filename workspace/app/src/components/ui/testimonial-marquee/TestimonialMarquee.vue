@@ -9,12 +9,12 @@ import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 export type { Testimonial };
 
 const props = withDefaults(
-	defineProps<{
-	        items: readonly Testimonial[];
-	        speed?: number;
-	        loading?: boolean;
-	    }>(),
-	{ speed: 40, loading: false },
+    defineProps<{
+            items: readonly Testimonial[];
+            speed?: number;
+            loading?: boolean;
+        }>(),
+    { speed: 40, loading: false },
 );
 
 const emit = defineEmits<{

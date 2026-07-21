@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
 });
 
 defineExpose(
-	{ root, viewport },
+    { root, viewport },
 );
 </script>
 

@@ -13,10 +13,10 @@ describe("WorkflowHero deferred panels", () => {
         const wrapper = mount(WorkflowHero);
 
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).toContain("Ollin Agent Go");
         expect(
-        	wrapper.find('[aria-label="Loading workflow"]').exists(),
+            wrapper.find('[aria-label="Loading workflow"]').exists(),
         ).toBe(false);
     });
 
@@ -31,8 +31,8 @@ describe("WorkflowHero deferred panels", () => {
         });
 
         const wrapper = mount(
-        	WorkflowHero,
-        	{ props: { workflowLoader } },
+            WorkflowHero,
+            { props: { workflowLoader } },
         );
 
         const bankingTab = wrapper.findAll('[role="tab"]').find((tab) => tab.text() === "Banking");
@@ -42,7 +42,7 @@ describe("WorkflowHero deferred panels", () => {
         await flushPromises();
 
         expect(
-        	wrapper.get('[role="alert"]').text(),
+            wrapper.get('[role="alert"]').text(),
         ).toContain(
             "This workflow could not be loaded.",
         );
@@ -53,10 +53,10 @@ describe("WorkflowHero deferred panels", () => {
 
         expect(loadBanking).toHaveBeenCalledTimes(2);
         expect(
-        	wrapper.find('[role="alert"]').exists(),
+            wrapper.find('[role="alert"]').exists(),
         ).toBe(false);
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).toContain("Legacy Surface");
     });
 });

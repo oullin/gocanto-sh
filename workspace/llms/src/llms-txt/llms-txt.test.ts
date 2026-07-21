@@ -21,7 +21,7 @@ describe("LlmsTxt.render", () => {
 
     it("opens with the H1 for the profile name", () => {
         expect(
-        	out.startsWith("# Gustavo Ocanto\n"),
+            out.startsWith("# Gustavo Ocanto\n"),
         ).toBe(true);
     });
 

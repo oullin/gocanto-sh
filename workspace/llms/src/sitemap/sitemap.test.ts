@@ -182,10 +182,10 @@ describe("Sitemap.render", () => {
 
     it("opens with the XML prolog and urlset", () => {
         expect(
-        	xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>\n<urlset'),
+            xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>\n<urlset'),
         ).toBe(true);
         expect(
-        	xml.trimEnd().endsWith("</urlset>"),
+            xml.trimEnd().endsWith("</urlset>"),
         ).toBe(true);
     });
 

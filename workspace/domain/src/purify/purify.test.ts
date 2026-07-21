@@ -13,7 +13,7 @@ const cases = [
 describe("HtmlSanitizer.decodeEntities", () => {
     it.each(cases)("decodes %s", (input, expected) => {
         expect(
-        	HtmlSanitizer.decodeEntities(input),
+            HtmlSanitizer.decodeEntities(input),
         ).toBe(expected);
     });
 
@@ -21,7 +21,7 @@ describe("HtmlSanitizer.decodeEntities", () => {
         const decodeAll = () => cases.map(([input]) => HtmlSanitizer.decodeEntities(input));
 
         expect(
-        	decodeAll(),
+            decodeAll(),
         ).toEqual(decodeAll());
     });
 });

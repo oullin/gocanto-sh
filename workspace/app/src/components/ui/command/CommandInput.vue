@@ -8,9 +8,9 @@ import { cn } from "#app/lib/utils";
 import { useCommand } from ".";
 
 defineOptions(
-	{
-	    inheritAttrs: false,
-	},
+    {
+        inheritAttrs: false,
+    },
 );
 
 const props = defineProps<

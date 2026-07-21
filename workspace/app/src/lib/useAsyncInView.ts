@@ -91,19 +91,19 @@ export function useAsyncInView<T>(
     let timerId: number | undefined;
 
     const { stop } = useIntersectionObserver(
-    	target,
-    	([entry]) => {
-    	        if (!entry?.isIntersecting || resolved) {
-    	            return;
-    	        }
+        target,
+        ([entry]) => {
+                if (!entry?.isIntersecting || resolved) {
+                    return;
+                }
 
-    	        resolved = true;
-    	        stop();
-    	        timerId = window.setTimeout(() => {
-    	            void controller.load();
-    	        }, delayMs);
-    	    },
-    	{ rootMargin },
+                resolved = true;
+                stop();
+                timerId = window.setTimeout(() => {
+                    void controller.load();
+                }, delayMs);
+            },
+        { rootMargin },
     );
 
     onScopeDispose(() => {
@@ -136,19 +136,19 @@ export function useInViewReady(
     let timerId: number | undefined;
 
     const { stop } = useIntersectionObserver(
-    	target,
-    	([entry]) => {
-    	        if (!entry?.isIntersecting || resolved) {
-    	            return;
-    	        }
+        target,
+        ([entry]) => {
+                if (!entry?.isIntersecting || resolved) {
+                    return;
+                }
 
-    	        resolved = true;
-    	        stop();
-    	        timerId = window.setTimeout(() => {
-    	            ready.value = true;
-    	        }, delayMs);
-    	    },
-    	{ rootMargin },
+                resolved = true;
+                stop();
+                timerId = window.setTimeout(() => {
+                    ready.value = true;
+                }, delayMs);
+            },
+        { rootMargin },
     );
 
     onScopeDispose(() => {

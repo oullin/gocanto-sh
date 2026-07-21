@@ -8,7 +8,7 @@ import { PrerenderInjector } from "#app/lib/prerender-injector";
 import { StructuredDataBuilder } from "#app/lib/structured-data";
 
 const __dirname = dirname(
-	fileURLToPath(import.meta.url),
+    fileURLToPath(import.meta.url),
 );
 
 const appRoot = resolve(__dirname, "..");
@@ -20,29 +20,29 @@ const jsonLdMarker = "<!--__JSONLD__-->";
 console.log("[prerender] building SSR bundle…");
 
 await build(
-	{
-	    root: appRoot,
-	    configLoader: "runner",
-	    logLevel: "warn",
-	    ssr: {
-	        external: ["jsdom"],
-	    },
-	    build: {
-	        ssr: "src/entry-server.ts",
-	        outDir: ssrOutDir,
-	        emptyOutDir: true,
-	        rollupOptions: {
-	            input: resolve(appRoot, "src/entry-server.ts"),
-	            output: { entryFileNames: ssrEntryFile },
-	        },
-	    },
-	},
+    {
+        root: appRoot,
+        configLoader: "runner",
+        logLevel: "warn",
+        ssr: {
+            external: ["jsdom"],
+        },
+        build: {
+            ssr: "src/entry-server.ts",
+            outDir: ssrOutDir,
+            emptyOutDir: true,
+            rollupOptions: {
+                input: resolve(appRoot, "src/entry-server.ts"),
+                output: { entryFileNames: ssrEntryFile },
+            },
+        },
+    },
 );
 
 console.log("[prerender] rendering App to HTML…");
 
 const ssrBundleUrl = pathToFileURL(
-	resolve(ssrOutDir, ssrEntryFile),
+    resolve(ssrOutDir, ssrEntryFile),
 ).href;
 
 const { render } = (await import(ssrBundleUrl)) as { render: () => Promise<string> };
@@ -65,8 +65,8 @@ const completed = injected.replace(jsonLdMarker, () => structuredData);
 await writeFile(distIndex, completed);
 
 await rm(
-	ssrOutDir,
-	{ recursive: true, force: true },
+    ssrOutDir,
+    { recursive: true, force: true },
 );
 
 console.log(`[prerender] dist/index.html prerendered (${appHtml.length} bytes of app HTML)`);

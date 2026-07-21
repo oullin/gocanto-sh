@@ -49,10 +49,10 @@ describe("StructuredDataBuilder", () => {
 
     it("serializes its output as pretty-printed JSON", () => {
         expect(
-        	JSON.parse(builder.toScriptContents()),
+            JSON.parse(builder.toScriptContents()),
         ).toEqual(builder.build());
         expect(
-        	builder.toScriptContents(),
+            builder.toScriptContents(),
         ).toContain('\n    "@context"');
     });
 
@@ -92,10 +92,10 @@ describe("StructuredDataBuilder", () => {
         const scriptContents = closingScriptBuilder.toScriptContents();
 
         expect(
-        	scriptContents.toLowerCase(),
+            scriptContents.toLowerCase(),
         ).not.toContain("</script");
         expect(
-        	JSON.parse(scriptContents),
+            JSON.parse(scriptContents),
         ).toEqual(closingScriptBuilder.build());
     });
 });

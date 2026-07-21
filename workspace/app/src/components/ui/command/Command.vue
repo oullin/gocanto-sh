@@ -8,11 +8,11 @@ import { cn } from "#app/lib/utils";
 import { provideCommandContext } from ".";
 
 const props = withDefaults(
-	defineProps<ListboxRootProps & { class?: HTMLAttributes["class"] }>(),
-	{
-	    modelValue: "",
-	    highlightOnHover: true,
-	},
+    defineProps<ListboxRootProps & { class?: HTMLAttributes["class"] }>(),
+    {
+        modelValue: "",
+        highlightOnHover: true,
+    },
 );
 
 const emits = defineEmits<ListboxRootEmits>();
@@ -24,7 +24,7 @@ const allItems = ref<Map<string, string>>(new Map());
 const allGroups = ref<Map<string, Set<string>>>(new Map());
 
 const { contains } = useFilter(
-	{ sensitivity: "base" },
+    { sensitivity: "base" },
 );
 
 const filterState = reactive({
@@ -85,12 +85,12 @@ watch(
 );
 
 provideCommandContext(
-	{
-	    allItems,
-	    allGroups,
-	    refreshFilter: filterItems,
-	    filterState,
-	},
+    {
+        allItems,
+        allGroups,
+        refreshFilter: filterItems,
+        filterState,
+    },
 );
 </script>
 

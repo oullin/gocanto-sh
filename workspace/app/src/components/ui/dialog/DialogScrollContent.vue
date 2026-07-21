@@ -14,9 +14,9 @@ import {
 } from "reka-ui";
 
 defineOptions(
-	{
-	    inheritAttrs: false,
-	},
+    {
+        inheritAttrs: false,
+    },
 );
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>();

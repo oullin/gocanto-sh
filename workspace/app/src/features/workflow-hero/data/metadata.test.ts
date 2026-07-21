@@ -6,7 +6,7 @@ describe("workflow metadata", () => {
     it("lists six lightweight tab entries", () => {
         expect(workflowMetadata).toHaveLength(6);
         expect(
-        	workflowMetadata.map((workflow) => workflow.label),
+            workflowMetadata.map((workflow) => workflow.label),
         ).toEqual([
             "AI Platform",
             "Fintech Payments",
@@ -18,7 +18,7 @@ describe("workflow metadata", () => {
 
         for (const workflow of workflowMetadata) {
             expect(
-            	Object.keys(workflow).sort(),
+                Object.keys(workflow).sort(),
             ).toEqual(["icon", "id", "label"]);
         }
     });

@@ -89,17 +89,17 @@ function loadCorpus(): void {
 }
 
 watch(
-	open,
-	(v) => {
-	        if (!v) {
-	            selectedKind.value = null;
+    open,
+    (v) => {
+            if (!v) {
+                selectedKind.value = null;
 
-	            return;
-	        }
+                return;
+            }
 
-	        loadCorpus();
-	    },
-	{ immediate: true },
+            loadCorpus();
+        },
+    { immediate: true },
 );
 
 const activeKey = ref<string | null>(null);

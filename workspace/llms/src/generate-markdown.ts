@@ -7,7 +7,7 @@ import { MarkdownBundleWriter } from "#llms/bundle/bundle-writer";
 import { NodeFileSystem } from "#llms/kernel/node-file-system";
 
 const __dirname = dirname(
-	fileURLToPath(import.meta.url),
+    fileURLToPath(import.meta.url),
 );
 
 const distDir = resolve(__dirname, "../../app/dist");

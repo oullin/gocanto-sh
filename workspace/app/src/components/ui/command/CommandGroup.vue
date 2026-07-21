@@ -21,7 +21,7 @@ const id = useId();
 const isRender = computed(() => (!filterState.search ? true : filterState.filtered.groups.has(id)));
 
 provideCommandGroupContext(
-	{ id },
+    { id },
 );
 
 onMounted(() => {

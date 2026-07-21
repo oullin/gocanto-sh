@@ -35,10 +35,10 @@ describe("project domain", () => {
         const rows = Projects.rows(projectFixture);
 
         expect(
-        	rows.map((row) => row.title),
+            rows.map((row) => row.title),
         ).toEqual(["First", "Second"]);
         expect(
-        	Projects.languages(rows),
+            Projects.languages(rows),
         ).toEqual(["Go", "TypeScript"]);
     });
 
@@ -46,7 +46,7 @@ describe("project domain", () => {
         const rows = Projects.rows(projectFixture);
 
         expect(
-        	Projects.filter(rows, new Set(["Go"])).map((row) => row.title),
+            Projects.filter(rows, new Set(["Go"])).map((row) => row.title),
         ).toEqual(["First"]);
     });
 });

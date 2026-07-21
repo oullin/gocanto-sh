@@ -7,7 +7,7 @@ const URL = "/some-post";
 describe("Posts.formatDate", () => {
     it("formats a valid YYYY-MM-DD date", () => {
         expect(
-        	Posts.formatDate("2026-07-18", URL),
+            Posts.formatDate("2026-07-18", URL),
         ).toEqual({
             raw: "2026-07-18",
             display: "Jul 18, 2026",
@@ -38,13 +38,13 @@ describe("Posts.normalizeDate", () => {
 
     it("returns the same string for a string input", () => {
         expect(
-        	Posts.normalizeDate("2026-07-18", URL),
+            Posts.normalizeDate("2026-07-18", URL),
         ).toBe("2026-07-18");
     });
 
     it("returns null for a non-string, non-Date value", () => {
         expect(
-        	Posts.normalizeDate(42, URL),
+            Posts.normalizeDate(42, URL),
         ).toBeNull();
     });
 });
@@ -63,13 +63,13 @@ describe("Posts.readingTime", () => {
         ].join("\n");
 
         expect(
-        	Posts.readingTime(src),
+            Posts.readingTime(src),
         ).toBe("2 min");
     });
 
     it("returns '1 min' for short text", () => {
         expect(
-        	Posts.readingTime("just a few words here"),
+            Posts.readingTime("just a few words here"),
         ).toBe("1 min");
     });
 });
@@ -77,19 +77,19 @@ describe("Posts.readingTime", () => {
 describe("Posts.normalizeTags", () => {
     it("filters an array down to strings only", () => {
         expect(
-        	Posts.normalizeTags(["a", 1, "b"]),
+            Posts.normalizeTags(["a", 1, "b"]),
         ).toEqual(["a", "b"]);
     });
 
     it("wraps a lone string in an array", () => {
         expect(
-        	Posts.normalizeTags("solo"),
+            Posts.normalizeTags("solo"),
         ).toEqual(["solo"]);
     });
 
     it("returns an empty array for anything else", () => {
         expect(
-        	Posts.normalizeTags(undefined),
+            Posts.normalizeTags(undefined),
         ).toEqual([]);
     });
 });

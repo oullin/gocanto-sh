@@ -34,8 +34,8 @@ class BundleGuard {
         const assetsDirectory = fileURLToPath(new URL("../dist/assets/", import.meta.url));
 
         const entries = await readdir(
-        	assetsDirectory,
-        	{ withFileTypes: true },
+            assetsDirectory,
+            { withFileTypes: true },
         );
 
         const javascriptFiles = entries

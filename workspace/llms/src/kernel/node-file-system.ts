@@ -11,8 +11,8 @@ export class NodeFileSystem implements FileSystem {
      */
     public ensureDir(path: string): void {
         mkdirSync(
-        	path,
-        	{ recursive: true },
+            path,
+            { recursive: true },
         );
     }
 

@@ -11,10 +11,10 @@ describe("HeroCta", () => {
         const link = wrapper.get("a.pill");
 
         expect(
-        	link.attributes("href"),
+            link.attributes("href"),
         ).toBe(`mailto:${profile.data.email}`);
         expect(
-        	link.text(),
+            link.text(),
         ).toContain("Get in touch");
     });
 });

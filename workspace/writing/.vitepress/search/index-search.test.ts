@@ -19,56 +19,56 @@ function makePost(overrides: Partial<Post> & { title: string; year: string }): P
 
 const posts: Post[] = [
     makePost(
-    	{
-    	    title: "Signed webhooks",
-    	    year: "2026",
-    	    tags: ["webhooks", "security", "go"],
-    	    description: "HMAC and idempotency",
-    	},
+        {
+            title: "Signed webhooks",
+            year: "2026",
+            tags: ["webhooks", "security", "go"],
+            description: "HMAC and idempotency",
+        },
     ),
     makePost(
-    	{
-    	    title: "Edge caching",
-    	    year: "2026",
-    	    tags: ["cloudflare", "go"],
-    	    description: "Workers at the edge",
-    	},
+        {
+            title: "Edge caching",
+            year: "2026",
+            tags: ["cloudflare", "go"],
+            description: "Workers at the edge",
+        },
     ),
     makePost(
-    	{
-    	    title: "Outbox pattern",
-    	    year: "2025",
-    	    tags: ["postgres", "go"],
-    	    description: "transactional outbox",
-    	},
+        {
+            title: "Outbox pattern",
+            year: "2025",
+            tags: ["postgres", "go"],
+            description: "transactional outbox",
+        },
     ),
 ];
 
 describe("WritingIndexSearch.matchesQuery", () => {
     it("matches on title, description or tags, case-insensitively", () => {
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], "WEBHOOK"),
+            WritingIndexSearch.matchesQuery(posts[0], "WEBHOOK"),
         ).toBe(true); // title
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], "idempotency"),
+            WritingIndexSearch.matchesQuery(posts[0], "idempotency"),
         ).toBe(true); // description
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], "security"),
+            WritingIndexSearch.matchesQuery(posts[0], "security"),
         ).toBe(true); // tag
     });
 
     it("returns true for an empty/whitespace query", () => {
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], ""),
+            WritingIndexSearch.matchesQuery(posts[0], ""),
         ).toBe(true);
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], "   "),
+            WritingIndexSearch.matchesQuery(posts[0], "   "),
         ).toBe(true);
     });
 
     it("returns false when nothing matches", () => {
         expect(
-        	WritingIndexSearch.matchesQuery(posts[0], "kafka"),
+            WritingIndexSearch.matchesQuery(posts[0], "kafka"),
         ).toBe(false);
     });
 });
@@ -76,7 +76,7 @@ describe("WritingIndexSearch.matchesQuery", () => {
 describe("WritingIndexSearch.filterPosts", () => {
     it("returns everything for tag 'all' and no query", () => {
         expect(
-        	WritingIndexSearch.filterPosts(posts, "", WritingIndexSearch.allTopics),
+            WritingIndexSearch.filterPosts(posts, "", WritingIndexSearch.allTopics),
         ).toHaveLength(3);
     });
 
@@ -84,7 +84,7 @@ describe("WritingIndexSearch.filterPosts", () => {
         const cloudflare = WritingIndexSearch.topicTag("cloudflare");
 
         expect(
-        	WritingIndexSearch.filterPosts(posts, "", cloudflare).map((p) => p.title),
+            WritingIndexSearch.filterPosts(posts, "", cloudflare).map((p) => p.title),
         ).toEqual([
             "Edge caching",
         ]);
@@ -95,7 +95,7 @@ describe("WritingIndexSearch.filterPosts", () => {
         const go = WritingIndexSearch.topicTag("go");
 
         expect(
-        	WritingIndexSearch.filterPosts(posts, "edge", go).map((p) => p.title),
+            WritingIndexSearch.filterPosts(posts, "edge", go).map((p) => p.title),
         ).toEqual([
             "Edge caching",
         ]);
@@ -105,7 +105,7 @@ describe("WritingIndexSearch.filterPosts", () => {
         const postgres = WritingIndexSearch.topicTag("postgres");
 
         expect(
-        	WritingIndexSearch.filterPosts(posts, "webhook", postgres),
+            WritingIndexSearch.filterPosts(posts, "webhook", postgres),
         ).toEqual([]);
     });
 });
@@ -114,29 +114,29 @@ describe("WritingIndexSearch.tagCounts", () => {
     it("orders every tag by count descending", () => {
         expect(WritingIndexSearch.tagCounts(posts)[0]).toEqual({ tag: "go", count: 3 });
         expect(
-        	WritingIndexSearch.tagCounts(posts),
+            WritingIndexSearch.tagCounts(posts),
         ).toHaveLength(5);
     });
 
     it("orders equal counts alphabetically", () => {
         expect(
-        	WritingIndexSearch.tagCounts(posts)
-        	        .slice(1)
-        	        .map(({ tag }) => tag),
+            WritingIndexSearch.tagCounts(posts)
+                    .slice(1)
+                    .map(({ tag }) => tag),
         ).toEqual(["cloudflare", "postgres", "security", "webhooks"]);
     });
 
     it("counts a repeated tag only once per post", () => {
         const postWithDuplicateTags = makePost(
-        	{
-        	    title: "Duplicate metadata",
-        	    year: "2026",
-        	    tags: ["go", "go", "security"],
-        	},
+            {
+                title: "Duplicate metadata",
+                year: "2026",
+                tags: ["go", "go", "security"],
+            },
         );
 
         expect(
-        	WritingIndexSearch.tagCounts([postWithDuplicateTags]),
+            WritingIndexSearch.tagCounts([postWithDuplicateTags]),
         ).toEqual([
             { tag: "go", count: 1 },
             { tag: "security", count: 1 },
@@ -147,13 +147,13 @@ describe("WritingIndexSearch.tagCounts", () => {
 describe("WritingIndexSearch.countLabel", () => {
     it("pluralizes", () => {
         expect(
-        	WritingIndexSearch.countLabel(1),
+            WritingIndexSearch.countLabel(1),
         ).toBe("1 post");
         expect(
-        	WritingIndexSearch.countLabel(0),
+            WritingIndexSearch.countLabel(0),
         ).toBe("0 posts");
         expect(
-        	WritingIndexSearch.countLabel(3),
+            WritingIndexSearch.countLabel(3),
         ).toBe("3 posts");
     });
 });
@@ -170,7 +170,7 @@ describe("WritingIndexSearch.listPosts", () => {
         const only = [posts[0]];
 
         expect(
-        	WritingIndexSearch.listPosts(only, posts[0]).map((p) => p.title),
+            WritingIndexSearch.listPosts(only, posts[0]).map((p) => p.title),
         ).toEqual([
             "Signed webhooks",
         ]);
@@ -183,12 +183,12 @@ describe("WritingIndexSearch.listPosts", () => {
         const featuredOnly = WritingIndexSearch.filterPosts(posts, "", webhooks);
 
         expect(
-        	WritingIndexSearch.listPosts(nonFeatured, posts[0]).map((p) => p.title),
+            WritingIndexSearch.listPosts(nonFeatured, posts[0]).map((p) => p.title),
         ).toEqual([
             "Edge caching",
         ]);
         expect(
-        	WritingIndexSearch.listPosts(featuredOnly, posts[0]).map((p) => p.title),
+            WritingIndexSearch.listPosts(featuredOnly, posts[0]).map((p) => p.title),
         ).toEqual([
             "Signed webhooks",
         ]);

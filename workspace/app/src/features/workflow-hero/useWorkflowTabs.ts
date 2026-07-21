@@ -34,7 +34,7 @@ export const useWorkflowTabs = (
     const panelState = ref<WorkflowPanelState>("ready");
 
     const tabRefs = ref<HTMLButtonElement[]>(
-    	[],
+        [],
     );
 
     const activeMetadata = computed(

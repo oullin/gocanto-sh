@@ -43,7 +43,7 @@ describe("RssFeed.render", () => {
         ]);
 
         expect(
-        	rss.indexOf("<title>Newer</title>"),
+            rss.indexOf("<title>Newer</title>"),
         ).toBeLessThan(
             rss.indexOf("<title>Older</title>"),
         );
@@ -76,17 +76,17 @@ describe("RssFeed.render", () => {
 
     it("is deterministic and omits post-specific fields for an empty collection", () => {
         const posts = [makePost(
-        	{ title: "One", date: "2026-07-18", url: "/one" },
+            { title: "One", date: "2026-07-18", url: "/one" },
         )];
 
         expect(
-        	RssFeed.render(posts),
+            RssFeed.render(posts),
         ).toBe(RssFeed.render(posts));
         expect(
-        	RssFeed.render([]),
+            RssFeed.render([]),
         ).not.toContain("<lastBuildDate>");
         expect(
-        	RssFeed.render([]),
+            RssFeed.render([]),
         ).not.toContain("<item>");
     });
 });

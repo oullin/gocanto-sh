@@ -53,9 +53,9 @@ class AsyncInViewTestHarness<T> {
     constructor(loader: () => T | Promise<T>, delayMs = 25) {
         const result = this.scope.run(() =>
             useAsyncInView(
-            	ref<HTMLElement | null>(null),
-            	loader,
-            	{ delayMs },
+                ref<HTMLElement | null>(null),
+                loader,
+                { delayMs },
             ),
         );
 

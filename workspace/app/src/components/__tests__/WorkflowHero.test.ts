@@ -10,16 +10,16 @@ describe("WorkflowHero", () => {
         const proofLink = wrapper.get(".wf-proof__users");
 
         expect(
-        	proofLink.attributes("aria-label"),
+            proofLink.attributes("aria-label"),
         ).toBe("View testimonials");
         expect(
-        	proofLink.attributes("aria-busy"),
+            proofLink.attributes("aria-busy"),
         ).toBe("true");
         expect(
-        	wrapper.findAll(".wf-proof__avatar--skeleton"),
+            wrapper.findAll(".wf-proof__avatar--skeleton"),
         ).toHaveLength(4);
         expect(
-        	wrapper.find(".wf-proof__label-skeleton").exists(),
+            wrapper.find(".wf-proof__label-skeleton").exists(),
         ).toBe(true);
     });
 
@@ -27,7 +27,7 @@ describe("WorkflowHero", () => {
         const wrapper = mount(WorkflowHero);
 
         expect(
-        	wrapper.findAll('[role="tab"]').map((tab) => tab.text()),
+            wrapper.findAll('[role="tab"]').map((tab) => tab.text()),
         ).toEqual(
             workflowMetadata.map((workflow) => workflow.label),
         );
@@ -46,12 +46,12 @@ describe("WorkflowHero", () => {
 
         await vi.waitFor(() => {
             expect(
-            	wrapper.text(),
+                wrapper.text(),
             ).toContain("Sandbox in 30 Minutes");
         });
 
         expect(
-        	wrapper.get('[role="tabpanel"]').attributes("id"),
+            wrapper.get('[role="tabpanel"]').attributes("id"),
         ).toBe("wf-panel-meeting-prep");
     });
 });

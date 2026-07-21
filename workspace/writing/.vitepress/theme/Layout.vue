@@ -30,7 +30,7 @@ const listedPosts = computed(() => WritingIndexSearch.listPosts(filtered.value, 
 const countLabel = computed(() => WritingIndexSearch.countLabel(filtered.value.length));
 
 const newestYear = computed(() => posts[0]?.date.year ?? String(
-	new Date().getFullYear(),
+    new Date().getFullYear(),
 ));
 
 const currentPost = computed(() => {
@@ -48,7 +48,7 @@ const progressPct = ref("0%");
 const activeToc = ref<string | null>(null);
 
 const toc = ref<{ id: string; label: string }[]>(
-	[],
+    [],
 );
 
 let scrollFrame: number | null = null;

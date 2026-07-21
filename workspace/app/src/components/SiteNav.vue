@@ -7,10 +7,10 @@ const scrolled = ref(false);
 const { openSearch } = useGlobalSearch();
 
 const MobileNavSheet = defineAsyncComponent(
-	{
-	    loader: () => import("#app/components/MobileNavSheet.vue"),
-	    hydrate: hydrateOnInteraction("click"),
-	},
+    {
+        loader: () => import("#app/components/MobileNavSheet.vue"),
+        hydrate: hydrateOnInteraction("click"),
+    },
 );
 
 const navItems = [

@@ -26,28 +26,28 @@ const SearchHarness = defineComponent({
         };
     },
     // The fmtkit sidecar re-indents multiline template literals
-    // non-idempotently (adds a leading tab each pass), so freeze this block's
-    // formatting. See https://github.com/oullin/fmtkit/pull/58.
+    // non-idempotently (one extra indent unit per pass, still present in
+    // v0.5.8), so freeze this block's formatting until that converges.
     // prettier-ignore
     template: `
-        <Command>
-            <CommandInput placeholder="Search" />
-            <button type="button" data-test="show-late" @click="showLateItem = true">Show late item</button>
-            <CommandList>
-                <CommandGroup heading="Projects">
-                    <CommandItem value="visible-only" search-value="python data pipelines">
-                        Payments Platform
-                    </CommandItem>
-                    <CommandItem value="hidden-only" search-value="golang services">
-                        Ledger Service
-                    </CommandItem>
-                    <CommandItem v-if="showLateItem" value="late-only" search-value="python automations">
-                        Automation Toolkit
-                    </CommandItem>
-                </CommandGroup>
-            </CommandList>
-        </Command>
-    `,
+            <Command>
+                <CommandInput placeholder="Search" />
+                <button type="button" data-test="show-late" @click="showLateItem = true">Show late item</button>
+                <CommandList>
+                    <CommandGroup heading="Projects">
+                        <CommandItem value="visible-only" search-value="python data pipelines">
+                            Payments Platform
+                        </CommandItem>
+                        <CommandItem value="hidden-only" search-value="golang services">
+                            Ledger Service
+                        </CommandItem>
+                        <CommandItem v-if="showLateItem" value="late-only" search-value="python automations">
+                            Automation Toolkit
+                        </CommandItem>
+                    </CommandGroup>
+                </CommandList>
+            </Command>
+        `,
 });
 
 describe("Command", () => {
@@ -59,10 +59,10 @@ describe("Command", () => {
         await nextTick();
 
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).toContain("Payments Platform");
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).not.toContain("Ledger Service");
     });
 
@@ -74,7 +74,7 @@ describe("Command", () => {
         await nextTick();
 
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).not.toContain("Automation Toolkit");
 
         await wrapper.get('[data-test="show-late"]').trigger("click");
@@ -82,7 +82,7 @@ describe("Command", () => {
         await nextTick();
 
         expect(
-        	wrapper.text(),
+            wrapper.text(),
         ).toContain("Automation Toolkit");
     });
 });

@@ -124,12 +124,12 @@ export class RssFeed {
     /** Writes the rendered RSS feed into a VitePress output directory. */
     public async write(outDir: string): Promise<void> {
         await writeFile(
-        	join(
-        		outDir,
-        		RssFeed.PATH.slice(1),
-        	),
-        	await this.load(),
-        	"utf8",
+            join(
+                outDir,
+                RssFeed.PATH.slice(1),
+            ),
+            await this.load(),
+            "utf8",
         );
     }
 

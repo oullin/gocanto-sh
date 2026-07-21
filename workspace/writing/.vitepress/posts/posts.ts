@@ -82,7 +82,7 @@ export class Posts {
             display: Posts.dateFormatter.format(date),
             short: Posts.shortDateFormatter.format(date),
             year: String(
-            	date.getUTCFullYear(),
+                date.getUTCFullYear(),
             ),
         };
     }

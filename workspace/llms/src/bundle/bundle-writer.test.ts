@@ -50,12 +50,12 @@ describe("MarkdownBundleWriter.generate", () => {
 
         expect(fs.directories).toEqual(["/dist"]);
         expect(
-        	[...fs.writes.keys()],
+            [...fs.writes.keys()],
         ).toEqual(expectedFiles.map((file) => `/dist/${file}`));
 
         for (const body of fs.writes.values()) {
             expect(
-            	body.endsWith("\n"),
+                body.endsWith("\n"),
             ).toBe(true);
         }
 

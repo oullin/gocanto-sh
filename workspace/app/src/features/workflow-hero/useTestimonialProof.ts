@@ -6,7 +6,7 @@ import type { ProofAvatar } from "#app/features/workflow-hero";
 /** Loads and prepares testimonial counts and avatars for the workflow hero. */
 export const useTestimonialProof = () => {
     const proofAvatars = ref<ProofAvatar[]>(
-    	[],
+        [],
     );
 
     const testimonialCount = ref(0);
