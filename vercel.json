@@ -5,6 +5,17 @@
     "cleanUrls": true,
     "redirects": [
         {
+            "source": "/writing/",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "gocanto.sh"
+                }
+            ],
+            "destination": "https://writing.gocanto.sh/",
+            "permanent": true
+        },
+        {
             "source": "/writing/:path*",
             "has": [
                 {
