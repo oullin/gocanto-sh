@@ -18,6 +18,9 @@ const rssFeed = new RssFeed({
 export default defineConfig({
     lang: "en-US",
     title: "Gustavo Ocanto: Writing",
+    // Default is ":title | <title>", which renders the index as
+    // "Writing | Gustavo Ocanto: Writing". Name the author once instead.
+    titleTemplate: ":title | Gustavo Ocanto",
     description: DESCRIPTION,
 
     // The landing page (gocanto.sh) is dark-only; match it and drop the toggle.

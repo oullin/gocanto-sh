@@ -1,5 +1,6 @@
 ---
-title: Writing
+title: "Gustavo Ocanto: Writing"
+titleTemplate: false
 description: "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge."
 ---
 
