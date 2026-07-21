@@ -1,8 +1,8 @@
 import { createApp, createSSRApp } from "vue";
 
-import App from "@/App.vue";
-import "@/loading.css";
-import "@/styles.css";
+import App from "#app/App.vue";
+import "#app/loading.css";
+import "#app/styles.css";
 
 const factory = import.meta.env.PROD ? createSSRApp : createApp;
 

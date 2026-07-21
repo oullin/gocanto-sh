@@ -2,11 +2,11 @@
 import { computed, ref, watch } from "vue";
 import { Projects } from "@gocanto/domain";
 import { projects } from "@gocanto/store";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { ScrollFade } from "@/components/ui/scroll-fade";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { Popover, PopoverContent, PopoverTrigger } from "#app/components/ui/popover";
+import { Checkbox } from "#app/components/ui/checkbox";
+import { Button } from "#app/components/ui/button";
+import { ScrollFade } from "#app/components/ui/scroll-fade";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
 

@@ -8,7 +8,7 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@components/ui/command";
+} from "#app/components/ui/command";
 
 const SearchHarness = defineComponent({
     components: {

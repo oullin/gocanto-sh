@@ -6,7 +6,7 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-} from "@/components/ui/sheet";
+} from "#app/components/ui/sheet";
 import {
     BookOpen,
     Calendar,

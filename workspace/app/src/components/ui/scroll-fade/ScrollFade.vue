@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { HTMLAttributes } from "vue";
-import { cn } from "@/lib/utils";
+import { cn } from "#app/lib/utils";
 
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();
 

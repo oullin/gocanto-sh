@@ -2,9 +2,9 @@
 import { computed, ref, shallowRef } from "vue";
 import { Recommendations, type SearchPayload } from "@gocanto/domain";
 import type { RecommendationRecord } from "@gocanto/store";
-import { TestimonialMarquee, type Testimonial } from "@/components/ui/testimonial-marquee";
-import SearchResultDetail from "@components/SearchResultDetail.vue";
-import { useAsyncInView } from "@lib/useAsyncInView";
+import { TestimonialMarquee, type Testimonial } from "#app/components/ui/testimonial-marquee";
+import SearchResultDetail from "#app/components/SearchResultDetail.vue";
+import { useAsyncInView } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
 const recommendationsFixture = useAsyncInView(section, async () => {

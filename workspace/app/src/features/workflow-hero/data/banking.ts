@@ -1,6 +1,6 @@
 import { FileText, Gauge, Landmark, PenLine, ServerCog, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { Workflow } from "#app/features/workflow-hero";
 
 export const bankingWorkflow: Workflow = {
     id: "follow-ups",

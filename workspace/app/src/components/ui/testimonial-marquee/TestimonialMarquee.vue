@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { TextFormatter } from "@gocanto/domain";
-import { cn } from "@lib/utils";
-import TestimonialCard from "@components/ui/testimonial-marquee/TestimonialCard.vue";
-import type { Testimonial } from "@components/ui/testimonial-marquee/types";
+import { cn } from "#app/lib/utils";
+import TestimonialCard from "#app/components/ui/testimonial-marquee/TestimonialCard.vue";
+import type { Testimonial } from "#app/components/ui/testimonial-marquee/types";
 
 export type { Testimonial };
 

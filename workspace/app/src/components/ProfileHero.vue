@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { profile } from "@gocanto/store";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
 

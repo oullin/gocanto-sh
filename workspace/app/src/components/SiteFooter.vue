@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { links, profile } from "@gocanto/store";
 import { Heart } from "lucide-vue-next";
-import ThemeToggle from "@components/ThemeToggle.vue";
+import ThemeToggle from "#app/components/ThemeToggle.vue";
 
 type FooterLink = {
     readonly label: string;

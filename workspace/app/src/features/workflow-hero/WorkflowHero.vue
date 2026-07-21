@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import "@features/workflow-hero/workflow-hero.css";
+import "#app/features/workflow-hero/workflow-hero.css";
 
-import { workflows } from "@features/workflow-hero/data";
-import { useWorkflowTabs } from "@features/workflow-hero/useWorkflowTabs";
-import WorkflowCanvas from "@features/workflow-hero/WorkflowCanvas.vue";
-import WorkflowHeroIntro from "@features/workflow-hero/WorkflowHeroIntro.vue";
-import WorkflowTabs from "@features/workflow-hero/WorkflowTabs.vue";
+import { workflows } from "#app/features/workflow-hero";
+import { useWorkflowTabs } from "#app/features/workflow-hero";
+import WorkflowCanvas from "#app/features/workflow-hero/WorkflowCanvas.vue";
+import WorkflowHeroIntro from "#app/features/workflow-hero/WorkflowHeroIntro.vue";
+import WorkflowTabs from "#app/features/workflow-hero/WorkflowTabs.vue";
 
 const { activeTab, activeWorkflow, onTabKeydown, panelKey, selectTab, setTabRef } =
     useWorkflowTabs(workflows);

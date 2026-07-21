@@ -1,11 +1,15 @@
-export { default as Matrix } from "@components/ui/matrix/Matrix.vue";
+/** Animated matrix display. */
+export { default as Matrix } from "#app/components/ui/matrix/Matrix.vue";
 
+/** Numeric brightness grid rendered by the matrix. */
 export type Frame = number[][];
 
+/** Creates a zero-filled matrix frame. */
 export function emptyFrame(rows: number, cols: number): Frame {
     return Array.from({ length: rows }, () => Array(cols).fill(0));
 }
 
+/** Resizes a frame while preserving cells within the target bounds. */
 export function ensureFrameSize(frame: Frame, rows: number, cols: number): Frame {
     const result: Frame = [];
 
@@ -21,6 +25,7 @@ export function ensureFrameSize(frame: Frame, rows: number, cols: number): Frame
     return result;
 }
 
+/** Builds a vertical-unit meter frame from normalized column levels. */
 export function vu(columns: number, levels: number[]): Frame {
     const rows = 7;
     const frame = emptyFrame(rows, columns);

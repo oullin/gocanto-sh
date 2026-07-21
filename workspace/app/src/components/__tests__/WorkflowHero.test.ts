@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
-import { workflows } from "@/features/workflow-hero/data";
-import WorkflowHero from "@components/WorkflowHero.vue";
+import { workflows } from "#app/features/workflow-hero";
+import WorkflowHero from "#app/components/WorkflowHero.vue";
 
 describe("WorkflowHero", () => {
     it("renders a stable testimonial proof skeleton before recommendations load", () => {

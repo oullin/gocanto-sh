@@ -1,35 +1,35 @@
 <script setup lang="ts">
 import { defineAsyncComponent, hydrateOnIdle, hydrateOnVisible } from "vue";
-import GlobalSearchLoader from "@components/GlobalSearchLoader.vue";
-import SiteNav from "@components/SiteNav.vue";
-import WorkflowHero from "@components/WorkflowHero.vue";
+import GlobalSearchLoader from "#app/components/GlobalSearchLoader.vue";
+import SiteNav from "#app/components/SiteNav.vue";
+import WorkflowHero from "#app/components/WorkflowHero.vue";
 
 const ExperienceGrid = defineAsyncComponent({
-    loader: () => import("@components/ExperienceGrid.vue"),
+    loader: () => import("#app/components/ExperienceGrid.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const ProjectsTable = defineAsyncComponent({
-    loader: () => import("@components/ProjectsTable.vue"),
+    loader: () => import("#app/components/ProjectsTable.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const RecommendationsMarquee = defineAsyncComponent({
-    loader: () => import("@components/RecommendationsMarquee.vue"),
+    loader: () => import("#app/components/RecommendationsMarquee.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const WhoIAm = defineAsyncComponent({
-    loader: () => import("@components/WhoIAm.vue"),
+    loader: () => import("#app/components/WhoIAm.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const SignatureSkillsGrid = defineAsyncComponent({
-    loader: () => import("@components/SignatureSkillsGrid.vue"),
+    loader: () => import("#app/components/SignatureSkillsGrid.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const SiteFooter = defineAsyncComponent({
-    loader: () => import("@components/SiteFooter.vue"),
+    loader: () => import("#app/components/SiteFooter.vue"),
     hydrate: hydrateOnVisible({ rootMargin: "320px" }),
 });
 const BackToTop = defineAsyncComponent({
-    loader: () => import("@components/BackToTop.vue"),
+    loader: () => import("#app/components/BackToTop.vue"),
     hydrate: hydrateOnIdle(6000),
 });
 </script>

@@ -1,14 +1,19 @@
 import type { Component } from "vue";
 
+/** Animation phase assigned to a workflow element. */
 export type WorkflowDelay = "early" | "middle" | "late" | "final";
+
+/** Horizontal placement of a workflow step. */
 export type WorkflowPosition = "left" | "center" | "right" | "mobile-only";
 
+/** Supporting detail displayed within a workflow step. */
 export type WorkflowDetail = {
     readonly text: string;
     readonly asset?: string;
     readonly alt?: string;
 };
 
+/** A single visual step in a workflow. */
 export type WorkflowStep = {
     readonly id: string;
     readonly label: string;
@@ -27,6 +32,7 @@ export type WorkflowStep = {
     readonly position: WorkflowPosition;
 };
 
+/** SVG geometry connecting workflow steps. */
 export type WorkflowConnector = {
     readonly x: number;
     readonly y: number;
@@ -39,6 +45,7 @@ export type WorkflowConnector = {
     readonly delay: Exclude<WorkflowDelay, "early">;
 };
 
+/** Complete workflow definition rendered by the hero. */
 export type Workflow = {
     readonly id: string;
     readonly label: string;
@@ -47,6 +54,7 @@ export type Workflow = {
     readonly steps: readonly WorkflowStep[];
 };
 
+/** Testimonial avatar shown as social proof. */
 export type ProofAvatar = {
     readonly src: string;
     readonly alt: string;

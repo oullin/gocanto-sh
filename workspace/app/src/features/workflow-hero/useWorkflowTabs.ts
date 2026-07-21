@@ -1,7 +1,8 @@
 import { computed, nextTick, ref } from "vue";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { Workflow } from "#app/features/workflow-hero";
 
+/** Coordinates active workflow tabs, focus movement, and panel refreshes. */
 export const useWorkflowTabs = (workflows: readonly Workflow[]) => {
     const fallbackWorkflow = workflows[0];
 

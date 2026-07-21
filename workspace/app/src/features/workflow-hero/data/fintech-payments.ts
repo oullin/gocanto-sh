@@ -1,6 +1,6 @@
 import { CreditCard, FileText, PackageCheck, PenLine, ShieldCheck, Wand2 } from "lucide-vue-next";
 
-import type { Workflow } from "@features/workflow-hero/types";
+import type { Workflow } from "#app/features/workflow-hero";
 
 export const fintechPaymentsWorkflow: Workflow = {
     id: "meeting-prep",

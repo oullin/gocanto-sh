@@ -8,9 +8,9 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import Command from "@components/ui/command/Command.vue";
+} from "#app/components/ui/dialog";
+import { cn } from "#app/lib/utils";
+import Command from "#app/components/ui/command/Command.vue";
 
 const props = withDefaults(
     defineProps<

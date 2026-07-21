@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
 import { defineAsyncComponent, ref, watch } from "vue";
-import { globalSearchOpen } from "@lib/globalSearch";
+import { useGlobalSearch } from "#app/lib/globalSearch";
 
-const GlobalSearch = defineAsyncComponent(() => import("@components/GlobalSearch.vue"));
-const shouldLoad = ref(globalSearchOpen.value);
+const GlobalSearch = defineAsyncComponent(() => import("#app/components/GlobalSearch.vue"));
+const { open } = useGlobalSearch();
+const shouldLoad = ref(open.value);
 
-watch(globalSearchOpen, (open) => {
-    if (open) {
+watch(open, (isOpen) => {
+    if (isOpen) {
         shouldLoad.value = true;
     }
 });
@@ -19,7 +20,7 @@ const onKeydown = (event: KeyboardEvent) => {
 
     event.preventDefault();
     shouldLoad.value = true;
-    globalSearchOpen.value = !globalSearchOpen.value;
+    open.value = !open.value;
 };
 
 useEventListener(() => (typeof window === "undefined" ? null : window), "keydown", onKeydown);

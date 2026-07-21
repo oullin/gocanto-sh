@@ -2,7 +2,7 @@
 import { computed, ref, type Component } from "vue";
 import { Skills } from "@gocanto/domain";
 import { profile, type ProfileSkillRecord } from "@gocanto/store";
-import { useInViewReady } from "@lib/useAsyncInView";
+import { useInViewReady } from "#app/lib/useAsyncInView";
 import {
     Binary,
     Server,
@@ -23,8 +23,8 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-} from "@/components/ui/sheet";
-import { ScrollFade } from "@/components/ui/scroll-fade";
+} from "#app/components/ui/sheet";
+import { ScrollFade } from "#app/components/ui/scroll-fade";
 
 const section = ref<HTMLElement | null>(null);
 const moreSection = ref<HTMLElement | null>(null);

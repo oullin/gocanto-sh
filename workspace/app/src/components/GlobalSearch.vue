@@ -16,11 +16,11 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
+} from "#app/components/ui/command";
 import { SearchCorpus, type SearchKind, type SearchResult } from "@gocanto/domain";
 import { education, experience, links, profile, projects, talks } from "@gocanto/store";
-import SearchResultDetail from "@components/SearchResultDetail.vue";
-import { globalSearchOpen } from "@lib/globalSearch";
+import SearchResultDetail from "#app/components/SearchResultDetail.vue";
+import { useGlobalSearch } from "#app/lib/globalSearch";
 
 const groupIcons = {
     work: BookOpen,
@@ -32,7 +32,7 @@ const groupIcons = {
     links: LinkIcon,
 } as const;
 
-const open = globalSearchOpen;
+const { open } = useGlobalSearch();
 const sheetOpen = ref(false);
 const activePayload = shallowRef<SearchResult["payload"] | null>(null);
 const corpus = shallowRef<SearchCorpus | null>(null);

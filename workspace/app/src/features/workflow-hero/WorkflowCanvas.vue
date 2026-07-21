@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Workflow } from "@features/workflow-hero/types";
-import WorkflowCard from "@features/workflow-hero/WorkflowCard.vue";
-import WorkflowConnectorLayer from "@features/workflow-hero/WorkflowConnectorLayer.vue";
+import type { Workflow } from "#app/features/workflow-hero";
+import WorkflowCard from "#app/features/workflow-hero/WorkflowCard.vue";
+import WorkflowConnectorLayer from "#app/features/workflow-hero/WorkflowConnectorLayer.vue";
 
 defineProps<{
     panelKey: number;

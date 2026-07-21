@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Menu, Search } from "lucide-vue-next";
-import { openGlobalSearch } from "@lib/globalSearch";
+import { useGlobalSearch } from "#app/lib/globalSearch";
 import {
     Sheet,
     SheetClose,
@@ -8,7 +8,7 @@ import {
     SheetDescription,
     SheetTitle,
     SheetTrigger,
-} from "@/components/ui/sheet";
+} from "#app/components/ui/sheet";
 
 defineProps<{
     items: Array<{
@@ -17,9 +17,7 @@ defineProps<{
     }>;
 }>();
 
-const openSearch = () => {
-    openGlobalSearch();
-};
+const { openSearch } = useGlobalSearch();
 </script>
 
 <template>
