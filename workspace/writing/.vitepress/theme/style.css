@@ -841,23 +841,12 @@ body {
 
 /* ---------------- Article ---------------- */
 
+/* Taller at the top than the other three sides: the tags are the first thing
+   under a sticky header, and 40px puts them close enough to read as part of
+   it. */
 .wr-article-wrap {
-    padding: 40px;
+    padding: 64px 40px 40px;
     animation: wr-fadeUp 0.4s ease;
-}
-
-.wr-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--wr-mono);
-    font-size: 13px;
-    color: var(--wr-muted) !important;
-    margin-bottom: 40px;
-}
-
-.wr-back:hover {
-    color: var(--wr-ink) !important;
 }
 
 .wr-article-grid {
@@ -1242,12 +1231,6 @@ body {
     .wr-header {
         gap: 16px;
         padding: 14px 20px;
-    }
-    /* The sticky header's "All writing" link is the same destination, and on a
-       narrow screen it is always a thumb away, so the in-page back link is pure
-       duplication above the fold. */
-    .wr-back {
-        display: none;
     }
     .wr-article-wrap,
     .wr-footer {
