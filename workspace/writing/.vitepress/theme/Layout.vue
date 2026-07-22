@@ -62,17 +62,23 @@ const articleTags = computed<string[]>(() => WritingArticlePage.tags(frontmatter
 
 const related = computed(() => WritingArticlePage.relatedPosts(posts, currentPost.value));
 
-const progressPct = ref("0%");
+const progressBar = ref<HTMLElement | null>(null);
 
 const activeToc = ref<string | null>(null);
 
 const showBackToTop = ref(false);
+
+const isElevated = ref(false);
 
 const toc = ref<Heading[]>(
     [],
 );
 
 let scrollFrame: number | null = null;
+
+// Resolved once per content update so the scroll handler measures cached nodes
+// instead of re-querying the document on every frame.
+let tocEls: HTMLElement[] = [];
 
 function buildToc() {
     if (typeof document === "undefined") {
@@ -81,6 +87,7 @@ function buildToc() {
 
     const heads = Array.from(document.querySelectorAll<HTMLElement>(".vp-doc h2[id]"));
 
+    tocEls = heads;
     toc.value = heads.map((h) => ({
         id: h.id,
         label: WritingArticlePage.headingLabel(h.textContent),
@@ -93,19 +100,21 @@ function buildToc() {
 function updateScrollState() {
     const doc = document.documentElement;
 
-    progressPct.value = WritingArticlePage.progress(
-        doc.scrollTop,
-        doc.scrollHeight,
-        doc.clientHeight,
-    );
+    // Written straight to the element rather than bound with `:style`: the width
+    // changes on every scroll frame, and a reactive ref would re-render the whole
+    // layout — header, search, article, TOC — 60 times a second.
+    if (progressBar.value) {
+        progressBar.value.style.width = WritingArticlePage.progress(
+            doc.scrollTop,
+            doc.scrollHeight,
+            doc.clientHeight,
+        );
+    }
 
     showBackToTop.value = WritingArticlePage.showBackToTop(doc.scrollTop);
+    isElevated.value = WritingArticlePage.isElevated(doc.scrollTop);
 
-    const offsets = toc.value.flatMap((t) => {
-        const el = document.getElementById(t.id);
-
-        return el ? [{ id: t.id, top: el.getBoundingClientRect().top }] : [];
-    });
+    const offsets = tocEls.map((el) => ({ id: el.id, top: el.getBoundingClientRect().top }));
 
     activeToc.value = WritingArticlePage.activeHeading(offsets, {
         height: doc.clientHeight,
@@ -329,10 +338,10 @@ const year = new Date().getFullYear();
         </div>
 
         <template v-else>
-            <div class="wr-progress" :style="{ width: progressPct }"></div>
+            <div ref="progressBar" class="wr-progress"></div>
 
             <div class="wr-shell">
-                <header class="wr-header">
+                <header class="wr-header" :class="{ 'is-elevated': isElevated }">
                     <div class="wr-brand">
                         <a href="https://gocanto.sh" class="wr-brand-home" aria-label="gocanto.sh">
                             <span class="wr-avatar" aria-hidden="true">

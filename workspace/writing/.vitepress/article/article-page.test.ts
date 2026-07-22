@@ -156,6 +156,28 @@ describe("WritingArticlePage.progress", () => {
     });
 });
 
+describe("WritingArticlePage.isElevated", () => {
+    it("stays flat while the page is still at the top", () => {
+        expect(
+            WritingArticlePage.isElevated(0),
+        ).toBe(false);
+        expect(
+            WritingArticlePage.isElevated(WritingArticlePage.headerElevationOffset),
+        ).toBe(false);
+    });
+
+    it("lifts once the page has scrolled past the offset", () => {
+        expect(
+            WritingArticlePage.isElevated(WritingArticlePage.headerElevationOffset + 1),
+        ).toBe(
+            true,
+        );
+        expect(
+            WritingArticlePage.isElevated(2000),
+        ).toBe(true);
+    });
+});
+
 describe("WritingArticlePage.showBackToTop", () => {
     it("stays hidden until the reader is past the offset", () => {
         expect(

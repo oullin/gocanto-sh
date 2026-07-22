@@ -25,6 +25,7 @@
     --wr-line-4: #3a3a36;
     --wr-code-bg: #0d0d0c;
     --wr-code-head: #101010;
+    --wr-header-bg: #0d0e10;
     --wr-surface: #111110;
     --wr-inline-code: #ff9a94;
 
@@ -117,7 +118,8 @@ body {
     height: 2px;
     background: linear-gradient(90deg, var(--wr-accent), var(--wr-accent-hover));
     z-index: 200;
-    transition: width 0.1s linear;
+    /* No transition: the width is rewritten on every animation frame while
+       scrolling, so a transition would restart each frame and only ever lag. */
     width: 0;
 }
 
@@ -198,9 +200,26 @@ body {
     border-bottom: 1px solid var(--wr-line);
     position: sticky;
     top: 0;
-    background: rgba(14, 15, 17, 0.82);
-    backdrop-filter: blur(12px);
+    /* Opaque on purpose. A translucent bar with a backdrop blur has to re-sample
+       the article passing underneath on every frame, and the blur lands a frame
+       behind the compositor-driven sticky offset, which reads as flicker. This
+       colour is what the old rgba(14, 15, 17, 0.82) composited to anyway. */
+    background: var(--wr-header-bg);
     z-index: 100;
+    transition: box-shadow 0.2s;
+}
+
+/* Once the page leaves the top the bar overlaps the article, so give it a shadow
+   to sit above rather than blend into the text sliding beneath it. */
+.wr-header.is-elevated {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* Declared after .wr-header so it wins the cascade at equal specificity. */
+@media (prefers-reduced-motion: reduce) {
+    .wr-header {
+        transition: none;
+    }
 }
 
 .wr-brand {
