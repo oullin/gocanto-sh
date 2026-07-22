@@ -15,6 +15,7 @@ import type {
 const bio: BioFixture = {
     version: "1.0.0",
     data: {
+        summary: "A test biography summary.",
         tagline: "A test biography.",
         note: "Fixture note.",
         paragraphs: ["<p>Fixture story.</p>"],
