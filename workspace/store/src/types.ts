@@ -109,6 +109,8 @@ export type BioQuickFact = {
 };
 
 export type BioRecord = {
+    /** Canonical one-line bio. Single source for every rendered and SEO surface. */
+    readonly summary: string;
     readonly tagline: string;
     readonly note: string;
     readonly paragraphs: readonly string[];
