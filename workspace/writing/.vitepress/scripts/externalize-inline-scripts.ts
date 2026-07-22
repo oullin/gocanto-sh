@@ -19,7 +19,7 @@ const INLINE_SCRIPT = /<script((?![^>]*\bsrc=)[^>]*)>([\s\S]*?)<\/script>/g;
 const FORCE_DARK = 'document.documentElement.classList.add("dark");';
 
 /**
- * Moves VitePress's inline `<script>` blocks into files under `assets/`, so the
+ * Moves VitePress's executable inline `<script>` blocks into files under `assets/`, so the
  * writing site can ship `script-src 'self'` instead of `'unsafe-inline'`.
  *
  * Hashing the inline scripts in the CSP instead would look stricter but is a
@@ -127,11 +127,19 @@ class InlineScriptExternalizer {
     }
 
     private static inlineScripts(html: string): InlineScript[] {
-        return [...html.matchAll(INLINE_SCRIPT)].map((match) => ({
-            tag: match[0],
-            attrs: match[1] ?? "",
-            body: match[2] ?? "",
-        }));
+        return (
+            [...html.matchAll(INLINE_SCRIPT)]
+                .map((match) => ({
+                    tag: match[0],
+                    attrs: match[1] ?? "",
+                    body: match[2] ?? "",
+                }))
+                // JSON-LD is structured data, not executable JavaScript. It must
+                // remain inline for crawlers and is not governed by script-src.
+                .filter(
+                    (script) => !/\btype=["']application\/(?:ld\+)?json["']/i.test(script.attrs),
+                )
+        );
     }
 
     private async assertNoInlineScripts(pages: string[]): Promise<void> {

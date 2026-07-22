@@ -7,7 +7,10 @@ function makePost(title: string, url: string): Post {
     return {
         title,
         url,
+        canonicalUrl: `https://writing.gocanto.sh${url}`,
         date: { raw: "2026-01-01", display: "Jan 1, 2026", short: "Jan 01", year: "2026" },
+        modifiedAt: "2026-01-01",
+        image: "https://writing.gocanto.sh/og-image.png",
         readingTime: "5 min",
         description: "",
         tags: [],

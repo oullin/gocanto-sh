@@ -1,7 +1,7 @@
 ---
 title: "Gustavo Ocanto: Writing"
 titleTemplate: false
-description: "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge."
+description: "First-hand engineering field notes by Gustavo Ocanto on regulated systems, payments, banking modernisation, reliable delivery, and production AI."
 ---
 
 <!--

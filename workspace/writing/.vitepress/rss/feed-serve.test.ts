@@ -19,7 +19,10 @@ interface ResponseStub {
 const post: Post = {
     title: "A post",
     url: "/a-post",
+    canonicalUrl: "https://writing.gocanto.sh/a-post",
     date: { raw: "2026-07-18", display: "Jul 18, 2026", short: "Jul 18", year: "2026" },
+    modifiedAt: "2026-07-18",
+    image: "https://writing.gocanto.sh/og-image.png",
     readingTime: "1 min",
     description: "A post description.",
     tags: [],

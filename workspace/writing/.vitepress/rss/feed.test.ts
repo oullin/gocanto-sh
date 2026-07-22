@@ -11,12 +11,15 @@ function makePost(
     return {
         title,
         url,
+        canonicalUrl: `https://writing.gocanto.sh${url}`,
         date: {
             raw: date,
             display: date,
             short: date,
             year: date.slice(0, 4),
         },
+        modifiedAt: date,
+        image: "https://writing.gocanto.sh/og-image.png",
         readingTime: "1 min",
         description: "A post description.",
         tags: [],

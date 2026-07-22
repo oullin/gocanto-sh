@@ -93,3 +93,37 @@ describe("Posts.normalizeTags", () => {
         ).toEqual([]);
     });
 });
+
+describe("Posts.normalizeImage", () => {
+    it("uses the shared social card by default", () => {
+        expect(
+            Posts.normalizeImage(undefined),
+        ).toBe("https://writing.gocanto.sh/og-image.png");
+    });
+
+    it("resolves root-relative images against the writing origin", () => {
+        expect(
+            Posts.normalizeImage("/images/post.png"),
+        ).toBe(
+            "https://writing.gocanto.sh/images/post.png",
+        );
+    });
+});
+
+describe("Posts.assertNoTopLevelHeading", () => {
+    it("accepts body content that begins below the layout title", () => {
+        expect(() =>
+            Posts.assertNoTopLevelHeading("---\ntitle: Test\n---\nIntro\n\n## Detail", URL),
+        ).not.toThrow();
+    });
+
+    it("rejects a duplicate authored H1", () => {
+        expect(() => Posts.assertNoTopLevelHeading("# Duplicate", URL)).toThrow(
+            "Post /some-post contains a top-level heading",
+        );
+    });
+
+    it("ignores headings inside fenced code", () => {
+        expect(() => Posts.assertNoTopLevelHeading("```md\n# Example\n```", URL)).not.toThrow();
+    });
+});

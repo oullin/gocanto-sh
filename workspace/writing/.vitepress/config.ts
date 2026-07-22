@@ -1,11 +1,14 @@
 import { defineConfig } from "vitepress";
+import { join } from "node:path";
 
+import { WritingBundle } from "#writing/bundle";
 import { RssFeed } from "#writing/rss";
+import { WritingSeoHead } from "#writing/seo";
 
 const SITE_URL = "https://writing.gocanto.sh";
 
 const DESCRIPTION =
-    "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+    "First-hand engineering field notes by Gustavo Ocanto on regulated systems, payments, banking modernisation, reliable delivery, and production AI.";
 
 const rssFeed = new RssFeed({
     loadPosts: async () => {
@@ -61,14 +64,16 @@ export default defineConfig({
                 href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap",
             },
         ],
-        ["meta", { property: "og:type", content: "website" }],
-        ["meta", { property: "og:site_name", content: "Gustavo Ocanto: Writing" }],
-        ["meta", { property: "og:url", content: SITE_URL }],
-        ["meta", { property: "og:image", content: `${SITE_URL}/og-image.png` }],
-        ["meta", { name: "twitter:card", content: "summary_large_image" }],
-        ["meta", { name: "twitter:site", content: "@gocanto" }],
-        ["meta", { name: "twitter:creator", content: "@gocanto" }],
     ],
+
+    transformHead({ pageData, description }) {
+        return new WritingSeoHead({
+            relativePath: pageData.relativePath,
+            title: pageData.title,
+            description,
+            frontmatter: pageData.frontmatter,
+        }).build();
+    },
 
     themeConfig: {
         nav: [
@@ -120,6 +125,13 @@ export default defineConfig({
     },
 
     async buildEnd(siteConfig) {
-        await rssFeed.write(siteConfig.outDir);
+        const { default: loader } = await import("#writing/posts-data");
+
+        const posts = await loader.load();
+
+        await Promise.all([
+            rssFeed.write(siteConfig.outDir),
+            new WritingBundle(join(siteConfig.srcDir, "posts"), siteConfig.outDir).write(posts),
+        ]);
     },
 });
