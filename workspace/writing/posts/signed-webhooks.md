@@ -1,7 +1,7 @@
 ---
 title: Signed webhooks done right
 date: 2026-07-18
-description: 'Most webhook "security" is a shared secret and a prayer. Real signed webhooks are three parts: signature, timestamp window, idempotency. Everyone ships the first and forgets the other two.'
+description: 'Most webhook “security” is a shared secret and a prayer. Real signed webhooks are three parts: signature, timestamp window, idempotency. Everyone ships the first and forgets the other two. Code from sasu.sh, running on Cloudflare Workers.'
 tags: [webhooks, security, cloudflare, hmac]
 ---
 
@@ -24,10 +24,10 @@ two and three:
 Drop any one and you have a hole: forgery, replay, or double-charges. All three, or
 it's theatre.
 
-The code below is pulled from a production system running on Cloudflare Workers, a
-small `signed-http` primitive shared by an annotator client, a CLI bridge, and the
-server's webhook fanout. It uses the Web Crypto API (`crypto.subtle`), so it runs
-unchanged on Workers, Deno, Bun, and modern Node.
+The code below is pulled from [sasu.sh](https://sasu.sh), a production system I run on
+Cloudflare Workers: a small `signed-http` primitive shared by an annotator client, a CLI
+bridge, and the server's webhook fanout. It uses the Web Crypto API (`crypto.subtle`), so
+it runs unchanged on Workers, Deno, Bun, and modern Node.
 
 ## Part 1: Sign the body, not a token
 
@@ -216,7 +216,7 @@ trusts anyone who can guess a key. You need all three, or it's theatre.
 
 ---
 
-_This is drawn from the `signed-http` and crypto primitives in a Cloudflare Workers app
-I maintain. If you want the wider architecture around it: hash-chained event logs,
-dead-letter fanout, SSRF-checked delivery. That's a future post. Find me on
-[X (@gocanto)](https://x.com/gocanto)._
+_This is drawn from the `signed-http` and crypto primitives in
+[sasu.sh](https://sasu.sh), a Cloudflare Workers app I maintain. If you want the wider
+architecture around it: hash-chained event logs, dead-letter fanout, SSRF-checked
+delivery. That's a future post. Find me on [X (@gocanto)](https://x.com/gocanto)._
