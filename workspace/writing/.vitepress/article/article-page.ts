@@ -24,6 +24,9 @@ export class WritingArticlePage {
     /** Scroll distance, in pixels, before the back-to-top button is offered. */
     static readonly backToTopOffset = 400;
 
+    /** Scroll distance, in pixels, before the top bar lifts off the article. */
+    static readonly headerElevationOffset = 8;
+
     /**
      * The highest the activation line may sit, in pixels. It keeps the line clear
      * of the sticky header on short viewports.
@@ -97,6 +100,14 @@ export class WritingArticlePage {
     /** True once the reader is deep enough in the page to want the top button. */
     static showBackToTop(scrollTop: number): boolean {
         return scrollTop > WritingArticlePage.backToTopOffset;
+    }
+
+    /**
+     * True once the page has left the top, so the sticky bar can cast a shadow
+     * over the article it now overlaps.
+     */
+    static isElevated(scrollTop: number): boolean {
+        return scrollTop > WritingArticlePage.headerElevationOffset;
     }
 
     /**
