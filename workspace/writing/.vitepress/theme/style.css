@@ -1243,6 +1243,12 @@ body {
         gap: 16px;
         padding: 14px 20px;
     }
+    /* The sticky header's "All writing" link is the same destination, and on a
+       narrow screen it is always a thumb away, so the in-page back link is pure
+       duplication above the fold. */
+    .wr-back {
+        display: none;
+    }
     .wr-article-wrap,
     .wr-footer {
         padding-left: 20px;
