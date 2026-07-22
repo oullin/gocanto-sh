@@ -1,3 +1,5 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
+
 import { defineConfig } from "vitepress";
 import { join } from "node:path";
 
@@ -17,6 +19,14 @@ const rssFeed = new RssFeed({
         return loader.load();
     },
 });
+
+function serveRssFeed(request: IncomingMessage, response: ServerResponse, next: (err?: any) => void) {
+    void rssFeed.serve(request, response).then((handled) => {
+        if (!handled) {
+            next();
+        }
+    }, next);
+}
 
 export default defineConfig({
     lang: "en-US",
@@ -112,13 +122,7 @@ export default defineConfig({
                 name: "writing-rss",
                 enforce: "pre",
                 configureServer(server) {
-                    server.middlewares.use((request, response, next) => {
-                        void rssFeed.serve(request, response).then((handled) => {
-                            if (!handled) {
-                                next();
-                            }
-                        }, next);
-                    });
+                    server.middlewares.use(serveRssFeed);
                 },
             },
         ],
