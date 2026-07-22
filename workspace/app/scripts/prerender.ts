@@ -5,8 +5,7 @@ import { dirname, resolve } from "node:path";
 
 import { links, profile } from "@gocanto/store";
 import { PrerenderInjector } from "#app/lib/prerender-injector";
-import { AppPageRegistry } from "#app/lib/page-registry";
-import { AuthorityStructuredDataBuilder, PageMetadataInjector } from "#app/lib/page-metadata";
+import { PageMetadataInjector } from "#app/lib/page-metadata";
 import { StructuredDataBuilder } from "#app/lib/structured-data";
 
 const __dirname = dirname(
@@ -56,57 +55,31 @@ const { render } = (await import(ssrBundleUrl)) as {
 
 const template = await readFile(distIndex, "utf8");
 
-const rootStructuredData = new StructuredDataBuilder({ profile, links }).toScriptContents();
-const routes = AppPageRegistry.all();
+console.log("[prerender] rendering the profile route…");
 
-let renderedBytes = 0;
+const appHtml = await render();
 
-console.log(`[prerender] rendering ${routes.length + 1} routes…`);
+const completed = new PageMetadataInjector(new PrerenderInjector(template).inject(appHtml)).inject({
+    path: "/",
+    title: rootTitle,
+    description: rootDescription,
+    type: "profile",
+    image: "https://gocanto.sh/og-image.png",
+    structuredData: new StructuredDataBuilder({ profile, links }).toScriptContents(),
+});
 
-for (const route of [undefined, ...routes]) {
-    const path = route?.path ?? "/";
+await mkdir(
+    dirname(distIndex),
+    { recursive: true },
+);
 
-    const appHtml = await render(path);
+await writeFile(distIndex, completed);
 
-    const injected = new PrerenderInjector(template).inject(appHtml);
-
-    const metadata = route
-        ? {
-              path: route.path,
-              title: route.title,
-              description: route.description,
-              type: "website" as const,
-              image: "https://gocanto.sh/og-image.png",
-              structuredData: new AuthorityStructuredDataBuilder(route).toScriptContents(),
-          }
-        : {
-              path: "/",
-              title: rootTitle,
-              description: rootDescription,
-              type: "profile" as const,
-              image: "https://gocanto.sh/og-image.png",
-              structuredData: rootStructuredData,
-          };
-
-    const completed = new PageMetadataInjector(injected).inject(metadata);
-    const output = route ? resolve(appRoot, `dist/${route.path.slice(1)}.html`) : distIndex;
-
-    await mkdir(
-        dirname(output),
-        { recursive: true },
-    );
-
-    await writeFile(output, completed);
-
-    renderedBytes += appHtml.length;
-    console.log(`[prerender] ${path} -> ${output.replace(`${appRoot}/`, "")}`);
-}
+console.log(`[prerender] / -> ${distIndex.replace(`${appRoot}/`, "")}`);
 
 await rm(
     ssrOutDir,
     { recursive: true, force: true },
 );
 
-console.log(
-    `[prerender] completed ${routes.length + 1} routes (${renderedBytes} bytes of app HTML)`,
-);
+console.log(`[prerender] completed 1 route (${appHtml.length} bytes of app HTML)`);

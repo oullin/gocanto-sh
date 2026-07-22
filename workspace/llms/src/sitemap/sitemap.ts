@@ -6,13 +6,6 @@ import type {
     TalksFixture,
 } from "@gocanto/store";
 
-const HTML_PAGES = [
-    "resume",
-    "expertise/regulated-ai-systems",
-    "expertise/banking-core-modernisation",
-    "expertise/payment-systems",
-] as const;
-
 /** Groups the dated fixtures used to compute the sitemap last-modified value. */
 export type LastmodSources = {
     profile: ProfileFixture;
@@ -90,14 +83,7 @@ export class Sitemap {
      * @returns Complete sitemap XML contents.
      */
     public static render(siteUrl: string, lastmod: string): string {
-        const urls: Url[] = [
-            { loc: `${siteUrl}/`, priority: "1.0", changefreq: "monthly" },
-            ...HTML_PAGES.map((page) => ({
-                loc: `${siteUrl}/${page}`,
-                priority: page === "resume" ? "0.9" : "0.8",
-                changefreq: "monthly",
-            })),
-        ];
+        const urls: Url[] = [{ loc: `${siteUrl}/`, priority: "1.0", changefreq: "monthly" }];
 
         const body = urls
             .map(

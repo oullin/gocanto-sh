@@ -3,11 +3,8 @@ import { renderToString } from "@vue/server-renderer";
 
 import App from "#app/App.vue";
 
-export async function render(path = "/"): Promise<string> {
-    const app = createSSRApp(
-        App,
-        { path },
+export async function render(): Promise<string> {
+    return await renderToString(
+        createSSRApp(App),
     );
-
-    return await renderToString(app);
 }

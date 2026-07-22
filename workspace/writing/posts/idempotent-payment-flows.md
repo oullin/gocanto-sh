@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "A correctness model for payment retries: stable operation identities, explicit state transitions, signed webhooks, ambiguous provider outcomes, and ledger reconciliation."
 tags: [payments, idempotency, webhooks, ledgers]
-expertise: https://gocanto.sh/expertise/payment-systems
-expertiseLabel: payment systems architecture
 ---
 
 Payment software is designed for the second attempt.

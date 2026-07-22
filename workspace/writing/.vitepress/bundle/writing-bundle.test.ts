@@ -16,12 +16,12 @@ const post: Post = {
 };
 
 describe("WritingBundle.renderIndex", () => {
-    it("links the canonical article, raw markdown, author, and resume", () => {
+    it("links the canonical article, raw markdown, and author", () => {
         const output = WritingBundle.renderIndex([post]);
 
         expect(output).toContain("https://writing.gocanto.sh/signed-webhooks");
         expect(output).toContain("https://writing.gocanto.sh/signed-webhooks.md");
         expect(output).toContain("https://gocanto.sh/");
-        expect(output).toContain("https://gocanto.sh/resume");
+        expect(output).not.toContain("https://gocanto.sh/resume");
     });
 });

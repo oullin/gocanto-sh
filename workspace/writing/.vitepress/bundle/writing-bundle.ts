@@ -30,7 +30,6 @@ export class WritingBundle {
 ## Author
 
 - [Gustavo Ocanto](https://gocanto.sh/): Software Architect for Regulated Systems.
-- [Public resume](https://gocanto.sh/resume)
 
 ## Posts
 

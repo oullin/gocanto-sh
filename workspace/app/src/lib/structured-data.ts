@@ -1,5 +1,7 @@
 import type { LinkRecord, LinksFixture, ProfileFixture } from "@gocanto/store";
 
+import { PERSON_ID, SITE_URL } from "#app/lib/site";
+
 /** Store link names that identify Gustavo's external personal profiles. */
 export const SAME_AS_NAMES = ["x", "github", "linkedin", "youtube", "instagram"] as const;
 
@@ -58,9 +60,7 @@ type StructuredData = {
 
 /** Builds the site's schema.org identity graph from canonical store fixtures. */
 export class StructuredDataBuilder {
-    private static readonly SITE_URL = "https://gocanto.sh/";
-    private static readonly PERSON_ID = "https://gocanto.sh/#person";
-    private static readonly WEBSITE_ID = "https://gocanto.sh/#website";
+    private static readonly WEBSITE_ID = `${SITE_URL}#website`;
     private static readonly DESCRIPTION =
         "Singapore-based software architect and principal engineer with 20+ years building regulated systems across banking, payments, e-commerce, and production AI.";
     private static readonly KNOWS_ABOUT = [
@@ -93,11 +93,11 @@ export class StructuredDataBuilder {
             "@graph": [
                 {
                     "@type": "Person",
-                    "@id": StructuredDataBuilder.PERSON_ID,
+                    "@id": PERSON_ID,
                     name: profile.data.name,
                     alternateName: profile.data.nickname,
-                    url: StructuredDataBuilder.SITE_URL,
-                    image: `${StructuredDataBuilder.SITE_URL}avatar.jpg`,
+                    url: SITE_URL,
+                    image: `${SITE_URL}avatar.jpg`,
                     jobTitle: profile.data.profession,
                     email: profile.data.email,
                     description: StructuredDataBuilder.DESCRIPTION,
@@ -112,17 +112,17 @@ export class StructuredDataBuilder {
                 {
                     "@type": "WebSite",
                     "@id": StructuredDataBuilder.WEBSITE_ID,
-                    url: StructuredDataBuilder.SITE_URL,
+                    url: SITE_URL,
                     name: profile.data.name,
-                    publisher: { "@id": StructuredDataBuilder.PERSON_ID },
+                    publisher: { "@id": PERSON_ID },
                     inLanguage: "en-US",
                 },
                 {
                     "@type": "ProfilePage",
-                    "@id": `${StructuredDataBuilder.SITE_URL}#profile-page`,
-                    url: StructuredDataBuilder.SITE_URL,
+                    "@id": `${SITE_URL}#profile-page`,
+                    url: SITE_URL,
                     name: `${profile.data.name} — Software Architect for Regulated Systems`,
-                    mainEntity: { "@id": StructuredDataBuilder.PERSON_ID },
+                    mainEntity: { "@id": PERSON_ID },
                     ...(profile.data.updated_at ? { dateModified: profile.data.updated_at } : {}),
                 },
             ],

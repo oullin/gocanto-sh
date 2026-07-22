@@ -25,8 +25,6 @@ const columns: ReadonlyArray<{ heading: string; links: readonly FooterLink[] }> 
             { label: "Featured work", href: "#work" },
             { label: "Projects", href: "#projects" },
             { label: "About", href: "#about" },
-            { label: "Public resume", href: "/resume" },
-            { label: "Payment systems", href: "/expertise/payment-systems" },
         ],
     },
     {

@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "Practical design for Kafka and Go payment pipelines: partitioning, bounded concurrency, inbox/outbox guarantees, external side effects, DLQs, replay, and operational evidence."
 tags: [kafka, go, payments, event-driven]
-expertise: https://gocanto.sh/expertise/banking-core-modernisation
-expertiseLabel: event-driven banking modernisation
 ---
 
 Kafka can preserve a payment event perfectly and your system can still process it incorrectly.

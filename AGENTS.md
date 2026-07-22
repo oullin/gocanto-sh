@@ -19,7 +19,7 @@ Run repository-wide checks from the root. `pnpm test` (Turbo) is the canonical t
 | Lint | `pnpm lint` | Exit 0 |
 | Typecheck | `pnpm typecheck` | Exit 0 |
 | Tests | `pnpm test` | All tests pass |
-| Format only | `make format-code` | Exit 0 |
+| Format only | `make format-all` | Exit 0 |
 
 Use filters for package-scoped work, for example `pnpm --filter @gocanto/app test` or `pnpm --filter @gocanto/domain typecheck`.
 
@@ -31,8 +31,10 @@ Use filters for package-scoped work, for example `pnpm --filter @gocanto/app tes
 
 ## Traps
 
-- `make ui-format` requires Docker. `make format-code` formats only; `make format` additionally runs lint, typecheck, and tests.
-- `make ui-format` and `make ui-format-check` silently no-op in linked Git worktrees: the formatter container mounts only the checkout, while a worktree's `.git` file points outside it. Run formatter checks from a normal checkout or in CI.
+- All formatting and linting goes through the host `fmtkit` binary via `infra/scripts/fmtkit.sh`; never call oxlint or oxfmt directly. `make format` formats the current path, `make format-all` formats the repository, and `make lint` runs `fmtkit check` plus `fmtkit lint`. `make ui-format` is an alias of `make format-all`, and `make ui-format-check` adds a `git diff --exit-code` drift gate.
+- The formatter works in linked Git worktrees. `fmtkit.sh` resolves its target with `git rev-parse --show-toplevel`, which returns the worktree root, so `make format-all` formats the worktree it is run from.
+- There are two SEO guards and they are deliberately not shared: `workspace/app/scripts/seo-guard.ts` checks the single prerendered profile route, while `workspace/writing/.vitepress/scripts/seo-guard.ts` walks every built article and enforces article-only rules. Only the ~10-line `assertCount` helper is common. Extracting it would add a `@gocanto/domain` dependency to `@gocanto/writing`, which otherwise has no workspace dependencies, so the duplication is intentional.
+- `workspace/writing` build scripts run under plain `node` type stripping, not `tsx`, so they must use erasable syntax. `workspace/app` build scripts run under `tsx`.
 - Dev servers run behind portless, using a shared HTTPS proxy on port 1355 and setting up a local CA on first use. For a plain-port escape hatch, use `pnpm --filter @gocanto/app dev:app` on port 5173 or `pnpm --filter @gocanto/writing dev:site` on port 5175.
 - The llms build writes generated files into `workspace/app/dist`; do not treat those outputs as hand-authored source.
 - Vercel is authoritative for production. `gocanto.sh` and `writing.gocanto.sh` are separate Vercel projects; the GitHub Pages workflow is a secondary fallback/mirror build check. See the README deployment section before operating either target.

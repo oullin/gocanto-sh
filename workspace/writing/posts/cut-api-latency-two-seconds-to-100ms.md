@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "A measurement-first account of reducing a production API path from roughly two seconds to about 100 milliseconds through query profiling, bounded data access, caching, and SLOs."
 tags: [performance, sql, caching, slos]
-expertise: https://gocanto.sh/expertise/payment-systems
-expertiseLabel: high-stakes backend architecture
 ---
 
 The fastest optimization was deleting work the request never needed to do.

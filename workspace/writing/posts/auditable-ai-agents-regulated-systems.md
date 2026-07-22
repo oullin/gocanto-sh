@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "A production architecture for regulated AI agents: typed tools, least privilege, human approval, structured output, signed event logs, replay, and fail-closed delivery gates."
 tags: [ai-agents, audit, mcp, regulated-systems]
-expertise: https://gocanto.sh/expertise/regulated-ai-systems
-expertiseLabel: auditable AI systems
 ---
 
 An AI agent should not be trusted because its last answer looked sensible.
