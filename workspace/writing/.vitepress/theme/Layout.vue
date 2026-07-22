@@ -179,7 +179,7 @@ const year = new Date().getFullYear();
 
         <div v-if="isIndex" class="wr-index-shell">
             <aside class="wr-index-rail">
-                <a href="/" class="wr-rail-name">
+                <a href="https://gocanto.sh" class="wr-rail-name">
                     <span class="wr-avatar wr-rail-avatar" aria-hidden="true">
                         <img src="/avatar-128.jpg" alt="" width="46" height="46" decoding="async" />
                     </span>
@@ -325,15 +325,17 @@ const year = new Date().getFullYear();
             <div class="wr-shell">
                 <header class="wr-header">
                     <div class="wr-brand">
-                        <span class="wr-avatar" aria-hidden="true">
-                            <img
-                                src="/avatar-128.jpg"
-                                alt=""
-                                width="30"
-                                height="30"
-                                decoding="async"
-                            />
-                        </span>
+                        <a href="https://gocanto.sh" class="wr-brand-home" aria-label="gocanto.sh">
+                            <span class="wr-avatar" aria-hidden="true">
+                                <img
+                                    src="/avatar-128.jpg"
+                                    alt=""
+                                    width="30"
+                                    height="30"
+                                    decoding="async"
+                                />
+                            </span>
+                        </a>
                         <a href="/" class="wr-home">Home</a>
                     </div>
                     <div class="wr-search">
