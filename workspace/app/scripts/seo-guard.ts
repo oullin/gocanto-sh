@@ -38,7 +38,9 @@ class AppSeoGuard {
             throw new Error(`[seo-guard] ${path} does not self-canonicalize to ${canonical}`);
         }
 
-        if (/@gmail\.com|\+65\s*8292|>References?</i.test(html)) {
+        // Match the shape of a private contact detail rather than the literal value, so
+        // the guard never has to carry the number it exists to keep off the page.
+        if (/@gmail\.com|\+65[\s-]*\d{4}[\s-]*\d{4}|>References?</i.test(html)) {
             throw new Error(`[seo-guard] private CV contact or reference content found on ${path}`);
         }
 

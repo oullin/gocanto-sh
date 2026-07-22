@@ -1,43 +1,52 @@
 ---
-title: "Kafka and Go for payment pipelines: backpressure, ordering, and replay"
-date: 2026-07-22
+title: Exactly-once ends where Kafka does
+date: 2026-05-28
 updated: 2026-07-22
-description: "Practical design for Kafka and Go payment pipelines: partitioning, bounded concurrency, inbox/outbox guarantees, external side effects, DLQs, replay, and operational evidence."
+description: "Kafka and Go pipelines carrying ATM streams, account transactions, and cross-border payments. Partition keys, bounded consumers, inbox and outbox, and why the strongest guarantee in the broker stops at your first external call."
 tags: [kafka, go, payments, event-driven]
 ---
 
-Kafka can preserve a payment event perfectly and your system can still process it incorrectly.
+Kafka held every event perfectly. We processed several of them twice.
 
-The broker gives you durable ordered logs within a partition. It does not choose the right partition
-key, control an unbounded Go worker pool, make a database side effect atomic, or tell an operator
-whether replaying a dead-letter event is safe.
+That is the summary of a week I spent on a payments pipeline at Silverlake, consolidating
+three very different streams into one system: ATM telemetry, account transactions, and
+cross-border payments. The broker was not the problem at any point. The broker gave us
+durable, ordered logs and never once lost anything.
 
-I treat the pipeline as one end-to-end correctness boundary: producer transaction, partitioning,
-consumer concurrency, external effects, and recovery all have to agree.
+What it does not give you is a partition key, a bounded worker pool, an atomic database
+side effect, or an answer to whether replaying a dead-lettered payment is safe. Those are
+all yours, and every one of them is where the duplicates came from.
 
-## Partition by the invariant that needs ordering
+## Three streams, three different invariants
 
-Global ordering is expensive and usually unnecessary. What matters is ordering for the entity whose
-state transitions cannot cross.
+Global ordering is expensive and almost always unnecessary. What matters is ordering for
+the entity whose state transitions must not cross.
 
-For an account ledger, partition by account ID. For a payment lifecycle, partition by payment ID.
-For a wallet where balance checks span all operations, the wallet ID may be the correct key.
+The three streams did not agree on what that entity was. Account transactions partition by
+account ID. A payment lifecycle partitions by payment ID. ATM telemetry mostly does not care,
+until you want per-device sequencing for a fault, and then the device is the key.
 
-The key must be stable. Partitioning a payment by event type puts `authorised` and `captured` on
-different logs and makes arrival order a race. Random keys distribute load beautifully while
-destroying the invariant.
+The key has to be stable, and the failure mode when it is not is sneaky. Partition a payment
+by event type and `authorised` and `captured` land on different logs, which turns arrival
+order into a race that only shows up under load. Random keys distribute beautifully and
+destroy the invariant while looking healthy on every dashboard you own.
 
-Hot keys need an explicit answer. One merchant or settlement account can dominate a partition. Do
-not change the key casually; decide whether the domain can be split, whether the hot workflow needs
-its own topic, or whether serial processing is the correct price of consistency.
+Hot keys need an answer decided in advance. One settlement account or one busy merchant can
+dominate a partition, and the tempting fix is to change the key, which is the one thing you
+cannot casually do. The real options are narrower: split the domain, give the hot workflow
+its own topic, or accept that serial processing is the correct price of consistency for that
+entity. **Pick one deliberately, because the accidental version is "we changed the key and
+lost ordering in production."**
 
-## Bound concurrency in the consumer
+## A goroutine per message is a denial of service you wrote yourself
 
-The easiest Go consumer to write starts a goroutine for every message. Under normal load it looks
-fast. During a downstream slowdown it converts Kafka lag into memory pressure, database contention,
-and thousands of requests waiting on the same dependency.
+The easiest Go consumer to write starts a goroutine per message. Under normal load it looks
+excellent. It looks excellent right up until something downstream slows down, and then it
+converts Kafka lag, which is a queue the broker is happily managing for you, into memory
+pressure, database contention, and several thousand requests piled onto the dependency that
+was already struggling.
 
-Use a bounded worker model and pause consumption when the local queue is full.
+Bound the workers and stop consuming when the local queue is full:
 
 ```go
 jobs := make(chan Message, workerCount*2)
@@ -55,68 +64,93 @@ for message := range consumer.Messages() {
 }
 ```
 
-The real implementation must retain partition ordering: either assign one serial worker per active
-partition or coordinate offsets so a later message cannot commit past a failed earlier one.
+That sketch is not sufficient on its own, and the missing part is the one people skip:
+partition ordering. Either assign one serial worker per active partition, or coordinate
+offsets so a later message cannot commit past an earlier one that failed. A pool that
+processes freely across partitions has quietly given up the guarantee you chose your
+partition key to get.
 
-Concurrency is a capacity decision. Set it from downstream limits and measured service time, then
-watch saturation and lag instead of assuming more workers mean more throughput.
+Concurrency is a capacity decision, not a knob. Set it from measured downstream limits and
+service time, then watch saturation and lag. More workers stop meaning more throughput at
+the exact moment it matters most.
 
-## Exactly-once ends at the external boundary
+## Exactly-once ends where Kafka does
 
-Kafka transactions can atomically consume records and produce records within Kafka. They do not
-atomically charge a provider, update an ordinary database, or send an email.
+Kafka transactions genuinely give you exactly-once, and the scope of that promise is
+precise: consume records and produce records, within Kafka.
 
-For database-backed services, use inbox and outbox records:
+They do not atomically charge a provider. They do not atomically update an ordinary
+database. They do not unsend an email. The moment your handler touches anything outside the
+cluster, you are back to at-least-once and it is your job to make the effect idempotent.
+
+For database-backed services, that means an inbox and an outbox:
 
 1. insert the consumed event ID into an inbox table;
 2. apply the domain change;
 3. insert resulting events into an outbox;
 4. commit all three in one database transaction;
-5. publish the outbox separately and mark it delivered.
+5. publish the outbox separately, then mark it delivered.
 
-A unique constraint on the inbox event ID makes redelivery harmless. The outbox publisher may send
-an event twice if it crashes after publishing but before marking it delivered, so downstream
-consumers still deduplicate.
+A unique constraint on the inbox event ID makes redelivery harmless, which is the whole
+point. And note step five is deliberately not in the transaction: the publisher can crash
+after publishing and before marking, so it will sometimes send an event twice, and
+downstream consumers still have to deduplicate. That is not a flaw in the pattern. It is the
+pattern being honest about where the boundary is.
 
-External payment calls need their own idempotency identity. “Kafka exactly-once” is not permission
-to omit provider idempotency keys.
+External payment calls need their own idempotency identity on top of all of this. "We have
+Kafka exactly-once" is not permission to omit a provider idempotency key, and the failure it
+produces is a duplicate charge rather than a duplicate row.
 
-## Dead letters need replay semantics
+## Dead letters nobody can replay are just a slower delete
 
-A DLQ is useful only if the event carries enough context to diagnose and safely retry:
+A DLQ is only useful if the event carries enough context to diagnose the failure and decide
+whether retrying is safe. Ours had to carry:
 
-- original topic, partition, offset, and event ID;
-- schema version and correlation ID;
-- named failure class and redacted error detail;
-- attempt count and first/last failure time;
-- handler version that rejected it.
+| Field | Because |
+| --- | --- |
+| Original topic, partition, offset, event ID | You need to find it again, and prove which one you replayed |
+| Schema version and correlation ID | The handler that failed may not be the handler that runs next |
+| Named failure class and redacted error | "Failed" is not triage |
+| Attempt count, first and last failure time | Distinguishes a blip from a fortnight |
+| Handler version that rejected it | The code has moved since |
 
-Separate transient exhaustion from permanent invalid data. Replaying malformed events into the same
-consumer without a code or data change creates an expensive loop.
+Transient exhaustion and permanently invalid data are different things and must not share a
+retry path. Replaying malformed events into an unchanged consumer is an expensive loop with
+a dashboard.
 
-The replay tool should support one event, a bounded set, and a dry-run validation. It should write a
-new audit event showing who replayed what and why. Recovery is a production mutation and deserves
-the same controls as the original flow.
+The replay tool supports one event, a bounded set, and a dry run, and it writes a new audit
+event recording who replayed what and why. Recovery is a production mutation. It deserves
+the controls the original flow has, not a shell script and a Slack message.
 
-## Operate the whole path
+## What we actually watched
 
-Consumer lag alone does not explain pipeline health. Track:
+Consumer lag alone does not describe pipeline health, and lag alarms train people to ignore
+alarms. What we tracked instead: arrival and completion rate by event type, age of the
+oldest unprocessed event, processing duration versus downstream wait, retry and DLQ rate by
+named failure, inbox deduplication count, outbox age and publish attempts, and reconciliation
+differences at the payment and ledger boundary.
 
-- arrival and completion rate by event type;
-- oldest unprocessed event age;
-- processing duration and downstream wait time;
-- retry and DLQ rate by named failure;
-- inbox deduplication count;
-- outbox age and publish attempts;
-- reconciliation differences at the payment or ledger boundary.
+Alerts were written to represent customer or settlement risk, not queue depth. A small lag on
+a quiet audit topic is not the same incident as a growing capture backlog forty minutes
+before a settlement cutoff, and an alert that cannot tell those apart will be muted by the
+second week.
 
-Alerts should represent customer or settlement risk. A small lag on a quiet audit topic is not the
-same incident as a growing capture backlog before a settlement cutoff.
+## Replay is the test of the whole design
 
-## Replay is the test of the architecture
+The pipeline became trustworthy on the day we could stop it, fix a defect, replay a bounded
+window, and then prove that no payment and no ledger entry had been duplicated.
 
-The pipeline is trustworthy when a team can stop it, repair a defect, replay a bounded window, and
-prove that no payment or ledger effect was duplicated.
+Not argue it. Prove it, from the inbox deduplication counts and the reconciliation report.
 
-Kafka and Go provide excellent primitives for that system. The guarantee comes from how partition
-keys, concurrency, transaction boundaries, idempotency, and operator tooling fit together.
+Kafka and Go are excellent primitives for this, and neither one gives you the guarantee. It
+comes from how partition keys, bounded concurrency, transaction boundaries, external
+idempotency, and operator tooling agree with each other. Any one of them disagreeing is a
+duplicate charge with a long incubation period.
+
+---
+
+_The idempotency half of this is in [designing idempotent payment
+flows](/idempotent-payment-flows), and the verification half is in
+[signed webhooks](/signed-webhooks). I run [Oullin](https://oullin.io), where event pipelines
+in regulated environments are a good chunk of the work. Find me on
+[X (@gocanto)](https://x.com/gocanto)._
