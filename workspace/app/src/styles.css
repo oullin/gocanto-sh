@@ -30,11 +30,6 @@
 }
 
 /* Recent writing cards linking out to writing.gocanto.sh. */
-.recent-writing {
-    padding-top: 64px;
-    padding-bottom: 72px;
-}
-
 .recent-writing .section-heading > a {
     color: var(--cyan);
     font-size: 13px;
@@ -2316,8 +2311,12 @@ button.explore-card:focus-visible {
     .pillars,
     .work-grid,
     .rec-grid,
-    .explore-grid {
+    .explore-grid,
+    .recent-writing__grid {
         grid-template-columns: 1fr;
+    }
+    .recent-writing__grid > a {
+        min-height: 0;
     }
     .guides-grid {
         grid-template-columns: 1fr;
