@@ -1,115 +1,157 @@
 ---
-title: How to modernise an AS/400 banking core without replacing it
-date: 2026-07-22
+title: The AS/400 was not the problem
+date: 2026-05-14
 updated: 2026-07-22
-description: "A low-risk pattern for modernising an AS/400 banking core with a Go boundary, explicit resilience controls, observable traffic, reconciliation, and reversible cutovers."
+description: "Modernising a VCOS banking core on AS/400 without replacing it: a Go reverse proxy and multi-protocol ingress, ambiguity as a first-class state, and a monitoring console built before any traffic moved."
 tags: [as400, banking, go, modernisation]
 ---
 
-A banking core can be old and still be correct.
+The first thing I shipped at a bank running a decades-old core was a dashboard.
 
-That distinction matters. The AS/400 or VCOS application in the middle of a bank may contain
-decades of tested posting rules, end-of-day behaviour, product exceptions, and operational
-knowledge. Replacing it because the interface is difficult confuses an integration problem with a
-domain problem.
+Not a service, not a migration, not the Go layer everyone was waiting for. A console
+showing ATM low-level processes, CPU and daemon health, core configuration snapshots, and
+the state of every channel and host interface. It felt like a detour for about a week, and
+then it was the only reason anyone could agree on what to do next.
 
-I have had better results modernising the surface first: put a controlled boundary around the
-core, make every interaction observable, and move capabilities a slice at a time. The core keeps
-doing what it already does well while new systems get contracts they can safely build against.
+This was Silverlake, on a VCOS core: C and AS/400, wired into a bank's daily reality. The
+brief was modernisation. The thing worth writing down is what we did not do, which was
+replace it.
 
-## Start with the boundary, not the rewrite
+## The core was old and it was correct
 
-The modern layer is not a thin HTTP translation. It owns the concerns the legacy core was never
-designed to provide to web, mobile, and event-driven consumers:
+A banking core can be thirty years old and still be the most reliable component in the
+building.
 
-- authentication and authorisation;
-- request validation and stable domain contracts;
-- rate limits, timeouts, and circuit breakers;
-- caching where the business semantics allow it;
-- correlation IDs and an audit record for every call;
-- protocol adaptation across HTTP, queues, streams, and native core interfaces.
+The VCOS application in the middle of that bank held decades of posting rules, end-of-day
+behaviour, product exceptions, and operational knowledge that existed nowhere else in
+writing. Nobody could tell you every rule. The system could, and it had been right about
+them for longer than most of the team had been working.
 
-Go is a good fit for this layer because the concurrency model is explicit, the deployment artifact
-is small, and the standard library is enough for most network work. More important than the
-language is the rule that the boundary owns one vocabulary. Callers should not need to know whether
-a balance came from DB2/400, a C service, or a Kafka-backed read model.
+The instinct to replace it comes from the interface, not the domain. It is hard to
+integrate with, so it feels obsolete. Those are different problems, and confusing them is
+how a two-year rewrite starts.
+
+**The core did not need replacing. It needed a boundary.**
+
+## The boundary is the product, not a translation layer
+
+The modern layer is not thin. If it is thin, you have built an HTTP wrapper around your
+problems and moved them into a nicer language.
+
+It owns everything the core was never designed to give web, mobile, and event-driven
+consumers: authentication and authorisation, request validation, stable domain contracts,
+rate limits, timeouts, circuit breakers, caching where the business semantics allow it,
+correlation IDs and an audit record for every call, and protocol adaptation across HTTP,
+Kafka, Redis Streams, and RabbitMQ, because different parts of the bank arrived over
+different transports and none of them were going to change for us.
+
+I wrote it in Go. The concurrency model is explicit, the deployment artifact is small, and
+the standard library covers most network work without an argument about frameworks. But the
+language was the least important decision. The rule that mattered was that the boundary owns
+one vocabulary:
 
 ```go
 type AccountCore interface {
     Balance(ctx context.Context, accountID AccountID) (Money, error)
     Post(ctx context.Context, command PostingCommand) (PostingResult, error)
 }
-
-type AccountService struct {
-    core    AccountCore
-    audit   AuditWriter
-    breaker CircuitBreaker
-}
 ```
 
-That interface is deliberately boring. The difficult details stay in adapters; the domain service
-gets stable types and named failures.
+Deliberately boring. A caller should never need to know whether a balance came from
+DB2/400, a C service, or a read model rebuilt off Kafka. The difficult details live in
+adapters. The domain service gets stable types and named failures, and that is the entire
+trick.
 
-## Make failure behaviour part of the contract
+## "Unknown" is a state, and it belongs in the type
 
-Legacy integrations often fail ambiguously. A socket can close after the core committed a posting
-but before the caller received the response. Retrying blindly can duplicate money movement;
-returning a generic error leaves the operation unresolved.
+Legacy integrations fail ambiguously, and ambiguity is where money goes missing.
 
-Every mutating command therefore needs a stable operation identity. The boundary records the
-request before calling the core and resolves retries against that identity. Outcomes are not only
-“success” and “failure”; they include “unknown, reconcile before retry.”
+A socket can close after the core has committed a posting and before your caller sees the
+response. Retry blindly and you have moved the money twice. Return a generic error and the
+operation sits unresolved while a customer looks at a balance that is wrong in a way nobody
+can explain.
 
-Timeouts must also be budgets, not defaults copied across services. If a request has two seconds
-remaining, an adapter cannot spend five seconds in its own retry loop. Pass the deadline down and
-reserve time for a controlled response.
+So every mutating command carries a stable operation identity, recorded before the call, and
+retries resolve against that identity rather than against hope. Outcomes are not success and
+failure. They are success, failure, and **unknown: reconcile before retrying**, which is a
+real state with real handling and not a comment next to an enum.
 
-Circuit breakers protect the core from synchronized retry storms, but opening a breaker is not the
-end of the design. The response must tell callers whether to retry, queue, or stop, and operations
-must know which dependency tripped it.
+Timeouts got the same treatment. A timeout is a budget, not a default copied between
+services. If a request has two seconds left, an adapter cannot spend five in its own retry
+loop, so the deadline is passed down and time is reserved for a controlled answer instead of
+a truncated one.
 
-## Observe before moving traffic
+Circuit breakers protect the core from synchronised retry storms, but tripping is the easy
+part. The response has to tell the caller whether to retry, queue, or stop, and operations
+has to know which dependency opened it. A breaker that only protects the core has moved the
+outage rather than contained it.
 
-The safest migration begins by learning what production actually does.
+## Which brings us back to the dashboard
 
-Mirror reads through the new boundary and compare them with the established path. Record latency,
-result differences, error classifications, and calls the new contract cannot yet express. For
-writes, start with audit-only observation or a controlled subset where reconciliation is already
-strong.
+You cannot decide whether a cutover is safe from a design document.
 
-The dashboard I want before cutover includes:
+Before any traffic moved, reads were mirrored through the new boundary and compared against
+the established path. Latency, result differences, error classifications, and the calls the
+new contract could not yet express, all recorded. Writes started as audit-only observation,
+then a bounded subset where reconciliation was already strong enough to catch us.
 
-- request volume and latency by operation;
-- core response codes translated into named domain errors;
-- circuit state, timeout rate, and retry count;
-- mismatches between old and new read paths;
-- unresolved operations waiting for reconciliation;
-- lag and failure rates for every downstream event consumer.
+What had to be on the screen before anyone would sign off:
 
-This is not monitoring added after delivery. It is the evidence used to decide whether the next
-traffic step is safe.
+| Signal | Answers |
+| --- | --- |
+| Volume and latency by operation | Is the boundary carrying what we think it is |
+| Core response codes mapped to named domain errors | Do we understand the failures yet |
+| Circuit state, timeout rate, retry count | Are we protecting the core or hammering it |
+| Old versus new read mismatches | Is the new path actually equivalent |
+| Unresolved operations awaiting reconciliation | How much ambiguity are we carrying |
+| Consumer lag and failure by downstream | Who breaks when we move |
 
-## Move one capability at a time
+That is not monitoring bolted on after delivery. It is the evidence used to decide whether
+the next step is allowed. The console ended up a Vue and TypeScript real-time system with a
+tree-based exploration model and a widget SDK, and moving it to Vite cut roughly 30% of our
+CI minutes as a side effect. Useful, but not the point. The point was that "is it safe to
+move ATM traffic" became a question with an answer.
 
-A practical sequence looks like this:
+## One capability at a time, with a route back
 
-1. Inventory operations and define the modern contract.
+The sequence we actually ran, with a five-engineer squad, over months rather than weeks:
+
+1. Inventory the operations and define the modern contract.
 2. Put read-only traffic through the boundary.
-3. Shadow and compare high-value reads.
+3. Shadow and compare the high-value reads.
 4. Introduce idempotent writes for one bounded workflow.
 5. Publish durable events from confirmed core outcomes.
-6. Move consumers gradually behind feature flags.
+6. Move consumers gradually, behind feature flags.
 7. Retire the old path only after a full reconciliation window.
 
-Every step needs an explicit rollback trigger and a route back. “We can redeploy the old version” is
-not enough if schemas, events, or downstream state have already moved.
+Every step needed an explicit rollback trigger agreed in advance, and an actual route back.
+"We can redeploy the old version" stops being true the moment schemas, events, or downstream
+state have moved, and the honest time to discover that is while writing the step, not during
+it.
 
-## Modernisation is successful when the core becomes uninteresting
+Docker multi-stage releases with automated rollout and rollback made the mechanics boring
+enough that reverting was a decision rather than an incident.
 
-The goal is not to hide the AS/400 and declare victory. It is to make the core one well-behaved
-dependency among others: bounded by contracts, protected from load, visible to operators, and
-replaceable capability by capability if the business later chooses.
+## Modernisation worked when the core got boring
 
-That approach is slower to describe than “rewrite it,” but much faster to operate safely. The
-valuable part of the old system survives while every new integration gets the modern guarantees it
-actually needs.
+The goal was never to hide the AS/400 and declare a transformation.
+
+It was to make it one well-behaved dependency among others: bounded by contracts, protected
+from load, visible to operators, and replaceable capability by capability if the bank ever
+decides that is worth doing. Nobody needed to know it was there, and nobody needed to
+pretend it was not.
+
+That is slower to describe than "rewrite it" and much faster to operate safely. The valuable
+part of the old system survives, every new integration gets modern guarantees, and the
+rewrite conversation becomes optional rather than existential.
+
+The part I would press on anyone starting this: build the dashboard first. Not because
+observability is a virtue, but because every argument you are about to have is really an
+argument about what production is doing, and only one of you will have the numbers.
+
+---
+
+_Related: [the two seconds nobody asked for](/cut-api-latency-two-seconds-to-100ms) on the
+measurement half of this, and [signed webhooks](/signed-webhooks) on the boundary half. I run
+[Oullin](https://oullin.io), where legacy modernisation in regulated environments is a large
+part of the work. Find me on [X (@gocanto)](https://x.com/gocanto)._
