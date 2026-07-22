@@ -349,7 +349,6 @@ const year = new Date().getFullYear();
                 </header>
 
                 <main class="wr-article-wrap">
-                    <a href="/" class="wr-back">← All writing</a>
                     <div class="wr-article-grid">
                         <article class="wr-article">
                             <header class="wr-article__head">
