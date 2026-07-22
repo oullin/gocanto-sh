@@ -36,7 +36,7 @@ export class HtmlSanitizer {
      * @returns Text with HTML entities decoded.
      */
     public static decodeEntities(value: string): string {
-        HtmlSanitizer.decodeContainer.innerHTML = value;
+        HtmlSanitizer.decodeContainer.innerHTML = HtmlSanitizer.sanitize(value);
 
         return HtmlSanitizer.decodeContainer.value;
     }
