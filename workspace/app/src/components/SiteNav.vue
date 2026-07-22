@@ -18,6 +18,7 @@ const navItems = [
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
     { href: "https://writing.gocanto.sh/", label: "Writing" },
+    { href: "/resume", label: "Resume" },
     { href: "#testimonials", label: "Testimonials" },
     { href: "#bio", label: "Bio" },
     { href: "#skills", label: "Skills" },
@@ -40,7 +41,7 @@ onBeforeUnmount(() => {
 <template>
     <header class="nav" :class="{ 'is-scrolled': scrolled }">
         <div class="nav-inner">
-            <a href="#" class="nav-brand" aria-label="gocanto home">
+            <a href="/" class="nav-brand" aria-label="gocanto home">
                 <span class="logo logo--mark" aria-hidden="true">
                     <img
                         src="/avatar-128.jpg"

@@ -1,24 +1,21 @@
 import type {
     ExperienceFixture,
     ProjectsFixture,
+    ProfileFixture,
     RecommendationsFixture,
     TalksFixture,
 } from "@gocanto/store";
 
-const MD_PAGES = [
-    "index.md",
-    "profile.md",
-    "bio.md",
-    "experience.md",
-    "projects.md",
-    "education.md",
-    "talks.md",
-    "recommendations.md",
-    "links.md",
+const HTML_PAGES = [
+    "resume",
+    "expertise/regulated-ai-systems",
+    "expertise/banking-core-modernisation",
+    "expertise/payment-systems",
 ] as const;
 
 /** Groups the dated fixtures used to compute the sitemap last-modified value. */
 export type LastmodSources = {
+    profile: ProfileFixture;
     projects: ProjectsFixture;
     experience: ExperienceFixture;
     recommendations: RecommendationsFixture;
@@ -43,6 +40,18 @@ export class Sitemap {
      */
     public static lastmod(sources: LastmodSources): string {
         const candidates: string[] = [];
+
+        const profileUpdatedAt = Sitemap.isoDate(sources.profile.data.updated_at ?? "");
+
+        if (profileUpdatedAt) {
+            candidates.push(profileUpdatedAt);
+        }
+
+        const experienceUpdatedAt = Sitemap.isoDate(sources.experience.updated_at ?? "");
+
+        if (experienceUpdatedAt) {
+            candidates.push(experienceUpdatedAt);
+        }
 
         for (const project of sources.projects.data) {
             const iso = Sitemap.isoDate(project.published_at);
@@ -83,12 +92,11 @@ export class Sitemap {
     public static render(siteUrl: string, lastmod: string): string {
         const urls: Url[] = [
             { loc: `${siteUrl}/`, priority: "1.0", changefreq: "monthly" },
-            ...MD_PAGES.map((page) => ({
+            ...HTML_PAGES.map((page) => ({
                 loc: `${siteUrl}/${page}`,
-                priority: "0.7",
+                priority: page === "resume" ? "0.9" : "0.8",
                 changefreq: "monthly",
             })),
-            { loc: `${siteUrl}/llms.txt`, priority: "0.5", changefreq: "monthly" },
         ];
 
         const body = urls

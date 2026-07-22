@@ -38,9 +38,22 @@ type WebsiteStructuredData = {
     readonly inLanguage: string;
 };
 
+type ProfilePageStructuredData = {
+    readonly "@type": "ProfilePage";
+    readonly "@id": string;
+    readonly url: string;
+    readonly name: string;
+    readonly mainEntity: { readonly "@id": string };
+    readonly dateModified?: string;
+};
+
 type StructuredData = {
     readonly "@context": "https://schema.org";
-    readonly "@graph": readonly [PersonStructuredData, WebsiteStructuredData];
+    readonly "@graph": readonly [
+        PersonStructuredData,
+        WebsiteStructuredData,
+        ProfilePageStructuredData,
+    ];
 };
 
 /** Builds the site's schema.org identity graph from canonical store fixtures. */
@@ -49,7 +62,7 @@ export class StructuredDataBuilder {
     private static readonly PERSON_ID = "https://gocanto.sh/#person";
     private static readonly WEBSITE_ID = "https://gocanto.sh/#website";
     private static readonly DESCRIPTION =
-        "Hands-on software architect with 20 years building regulated backends: payments, banking cores, Kafka pipelines, AS/400 modernisation. Now architecting AI-agentic systems in Go.";
+        "Singapore-based software architect and principal engineer with 20+ years building regulated systems across banking, payments, e-commerce, and production AI.";
     private static readonly KNOWS_ABOUT = [
         "Software Architecture",
         "AI-Agentic Systems",
@@ -103,6 +116,14 @@ export class StructuredDataBuilder {
                     name: profile.data.name,
                     publisher: { "@id": StructuredDataBuilder.PERSON_ID },
                     inLanguage: "en-US",
+                },
+                {
+                    "@type": "ProfilePage",
+                    "@id": `${StructuredDataBuilder.SITE_URL}#profile-page`,
+                    url: StructuredDataBuilder.SITE_URL,
+                    name: `${profile.data.name} — Software Architect for Regulated Systems`,
+                    mainEntity: { "@id": StructuredDataBuilder.PERSON_ID },
+                    ...(profile.data.updated_at ? { dateModified: profile.data.updated_at } : {}),
                 },
             ],
         };
