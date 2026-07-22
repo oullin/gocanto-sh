@@ -118,6 +118,7 @@ describe("useAsyncInView", () => {
         );
 
         const state = computed(() => controller.state);
+
         const errorState = computed(() => controller.error.value);
 
         expect(state.value).toBe("idle");

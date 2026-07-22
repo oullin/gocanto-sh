@@ -57,17 +57,19 @@ class DistAssembler {
             { recursive: true },
         );
 
-        await Promise.all(DistAssembler.sites.map(async (site) => {
-            await cp(
-                join(this.root, site.source),
-                join(this.outDir, site.mount),
-                {
-                    recursive: true,
-                },
-            );
+        await Promise.all(
+            DistAssembler.sites.map(async (site) => {
+                await cp(
+                    join(this.root, site.source),
+                    join(this.outDir, site.mount),
+                    {
+                        recursive: true,
+                    },
+                );
 
-            console.log(`assembled ${site.name} -> dist/${site.mount}`);
-        }));
+                console.log(`assembled ${site.name} -> dist/${site.mount}`);
+            }),
+        );
 
         await this.assertRootIsEmpty();
     }

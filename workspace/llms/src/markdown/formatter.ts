@@ -243,9 +243,11 @@ export class FixtureMarkdown {
         if (typeof project === "string") {
             return `- ${project}`;
         }
+
         if (project.url) {
             return `- [${project.title}](${project.url})`;
         }
+
         return `- ${project.title}`;
     }
 

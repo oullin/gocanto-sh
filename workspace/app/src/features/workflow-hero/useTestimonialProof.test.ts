@@ -11,40 +11,40 @@ vi.mock("@gocanto/store/recommendations", () => {
                     uuid: "1",
                     created_at: "2024-01-05",
                     text: "Great work!",
-                    person: { full_name: "Alice", avatar: "/alice.jpg" }
+                    person: { full_name: "Alice", avatar: "/alice.jpg" },
                 },
                 {
                     uuid: "2",
                     created_at: "2024-01-04",
                     text: "Awesome!",
-                    person: { full_name: "Bob", avatar: "/bob.jpg" }
+                    person: { full_name: "Bob", avatar: "/bob.jpg" },
                 },
                 {
                     uuid: "1", // Duplicate
                     created_at: "2024-01-05",
                     text: "Great work!",
-                    person: { full_name: "Alice", avatar: "/alice.jpg" }
+                    person: { full_name: "Alice", avatar: "/alice.jpg" },
                 },
                 {
                     uuid: "3",
                     created_at: "2024-01-06",
                     text: "Fantastic!",
-                    person: { full_name: "Charlie", avatar: "/charlie.jpg" }
+                    person: { full_name: "Charlie", avatar: "/charlie.jpg" },
                 },
                 {
                     uuid: "4",
                     created_at: "2024-01-02",
                     text: "Nice job!",
-                    person: { full_name: "Dave", avatar: "/dave.jpg" }
+                    person: { full_name: "Dave", avatar: "/dave.jpg" },
                 },
                 {
                     uuid: "5",
                     created_at: "2024-01-01",
                     text: "Superb!",
-                    person: { full_name: "Eve", avatar: "/eve.jpg" }
-                }
-            ]
-        }
+                    person: { full_name: "Eve", avatar: "/eve.jpg" },
+                },
+            ],
+        },
     };
 });
 
@@ -55,7 +55,7 @@ describe("useTestimonialProof", () => {
             template: "<div></div>",
             setup() {
                 return useTestimonialProof();
-            }
+            },
         };
 
         const wrapper = mount(Component);
@@ -75,9 +75,9 @@ describe("useTestimonialProof", () => {
         // Should slice to first 4
         expect(wrapper.vm.proofAvatars).toEqual([
             { src: AVATAR_BASE_URL + "/charlie.jpg", alt: "Charlie" }, // 2024-01-06
-            { src: AVATAR_BASE_URL + "/alice.jpg", alt: "Alice" },     // 2024-01-05
-            { src: AVATAR_BASE_URL + "/bob.jpg", alt: "Bob" },         // 2024-01-04
-            { src: AVATAR_BASE_URL + "/dave.jpg", alt: "Dave" },       // 2024-01-02
+            { src: AVATAR_BASE_URL + "/alice.jpg", alt: "Alice" }, // 2024-01-05
+            { src: AVATAR_BASE_URL + "/bob.jpg", alt: "Bob" }, // 2024-01-04
+            { src: AVATAR_BASE_URL + "/dave.jpg", alt: "Dave" }, // 2024-01-02
         ]);
     });
 });
