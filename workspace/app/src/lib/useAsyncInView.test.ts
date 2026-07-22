@@ -107,6 +107,35 @@ describe("useAsyncInView", () => {
         expect(state.value).toBe("ready");
     });
 
+    it("tracks controller state reactively across a failed load", async () => {
+        let rejectLoader!: (reason: any) => void;
+
+        const controller = new AsyncInViewController(
+            () =>
+                new Promise<string>((_, reject) => {
+                    rejectLoader = reject;
+                }),
+        );
+
+        const state = computed(() => controller.state);
+        const errorState = computed(() => controller.error.value);
+
+        expect(state.value).toBe("idle");
+        expect(errorState.value).toBe(false);
+
+        const load = controller.load();
+
+        expect(state.value).toBe("loading");
+        expect(errorState.value).toBe(false);
+
+        rejectLoader(new Error("failed"));
+
+        await load;
+
+        expect(state.value).toBe("error");
+        expect(errorState.value).toBe(true);
+    });
+
     it("does not resolve before intersection", async () => {
         const loader = vi.fn(async () => "loaded");
         const harness = new AsyncInViewTestHarness(loader);
