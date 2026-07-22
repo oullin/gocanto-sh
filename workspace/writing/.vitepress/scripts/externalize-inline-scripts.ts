@@ -53,11 +53,10 @@ class InlineScriptExternalizer {
             throw new Error(`no HTML found in ${this.distDir}. Run the VitePress build first.`);
         }
 
-        let extracted = 0;
-
-        for (const page of pages) {
-            extracted += await this.rewritePage(page);
-        }
+        const counts = await Promise.all(
+            pages.map(page => this.rewritePage(page))
+        );
+        const extracted = counts.reduce((acc, count) => acc + count, 0);
 
         await this.assertNoInlineScripts(pages);
 
@@ -72,17 +71,26 @@ class InlineScriptExternalizer {
         let html = original;
         let count = 0;
 
-        for (const script of InlineScriptExternalizer.inlineScripts(original)) {
-            // force-dark only ever adds a class; setting it on the element is
-            // equivalent and saves a render-blocking request before first paint.
-            if (script.body.trim() === FORCE_DARK) {
+        const scripts = InlineScriptExternalizer.inlineScripts(original);
+
+        const replacements = await Promise.all(
+            scripts.map(async (script) => {
+                // force-dark only ever adds a class; setting it on the element is
+                // equivalent and saves a render-blocking request before first paint.
+                if (script.body.trim() === FORCE_DARK) {
+                    return { script, isDark: true, name: "" };
+                }
+                const name = await this.writeAsset(script.body);
+                return { script, isDark: false, name };
+            })
+        );
+
+        for (const { script, isDark, name } of replacements) {
+            if (isDark) {
                 html = InlineScriptExternalizer.markDark(html).replace(script.tag, "");
                 count += 1;
-
                 continue;
             }
-
-            const name = await this.writeAsset(script.body);
 
             html = html.replace(
                 script.tag,
@@ -143,18 +151,20 @@ class InlineScriptExternalizer {
     }
 
     private async assertNoInlineScripts(pages: string[]): Promise<void> {
-        for (const page of pages) {
-            const html = await readFile(page, "utf8");
+        await Promise.all(
+            pages.map(async (page) => {
+                const html = await readFile(page, "utf8");
 
-            const leftover = InlineScriptExternalizer.inlineScripts(html);
+                const leftover = InlineScriptExternalizer.inlineScripts(html);
 
-            if (leftover.length > 0) {
-                throw new Error(
-                    `${page} still has ${leftover.length} inline script(s) after externalising. ` +
-                        "The CSP for writing.gocanto.sh sets script-src 'self', which would block them.",
-                );
-            }
-        }
+                if (leftover.length > 0) {
+                    throw new Error(
+                        `${page} still has ${leftover.length} inline script(s) after externalising. ` +
+                            "The CSP for writing.gocanto.sh sets script-src 'self', which would block them.",
+                    );
+                }
+            })
+        );
     }
 
     private async htmlPages(): Promise<string[]> {
