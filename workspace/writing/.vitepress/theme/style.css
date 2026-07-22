@@ -209,6 +209,11 @@ body {
     gap: 12px;
 }
 
+.wr-brand-home {
+    display: inline-flex;
+    line-height: 0;
+}
+
 .wr-avatar {
     width: 30px;
     height: 30px;
