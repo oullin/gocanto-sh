@@ -25,7 +25,7 @@ const posts = [
 </script>
 
 <template>
-    <section id="writing" class="recent-writing outer" aria-labelledby="recent-writing-title">
+    <section id="writing" class="recent-writing" aria-labelledby="recent-writing-title">
         <div class="section-heading">
             <div>
                 <span>Field notes · First-hand systems</span>

@@ -52,8 +52,8 @@ const BackToTop = defineAsyncComponent(
 <template>
     <SiteNav />
     <WorkflowHero />
-    <RecentWriting />
     <main class="outer">
+        <RecentWriting />
         <ExperienceGrid />
         <ProjectsTable />
         <RecommendationsMarquee />
