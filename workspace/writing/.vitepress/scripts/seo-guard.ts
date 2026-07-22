@@ -56,6 +56,37 @@ class WritingSeoGuard {
                 throw new Error(`[writing-seo-guard] ${file} is missing BlogPosting JSON-LD`);
             }
 
+            if (file !== "index.html") {
+                this.assertCount(
+                    html,
+                    /<meta property="article:published_time" content="\d{4}-\d{2}-\d{2}">/g,
+                    1,
+                    file,
+                    "article publication date",
+                );
+                this.assertCount(
+                    html,
+                    /<meta property="article:modified_time" content="\d{4}-\d{2}-\d{2}">/g,
+                    1,
+                    file,
+                    "article modified date",
+                );
+                this.assertCount(
+                    html,
+                    /"datePublished":"\d{4}-\d{2}-\d{2}"/g,
+                    1,
+                    file,
+                    "JSON-LD publication date",
+                );
+                this.assertCount(
+                    html,
+                    /"dateModified":"\d{4}-\d{2}-\d{2}"/g,
+                    1,
+                    file,
+                    "JSON-LD modified date",
+                );
+            }
+
             canonicals.add(canonical);
         }
 

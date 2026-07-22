@@ -28,7 +28,7 @@ Vercel Analytics and Speed Insights run on both hostnames. Automatic page views 
 - `profile_conversion` with targets such as `contact-cta`, `writing-index`, and `writing-transition`;
 - `writing_transition` with targets such as `profile-transition`, `resume-transition`, `expertise-transition`, and `rss-subscribe`.
 
-Review transitions by target rather than treating all outbound clicks as the same intent. There is no public resume PDF or download event; `/resume` page views are the resume signal.
+Review transitions by target rather than treating all outbound clicks as the same intent. `/resume` page views are the resume signal.
 
 ## Review cadence
 

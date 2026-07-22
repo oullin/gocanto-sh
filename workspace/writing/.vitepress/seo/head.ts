@@ -145,7 +145,28 @@ export class WritingSeoHead {
             return value.toISOString().slice(0, 10);
         }
 
-        return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : undefined;
+        if (typeof value !== "string") {
+            return undefined;
+        }
+
+        const date = value.slice(0, 10);
+        const parsedDate = new Date(`${date}T00:00:00Z`);
+
+        if (
+            !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+            Number.isNaN(parsedDate.getTime()) ||
+            parsedDate.toISOString().slice(0, 10) !== date
+        ) {
+            return undefined;
+        }
+
+        if (value === date) {
+            return date;
+        }
+
+        return /^\d{4}-\d{2}-\d{2}T/.test(value) && !Number.isNaN(new Date(value).getTime())
+            ? date
+            : undefined;
     }
 
     private tags(): string[] {
