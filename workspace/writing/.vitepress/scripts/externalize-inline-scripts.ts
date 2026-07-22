@@ -53,11 +53,10 @@ class InlineScriptExternalizer {
             throw new Error(`no HTML found in ${this.distDir}. Run the VitePress build first.`);
         }
 
-        let extracted = 0;
-
-        for (const page of pages) {
-            extracted += await this.rewritePage(page);
-        }
+        const counts = await Promise.all(
+            pages.map((page) => this.rewritePage(page)),
+        );
+        const extracted = counts.reduce((acc, count) => acc + count, 0);
 
         await this.assertNoInlineScripts(pages);
 
