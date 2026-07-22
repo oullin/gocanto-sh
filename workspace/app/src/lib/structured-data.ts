@@ -1,3 +1,4 @@
+import { bio } from "@gocanto/store";
 import type { LinkRecord, LinksFixture, ProfileFixture } from "@gocanto/store";
 
 import { PERSON_ID, SITE_URL } from "#app/lib/site";
@@ -61,8 +62,7 @@ type StructuredData = {
 /** Builds the site's schema.org identity graph from canonical store fixtures. */
 export class StructuredDataBuilder {
     private static readonly WEBSITE_ID = `${SITE_URL}#website`;
-    private static readonly DESCRIPTION =
-        "Singapore-based software architect and principal engineer with 20+ years building regulated systems across banking, payments, e-commerce, and production AI.";
+    private static readonly DESCRIPTION = bio.data.summary;
     private static readonly KNOWS_ABOUT = [
         "Software Architecture",
         "AI-Agentic Systems",

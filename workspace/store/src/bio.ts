@@ -3,6 +3,8 @@ import type { BioFixture } from "#store/types";
 export const bio = {
     version: "1.0.0",
     data: {
+        summary:
+            "Software architect. 20+ years shipping production-grade backends for fintech, banking, and e-commerce.",
         tagline: "Same person whether you're an engineer, a founder, or a recruiter.",
         note: "Born in Venezuela, Singaporean citizen, Singapore-based since 2017. Two decades in software. Half of it as an engineer, half as the engineer who builds the team around me.",
         paragraphs: [

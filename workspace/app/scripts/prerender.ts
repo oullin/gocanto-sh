@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve } from "node:path";
 
-import { links, profile } from "@gocanto/store";
+import { bio, links, profile } from "@gocanto/store";
 import { PrerenderInjector } from "#app/lib/prerender-injector";
 import { PageMetadataInjector } from "#app/lib/page-metadata";
 import { StructuredDataBuilder } from "#app/lib/structured-data";
@@ -17,9 +17,7 @@ const ssrOutDir = resolve(appRoot, ".prerender-ssr");
 const ssrEntryFile = "entry-server.js";
 const distIndex = resolve(appRoot, "dist/index.html");
 const rootTitle = "Gustavo Ocanto — Software Architect for Regulated Systems";
-
-const rootDescription =
-    "Gustavo Ocanto is a Singapore-based software architect and principal engineer with 20+ years building regulated systems across banking, payments, e-commerce, and production AI.";
+const rootDescription = bio.data.summary;
 
 console.log("[prerender] building SSR bundle…");
 
