@@ -171,6 +171,10 @@ export const authorityPages = {
                     url: "https://writing.gocanto.sh/idempotent-payment-flows",
                 },
                 {
+                    label: "How to cut API latency from two seconds to 100 milliseconds",
+                    url: "https://writing.gocanto.sh/cut-api-latency-two-seconds-to-100ms",
+                },
+                {
                     label: "Signed webhooks done right",
                     url: "https://writing.gocanto.sh/signed-webhooks",
                 },

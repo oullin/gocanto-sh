@@ -103,7 +103,7 @@ export class StructuredDataBuilder {
                     description: StructuredDataBuilder.DESCRIPTION,
                     worksFor: {
                         "@type": "Organization",
-                        name: "Oullin",
+                        name: "Oullin Labs",
                         url: "https://oullin.io/",
                     },
                     knowsAbout: StructuredDataBuilder.KNOWS_ABOUT,

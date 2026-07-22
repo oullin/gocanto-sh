@@ -17,6 +17,10 @@ message arrives once, it does not behave correctly in production.
 Idempotency is not a header added at the API edge. It is a chain of identities and state transitions
 that connects the customer action, provider request, webhook, and ledger effect.
 
+I learned these constraints while building multi-currency wallet flows and integrating payment
+gateways across regional markets. Duplicate callbacks, ambiguous timeouts, and out-of-order status
+events were normal operating conditions, so recovery could not guess or repeat a financial effect.
+
 ## Give the logical operation one identity
 
 Start with the business action: “capture order 8472 for SGD 129.00.” Generate one operation ID and

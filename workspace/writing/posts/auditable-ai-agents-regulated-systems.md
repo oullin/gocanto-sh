@@ -17,6 +17,10 @@ approved the work, and which validators accepted the final artifact.
 That changes the architecture. The model becomes one fallible component inside a controlled
 workflow, not the workflow itself.
 
+This is the control model I am applying while building an agent platform for fixed-scope delivery
+in regulated environments. Runs must be replayable, consequential steps must be auditable, and
+validation must fail closed before an artifact can leave the workflow.
+
 ## Put deterministic software around the model
 
 The application owns identity, permissions, state, retries, and policy. The model proposes actions
