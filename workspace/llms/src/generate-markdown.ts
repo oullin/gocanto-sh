@@ -12,7 +12,7 @@ const __dirname = dirname(
 
 const distDir = resolve(__dirname, "../../app/dist");
 
-const { files, lastmod } = new MarkdownBundleWriter(new NodeFileSystem()).generate(distDir, {
+new MarkdownBundleWriter(new NodeFileSystem()).generate(distDir, {
     profile,
     bio,
     projects,
@@ -22,9 +22,3 @@ const { files, lastmod } = new MarkdownBundleWriter(new NodeFileSystem()).genera
     talks,
     links,
 });
-
-const markdownCount = files.filter((file) => file.endsWith(".md")).length;
-
-console.log(
-    `[llms] wrote ${markdownCount} markdown files, llms.txt, and sitemap.xml (lastmod=${lastmod}) into ${distDir}`,
-);
