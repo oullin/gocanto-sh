@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { bio } from "@gocanto/store";
 import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "#writing/posts-data";
 import { WritingArticlePage } from "#writing/article";
@@ -191,7 +190,15 @@ const year = new Date().getFullYear();
                         <span class="wr-rail-name__role">software architect</span>
                     </span>
                 </a>
-                <p class="wr-lede">{{ bio.data.summary }}</p>
+                <!--
+                    Copy kept local on purpose. It mirrors the profile bio summary in
+                    @gocanto/store, but this package deliberately has no workspace
+                    dependencies so the VitePress SEO/build path stays isolated.
+                -->
+                <p class="wr-lede">
+                    Software architect. 20+ years shipping production-grade backends for fintech,
+                    banking, and e-commerce.
+                </p>
 
                 <nav class="wr-topics" aria-label="Topics">
                     <div class="wr-topics__label">Topics</div>
