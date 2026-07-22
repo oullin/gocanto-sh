@@ -19,6 +19,7 @@ export type {
     LinksFixture,
     ProfileFixture,
     ProfileRecord,
+    ProfileSkillExampleProject,
     ProfileSkillRecord,
     ProjectRecord,
     ProjectsFixture,
