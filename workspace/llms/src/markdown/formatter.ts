@@ -11,6 +11,7 @@ import type {
     LinkRecord,
     LinksFixture,
     ProfileFixture,
+    ProfileSkillExampleProject,
     ProfileSkillRecord,
     ProjectRecord,
     ProjectsFixture,
@@ -228,20 +229,24 @@ export class FixtureMarkdown {
         }
 
         if (skill.example_projects?.length) {
-            lines.push("", "**Example projects:**");
-
-            for (const project of skill.example_projects) {
-                if (typeof project === "string") {
-                    lines.push(`- ${project}`);
-                } else if (project.url) {
-                    lines.push(`- [${project.title}](${project.url})`);
-                } else {
-                    lines.push(`- ${project.title}`);
-                }
-            }
+            lines.push(
+                "",
+                "**Example projects:**",
+                ...skill.example_projects.map(FixtureMarkdown.renderSkillExampleProject),
+            );
         }
 
         return lines.join("\n");
+    }
+
+    private static renderSkillExampleProject(project: string | ProfileSkillExampleProject): string {
+        if (typeof project === "string") {
+            return `- ${project}`;
+        }
+        if (project.url) {
+            return `- [${project.title}](${project.url})`;
+        }
+        return `- ${project.title}`;
     }
 
     private static renderProject(project: ProjectRecord): string {
