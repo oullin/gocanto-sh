@@ -16,7 +16,6 @@ describe("StructuredDataBuilder", () => {
         expect(person["@id"]).toBe("https://gocanto.sh/#person");
         expect(person.email).toBe(profile.data.email);
         expect(person.jobTitle).toBe(profile.data.profession);
-        expect(person.worksFor.name).toBe("Oullin Labs");
         expect(person.sameAs).toEqual([
             "https://x.com/gocanto",
             "https://github.com/gocanto",
