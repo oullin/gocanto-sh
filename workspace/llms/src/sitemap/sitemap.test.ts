@@ -3,12 +3,24 @@ import { Sitemap } from "#llms/sitemap/sitemap";
 
 import type {
     ExperienceFixture,
+    ProfileFixture,
     ProjectsFixture,
     RecommendationsFixture,
     TalksFixture,
 } from "@gocanto/store";
 
 const emptySources = {
+    profile: {
+        version: "1.0.0",
+        data: {
+            nickname: "gus",
+            handle: "gocanto",
+            name: "Gustavo Ocanto",
+            email: "hi@example.com",
+            profession: "Software Architect",
+            skills: [],
+        },
+    } satisfies ProfileFixture,
     projects: { version: "1.0.0", data: [] } satisfies ProjectsFixture,
     experience: { version: "1.0.0", data: [] } satisfies ExperienceFixture,
     recommendations: { version: "1.0.0", data: [] } satisfies RecommendationsFixture,
@@ -25,6 +37,7 @@ describe("Sitemap.lastmod", () => {
 
     it("picks the latest date across projects, recommendations, and talks", () => {
         const out = Sitemap.lastmod({
+            profile: emptySources.profile,
             projects: {
                 version: "1.0.0",
                 data: [
@@ -189,23 +202,17 @@ describe("Sitemap.render", () => {
         ).toBe(true);
     });
 
-    it("includes the root, all 9 markdown pages, and llms.txt (11 URLs)", () => {
+    it("includes only the canonical root, resume, and expertise HTML pages", () => {
         const matches = xml.match(/<url>/g) ?? [];
 
-        expect(matches.length).toBe(11);
+        expect(matches.length).toBe(5);
 
         const expectedLocs = [
             "https://gocanto.sh/",
-            "https://gocanto.sh/index.md",
-            "https://gocanto.sh/profile.md",
-            "https://gocanto.sh/bio.md",
-            "https://gocanto.sh/experience.md",
-            "https://gocanto.sh/projects.md",
-            "https://gocanto.sh/education.md",
-            "https://gocanto.sh/talks.md",
-            "https://gocanto.sh/recommendations.md",
-            "https://gocanto.sh/links.md",
-            "https://gocanto.sh/llms.txt",
+            "https://gocanto.sh/resume",
+            "https://gocanto.sh/expertise/regulated-ai-systems",
+            "https://gocanto.sh/expertise/banking-core-modernisation",
+            "https://gocanto.sh/expertise/payment-systems",
         ];
 
         for (const loc of expectedLocs) {
@@ -216,6 +223,6 @@ describe("Sitemap.render", () => {
     it("stamps the lastmod on every entry", () => {
         const matches = xml.match(/<lastmod>2025-05-19<\/lastmod>/g) ?? [];
 
-        expect(matches.length).toBe(11);
+        expect(matches.length).toBe(5);
     });
 });

@@ -2,6 +2,7 @@ import type { ExperienceFixture } from "#store/types";
 
 export const experience = {
     version: "1.0.4",
+    updated_at: "2026-07-22",
     data: [
         {
             uuid: "172a1fd4-49c1-4515-8731-feffc809d5d6",

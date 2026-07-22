@@ -9,7 +9,8 @@ export const profile = {
         handle: "gocanto",
         name: "Gustavo Ocanto",
         email: "hi@ollin.sh",
-        profession: "Software Architect & Principal Engineer",
+        profession: "Software Architect for Regulated Systems",
+        updated_at: "2026-07-22",
         skills: profileSkills,
     },
 } as const satisfies ProfileFixture;

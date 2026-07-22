@@ -46,4 +46,8 @@ describe("LlmsTxt.render", () => {
             expect(out).toContain(`(${link})`);
         }
     });
+
+    it("federates long-form writing to the writing bundle", () => {
+        expect(out).toContain("https://writing.gocanto.sh/llms.txt");
+    });
 });

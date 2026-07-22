@@ -1,4 +1,5 @@
 export { bio } from "#store/bio";
+export { authorityPages } from "#store/authority-pages";
 export { education } from "#store/education";
 export { experience } from "#store/experience";
 export { links } from "#store/links";
@@ -8,6 +9,10 @@ export { talks } from "#store/talks";
 
 export type {
     BioFixture,
+    AuthorityPageLink,
+    AuthorityPageRecord,
+    AuthorityPageSection,
+    AuthorityPagesFixture,
     BioQuickFact,
     BioRecord,
     EducationFixture,

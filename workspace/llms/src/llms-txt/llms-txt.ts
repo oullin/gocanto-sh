@@ -32,6 +32,10 @@ export class LlmsTxt {
 - [Talks](${siteUrl}/talks.md)
 - [Recommendations](${siteUrl}/recommendations.md)
 - [Links](${siteUrl}/links.md)
+
+## Writing
+
+- [Engineering writing](https://writing.gocanto.sh/llms.txt): First-hand field notes and raw Markdown articles.
 `;
     }
 }

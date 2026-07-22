@@ -22,13 +22,13 @@ const { proofAvatars, proofLoaded, proofSkeletons, testimonialCount } = useTesti
                 </span>
 
                 <h1 id="hero-title" class="wf-hero__title">
-                    AI-accelerated software for regulated industries
+                    Software architecture for regulated systems
                 </h1>
 
                 <p class="wf-hero__lede">
-                    I build production-grade backends for fintech, banking, and e-commerce: payment
-                    integrations, event pipelines, legacy modernization, and practical AI agents
-                    that ship fast and pass audit.
+                    I build production-grade systems for fintech, banking, and e-commerce: payment
+                    platforms, event pipelines, legacy modernisation, and practical AI agents that
+                    remain reviewable under load and under audit.
                 </p>
 
                 <div class="wf-hero__ctas">
