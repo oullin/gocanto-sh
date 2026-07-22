@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { defaultWorkflow, workflowMetadata } from "#app/features/workflow-hero/data";
-import { WorkflowLoader } from "#app/features/workflow-hero/WorkflowLoader";
+import { WorkflowLoader, WorkflowLoadError } from "#app/features/workflow-hero/WorkflowLoader";
 
 import type { WorkflowPayload } from "#app/features/workflow-hero/types";
 
@@ -45,5 +45,17 @@ describe("WorkflowLoader", () => {
         expect(failed._tag).toBe("failed");
         expect(retried._tag).toBe("loaded");
         expect(loadBanking).toHaveBeenCalledTimes(2);
+    });
+
+    it("returns failed result when requested workflow loader is missing", async () => {
+        const loader = new WorkflowLoader(workflowMetadata, defaultWorkflow, {});
+
+        const missing = await loader.load("data-sync");
+
+        expect(missing._tag).toBe("failed");
+        if (missing._tag === "failed") {
+            expect(missing.error).toBeInstanceOf(WorkflowLoadError);
+            expect(missing.error.cause).toBe("Payload loader is not registered");
+        }
     });
 });
