@@ -24,6 +24,11 @@ That is a delivery problem, not a documentation detail. The work here was to mak
 collection usable from the first screen, then prove that every public command worked
 through the same GitHub path a user would take.
 
+The same lesson carries into production agent systems. A plugin or tool registry is only
+dependable when its manifest, permissions, activation path, visible result, and rollback
+behaviour can be verified as one distribution contract; working code in a checkout is not
+enough.
+
 ## Put the first useful command first
 
 The old documentation explained the plugins before it helped anyone run them. That is

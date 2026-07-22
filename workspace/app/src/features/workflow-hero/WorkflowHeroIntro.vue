@@ -32,9 +32,15 @@ const { proofAvatars, proofLoaded, proofSkeletons, testimonialCount } = useTesti
                 </p>
 
                 <div class="wf-hero__ctas">
-                    <Button as="a" :href="mailto" variant="outline" class="wf-cta-primary">
+                    <Button
+                        as="a"
+                        :href="mailto"
+                        variant="outline"
+                        class="wf-cta-primary"
+                        data-analytics="contact-cta"
+                    >
                         <ArrowUpRight class="size-4" aria-hidden="true" />
-                        Book a review
+                        Discuss a review
                     </Button>
                 </div>
 
