@@ -89,10 +89,18 @@ Neither site may sit at the `dist/` root. Vercel resolves the filesystem *before
 
 `vercel.json` then routes by `Host`:
 
-- `writing.gocanto.sh/(.*)` rewrites to `/writing/$1`; everything else rewrites to `/app/$1`.
-- `gocanto.sh/writing/*` permanently redirects to `writing.gocanto.sh/*`, so the writing site has one canonical origin. Preview deployments skip this redirect, which is how you verify the writing side before a domain is attached. The bare `/writing/` needs its own rule: `/writing/:path*` matches `/writing` and `/writing/<slug>`, but not the trailing-slash form, which would otherwise serve the writing index from the profile origin.
+- `writing(-preview)?\.gocanto\.sh/(.*)` rewrites to `/writing/$1`; everything else rewrites to `/app/$1`. The host values are regexes, so the one pattern covers production and the preview alias.
+- `gocanto.sh/writing/*` permanently redirects to `writing.gocanto.sh/*`, so the writing site has one canonical origin. The bare `/writing/` needs its own rule: `/writing/:path*` matches `/writing` and `/writing/<slug>`, but not the trailing-slash form, which would otherwise serve the writing index from the profile origin.
 - Security headers are per-host, and both hosts ship `script-src 'self'` with no `'unsafe-inline'`. VitePress emits its bootstrap as inline `<script>` blocks, so [`externalize-inline-scripts.ts`](workspace/writing/.vitepress/scripts/externalize-inline-scripts.ts) moves them into `assets/` after each build. Pinning CSP hashes instead would be a trap: one of those blocks carries `__VP_HASH_MAP__`, whose contents change whenever a post is added, so the hash would stop matching on the next publish. That pass fails the build if any inline script survives it, so a VitePress upgrade breaks the build rather than production.
 - `cleanUrls` serves `posts/<slug>.md` at `/<slug>` without the `.html` suffix.
+
+#### Previewing the writing site
+
+A PR's own `gocanto-sh-git-<branch>-oullin.vercel.app` URL always serves the **profile** site: the host is not `writing.gocanto.sh`, so the writing rewrite misses and the catch-all sends everything to `/app/$1`. Browsing that deployment's `/writing/` does not help either — the filesystem answers with the writing HTML, but VitePress builds with `base: "/"`, so its `/assets/*`, `/favicon.png`, and internal links all fall through to `/app/*` and 404.
+
+The writing side is therefore only viewable over a host that matches the writing rewrite. `writing-preview.gocanto.sh` is that host: in the Vercel project's Domains screen it must be set to **Connect to an environment → Preview → `<branch>`**, not *Redirect to Another Domain* (a redirect just bounces to production and shows none of the branch's changes). Repoint it at whichever branch you are reviewing.
+
+For local checks, `pnpm --filter @gocanto/writing dev:site` on port 5175 needs no Vercel at all.
 
 #### GitHub Pages workflow (secondary/fallback, not production)
 
