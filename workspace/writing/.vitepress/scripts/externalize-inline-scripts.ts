@@ -135,18 +135,20 @@ class InlineScriptExternalizer {
     }
 
     private async assertNoInlineScripts(pages: string[]): Promise<void> {
-        for (const page of pages) {
-            const html = await readFile(page, "utf8");
+        await Promise.all(
+            pages.map(async (page) => {
+                const html = await readFile(page, "utf8");
 
-            const leftover = InlineScriptExternalizer.inlineScripts(html);
+                const leftover = InlineScriptExternalizer.inlineScripts(html);
 
-            if (leftover.length > 0) {
-                throw new Error(
-                    `${page} still has ${leftover.length} inline script(s) after externalising. ` +
-                        "The CSP for writing.gocanto.sh sets script-src 'self', which would block them.",
-                );
-            }
-        }
+                if (leftover.length > 0) {
+                    throw new Error(
+                        `${page} still has ${leftover.length} inline script(s) after externalising. ` +
+                            "The CSP for writing.gocanto.sh sets script-src 'self', which would block them.",
+                    );
+                }
+            }),
+        );
     }
 
     private async htmlPages(): Promise<string[]> {
