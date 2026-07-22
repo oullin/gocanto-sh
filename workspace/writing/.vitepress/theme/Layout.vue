@@ -20,13 +20,9 @@ const isIndex = computed(() => WritingArticlePage.isIndex(route.path));
 
 const tag = ref<TopicSelection>(WritingIndexSearch.allTopics);
 
-const query = ref("");
+const filtering = computed(() => WritingIndexSearch.isFiltering(tag.value));
 
-const searchInput = ref<HTMLInputElement | null>(null);
-
-const filtering = computed(() => WritingIndexSearch.isFiltering(query.value, tag.value));
-
-const filtered = computed(() => WritingIndexSearch.filterPosts(posts, query.value, tag.value));
+const filtered = computed(() => WritingIndexSearch.filterPosts(posts, tag.value));
 
 const topics = computed(() => WritingIndexSearch.topTopics(posts));
 
@@ -42,18 +38,8 @@ const countLabel = computed(() =>
 
 const yearRange = computed(() => WritingIndexSearch.yearRange(posts));
 
-function clearFilters() {
+function clearTopic() {
     tag.value = WritingIndexSearch.allTopics;
-    query.value = "";
-}
-
-function onSearchHotkey(event: KeyboardEvent) {
-    if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") {
-        return;
-    }
-
-    event.preventDefault();
-    searchInput.value?.focus();
 }
 
 const currentPost = computed(() => WritingArticlePage.currentPost(posts, route.path));
@@ -162,7 +148,6 @@ onMounted(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
     // The activation line is a fraction of the viewport, so a resize moves it.
     window.addEventListener("resize", onScroll, { passive: true });
-    window.addEventListener("keydown", onSearchHotkey);
     buildToc();
     updateScrollState();
 });
@@ -170,7 +155,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", onScroll);
-    window.removeEventListener("keydown", onSearchHotkey);
 
     if (scrollFrame !== null) {
         window.cancelAnimationFrame(scrollFrame);
@@ -277,16 +261,9 @@ const year = new Date().getFullYear();
                 <div class="wr-index-head">
                     <h1>Writing</h1>
                     <span class="wr-index-head__count">{{ countLabel }} · {{ yearRange }}</span>
-                    <div class="wr-index-search">
-                        <span class="wr-index-search__icon" aria-hidden="true">⌕</span>
-                        <input
-                            ref="searchInput"
-                            v-model="query"
-                            type="search"
-                            aria-label="Search writing"
-                            placeholder="Search writing…"
-                        />
-                        <span class="wr-index-search__key" aria-hidden="true">⌘K</span>
+                    <!-- Same VitePress local-search button the article header uses. -->
+                    <div class="wr-search wr-index-search">
+                        <VPNavBarSearch />
                     </div>
                 </div>
 
@@ -327,11 +304,11 @@ const year = new Date().getFullYear();
 
                 <div v-else-if="filtering" class="wr-empty">
                     <div>
-                        Nothing matches
-                        <span>{{ query.trim() ? `“${query.trim()}”` : "this filter" }}</span>
+                        Nothing tagged
+                        <span>{{ tag }}</span>
                     </div>
-                    <button type="button" class="wr-empty__clear" @click="clearFilters">
-                        Clear filters
+                    <button type="button" class="wr-empty__clear" @click="clearTopic">
+                        Clear topic
                     </button>
                 </div>
             </main>

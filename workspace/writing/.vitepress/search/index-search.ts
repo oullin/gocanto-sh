@@ -12,7 +12,11 @@ export type TopicCount = {
     readonly count: number;
 };
 
-/** Pure search and list behavior for the writing index, kept free of Vue and the DOM. */
+/**
+ * Pure topic-filter and list behavior for the writing index, kept free of Vue
+ * and the DOM. Full-text search is VitePress's local-search provider, the same
+ * one the article header uses, so it has no counterpart here.
+ */
 export class WritingIndexSearch {
     /** The topic selection that disables topic filtering. */
     static readonly allTopics: TopicSelection = "all";
@@ -25,31 +29,16 @@ export class WritingIndexSearch {
         return value as TopicTag;
     }
 
-    /** Case-insensitively match a query against a post's title, description, and tags. */
-    static matchesQuery(post: Post, query: string): boolean {
-        const normalizedQuery = query.trim().toLowerCase();
-
-        if (!normalizedQuery) {
-            return true;
-        }
-
-        return `${post.title} ${post.description} ${post.tags.join(" ")}`
-            .toLowerCase()
-            .includes(normalizedQuery);
-    }
-
-    /** Filter posts by the active topic and search query. */
-    static filterPosts(posts: readonly Post[], query: string, topic: TopicSelection): Post[] {
+    /** Filter posts by the active topic. */
+    static filterPosts(posts: readonly Post[], topic: TopicSelection): Post[] {
         return posts.filter(
-            (post) =>
-                (topic === WritingIndexSearch.allTopics || post.tags.includes(topic)) &&
-                WritingIndexSearch.matchesQuery(post, query),
+            (post) => topic === WritingIndexSearch.allTopics || post.tags.includes(topic),
         );
     }
 
-    /** True when a topic or a query narrows the index away from its default view. */
-    static isFiltering(query: string, topic: TopicSelection): boolean {
-        return topic !== WritingIndexSearch.allTopics || query.trim() !== "";
+    /** True when a topic narrows the index away from its default view. */
+    static isFiltering(topic: TopicSelection): boolean {
+        return topic !== WritingIndexSearch.allTopics;
     }
 
     /** Return all topic counts, ordered by frequency and then alphabetically. */
