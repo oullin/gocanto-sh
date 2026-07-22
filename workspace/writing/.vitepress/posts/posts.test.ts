@@ -110,6 +110,22 @@ describe("Posts.normalizeImage", () => {
     });
 });
 
+describe("Posts.requireDescription", () => {
+    it("returns a trimmed authored description", () => {
+        expect(
+            Posts.requireDescription("  Field notes on payments.  ", URL),
+        ).toBe(
+            "Field notes on payments.",
+        );
+    });
+
+    it.each([[undefined], [null], [""], ["   "], [42]])("rejects %p", (value) => {
+        expect(() => Posts.requireDescription(value, URL)).toThrow(
+            "Post /some-post is missing a frontmatter description.",
+        );
+    });
+});
+
 describe("Posts.assertNoTopLevelHeading", () => {
     it("accepts body content that begins below the layout title", () => {
         expect(() =>
