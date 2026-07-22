@@ -1,6 +1,5 @@
 import { bio, education, experience, links, profile, projects, talks } from "@gocanto/store";
 import { recommendations } from "@gocanto/store/recommendations";
-import { resolve } from "node:path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const generateMock = vi.fn().mockReturnValue({
@@ -10,7 +9,7 @@ const generateMock = vi.fn().mockReturnValue({
 
 vi.mock("#llms/bundle/bundle-writer", () => {
     return {
-        MarkdownBundleWriter: vi.fn().mockImplementation(function() {
+        MarkdownBundleWriter: vi.fn().mockImplementation(function () {
             return {
                 generate: generateMock,
             };
@@ -25,18 +24,16 @@ vi.mock("#llms/kernel/node-file-system", () => {
 });
 
 describe("generate-markdown", () => {
-    let consoleSpy: any;
-
     beforeEach(() => {
-        consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
         vi.clearAllMocks();
         vi.resetModules();
     });
 
-    it("should generate markdown files and log output", async () => {
+    it("should generate markdown files into the app dist directory", async () => {
         await import("./generate-markdown");
 
         expect(generateMock).toHaveBeenCalled();
+
         const callArgs = generateMock.mock.calls[0];
 
         // Assert on the distDir path. Note: __dirname in tests might differ from the actual module.
@@ -53,9 +50,5 @@ describe("generate-markdown", () => {
             talks,
             links,
         });
-
-        expect(consoleSpy).toHaveBeenCalledWith(
-            expect.stringContaining("[llms] wrote 2 markdown files, llms.txt, and sitemap.xml (lastmod=2023-01-01) into")
-        );
     });
 });

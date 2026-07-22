@@ -53,9 +53,8 @@ class InlineScriptExternalizer {
             throw new Error(`no HTML found in ${this.distDir}. Run the VitePress build first.`);
         }
 
-        const counts = await Promise.all(
-            pages.map(page => this.rewritePage(page))
-        );
+        const counts = await Promise.all(pages.map((page) => this.rewritePage(page)));
+
         const extracted = counts.reduce((acc, count) => acc + count, 0);
 
         await this.assertNoInlineScripts(pages);
@@ -80,9 +79,11 @@ class InlineScriptExternalizer {
                 if (script.body.trim() === FORCE_DARK) {
                     return { script, isDark: true, name: "" };
                 }
+
                 const name = await this.writeAsset(script.body);
+
                 return { script, isDark: false, name };
-            })
+            }),
         );
 
         for (const { script, isDark, name } of replacements) {
@@ -163,7 +164,7 @@ class InlineScriptExternalizer {
                             "The CSP for writing.gocanto.sh sets script-src 'self', which would block them.",
                     );
                 }
-            })
+            }),
         );
     }
 

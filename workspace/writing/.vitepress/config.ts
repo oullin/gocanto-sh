@@ -20,7 +20,11 @@ const rssFeed = new RssFeed({
     },
 });
 
-function serveRssFeed(request: IncomingMessage, response: ServerResponse, next: (err?: any) => void) {
+function serveRssFeed(
+    request: IncomingMessage,
+    response: ServerResponse,
+    next: (err?: any) => void,
+) {
     void rssFeed.serve(request, response).then((handled) => {
         if (!handled) {
             next();
