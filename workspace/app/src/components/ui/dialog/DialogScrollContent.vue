@@ -25,6 +25,17 @@ const emits = defineEmits<DialogContentEmits>();
 const delegatedProps = reactiveOmit(props, "class");
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const handlePointerDownOutside = (event: any) => {
+    const originalEvent = event.detail.originalEvent;
+    const target = originalEvent.target as HTMLElement;
+    if (
+        originalEvent.offsetX > target.clientWidth ||
+        originalEvent.offsetY > target.clientHeight
+    ) {
+        event.preventDefault();
+    }
+};
 </script>
 
 <template>
@@ -40,18 +51,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
                     )
                 "
                 v-bind="{ ...$attrs, ...forwarded }"
-                @pointer-down-outside="
-                    (event) => {
-                        const originalEvent = event.detail.originalEvent;
-                        const target = originalEvent.target as HTMLElement;
-                        if (
-                            originalEvent.offsetX > target.clientWidth ||
-                            originalEvent.offsetY > target.clientHeight
-                        ) {
-                            event.preventDefault();
-                        }
-                    }
-                "
+                @pointer-down-outside="handlePointerDownOutside"
             >
                 <slot />
 
