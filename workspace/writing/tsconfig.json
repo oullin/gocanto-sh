@@ -19,6 +19,10 @@
             "#writing/posts-data": ["./posts.data.ts"],
             "#writing/article": ["./.vitepress/article/index.ts"],
             "#writing/article/article-page": ["./.vitepress/article/article-page.ts"],
+            "#writing/analytics": ["./.vitepress/analytics/index.ts"],
+            "#writing/analytics/writing-analytics": ["./.vitepress/analytics/writing-analytics.ts"],
+            "#writing/bundle": ["./.vitepress/bundle/index.ts"],
+            "#writing/bundle/writing-bundle": ["./.vitepress/bundle/writing-bundle.ts"],
             "#writing/posts": ["./.vitepress/posts/index.ts"],
             "#writing/posts/posts": ["./.vitepress/posts/posts.ts"],
             "#writing/posts/types": ["./.vitepress/posts/types.ts"],
@@ -26,6 +30,8 @@
             "#writing/rss/feed": ["./.vitepress/rss/feed.ts"],
             "#writing/search": ["./.vitepress/search/index.ts"],
             "#writing/search/index-search": ["./.vitepress/search/index-search.ts"],
+            "#writing/seo": ["./.vitepress/seo/index.ts"],
+            "#writing/seo/head": ["./.vitepress/seo/head.ts"],
             "#writing/*": ["./.vitepress/*"]
         }
     },

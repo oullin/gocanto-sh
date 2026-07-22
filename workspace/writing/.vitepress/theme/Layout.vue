@@ -46,6 +46,18 @@ const currentPost = computed(() => WritingArticlePage.currentPost(posts, route.p
 
 const articleTags = computed<string[]>(() => WritingArticlePage.tags(frontmatter.value.tags));
 
+const expertiseUrl = computed(() =>
+    typeof frontmatter.value.expertise === "string"
+        ? frontmatter.value.expertise
+        : "https://gocanto.sh/resume",
+);
+
+const expertiseLabel = computed(() =>
+    typeof frontmatter.value.expertiseLabel === "string"
+        ? frontmatter.value.expertiseLabel
+        : "public resume",
+);
+
 const related = computed(() => WritingArticlePage.relatedPosts(posts, currentPost.value));
 
 const progressBar = ref<HTMLElement | null>(null);
@@ -240,12 +252,18 @@ const year = new Date().getFullYear();
                     <a
                         class="wr-subscribe"
                         href="/feed.rss"
+                        data-analytics="rss-subscribe"
                         target="_self"
                         type="application/rss+xml"
                         >Subscribe via RSS</a
                     >
                     <div>
-                        <a href="https://gocanto.sh" class="wr-site-link">gocanto.sh</a>
+                        <a
+                            href="https://gocanto.sh"
+                            class="wr-site-link"
+                            data-analytics="profile-transition"
+                            >gocanto.sh</a
+                        >
                         <span class="wr-dot" aria-hidden="true">·</span>
                         <span>Singapore</span>
                     </div>
@@ -355,6 +373,15 @@ const year = new Date().getFullYear();
                                 <h1 class="wr-article__title">{{ frontmatter.title }}</h1>
                                 <div class="wr-article__meta">
                                     <span>{{ currentPost?.date.display }}</span>
+                                    <template
+                                        v-if="
+                                            currentPost &&
+                                            currentPost.modifiedAt !== currentPost.date.raw
+                                        "
+                                    >
+                                        <span class="wr-sep">/</span>
+                                        <span>Updated {{ currentPost.modifiedAt }}</span>
+                                    </template>
                                     <span class="wr-sep">/</span>
                                     <span>{{ currentPost?.readingTime }} read</span>
                                     <span class="wr-sep">/</span>
@@ -365,6 +392,39 @@ const year = new Date().getFullYear();
                             <div class="vp-doc">
                                 <Content />
                             </div>
+
+                            <aside class="wr-author" aria-label="About the author">
+                                <a
+                                    href="https://gocanto.sh/"
+                                    class="wr-author__identity"
+                                    data-analytics="profile-transition"
+                                >
+                                    <img
+                                        src="/avatar-128.jpg"
+                                        alt="Gustavo Ocanto"
+                                        width="48"
+                                        height="48"
+                                    />
+                                    <span>
+                                        <strong>Gustavo Ocanto</strong>
+                                        <small>Software Architect for Regulated Systems</small>
+                                    </span>
+                                </a>
+                                <p>
+                                    Twenty-plus years building banking, payment, e-commerce, and
+                                    production AI systems in Singapore.
+                                </p>
+                                <div class="wr-author__links">
+                                    <a
+                                        href="https://gocanto.sh/resume"
+                                        data-analytics="resume-transition"
+                                        >Public resume</a
+                                    >
+                                    <a :href="expertiseUrl" data-analytics="expertise-transition">{{
+                                        expertiseLabel
+                                    }}</a>
+                                </div>
+                            </aside>
 
                             <div v-if="related.length" class="wr-related">
                                 <div class="wr-related__label">Related</div>

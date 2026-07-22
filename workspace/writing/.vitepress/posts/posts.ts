@@ -4,6 +4,8 @@ import type { Post } from "#writing/posts";
 
 /** Normalizes VitePress content data into writing posts. */
 export class Posts {
+    private static readonly siteUrl = "https://writing.gocanto.sh";
+    private static readonly defaultImage = `${Posts.siteUrl}/og-image.png`;
     private static readonly dateFormatter = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
         month: "short",
@@ -28,14 +30,20 @@ export class Posts {
                 return raw ? [{ page, raw }] : [];
             })
             .map(({ page: { url, frontmatter, excerpt, src }, raw }) => {
+                Posts.assertNoTopLevelHeading(src ?? "", url);
+
                 // `rewrites` publishes posts/:slug at the top level, so strip the
                 // posts/ prefix to match the actual (clean) URL.
                 const postUrl = url.replace(/^\/posts\//, "/");
+                const modifiedAt = Posts.normalizeDate(frontmatter.updated, postUrl) ?? raw;
 
                 return {
                     title: frontmatter.title ?? url,
                     url: postUrl,
+                    canonicalUrl: new URL(postUrl, `${Posts.siteUrl}/`).toString(),
                     date: Posts.formatDate(raw, postUrl),
+                    modifiedAt: Posts.formatDate(modifiedAt, postUrl).raw,
+                    image: Posts.normalizeImage(frontmatter.image),
                     readingTime: Posts.readingTime(src ?? ""),
                     description: frontmatter.description ?? excerpt ?? "",
                     tags: Posts.normalizeTags(frontmatter.tags),
@@ -93,5 +101,25 @@ export class Posts {
         }
 
         return typeof value === "string" ? [value] : [];
+    }
+
+    /** Resolve a post image to an absolute, crawlable URL. */
+    public static normalizeImage(value: unknown): string {
+        if (typeof value !== "string" || value.trim() === "") {
+            return Posts.defaultImage;
+        }
+
+        return new URL(value, `${Posts.siteUrl}/`).toString();
+    }
+
+    /** The layout owns the single article H1; post bodies must begin below it. */
+    public static assertNoTopLevelHeading(source: string, url: string): void {
+        const body = source.replace(/^---[\s\S]*?---/, "").replace(/```[\s\S]*?```/g, "");
+
+        if (/^#\s+/m.test(body)) {
+            throw new Error(
+                `Post ${url} contains a top-level heading. The article layout renders the H1.`,
+            );
+        }
     }
 }

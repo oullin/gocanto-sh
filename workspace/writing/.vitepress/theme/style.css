@@ -962,6 +962,51 @@ body {
     border-top: 1px solid var(--wr-line);
 }
 
+.wr-author {
+    margin-top: 56px;
+    padding: 24px;
+    border: 1px solid var(--wr-line);
+    background: var(--wr-surface);
+}
+
+.wr-author__identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--wr-ink);
+}
+
+.wr-author__identity img {
+    border-radius: 50%;
+}
+
+.wr-author__identity span {
+    display: grid;
+    gap: 2px;
+}
+
+.wr-author__identity small,
+.wr-author p {
+    color: var(--wr-muted);
+}
+
+.wr-author p {
+    margin: 18px 0;
+    line-height: 1.65;
+}
+
+.wr-author__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.wr-author__links a {
+    color: var(--wr-accent);
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .wr-related__label {
     font-family: var(--wr-mono);
     font-size: 12px;

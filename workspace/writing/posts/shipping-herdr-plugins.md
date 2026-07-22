@@ -1,11 +1,12 @@
 ---
 title: Shipping Herdr plugins people can actually use
 date: 2026-07-22
+updated: 2026-07-22
 description: "Three Herdr plugins already worked. Shipping them meant making the install path obvious, showing the real result, documenting every action, and proving the marketplace flow from public GitHub."
 tags: [herdr, plugins, documentation, marketplace]
+expertise: https://gocanto.sh/expertise/regulated-ai-systems
+expertiseLabel: production-ready AI systems
 ---
-
-# Shipping Herdr plugins people can actually use
 
 A plugin that only works from its own checkout is not shipped. It is a demo with a
 manifest.

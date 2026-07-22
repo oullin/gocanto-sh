@@ -1,11 +1,12 @@
 ---
 title: Merging is not shipping
 date: 2026-07-22
+updated: 2026-07-22
 description: "A green build, a clean merge, and nothing reached production. Six bugs that live in the gap between correct code and a working site, and why none of them showed up as an error."
 tags: [deploys, vercel, csp, vitepress]
+expertise: https://gocanto.sh/expertise/regulated-ai-systems
+expertiseLabel: reliable delivery for regulated systems
 ---
-
-# Merging is not shipping
 
 I merged a change to my writing site, waited, and reloaded the page. Nothing.
 

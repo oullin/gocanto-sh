@@ -1,6 +1,7 @@
 import DefaultTheme from "vitepress/theme";
 import type { Theme } from "vitepress";
 import Layout from "#writing/theme/Layout.vue";
+import { WritingAnalytics } from "#writing/analytics";
 import "#writing/theme/style.css";
 
 /**
@@ -11,6 +12,9 @@ import "#writing/theme/style.css";
 const theme: Theme = {
     extends: DefaultTheme,
     Layout,
+    enhanceApp() {
+        new WritingAnalytics().start();
+    },
 };
 
 export default theme;

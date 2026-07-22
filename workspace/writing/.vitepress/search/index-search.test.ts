@@ -6,10 +6,15 @@ import { WritingIndexSearch } from "#writing/search";
 function makePost(overrides: Partial<Post> & { title: string; year: string }): Post {
     const { title, year, ...rest } = overrides;
 
+    const url = `/${title.toLowerCase().replace(/\s+/g, "-")}`;
+
     return {
         title,
-        url: `/${title.toLowerCase().replace(/\s+/g, "-")}`,
+        url,
+        canonicalUrl: `https://writing.gocanto.sh${url}`,
         date: { raw: `${year}-01-01`, display: `Jan 1, ${year}`, short: "Jan 01", year },
+        modifiedAt: `${year}-01-01`,
+        image: "https://writing.gocanto.sh/og-image.png",
         readingTime: "5 min",
         description: "",
         tags: [],

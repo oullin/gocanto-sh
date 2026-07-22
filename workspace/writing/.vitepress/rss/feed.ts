@@ -8,7 +8,7 @@ const SITE_URL = "https://writing.gocanto.sh";
 const FEED_TITLE = "Gustavo Ocanto: Writing";
 
 const FEED_DESCRIPTION =
-    "Engineering notes by Gustavo Ocanto: Go, Laravel, and the edge. Real code from shipped systems, not slop.";
+    "First-hand engineering field notes by Gustavo Ocanto on regulated systems, payments, banking modernisation, reliable delivery, and production AI.";
 
 interface RssChannel {
     title: string;
