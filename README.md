@@ -118,15 +118,19 @@ Verify aliases again after promotion.
 
 Build-time prerender so crawlers and social scrapers get rendered HTML, not an empty SPA shell.
 
-**In `<head>`** ([workspace/app/index.html](workspace/app/index.html)): canonical + `hreflang`, full Open Graph (`og:type=profile`, 1200×630 image), Twitter `summary_large_image`, `profile:*` tags, JSON-LD `@graph` with `Person` + `WebSite` (`sameAs` across X, GitHub, LinkedIn, YouTube, Instagram).
+**In `<head>`** ([workspace/app/index.html](workspace/app/index.html)): canonical + `hreflang`, full Open Graph (`og:type=profile`, 1200×630 image), Twitter `summary_large_image`, `profile:*` tags, and a JSON-LD `@graph` connecting `ProfilePage`, `Person`, and `WebSite` (`sameAs` across X, GitHub, LinkedIn, YouTube, and Instagram).
+
+The profile build emits five canonical HTML routes: `/`, `/resume`, and three expertise pages for regulated AI, banking-core modernisation, and payment systems. The public resume is HTML-only and derives from the curated store; the private source CV and its contact/reference details are never copied into build output.
 
 **Static assets** in [workspace/app/public/](workspace/app/public/): `robots.txt`, `site.webmanifest`, `apple-touch-icon.png` (180×180), `og-image.png` (1200×630), recompressed `avatar.jpg`.
 
 **Prerender flow** (follows [Vite's SSR guide](https://vite.dev/guide/ssr)):
 
 1. `vite build` emits the client bundle with a loading shell.
-2. `tsx scripts/prerender.ts` builds the SSR entry, calls `renderToString(createSSRApp(App))`, and injects the result into `dist/index.html`.
+2. `tsx scripts/prerender.ts` builds the SSR entry, renders every route in the typed page registry, and writes independently hydrated HTML files into `dist/`.
 3. Client hydrates via `createSSRApp` in prod, `createApp` in dev.
+
+`scripts/seo-guard.ts` rejects builds with duplicate page metadata, an incorrect H1/canonical count, missing JSON-LD, or private CV contact/reference content.
 
 **SSR-safety:** components must not touch `window`/`document` at setup top-level. Use `onMounted`, event handlers, or a getter guard:
 
@@ -144,7 +148,11 @@ Built from [@gocanto/store](workspace/store/) by [workspace/llms/src/generate-ma
 - [`index.md`](https://gocanto.sh/index.md) — full profile in one file
 - [`bio.md`](https://gocanto.sh/bio.md) — short biography
 - [`profile.md`](https://gocanto.sh/profile.md) · [`experience.md`](https://gocanto.sh/experience.md) · [`projects.md`](https://gocanto.sh/projects.md) · [`education.md`](https://gocanto.sh/education.md) · [`talks.md`](https://gocanto.sh/talks.md) · [`recommendations.md`](https://gocanto.sh/recommendations.md) · [`links.md`](https://gocanto.sh/links.md)
-- [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — 10 URLs with `lastmod` from latest content update
+- [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — five canonical HTML URLs with `lastmod` from the latest profile, experience, project, talk, or recommendation update
+
+Raw Markdown and `llms.txt` remain public for agents but are excluded from search sitemaps and served with `X-Robots-Tag: noindex, follow`. The writing host owns its article Markdown and [`llms.txt`](https://writing.gocanto.sh/llms.txt); the profile index links there rather than duplicating article bodies.
+
+The Search Console and analytics release procedure lives in [docs/seo-rollout.md](docs/seo-rollout.md).
 
 ## License
 
