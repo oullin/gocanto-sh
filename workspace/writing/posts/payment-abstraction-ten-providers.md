@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "How to keep checkout and ledger logic stable across ten-plus payment providers using capability-aware contracts, typed errors, idempotency, webhook normalization, and contract tests."
 tags: [payments, architecture, integrations, contract-testing]
-expertise: https://gocanto.sh/expertise/payment-systems
-expertiseLabel: payment systems architecture
 ---
 
 Ten payment providers do not become one provider because they implement the same interface.

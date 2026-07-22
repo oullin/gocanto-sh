@@ -995,18 +995,6 @@ body {
     line-height: 1.65;
 }
 
-.wr-author__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-}
-
-.wr-author__links a {
-    color: var(--wr-accent);
-    font-size: 13px;
-    font-weight: 600;
-}
-
 .wr-related__label {
     font-family: var(--wr-mono);
     font-size: 12px;

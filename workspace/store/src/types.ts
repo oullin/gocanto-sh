@@ -115,33 +115,6 @@ export type BioRecord = {
     readonly quick_facts: readonly BioQuickFact[];
 };
 
-export type AuthorityPageSection = {
-    readonly heading: string;
-    readonly body: string;
-    readonly bullets: readonly string[];
-};
-
-export type AuthorityPageLink = {
-    readonly label: string;
-    readonly url: string;
-};
-
-export type AuthorityPageRecord = {
-    readonly kind: "resume" | "expertise";
-    readonly path: string;
-    readonly title: string;
-    readonly description: string;
-    readonly eyebrow: string;
-    readonly heading: string;
-    readonly lead: string;
-    readonly updated_at: string;
-    readonly proof: readonly string[];
-    readonly sections: readonly AuthorityPageSection[];
-    readonly related_writing: readonly AuthorityPageLink[];
-};
-
-export type AuthorityPagesFixture = FixtureEnvelope<readonly AuthorityPageRecord[]>;
-
 export type BioFixture = FixtureEnvelope<BioRecord>;
 
 export type EducationFixture = FixtureEnvelope<readonly EducationRecord[]>;

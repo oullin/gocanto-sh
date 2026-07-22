@@ -4,8 +4,6 @@ date: 2026-07-22
 updated: 2026-07-22
 description: "A low-risk pattern for modernising an AS/400 banking core with a Go boundary, explicit resilience controls, observable traffic, reconciliation, and reversible cutovers."
 tags: [as400, banking, go, modernisation]
-expertise: https://gocanto.sh/expertise/banking-core-modernisation
-expertiseLabel: banking core modernisation
 ---
 
 A banking core can be old and still be correct.

@@ -1,23 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import type { AuthorityPageRecord } from "@gocanto/store";
-import { AuthorityStructuredDataBuilder, PageMetadataInjector } from "#app/lib/page-metadata";
+import { PageMetadataInjector } from "#app/lib/page-metadata";
 
-const page: AuthorityPageRecord = {
-    kind: "expertise",
-    path: "/expertise/payments",
-    title: "Payment Systems Architecture | Gustavo Ocanto",
-    description: "Payment systems built for retries.",
-    eyebrow: "Expertise",
-    heading: "Payments",
-    lead: "Reliable payments.",
-    updated_at: "2026-07-22",
-    proof: [],
-    sections: [],
-    related_writing: [],
-};
-
-const routeTemplate = `<html><head>
+const template = `<html><head>
     <meta name="description" content="old" />
     <link rel="canonical" href="https://gocanto.sh/" />
     <link rel="alternate" href="https://gocanto.sh/" hreflang="en-US" />
@@ -36,47 +21,47 @@ const routeTemplate = `<html><head>
     <title>Old</title><script><!--__JSONLD__--></script>
 </head></html>`;
 
-describe("AuthorityStructuredDataBuilder", () => {
-    it("links expertise pages to the canonical Person entity", () => {
-        const output = new AuthorityStructuredDataBuilder(page).toScriptContents();
-
-        expect(output).toContain('"@type": "WebPage"');
-        expect(output).toContain("https://gocanto.sh/#person");
-        expect(output).toContain('"@type": "BreadcrumbList"');
-    });
-});
+const metadata = {
+    path: "/example/nested-path",
+    title: "Payment Systems Architecture | Gustavo Ocanto",
+    description: "Payment systems built for retries.",
+    type: "website",
+    image: "https://gocanto.sh/og-image.png",
+    structuredData: '{"ok":true}',
+} as const;
 
 describe("PageMetadataInjector", () => {
     it("applies a unique title, canonical, description, and JSON-LD", () => {
-        const output = new PageMetadataInjector(routeTemplate).inject({
-            path: page.path,
-            title: page.title,
-            description: page.description,
-            type: "website",
-            image: "https://gocanto.sh/og-image.png",
-            structuredData: '{"ok":true}',
-        });
+        const output = new PageMetadataInjector(template).inject(metadata);
 
-        expect(output).toContain(`<title>${page.title}</title>`);
-        expect(output).toContain('href="https://gocanto.sh/expertise/payments"');
+        expect(output).toContain(`<title>${metadata.title}</title>`);
+        expect(output).toContain('href="https://gocanto.sh/example/nested-path"');
         expect(output).toContain('{"ok":true}');
     });
 
-    it("escapes route metadata before inserting it into HTML", () => {
-        const output = new PageMetadataInjector(routeTemplate).inject({
-            path: page.path,
-            title: 'Payments & "recovery" <patterns>',
-            description: 'Retries & "reconciliation" <first>',
-            type: "website",
-            image: "https://gocanto.sh/og-image.png",
-            structuredData: '{"ok":true}',
+    it("escapes HTML-significant characters in injected metadata", () => {
+        const output = new PageMetadataInjector(template).inject({
+            ...metadata,
+            title: 'Payments "&" <b>tags</b>',
         });
 
-        expect(output).toContain(
-            "<title>Payments &amp; &quot;recovery&quot; &lt;patterns&gt;</title>",
+        expect(output).toContain("&quot;&amp;&quot; &lt;b&gt;");
+        expect(output).not.toContain("<b>tags</b>");
+    });
+
+    it("throws when the template is missing a metadata tag it must rewrite", () => {
+        const withoutDescription = template.replace(/<meta name="description"[^>]*>/, "");
+
+        expect(() => new PageMetadataInjector(withoutDescription).inject(metadata)).toThrow(
+            "missing name=description metadata tag",
         );
-        expect(output).toContain(
-            'content="Retries &amp; &quot;reconciliation&quot; &lt;first&gt;"',
+    });
+
+    it("throws when the JSON-LD marker is absent", () => {
+        const withoutMarker = template.replace("<!--__JSONLD__-->", "");
+
+        expect(() => new PageMetadataInjector(withoutMarker).inject(metadata)).toThrow(
+            "could not locate JSON-LD marker",
         );
     });
 });

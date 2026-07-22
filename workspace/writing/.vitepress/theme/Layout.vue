@@ -46,18 +46,6 @@ const currentPost = computed(() => WritingArticlePage.currentPost(posts, route.p
 
 const articleTags = computed<string[]>(() => WritingArticlePage.tags(frontmatter.value.tags));
 
-const expertiseUrl = computed(() =>
-    typeof frontmatter.value.expertise === "string"
-        ? frontmatter.value.expertise
-        : "https://gocanto.sh/resume",
-);
-
-const expertiseLabel = computed(() =>
-    typeof frontmatter.value.expertiseLabel === "string"
-        ? frontmatter.value.expertiseLabel
-        : "public resume",
-);
-
 const related = computed(() => WritingArticlePage.relatedPosts(posts, currentPost.value));
 
 const progressBar = ref<HTMLElement | null>(null);
@@ -415,16 +403,6 @@ const year = new Date().getFullYear();
                                     Twenty-plus years building banking, payment, e-commerce, and
                                     production AI systems in Singapore.
                                 </p>
-                                <div class="wr-author__links">
-                                    <a
-                                        href="https://gocanto.sh/resume"
-                                        data-analytics="resume-transition"
-                                        >Public resume</a
-                                    >
-                                    <a :href="expertiseUrl" data-analytics="expertise-transition">{{
-                                        expertiseLabel
-                                    }}</a>
-                                </div>
                             </aside>
 
                             <div v-if="related.length" class="wr-related">

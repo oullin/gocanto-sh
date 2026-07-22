@@ -202,27 +202,16 @@ describe("Sitemap.render", () => {
         ).toBe(true);
     });
 
-    it("includes only the canonical root, resume, and expertise HTML pages", () => {
+    it("includes only the canonical root HTML page", () => {
         const matches = xml.match(/<url>/g) ?? [];
 
-        expect(matches.length).toBe(5);
-
-        const expectedLocs = [
-            "https://gocanto.sh/",
-            "https://gocanto.sh/resume",
-            "https://gocanto.sh/expertise/regulated-ai-systems",
-            "https://gocanto.sh/expertise/banking-core-modernisation",
-            "https://gocanto.sh/expertise/payment-systems",
-        ];
-
-        for (const loc of expectedLocs) {
-            expect(xml).toContain(`<loc>${loc}</loc>`);
-        }
+        expect(matches.length).toBe(1);
+        expect(xml).toContain("<loc>https://gocanto.sh/</loc>");
     });
 
     it("stamps the lastmod on every entry", () => {
         const matches = xml.match(/<lastmod>2025-05-19<\/lastmod>/g) ?? [];
 
-        expect(matches.length).toBe(5);
+        expect(matches.length).toBe(1);
     });
 });

@@ -1,4 +1,4 @@
-import type { AuthorityPageRecord } from "@gocanto/store";
+import { SITE_URL } from "#app/lib/site";
 
 export interface AppPageMetadata {
     readonly path: string;
@@ -14,7 +14,7 @@ export class PageMetadataInjector {
     public constructor(private readonly template: string) {}
 
     public inject(metadata: AppPageMetadata): string {
-        const canonical = new URL(metadata.path, "https://gocanto.sh").toString();
+        const canonical = new URL(metadata.path, SITE_URL).toString();
 
         let html = this.template.replace(
             /<title>[\s\S]*?<\/title>/,
@@ -75,72 +75,5 @@ export class PageMetadataInjector {
             .replaceAll('"', "&quot;")
             .replaceAll("<", "&lt;")
             .replaceAll(">", "&gt;");
-    }
-}
-
-/** Builds JSON-LD for a resume or expertise page around the canonical Person entity. */
-export class AuthorityStructuredDataBuilder {
-    private static readonly personId = "https://gocanto.sh/#person";
-
-    public constructor(private readonly page: AuthorityPageRecord) {}
-
-    public toScriptContents(): string {
-        const url = new URL(this.page.path, "https://gocanto.sh").toString();
-
-        const pageEntity =
-            this.page.kind === "resume"
-                ? {
-                      "@type": "ProfilePage",
-                      "@id": `${url}#profile-page`,
-                      url,
-                      name: this.page.title,
-                      description: this.page.description,
-                      dateModified: this.page.updated_at,
-                      mainEntity: { "@id": AuthorityStructuredDataBuilder.personId },
-                  }
-                : {
-                      "@type": "WebPage",
-                      "@id": `${url}#web-page`,
-                      url,
-                      name: this.page.title,
-                      description: this.page.description,
-                      dateModified: this.page.updated_at,
-                      about: { "@id": AuthorityStructuredDataBuilder.personId },
-                  };
-
-        return JSON.stringify(
-            {
-                "@context": "https://schema.org",
-                "@graph": [
-                    pageEntity,
-                    {
-                        "@type": "Person",
-                        "@id": AuthorityStructuredDataBuilder.personId,
-                        name: "Gustavo Ocanto",
-                        url: "https://gocanto.sh/",
-                        jobTitle: "Software Architect for Regulated Systems",
-                    },
-                    {
-                        "@type": "BreadcrumbList",
-                        itemListElement: [
-                            {
-                                "@type": "ListItem",
-                                position: 1,
-                                name: "Gustavo Ocanto",
-                                item: "https://gocanto.sh/",
-                            },
-                            {
-                                "@type": "ListItem",
-                                position: 2,
-                                name: this.page.kind === "resume" ? "Resume" : "Expertise",
-                                item: url,
-                            },
-                        ],
-                    },
-                ],
-            },
-            null,
-            4,
-        ).replaceAll("<", "\\u003c");
     }
 }

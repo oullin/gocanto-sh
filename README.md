@@ -148,11 +148,9 @@ Built from [@gocanto/store](workspace/store/) by [workspace/llms/src/generate-ma
 - [`index.md`](https://gocanto.sh/index.md) — full profile in one file
 - [`bio.md`](https://gocanto.sh/bio.md) — short biography
 - [`profile.md`](https://gocanto.sh/profile.md) · [`experience.md`](https://gocanto.sh/experience.md) · [`projects.md`](https://gocanto.sh/projects.md) · [`education.md`](https://gocanto.sh/education.md) · [`talks.md`](https://gocanto.sh/talks.md) · [`recommendations.md`](https://gocanto.sh/recommendations.md) · [`links.md`](https://gocanto.sh/links.md)
-- [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — five canonical HTML URLs with `lastmod` from the latest profile, experience, project, talk, or recommendation update
+- [`sitemap.xml`](https://gocanto.sh/sitemap.xml) — the canonical HTML URL with `lastmod` from the latest profile, experience, project, talk, or recommendation update
 
 Raw Markdown and `llms.txt` remain public for agents but are excluded from search sitemaps and served with `X-Robots-Tag: noindex, follow`. The writing host owns its article Markdown and [`llms.txt`](https://writing.gocanto.sh/llms.txt); the profile index links there rather than duplicating article bodies.
-
-The Search Console and analytics release procedure lives in [docs/seo-rollout.md](docs/seo-rollout.md).
 
 ## License
 
