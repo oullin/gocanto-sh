@@ -133,6 +133,10 @@ export class RssFeed {
         );
     }
 
+    // XML escaping, not HTML sanitization: an HTML sanitizer cannot produce it,
+    // and the writing package deliberately carries no workspace dependencies.
+    // `Posts.requireDescription` guarantees every value reaching this is plain
+    // text, so escaping is the only transformation left to apply.
     private static escapeXml(value: string): string {
         return value
             .replaceAll("&", "&amp;")

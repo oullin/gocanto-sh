@@ -29,7 +29,7 @@ export class Posts {
 
                 return raw ? [{ page, raw }] : [];
             })
-            .map(({ page: { url, frontmatter, excerpt, src }, raw }) => {
+            .map(({ page: { url, frontmatter, src }, raw }) => {
                 Posts.assertNoTopLevelHeading(src ?? "", url);
 
                 // `rewrites` publishes posts/:slug at the top level, so strip the
@@ -45,7 +45,7 @@ export class Posts {
                     modifiedAt: Posts.formatDate(modifiedAt, postUrl).raw,
                     image: Posts.normalizeImage(frontmatter.image),
                     readingTime: Posts.readingTime(src ?? ""),
-                    description: frontmatter.description ?? excerpt ?? "",
+                    description: Posts.requireDescription(frontmatter.description, postUrl),
                     tags: Posts.normalizeTags(frontmatter.tags),
                 };
             })
@@ -93,6 +93,23 @@ export class Posts {
                 date.getUTCFullYear(),
             ),
         };
+    }
+
+    /**
+     * Descriptions must be authored, never derived.
+     *
+     * The loader runs with `excerpt: true`, so falling back to the excerpt would
+     * feed VitePress-rendered HTML into the RSS feed, the meta tags, and the
+     * llms index — all of which expect plain text.
+     */
+    public static requireDescription(value: unknown, url: string): string {
+        const description = typeof value === "string" ? value.trim() : "";
+
+        if (description === "") {
+            throw new Error(`Post ${url} is missing a frontmatter description.`);
+        }
+
+        return description;
     }
 
     public static normalizeTags(value: unknown): string[] {

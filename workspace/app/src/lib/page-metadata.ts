@@ -1,3 +1,5 @@
+import { HtmlSanitizer } from "@gocanto/domain/purify";
+
 import { SITE_URL } from "#app/lib/site";
 
 export interface AppPageMetadata {
@@ -16,10 +18,9 @@ export class PageMetadataInjector {
     public inject(metadata: AppPageMetadata): string {
         const canonical = new URL(metadata.path, SITE_URL).toString();
 
-        let html = this.template.replace(
-            /<title>[\s\S]*?<\/title>/,
-            `<title>${this.escape(metadata.title)}</title>`,
-        );
+        const title = HtmlSanitizer.element("title", {}, HtmlSanitizer.toText(metadata.title));
+
+        let html = PageMetadataInjector.swap(this.template, /<title>[\s\S]*?<\/title>/, title);
 
         html = this.replaceMeta(html, "name", "description", metadata.description);
         html = this.replaceMeta(html, "property", "og:title", metadata.title);
@@ -33,24 +34,25 @@ export class PageMetadataInjector {
         html = this.replaceMeta(html, "name", "twitter:description", metadata.description);
         html = this.replaceMeta(html, "name", "twitter:image", metadata.image);
         html = this.replaceMeta(html, "name", "twitter:image:alt", metadata.title);
-        html = html.replace(
+        html = PageMetadataInjector.swap(
+            html,
             /<link rel="canonical" href="[^"]+"\s*\/?>/,
-            `<link rel="canonical" href="${canonical}" />`,
+            HtmlSanitizer.element("link", { rel: "canonical", href: canonical }),
         );
-        html = html.replace(
-            /<link rel="alternate" href="[^"]+" hreflang="en-US"\s*\/?>/,
-            `<link rel="alternate" href="${canonical}" hreflang="en-US" />`,
-        );
-        html = html.replace(
-            /<link rel="alternate" href="[^"]+" hreflang="x-default"\s*\/?>/,
-            `<link rel="alternate" href="${canonical}" hreflang="x-default" />`,
-        );
+
+        for (const hreflang of ["en-US", "x-default"]) {
+            html = PageMetadataInjector.swap(
+                html,
+                new RegExp(`<link rel="alternate" href="[^"]+" hreflang="${hreflang}"\\s*/?>`),
+                HtmlSanitizer.element("link", { rel: "alternate", href: canonical, hreflang }),
+            );
+        }
 
         if (!html.includes("<!--__JSONLD__-->")) {
             throw new Error("[prerender] could not locate JSON-LD marker in route template");
         }
 
-        return html.replace("<!--__JSONLD__-->", metadata.structuredData);
+        return PageMetadataInjector.swap(html, "<!--__JSONLD__-->", metadata.structuredData);
     }
 
     private replaceMeta(
@@ -60,20 +62,21 @@ export class PageMetadataInjector {
         content: string,
     ): string {
         const pattern = new RegExp(`<meta\\s+(?=[^>]*${attribute}="${key}")[^>]*>`, "i");
-        const tag = `<meta ${attribute}="${key}" content="${this.escape(content)}" />`;
 
         if (!pattern.test(html)) {
             throw new Error(`[prerender] missing ${attribute}=${key} metadata tag`);
         }
 
-        return html.replace(pattern, tag);
+        const tag = HtmlSanitizer.element("meta", {
+            [attribute]: key,
+            content: HtmlSanitizer.toText(content),
+        });
+
+        return PageMetadataInjector.swap(html, pattern, tag);
     }
 
-    private escape(value: string): string {
-        return value
-            .replaceAll("&", "&amp;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;");
+    // A replacer function keeps `$&` and friends in the injected value literal.
+    private static swap(html: string, pattern: RegExp | string, value: string): string {
+        return html.replace(pattern, () => value);
     }
 }

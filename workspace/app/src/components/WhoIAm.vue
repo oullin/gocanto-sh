@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { bio } from "@gocanto/store";
+import { HtmlSanitizer } from "@gocanto/domain/purify";
 import { useInViewReady } from "#app/lib/useAsyncInView";
 
 const section = ref<HTMLElement | null>(null);
@@ -12,34 +13,9 @@ const stackedFactKeys = new Set(["Originally from"]);
 const shouldStackFact = (fact: (typeof data.quick_facts)[number]) => stackedFactKeys.has(fact.key);
 const factValueLines = (fact: (typeof data.quick_facts)[number]) => fact.value.split(" · ");
 
-type ParagraphToken = { type: "text" | "em"; value: string };
-
-const EM_TAG_RE = /<em>([\s\S]*?)<\/em>/gi;
-
-const tokenizeParagraph = (input: string): ParagraphToken[] => {
-    const out: ParagraphToken[] = [];
-
-    let cursor = 0;
-
-    for (const match of input.matchAll(EM_TAG_RE)) {
-        const start = match.index ?? 0;
-
-        if (start > cursor) {
-            out.push({ type: "text", value: input.slice(cursor, start) });
-        }
-
-        out.push({ type: "em", value: match[1] });
-        cursor = start + match[0].length;
-    }
-
-    if (cursor < input.length) {
-        out.push({ type: "text", value: input.slice(cursor) });
-    }
-
-    return out;
-};
-
-const paragraphs = data.paragraphs.map(tokenizeParagraph);
+// Bio copy carries inline emphasis. DOMPurify decides what markup survives so
+// the template can render it directly.
+const paragraphs = data.paragraphs.map((paragraph) => HtmlSanitizer.sanitizeInline(paragraph));
 </script>
 
 <template>
@@ -61,13 +37,8 @@ const paragraphs = data.paragraphs.map(tokenizeParagraph);
             </aside>
 
             <div class="bio-body">
-                <p v-for="(tokens, i) in paragraphs" :key="i">
-                    <span :class="{ 'sk-shimmer': !ready }">
-                        <template v-for="(t, j) in tokens" :key="j">
-                            <em v-if="t.type === 'em'">{{ t.value }}</em>
-                            <template v-else>{{ t.value }}</template>
-                        </template>
-                    </span>
+                <p v-for="(paragraph, i) in paragraphs" :key="i">
+                    <span :class="{ 'sk-shimmer': !ready }" v-html="paragraph" />
                 </p>
 
                 <div class="quick-facts">

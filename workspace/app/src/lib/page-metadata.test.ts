@@ -39,14 +39,27 @@ describe("PageMetadataInjector", () => {
         expect(output).toContain('{"ok":true}');
     });
 
-    it("escapes HTML-significant characters in injected metadata", () => {
+    it("strips markup from metadata and escapes what is left", () => {
         const output = new PageMetadataInjector(template).inject({
             ...metadata,
             title: 'Payments "&" <b>tags</b>',
         });
 
-        expect(output).toContain("&quot;&amp;&quot; &lt;b&gt;");
+        expect(output).toContain('<title>Payments "&amp;" tags</title>');
+        expect(output).toContain('content="Payments &quot;&amp;&quot; tags"');
         expect(output).not.toContain("<b>tags</b>");
+    });
+
+    it("does not treat replacement patterns in metadata as capture references", () => {
+        const output = new PageMetadataInjector(template).inject({
+            ...metadata,
+            title: "Cost $& savings $1",
+            structuredData: '{"note":"$&"}',
+        });
+
+        expect(output).toContain("<title>Cost $&amp; savings $1</title>");
+        expect(output).toContain('content="Cost $&amp; savings $1"');
+        expect(output).toContain('{"note":"$&"}');
     });
 
     it("throws when the template is missing a metadata tag it must rewrite", () => {

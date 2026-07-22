@@ -228,8 +228,7 @@ const year = new Date().getFullYear();
                     </div>
                     <p>
                         Building <a href="https://github.com/oullin">oag</a>, an AI agent platform
-                        in Go for regulated systems, as Founder &amp; Principal Engineer at Oullin
-                        Labs.
+                        in Go for regulated systems, as Lead Software Architect at Oullin Labs.
                     </p>
                 </div>
 

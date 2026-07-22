@@ -2,9 +2,6 @@ import { HtmlSanitizer } from "@gocanto/domain/purify";
 
 /** Provides pure text formatting transformations. */
 export class TextFormatter {
-    private static readonly lineBreakPlaceholder = "__GOCANTO_STRIP_HTML_LINE_BREAK__";
-    private static readonly paragraphBreakPlaceholder = "__GOCANTO_STRIP_HTML_PARAGRAPH_BREAK__";
-
     private constructor() {}
 
     /**
@@ -14,17 +11,7 @@ export class TextFormatter {
      * @returns Plain decoded text.
      */
     public static stripHtml(input: string | null | undefined): string {
-        const normalized = (input ?? "")
-            .replace(/<br\s*\/?>/gi, TextFormatter.lineBreakPlaceholder)
-            .replace(/<\/p>\s*<p>/gi, TextFormatter.paragraphBreakPlaceholder);
-
-        const sanitized = HtmlSanitizer.sanitize(normalized);
-
-        return HtmlSanitizer.decodeEntities(sanitized)
-            .replaceAll(TextFormatter.lineBreakPlaceholder, "\n")
-            .replaceAll(TextFormatter.paragraphBreakPlaceholder, "\n\n")
-            .replace(/\n{3,}/g, "\n\n")
-            .trim();
+        return HtmlSanitizer.toText(input ?? "");
     }
 
     /**
