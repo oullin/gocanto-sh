@@ -44,39 +44,10 @@ const posts: Post[] = [
     ),
 ];
 
-describe("WritingIndexSearch.matchesQuery", () => {
-    it("matches on title, description or tags, case-insensitively", () => {
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], "WEBHOOK"),
-        ).toBe(true); // title
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], "idempotency"),
-        ).toBe(true); // description
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], "security"),
-        ).toBe(true); // tag
-    });
-
-    it("returns true for an empty/whitespace query", () => {
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], ""),
-        ).toBe(true);
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], "   "),
-        ).toBe(true);
-    });
-
-    it("returns false when nothing matches", () => {
-        expect(
-            WritingIndexSearch.matchesQuery(posts[0], "kafka"),
-        ).toBe(false);
-    });
-});
-
 describe("WritingIndexSearch.filterPosts", () => {
-    it("returns everything for tag 'all' and no query", () => {
+    it("returns everything for tag 'all'", () => {
         expect(
-            WritingIndexSearch.filterPosts(posts, "", WritingIndexSearch.allTopics),
+            WritingIndexSearch.filterPosts(posts, WritingIndexSearch.allTopics),
         ).toHaveLength(3);
     });
 
@@ -84,28 +55,17 @@ describe("WritingIndexSearch.filterPosts", () => {
         const cloudflare = WritingIndexSearch.topicTag("cloudflare");
 
         expect(
-            WritingIndexSearch.filterPosts(posts, "", cloudflare).map((p) => p.title),
+            WritingIndexSearch.filterPosts(posts, cloudflare).map((p) => p.title),
         ).toEqual([
             "Edge caching",
         ]);
     });
 
-    it("combines tag and query (AND)", () => {
-        // tag=go narrows to all three; query 'edge' narrows to one
-        const go = WritingIndexSearch.topicTag("go");
+    it("returns empty when no post carries the tag", () => {
+        const kafka = WritingIndexSearch.topicTag("kafka");
 
         expect(
-            WritingIndexSearch.filterPosts(posts, "edge", go).map((p) => p.title),
-        ).toEqual([
-            "Edge caching",
-        ]);
-    });
-
-    it("returns empty when the combination matches nothing", () => {
-        const postgres = WritingIndexSearch.topicTag("postgres");
-
-        expect(
-            WritingIndexSearch.filterPosts(posts, "webhook", postgres),
+            WritingIndexSearch.filterPosts(posts, kafka),
         ).toEqual([]);
     });
 });
@@ -162,21 +122,15 @@ describe("WritingIndexSearch.topTopics", () => {
 });
 
 describe("WritingIndexSearch.isFiltering", () => {
-    it("is false only on the unfiltered default view", () => {
+    it("is false on the unfiltered default view", () => {
         expect(
-            WritingIndexSearch.isFiltering("", WritingIndexSearch.allTopics),
-        ).toBe(false);
-        expect(
-            WritingIndexSearch.isFiltering("   ", WritingIndexSearch.allTopics),
+            WritingIndexSearch.isFiltering(WritingIndexSearch.allTopics),
         ).toBe(false);
     });
 
-    it("is true for a query or a topic", () => {
+    it("is true for a topic", () => {
         expect(
-            WritingIndexSearch.isFiltering("kafka", WritingIndexSearch.allTopics),
-        ).toBe(true);
-        expect(
-            WritingIndexSearch.isFiltering("", WritingIndexSearch.topicTag("go")),
+            WritingIndexSearch.isFiltering(WritingIndexSearch.topicTag("go")),
         ).toBe(true);
     });
 });
@@ -240,7 +194,7 @@ describe("WritingIndexSearch.archivePosts", () => {
 
     it("lists every match while filtering, featured included", () => {
         const webhooks = WritingIndexSearch.topicTag("webhooks");
-        const matches = WritingIndexSearch.filterPosts(posts, "", webhooks);
+        const matches = WritingIndexSearch.filterPosts(posts, webhooks);
 
         expect(
             WritingIndexSearch.archivePosts(matches, posts[0], true).map((p) => p.title),

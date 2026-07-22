@@ -329,6 +329,16 @@ body {
     line-height: 1;
 }
 
+/* VitePress hides the placeholder below 768px because its own navbar collapses
+   the button to a 48px icon. Ours keeps its full width on every breakpoint, so
+   without this the button reads as an empty box. The ⌘K keys stay hidden: there
+   is no hotkey to advertise on a touch keyboard. */
+@media (max-width: 767px) {
+    .wr-search .DocSearch-Button-Placeholder {
+        display: inline-block;
+    }
+}
+
 .wr-search .DocSearch-Button-Keys {
     gap: 6px;
     min-width: auto;
@@ -635,55 +645,12 @@ body {
     white-space: nowrap;
 }
 
+/* The index reuses the article header's search (`.wr-search`), so it only has to
+   cap the width instead of stretching across the head row. */
 .wr-index-search {
-    position: relative;
-    margin-left: auto;
+    flex: none;
     width: 300px;
     max-width: 40%;
-}
-
-.wr-index-search input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 9px 58px 9px 34px;
-    background: var(--wr-code-head);
-    border: 1px solid var(--wr-line-2);
-    border-radius: 6px;
-    color: var(--wr-ink);
-    font: 400 12.5px var(--wr-mono);
-    transition: border-color 0.15s;
-    appearance: none;
-}
-
-.wr-index-search input:focus {
-    outline: none;
-    border-color: var(--wr-line-4);
-}
-
-.wr-index-search input::-webkit-search-cancel-button {
-    appearance: none;
-}
-
-.wr-index-search__icon,
-.wr-index-search__key {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--wr-faint);
-    pointer-events: none;
-}
-
-.wr-index-search__icon {
-    left: 12px;
-    font-size: 13px;
-}
-
-.wr-index-search__key {
-    right: 10px;
-    padding: 2px 6px;
-    border: 1px solid var(--wr-line-3);
-    border-radius: 4px;
-    font: 400 10px/1.4 var(--wr-mono);
 }
 
 /* ---------------- Featured post ---------------- */
