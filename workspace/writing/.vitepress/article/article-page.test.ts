@@ -192,30 +192,60 @@ describe("WritingArticlePage.headingLabel", () => {
 describe("WritingArticlePage.activeHeading", () => {
     const offsets = (...tops: number[]) => tops.map((top, index) => ({ id: `h${index + 1}`, top }));
 
-    it("holds the first heading while the reader is still above it", () => {
+    /** An 800px viewport mid-article, so the activation line lands on 266.67px. */
+    const reading = { height: 800, scrollTop: 2000, scrollHeight: 9000 };
+
+    it("marks nothing while the reader is still above the first heading", () => {
         expect(
-            WritingArticlePage.activeHeading(offsets(600, 900, 1400)),
+            WritingArticlePage.activeHeading(offsets(600, 900, 1400), reading),
+        ).toBeNull();
+    });
+
+    it("lights a heading up once it reaches the upper third", () => {
+        expect(
+            WritingArticlePage.activeHeading(offsets(185, 900, 1400), reading),
         ).toBe("h1");
     });
 
-    it("advances to the last heading scrolled past", () => {
+    it("advances to the last heading past the line", () => {
         expect(
-            WritingArticlePage.activeHeading(offsets(-400, 40, 900)),
+            WritingArticlePage.activeHeading(offsets(-400, 40, 900), reading),
         ).toBe("h2");
         expect(
-            WritingArticlePage.activeHeading(offsets(-900, -400, -20)),
+            WritingArticlePage.activeHeading(offsets(-900, -400, -20), reading),
         ).toBe("h3");
     });
 
-    it("counts a heading sitting exactly on the offset as read", () => {
+    it("leaves the section being read lit while the next heading is still low", () => {
         expect(
-            WritingArticlePage.activeHeading(offsets(-100, WritingArticlePage.headingOffset, 900)),
+            WritingArticlePage.activeHeading(offsets(-400, 500, 1300), reading),
+        ).toBe("h1");
+    });
+
+    it("keeps the line clear of the sticky header on a short viewport", () => {
+        const short = { height: 200, scrollTop: 2000, scrollHeight: 9000 };
+
+        expect(
+            WritingArticlePage.activeHeading(
+                offsets(-400, WritingArticlePage.headingOffset),
+                short,
+            ),
         ).toBe("h2");
+    });
+
+    it("marks the last heading at the foot of the page, however short its section", () => {
+        expect(
+            WritingArticlePage.activeHeading(offsets(-4000, -2000, 700), {
+                height: 800,
+                scrollTop: 8200,
+                scrollHeight: 9000,
+            }),
+        ).toBe("h3");
     });
 
     it("has nothing to mark on an article without headings", () => {
         expect(
-            WritingArticlePage.activeHeading([]),
+            WritingArticlePage.activeHeading([], reading),
         ).toBeNull();
     });
 });

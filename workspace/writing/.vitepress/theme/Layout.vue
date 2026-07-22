@@ -85,7 +85,9 @@ function buildToc() {
         id: h.id,
         label: WritingArticlePage.headingLabel(h.textContent),
     }));
-    activeToc.value = toc.value[0]?.id ?? null;
+    // Left unmarked on purpose: the reader starts above the first heading, and
+    // the callers below settle the real state on the same tick.
+    activeToc.value = null;
 }
 
 function updateScrollState() {
@@ -105,7 +107,11 @@ function updateScrollState() {
         return el ? [{ id: t.id, top: el.getBoundingClientRect().top }] : [];
     });
 
-    activeToc.value = WritingArticlePage.activeHeading(offsets);
+    activeToc.value = WritingArticlePage.activeHeading(offsets, {
+        height: doc.clientHeight,
+        scrollTop: doc.scrollTop,
+        scrollHeight: doc.scrollHeight,
+    });
 }
 
 function onScroll() {
@@ -145,6 +151,8 @@ onContentUpdated(() => {
 
 onMounted(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
+    // The activation line is a fraction of the viewport, so a resize moves it.
+    window.addEventListener("resize", onScroll, { passive: true });
     window.addEventListener("keydown", onSearchHotkey);
     buildToc();
     updateScrollState();
@@ -152,6 +160,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
     window.removeEventListener("keydown", onSearchHotkey);
 
     if (scrollFrame !== null) {

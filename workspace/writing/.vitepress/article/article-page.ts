@@ -12,13 +12,32 @@ export type HeadingOffset = {
     readonly top: number;
 };
 
+/** The scroll geometry the reading tracker needs, in pixels. */
+export type Viewport = {
+    readonly height: number;
+    readonly scrollTop: number;
+    readonly scrollHeight: number;
+};
+
 /** Pure behavior for the post detail page, kept free of Vue and the DOM. */
 export class WritingArticlePage {
     /** Scroll distance, in pixels, before the back-to-top button is offered. */
     static readonly backToTopOffset = 400;
 
-    /** A heading at or above this viewport offset counts as the one being read. */
+    /**
+     * The highest the activation line may sit, in pixels. It keeps the line clear
+     * of the sticky header on short viewports.
+     */
     static readonly headingOffset = 120;
+
+    /**
+     * Where the activation line sits in a normal viewport: a heading counts as
+     * the one being read once it reaches the upper third of the screen.
+     */
+    static readonly activationRatio = 1 / 3;
+
+    /** Slack, in pixels, for calling the page scrolled to the bottom. */
+    static readonly bottomSlack = 2;
 
     /** Related posts shown beneath an article. */
     static readonly relatedLimit = 2;
@@ -89,14 +108,34 @@ export class WritingArticlePage {
     }
 
     /**
-     * The heading to mark active: the last one scrolled past, falling back to the
-     * first while the reader is still above it.
+     * The heading to mark active: the last one to have reached the activation
+     * line, which sits in the upper third of the viewport so a section lights up
+     * while it is being read rather than once it is nearly off the top. Nothing
+     * is marked while the reader is still above the first heading, and the last
+     * heading wins at the foot of the page, where a short final section can never
+     * climb to the line.
      */
-    static activeHeading(headings: readonly HeadingOffset[]): string | null {
-        let active = headings[0]?.id ?? null;
+    static activeHeading(headings: readonly HeadingOffset[], viewport: Viewport): string | null {
+        if (headings.length === 0) {
+            return null;
+        }
+
+        if (
+            viewport.scrollTop + viewport.height >=
+            viewport.scrollHeight - WritingArticlePage.bottomSlack
+        ) {
+            return headings[headings.length - 1].id;
+        }
+
+        const line = Math.max(
+            WritingArticlePage.headingOffset,
+            viewport.height * WritingArticlePage.activationRatio,
+        );
+
+        let active: string | null = null;
 
         for (const heading of headings) {
-            if (heading.top <= WritingArticlePage.headingOffset) {
+            if (heading.top <= line) {
                 active = heading.id;
             }
         }
