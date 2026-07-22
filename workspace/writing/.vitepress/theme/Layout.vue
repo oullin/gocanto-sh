@@ -14,7 +14,7 @@ import type { TopicSelection } from "#writing/search";
 // above a dense archive list. Articles retain their existing header, reading
 // progress, TOC, related posts, and footer.
 
-const { page, frontmatter } = useData();
+const { frontmatter } = useData();
 const route = useRoute();
 
 const isIndex = computed(() => WritingArticlePage.isIndex(route.path));

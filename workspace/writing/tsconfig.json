@@ -35,5 +35,11 @@
             "#writing/*": ["./.vitepress/*"]
         }
     },
-    "include": [".vitepress/**/*.ts", "posts.data.ts", "vite-env.d.ts", "vitest.config.ts"]
+    "include": [
+        ".vitepress/**/*.ts",
+        ".vitepress/**/*.vue",
+        "posts.data.ts",
+        "vite-env.d.ts",
+        "vitest.config.ts"
+    ]
 }

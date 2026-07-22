@@ -9,7 +9,7 @@ export const experience = {
             company: "Oullin Labs",
             employment_type: "Full-Time",
             location_type: "On-Site",
-            position: "Founder & Principal Engineer",
+            position: "Head of Engineering & Lead Architect",
             start_date: "December, 2025",
             end_date: "Present",
             summary:
