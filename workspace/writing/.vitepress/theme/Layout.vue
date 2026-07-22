@@ -341,7 +341,7 @@ const year = new Date().getFullYear();
                                 />
                             </span>
                         </a>
-                        <a href="/" class="wr-home">Home</a>
+                        <a href="/" class="wr-home">All writing</a>
                     </div>
                     <div class="wr-search">
                         <VPNavBarSearch />
