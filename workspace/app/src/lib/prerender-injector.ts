@@ -63,14 +63,15 @@ export class PrerenderInjector {
         let match: RegExpExecArray | null;
 
         while ((match = divTag.exec(this.template)) !== null) {
-            if (match[0] === APP_DIV_CLOSE) {
-                depth -= 1;
-
-                if (depth === 0) {
-                    return match.index;
-                }
-            } else {
+            if (match[0] !== APP_DIV_CLOSE) {
                 depth += 1;
+                continue;
+            }
+
+            depth -= 1;
+
+            if (depth === 0) {
+                return match.index;
             }
         }
 
