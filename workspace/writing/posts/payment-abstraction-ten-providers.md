@@ -157,10 +157,13 @@ Checkout speaks one payment language. Adapters preserve provider evidence. The c
 enforces the same correctness rules for everyone. Adding the eleventh gateway is still
 integration work, and it no longer means rewriting the product around another SDK.
 
-<!-- NEED: one concrete war story to open or close with. The strongest version of this post
-has a named incident: the provider whose webhook ordering broke an assumption, or the
-capability we discovered at the wrong moment. Anything real and shareable would replace the
-generalised framing. -->
+Two of those ten taught me the rule the hard way. WeChat's asynchronous notifications did
+not always arrive in order, so a stale `authorised` could land after `captured` and, before
+the state machine above existed, drag a payment backwards; the fix was allowed transitions
+and event dedup, not a branch that special-cased WeChat. PayPal gave me the other half: a
+capture that timed out with no response, the ambiguous outcome a naive retry turns into a
+double charge. That one is resolved by querying on the merchant reference and letting
+reconciliation settle it, never by firing the capture again and hoping.
 
 The lie in that original interface was not the four verbs. It was believing the verbs were
 the contract.
