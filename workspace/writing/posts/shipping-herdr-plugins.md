@@ -66,7 +66,7 @@ that initial state on purpose.
 Afterwards, Herdr events keep things current: tab changes re-index labels, new
 workspaces receive the keymap, and new panes receive navigation hints.
 
-**Install is not the same as activate. Document both.**
+Install is not the same as activate. Document both.
 
 ## Show the result before asking for trust
 
@@ -184,7 +184,7 @@ interest and a working result, while making the trust boundary and exit path vis
 before installation.
 
 Good plugin distribution should feel boring: find it, see it, install it, activate it,
-and remove it without guessing. The code is only one part of making that true.
+and remove it without guessing.
 
 ---
 

@@ -6,7 +6,7 @@ export const oullinProjects = [
         language: "Go / Docker",
         title: "Oullin: REST API",
         excerpt:
-            "A purpose-built Go API powering content delivery and dynamic data for the Oullin platform. Structured around clean request routing, strict input validation, and a fixture-driven data layer that makes it trivial to swap persistence backends without touching application logic. Designed from the start for predictable latency under load, with no hidden allocations in the hot path. Ships as a single Docker image with zero external config requirements: pull, run, done.",
+            "A Go API powering content delivery and dynamic data for the Oullin platform. Request routing, strict input validation, and a fixture-driven data layer that swaps persistence backends without touching application logic. Built for predictable latency under load, and it ships as a single Docker image that runs with no external config.",
         url: "https://github.com/oullin/api",
         is_open_source: true,
         icon: "Server",
@@ -18,7 +18,7 @@ export const oullinProjects = [
         language: "Vue / TypeScript",
         title: "Oullin: Web Client",
         excerpt:
-            "The Vue 3 + TypeScript single-page application behind the Oullin platform. Built with Vite, Tailwind CSS v4, and a composable API store that abstracts all remote data access behind a single, type-safe surface. Routing, SEO metadata, and structured JSON-LD are handled declaratively so each page remains focused on content rather than plumbing. shadcn-vue provides the base component primitives, extended with a custom design token system for light and dark mode without a single media query in component code.",
+            "The Vue 3 + TypeScript single-page application behind the Oullin platform. Built with Vite, Tailwind CSS v4, and a composable API store that puts all remote data access behind one type-safe surface. Routing, SEO metadata, and structured JSON-LD are declarative, so each page stays focused on content. shadcn-vue supplies the base component primitives, extended with a custom design token system that handles light and dark mode without media queries in component code.",
         url: "https://github.com/oullin/web",
         is_open_source: true,
         icon: "Globe",
@@ -30,7 +30,7 @@ export const oullinProjects = [
         language: "Go / Docker",
         title: "Oullin: Infrastructure",
         excerpt:
-            "Docker-based deployment pipeline for the full Oullin stack: API, web client, and any future services. The core design principle is environment parity: if it works locally it works in production, with no special-casing at any layer. A composable Makefile wraps common operations so the cognitive overhead of managing multi-service deployments collapses to a handful of muscle-memory commands. Reproducible builds are enforced through pinned base images and explicit dependency resolution.",
+            "Docker-based deployment pipeline for the full Oullin stack: API, web client, and any future services. It holds one line: if it works locally it works in production, with no special-casing at any layer. A Makefile wraps common operations, so managing a multi-service deployment comes down to a handful of commands. Pinned base images and explicit dependency resolution keep the builds reproducible.",
         url: "https://github.com/oullin/infra",
         is_open_source: true,
         icon: "Box",
@@ -42,7 +42,7 @@ export const oullinProjects = [
         language: "Go",
         title: "Oullin: Workflow",
         excerpt:
-            "A production-grade state machine and Petri Net workflow engine for Go, built to model complex domain object lifecycles without coupling state logic to business rules. Transitions are declared explicitly with guard conditions and side-effect hooks, making illegal state changes impossible by construction rather than by convention. The engine ships with a full audit trail, thread-safe concurrent state lookups, and Graphviz export for visualising transition graphs, useful both in debugging and in communicating system behaviour to non-technical stakeholders.",
+            "A state machine and Petri Net workflow engine for Go, built to model domain object lifecycles without coupling state logic to business rules. Transitions are declared with guard conditions and side-effect hooks, so illegal state changes fail at compile time instead of in review. The engine ships with a full audit trail, thread-safe concurrent state lookups, and Graphviz export for visualising transition graphs, which helps both in debugging and in showing system behaviour to non-technical stakeholders.",
         url: "https://github.com/oullin/workflow",
         is_open_source: true,
         icon: "GitBranch",

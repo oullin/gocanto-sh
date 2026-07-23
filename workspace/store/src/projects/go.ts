@@ -6,7 +6,7 @@ export const goProjects = [
         language: "Go",
         title: "users-grpc-service",
         excerpt:
-            "A reference gRPC service in Go implementing both server and client roles, designed to demonstrate clean contract design between distributed services. Identity and session operations are exposed via a typed protobuf interface, making the service easy to consume, mock, or swap behind an API gateway. Built with observability in mind: structured logging and defined error codes throughout so distributed traces stay readable. Useful as a starting point for any Go service that needs to participate in a gRPC mesh.",
+            "A reference gRPC service in Go implementing both server and client roles, built to show contract design between distributed services. Identity and session operations sit behind a typed protobuf interface, so the service is easy to consume, mock, or swap behind an API gateway. Structured logging and defined error codes throughout keep distributed traces readable. A useful starting point for any Go service that needs to join a gRPC mesh.",
         url: "https://github.com/gocanto/users-grpc-service",
         is_open_source: true,
         icon: "Users",
@@ -18,7 +18,7 @@ export const goProjects = [
         language: "Go",
         title: "converter-go",
         excerpt:
-            "A data-agnostic currency converter in Go that accepts any exchange-rate provider through a defined interface, keeping business logic fully decoupled from third-party API contracts. Conversion operations are expressed as value types rather than primitive floats, eliminating a whole class of precision and mutation bugs at the type level. The port mirrors the design decisions made in the earlier PHP version of the same library, intentionally, to validate that the interface held up across languages and runtime models.",
+            "A data-agnostic currency converter in Go that takes any exchange-rate provider through a defined interface, keeping business logic decoupled from third-party API contracts. Conversion operations are value types, not primitive floats, which removes a whole class of precision and mutation bugs at the type level. The port deliberately mirrors the earlier PHP version, to check that the interface held up across languages and runtime models.",
         url: "https://github.com/gocanto/go-converter",
         is_open_source: true,
         icon: "ArrowLeftRight",
@@ -30,7 +30,7 @@ export const goProjects = [
         language: "Go",
         title: "money",
         excerpt:
-            "A Go implementation of Martin Fowler's Money pattern, centred on amount and currency value objects so arithmetic stays explicit, predictable, and safe across domain boundaries.",
+            "A Go implementation of Martin Fowler's Money pattern, centred on amount and currency value objects so arithmetic stays explicit and safe across domain boundaries.",
         url: "https://github.com/gocanto/money",
         is_open_source: true,
         icon: "Coins",
@@ -78,7 +78,7 @@ export const goProjects = [
         language: "Go",
         title: "payment-gateway",
         excerpt:
-            "A Go payment gateway sandbox focused on provider abstraction and transaction flow handling, structured as a clean starting point for payment integrations.",
+            "A Go payment gateway sandbox focused on provider abstraction and transaction flow handling, structured as a starting point for payment integrations.",
         url: "https://github.com/gocanto/payment-gateway",
         is_open_source: true,
         icon: "CreditCard",
@@ -90,7 +90,7 @@ export const goProjects = [
         language: "Go",
         title: "fmtkit",
         excerpt:
-            "A rule-driven formatting pipeline for Go and TypeScript/Vue that goes beyond gofmt, enforcing structure around control flow, declaration ordering, and spacing before handing code off to gofmt and goimports, with an embedded oxfmt/oxlint toolchain for the TS side. Built to make human-written, generated, and agent-written code converge on the same house style in a single pass. Ships as one self-contained binary (Homebrew or GitHub Releases) and a reusable Go engine, with config-driven file discovery, exclusion rules, and agent-friendly output formats for CI and automation workflows.",
+            "A rule-driven formatting pipeline for Go and TypeScript/Vue that goes beyond gofmt, enforcing structure around control flow, declaration ordering, and spacing before handing code to gofmt and goimports, with an embedded oxfmt/oxlint toolchain for the TS side. It makes human-written, generated, and agent-written code land on the same house style in a single pass. Ships as one self-contained binary (Homebrew or GitHub Releases) and a reusable Go engine, with config-driven file discovery, exclusion rules, and agent-friendly output formats for CI and automation.",
         url: "https://github.com/oullin/fmtkit",
         is_open_source: true,
         icon: "Wand2",

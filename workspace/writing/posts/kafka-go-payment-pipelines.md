@@ -35,8 +35,8 @@ Hot keys need an answer decided in advance. One settlement account or one busy m
 dominate a partition, and the tempting fix is to change the key, which is the one thing you
 cannot casually do. The real options are narrower: split the domain, give the hot workflow
 its own topic, or accept that serial processing is the correct price of consistency for that
-entity. **Pick one deliberately, because the accidental version is "we changed the key and
-lost ordering in production."**
+entity. Pick one deliberately, because the accidental version is "we changed the key and
+lost ordering in production."
 
 ## A goroutine per message is a denial of service you wrote yourself
 

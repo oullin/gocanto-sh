@@ -14,7 +14,7 @@ const pillars: Pillar[] = [
     {
         sub: "Agentic AI",
         title: "AI assistants you can actually trust with real work.",
-        body: 'Not chatbots. AI that books, files, refunds, dispatches. Every action is logged, every decision is replayable, and the system refuses unsafe steps before they happen. Built for teams who can\'t afford an AI "oops."',
+        body: 'AI that books, files, refunds, and dispatches. Every action is logged, every decision is replayable, and the system refuses unsafe steps before they happen. Built for teams who can\'t afford an AI "oops."',
     },
     {
         sub: "Banking & Fintech",

@@ -20,7 +20,7 @@ integrations, event pipelines, and AS/400 modernisation pilots. The architecture
 what fixed price forces you into, and it turns out to be the same architecture a bank would
 ask for.
 
-**An agent should not be trusted because its last answer looked sensible.**
+An agent should not be trusted because its last answer looked sensible.
 
 ## The deterministic software owns everything that matters
 
