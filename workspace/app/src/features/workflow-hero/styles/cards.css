@@ -187,9 +187,7 @@
     border-radius: 12px;
     background: var(--wf-card);
     color: var(--wf-ink);
-    box-shadow:
-        0 16px 32px oklch(0 0 0 / 0.35),
-        inset 0 1px 0 oklch(1 0 0 / 0.04);
+    box-shadow: var(--wf-card-shadow);
 }
 
 .wf-card[data-step-id="lead-input"] .wf-card__body {
@@ -312,7 +310,7 @@
     min-height: 22px;
     border: 1px solid var(--wf-line);
     border-radius: 6px;
-    background: oklch(0.18 0 0);
+    background: var(--wf-chip-bg);
     color: var(--wf-ink);
     padding: 2px 8px;
     font-size: 12px;
@@ -341,7 +339,7 @@
     height: 14px;
     border-radius: 4px;
     border: 1px solid var(--wf-line);
-    background: oklch(1 0 0 / 0.06);
+    background: var(--wf-hover-bg);
 }
 
 .wf-card__footer {

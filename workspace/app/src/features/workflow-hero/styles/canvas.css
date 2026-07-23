@@ -1,5 +1,5 @@
 .wf-canvas-wrap:focus-visible {
-    outline: 3px solid oklch(1 0 0 / 0.2);
+    outline: 3px solid var(--wf-focus);
     outline-offset: -4px;
 }
 
@@ -16,10 +16,10 @@
         radial-gradient(
             ellipse at center,
             transparent 0 34%,
-            oklch(0.085 0 0 / 0.3) 52%,
+            var(--wf-canvas-veil) 52%,
             var(--wf-bg) 78%
         ),
-        radial-gradient(circle, oklch(1 0 0 / 0.12) 1px, transparent 1.5px);
+        radial-gradient(circle, var(--wf-dot) 1px, transparent 1.5px);
     background-size:
         100% 100%,
         20px 20px;
@@ -110,7 +110,7 @@
 
 .wf-connector-path,
 .wf-connector-arrow {
-    stroke: oklch(1 0 0 / 0.24);
+    stroke: var(--wf-node-line);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -121,7 +121,7 @@
 }
 
 .wf-connector-diamond {
-    fill: oklch(1 0 0 / 0.24);
+    fill: var(--wf-node-line);
     opacity: 0;
     animation: wf-node-fade 500ms ease-out both;
     animation-delay: var(--wf-connector-delay);
