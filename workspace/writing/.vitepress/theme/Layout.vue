@@ -7,6 +7,7 @@ import { WritingArticlePage } from "#writing/article";
 import type { Heading } from "#writing/article";
 import { WritingIndexSearch } from "#writing/search";
 import type { TopicSelection } from "#writing/search";
+import ThemeToggle from "./ThemeToggle.vue";
 
 // Implements the "Blog Home" design: a dark editorial index with a sticky
 // author rail (identity, topic counts, "Now" card) and a promoted latest post
@@ -275,6 +276,7 @@ const year = new Date().getFullYear();
                     <div class="wr-search wr-index-search">
                         <VPNavBarSearch />
                     </div>
+                    <ThemeToggle />
                 </div>
 
                 <article v-if="featured && !filtering" class="wr-essay wr-essay--featured">
@@ -346,6 +348,7 @@ const year = new Date().getFullYear();
                     <div class="wr-search">
                         <VPNavBarSearch />
                     </div>
+                    <ThemeToggle />
                 </header>
 
                 <main class="wr-article-wrap">

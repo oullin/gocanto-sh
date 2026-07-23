@@ -40,8 +40,9 @@ export default defineConfig({
     titleTemplate: ":title | Gustavo Ocanto",
     description: DESCRIPTION,
 
-    // The landing page (gocanto.sh) is dark-only; match it and drop the toggle.
-    appearance: "force-dark",
+    // Match the landing site's behaviour: system preference by default, with a
+    // manual toggle rendered by the custom Layout (see theme/ThemeToggle.vue).
+    appearance: true,
 
     // Subdomain root; posts live in posts/ but resolve at clean top-level URLs.
     base: "/",
