@@ -1,31 +1,25 @@
 ---
-title: Ten gateways do not become one gateway
+title: Designing a payment abstraction that survives ten-plus providers
 date: 2026-06-11
-updated: 2026-07-22
-description: "Adyen, Stripe, PayPal, WeChat, PayDollar and half a dozen more behind one checkout. The shared interface was the easy part; capabilities, error meaning, webhook order, and recovery were the work."
+updated: 2026-07-23
+description: "How to keep checkout and ledger logic stable across ten-plus payment providers using capability-aware contracts, typed errors, idempotency, webhook normalization, and contract tests."
 tags: [payments, architecture, integrations, contract-testing]
 ---
 
-By the tenth gateway, our interface was a polite lie.
+Ten payment providers do not become one provider because they implement the same interface.
 
-Adyen, Stripe, PayPal, WeChat, PayDollar, and several more behind one checkout at
-BeMyGuest, serving e-commerce and marketplace flows across South East Asia. Every one of
-them implemented the same four verbs. Authorise, capture, refund, query. On paper we had an
-abstraction. In practice, the code that consumed it had learned which provider it was
-talking to, and had opinions.
+At BeMyGuest we ran Adyen, Stripe, PayPal, WeChat, PayDollar, and several more behind one checkout,
+serving e-commerce and marketplace flows across South East Asia. The common verbs are easy:
+authorize, capture, refund, query. The differences that break checkout live in capabilities,
+timing, error meaning, webhook order, and recovery.
 
-That is the actual failure mode of a payment abstraction. Not that it does not compile. That
-it compiles while the business logic quietly grows provider-shaped branches, and nobody
-notices until adding number eleven means touching checkout.
+A durable abstraction keeps the business workflow stable without pretending those differences do
+not exist.
 
-## The verbs were never the hard part
+## Start from the domain operation
 
-The differences that break a checkout do not live in the method names. They live in
-capabilities, timing, what an error means, what order webhooks arrive in, and what recovery
-looks like when the answer never comes.
-
-So the interface gets designed from what checkout and the ledger need to ask, in our
-vocabulary, not by averaging ten SDKs:
+Do not design the interface by averaging provider SDKs. Define what checkout and the ledger need to
+ask in your own vocabulary.
 
 ```go
 type Gateway interface {
@@ -36,25 +30,30 @@ type Gateway interface {
 }
 ```
 
-Requests carry a stable operation ID, money as amount plus currency, customer context,
-return URLs, and the narrow metadata the domain actually permits. Provider-specific fields
-do not leak in as an untyped map, and this is the rule I would defend hardest.
+Requests carry stable operation IDs, money as amount plus currency, customer context, return URLs,
+and the narrow metadata the domain permits. Provider-specific fields do not leak into the shared
+request as an untyped map.
 
-**A generic `options` bag becomes an undocumented second API within a quarter.** Everything
-awkward gets shoved into it, nothing is typed, nothing is tested, and eventually a key that
-only Adyen reads is being set by code that thinks it is talking to PayPal. When a provider
-genuinely needs extra information, it becomes a declared capability or a typed configuration
-for that method. Both of those you can search for. A map key you cannot.
+When a provider requires extra information, model it as a declared capability or a typed method
+configuration. A generic `options` bag eventually becomes an undocumented second API: everything
+awkward ends up in it, nothing is typed or tested, and a key that only Adyen reads can be set by
+code that is talking to PayPal. A declared capability or typed configuration can be searched for;
+a map key cannot.
 
-## Capabilities are data, not documentation
+## Make capabilities visible
 
-Providers support different combinations of things, and the list is longer than anyone
-expects: authorise-then-capture versus immediate sale, partial capture, partial refund,
-synchronous confirmation versus redirect versus asynchronous webhook, saved instruments,
-recurring mandates, supported currencies and countries, amount limits, provider-side
-idempotency, and whether you can query by your own merchant reference.
+Providers support different combinations:
 
-If that lives in a wiki, checkout will find out the hard way. So it lives in the type:
+- authorize then capture versus immediate sale;
+- partial capture or partial refund;
+- synchronous confirmation versus redirect or asynchronous webhook;
+- saved instruments and recurring mandates;
+- currencies, countries, and amount limits;
+- provider idempotency and query-by-merchant-reference.
+
+Expose those capabilities to routing and validation before checkout starts. If partial capture is a
+business requirement, discovering at capture time that the selected provider cannot do it is too
+late.
 
 ```ts
 type GatewayCapabilities = {
@@ -66,107 +65,94 @@ type GatewayCapabilities = {
 };
 ```
 
-Exposed to routing and validation before checkout starts, not consulted at capture time.
-Discovering that the selected provider cannot do a partial capture at the moment you attempt
-one leaves you holding an authorised payment, a customer, and no good options. With
-capabilities as data, the domain either picks a provider that can do the job or tells the
-customer the truth up front.
+The domain can select a compatible provider or present an accurate limitation. It does not branch on
+provider names.
 
-`queryByMerchantReference` deserves its own mention, because it is the capability that
-determines whether you can recover from an ambiguous outcome. Providers that do not offer it
-turn every timeout into a manual investigation.
+`queryByMerchantReference` matters more than it looks: it determines whether you can recover from an
+ambiguous outcome. Providers that do not offer it turn every timeout into a manual investigation.
 
-## Normalise errors without erasing the evidence
+## Normalize errors without erasing evidence
 
-Provider SDK errors are simultaneously too detailed for checkout and too vague for
-operations. Both audiences are badly served by passing them through.
+Provider SDK errors are usually too detailed for checkout and too vague for operations.
 
-The taxonomy that survived ten integrations:
+Translate them into a typed taxonomy:
 
-| Normalised error | Means | Retry |
-| --- | --- | --- |
-| `declined` | A completed business decision | Never automatically |
-| `invalid-request` | Our integration or input defect | No, fix it |
-| `authentication-failed` | Configuration incident | No, page someone |
-| `rate-limited` | Provider is throttling us | Yes, on their budget |
-| `temporarily-unavailable` | Transient | Yes, may be safe |
-| `unknown-outcome` | We do not know what happened | **Reconcile first** |
+- `declined`: a completed business decision; do not retry automatically;
+- `invalid-request`: integration or input defect;
+- `authentication-failed`: configuration incident;
+- `rate-limited`: retry according to the provider budget;
+- `temporarily-unavailable`: retry may be safe;
+- `unknown-outcome`: reconcile before another mutation.
 
-The attempt record keeps the redacted provider code, request ID, HTTP status, and raw
-category underneath. Support needs the evidence; the workflow needs stable behaviour; those
-are different requirements and collapsing them loses one of them.
+Retain the redacted provider code, request ID, HTTP status, and raw category in the attempt record.
+Support needs the evidence, while the workflow needs stable behaviour.
 
-Retry policy belongs to the normalised error combined with the operation type, not to the
-error alone. Retrying a query is free. Retrying a capture that returned an ambiguous response
-is how you charge someone twice.
+Retry policy belongs to the normalized error and operation type. Retrying a query is not the same as
+retrying a capture with an ambiguous response.
 
-## Events become state transitions, not a switch statement
+We learned that with PayPal. A capture timed out with no response at all: no success, no decline,
+nothing to map. A naive retry of the capture would have risked charging the customer twice. The
+correct handling is to treat the outcome as `unknown-outcome`, query the provider by our merchant
+reference, and let reconciliation settle the payment state before any further mutation.
 
-Every provider signs and names its webhooks differently, and this is where provider logic
-loves to leak back in.
+## Normalize events into state transitions
 
-The adapter verifies the exact raw request body, checks freshness, deduplicates the provider
-event, and translates it into a domain event. The shared handler then applies the payment
-state machine. If that handler contains `if provider == ...`, the abstraction has already
-failed and the only question is how far the rot has spread.
+Every provider signs and names webhooks differently. The adapter verifies the exact raw request,
+checks freshness, deduplicates the provider event, and translates it into a domain event.
 
-Store both identities: the provider event ID for transport deduplication, and the domain
-transition ID for the resulting effect. Out-of-order and repeated events stay visible in the
-audit trail even when they change nothing, which matters at 3am when someone asks why a
-payment moved backwards. It did not. A stale `authorised` arrived after `captured` and was
-recorded and ignored, and you can show them that.
+The shared handler then applies the payment state machine. It should not contain ten branches such
+as `if provider == ...`.
 
-## The contract suite is the abstraction
+WeChat made the case for the state machine. Its asynchronous notifications did not always arrive in
+order: a stale `authorized` event could arrive after `captured`, and before the state machine
+existed, that stale event could drag a payment's state backwards. The fix was not WeChat-specific
+branching. It was a table of allowed state transitions plus event deduplication, applied to every
+provider: the stale `authorized` is recorded in the audit trail and ignored, because `captured` to
+`authorized` is not a legal transition.
 
-The interface is a claim. The shared test suite is what makes it true.
+Store both identities: provider event ID for transport deduplication and domain transition ID for
+the resulting effect. Out-of-order or repeated events remain visible in the audit trail even when
+they do not change state.
 
-Every adapter runs the same behavioural suite against fixtures or a sandbox: that the
-idempotency key is forwarded in the form the provider requires, that money uses the
-provider's minor-unit rules, that known responses map to the correct domain states, that
-error codes map to the retry taxonomy, that signatures reject changed bodies and stale
-timestamps, that duplicate webhooks do not repeat state or ledger effects, and that an
-ambiguous create or capture can be queried and reconciled.
+## Test the contract, not only the adapter methods
 
-Provider-specific tests still cover authentication and payload detail. But it is the shared
-suite that proves adding provider eleven has not weakened a guarantee checkout depends on,
-and that is the only claim anyone actually cares about.
+Each adapter runs the same behavioral suite against provider fixtures or a sandbox:
 
-Keep the captured fixtures redacted and versioned. When a provider changes a response shape,
-the diff is reviewable and last year's incident is this year's regression test.
+- the idempotency key is forwarded in the required form;
+- money uses the provider's expected minor-unit rules;
+- known responses map to the correct domain states;
+- error codes map to the retry taxonomy;
+- signatures reject changed bodies and stale timestamps;
+- duplicate webhooks do not repeat state or ledger effects;
+- ambiguous create/capture outcomes can be queried and reconciled.
 
-## Route with evidence, and never fail over an unknown
+Provider-specific tests cover authentication and payload details. The shared contract suite proves
+that adding a provider does not weaken checkout guarantees.
 
-Once providers share a reliable boundary, routing can start considering availability, cost,
-currency, country, capability, and recent success rate. It still has to be deterministic and
-explainable: record why a provider was chosen and which fallback rule fired, or you will be
-reverse-engineering it during an outage.
+Keep captured fixtures redacted and versioned. When a provider changes a response shape, the diff is
+reviewable and the old incident becomes a regression test.
 
-One hard rule. **Never fail over an ambiguous mutation to a second provider until the first
-outcome is resolved.** "Try another gateway" is a reasonable-sounding sentence that charges
+## Route with evidence
+
+Once providers share a reliable boundary, routing can consider availability, cost, currency,
+country, capability, and recent success rate. Routing must still be deterministic and explainable.
+
+Record why a provider was selected and which fallback rule ran. Never fail over an ambiguous
+mutation to a second provider until the first outcome is resolved; "try another gateway" can charge
 the customer twice.
 
-Dashboards compare authorisation success, latency, error taxonomy, webhook lag, and
-reconciliation differences per provider. Aggregate uptime hides the integration that is
-quietly declining one market, which is the outage that costs the most and pages the least.
+Operational dashboards should compare authorization success, latency, error taxonomy, webhook lag,
+and reconciliation differences by provider. Aggregate uptime alone hides the integration that is
+quietly declining one market.
 
-## The goal was never identical providers
+## A good abstraction exposes the differences that matter
 
-It was stable business logic with the differences made explicit at the boundary.
+The goal is not identical providers. It is stable business logic with explicit capability and
+failure differences at the boundary.
 
-Checkout speaks one payment language. Adapters preserve provider evidence. The contract suite
-enforces the same correctness rules for everyone. Adding the eleventh gateway is still
-integration work, and it no longer means rewriting the product around another SDK.
-
-Two of those ten taught me the rule the hard way. WeChat's asynchronous notifications did
-not always arrive in order, so a stale `authorised` could land after `captured` and, before
-the state machine above existed, drag a payment backwards; the fix was allowed transitions
-and event dedup, not a branch that special-cased WeChat. PayPal gave me the other half: a
-capture that timed out with no response, the ambiguous outcome a naive retry turns into a
-double charge. That one is resolved by querying on the merchant reference and letting
-reconciliation settle it, never by firing the capture again and hoping.
-
-The lie in that original interface was not the four verbs. It was believing the verbs were
-the contract.
+Checkout speaks one payment language. Adapters preserve provider evidence. Contracts enforce the
+same correctness rules. Adding provider eleven is still integration work, but it no longer requires
+rewriting the product around another SDK.
 
 ---
 

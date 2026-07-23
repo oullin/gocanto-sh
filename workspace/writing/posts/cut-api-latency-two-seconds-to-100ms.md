@@ -1,71 +1,71 @@
 ---
-title: The two seconds nobody asked for
+title: How to cut API latency from two seconds to 100 milliseconds
 date: 2026-07-02
-updated: 2026-07-22
-description: "An API path at two seconds, a database doing three. It ended at 100ms, and almost none of it came from making queries faster. It came from deleting work the request never needed to do."
+updated: 2026-07-23
+description: "A measurement-first account of reducing a production API path from roughly two seconds to about 100 milliseconds through query profiling, bounded data access, caching, and SLOs."
 tags: [performance, sql, caching, slos]
 ---
 
-The endpoint took two seconds and the database underneath it took three.
+The fastest optimization was deleting work the request never needed to do.
 
-That arithmetic should bother you, and it bothered me. A request cannot be slower than its
-own database work and also faster than it, so either the profile was lying or the request
-was not really waiting for all of that work. It was the second thing, in the least helpful
-way: part of those three seconds belonged to a different caller warming the same rows.
+On a business banking product at Aspire Financial Technologies, latency on the transaction paths
+sat around two seconds while the underlying database work could take roughly three. That
+arithmetic was itself a finding: a request cannot be slower than its own database work and also
+faster than it, and the profile only made sense once it was clear that part of those three seconds
+belonged to a different caller warming the same rows. After profiling and changing the shape of the
+operation, the API path landed around 100 milliseconds and the key queries around 800 milliseconds
+in their heavier form.
 
-This was a business banking product at Aspire Financial Technologies, on transaction paths
-customers hit constantly and complained about politely. It ended at roughly 100ms on the
-API and 800ms on the heaviest database work. The interesting part is not the ratio. It is
-that almost none of the improvement came from making a query faster.
+The useful part of that result is not the percentages. It is the order of operations: measure the
+whole path, remove unnecessary work, make database access explicit, cache only stable answers, and
+set an SLO so the gain survives the next feature.
 
-## "The API is slow" is not a measurement
+## Define the request you are optimizing
 
-The first day produced no code. It produced a number I could argue with.
+"The API is slow" is not a measurement.
 
-One route, one representative workload, and then p50, p95, p99, payload size, query count,
-rows read, external calls, CPU time, and time spent waiting on the connection pool. Spans
-around each, so the missing milliseconds had nowhere to hide between two log lines.
+Pick one route and one representative workload. Record p50, p95, and p99 latency, payload size,
+query count, rows read, external calls, CPU time, and time waiting for the connection pool. Break the
+trace into spans so the missing time cannot hide between application logs.
 
-Two things about that setup mattered more than the tooling.
+Use production-shaped data. A query that scans 200 rows locally can scan 20 million in the real
+tenant. Copy statistics or generate representative volume without copying sensitive records.
 
-**Use production-shaped data.** A query that scans 200 rows on a laptop scans twenty
-million in the tenant that files the ticket. Copy statistics rather than records and the
-planner makes production decisions against data you are allowed to have.
+I also separate cold and warm behaviour. A cache or connection warm-up can make an average look
+excellent while the first customer after a quiet period still waits seconds.
 
-**Separate cold from warm.** Our averages looked respectable because the pool and the
-caches were always hot by the time anyone measured. The first customer after a quiet Sunday
-still waited seconds, and no dashboard I owned had an opinion about it.
+## Count queries before tuning queries
 
-## The problem was the number of queries, not the queries
+An N+1 path can execute individually fast statements and still be slow as a request. Instrument the
+query count and attach it to the trace. On this system the count came back in the hundreds for a
+single page of transactions: not one slow statement, but several hundred fast ones, none of which
+appear in a slow query log.
 
-The count came back in the hundreds for a single page of transactions. Not one slow
-statement: several hundred fast ones, which is a more embarrassing result, because every
-individual query looks fine in the slow log.
+Common sources include:
 
-They came from the usual places, and one specific place:
+- loading related records inside a serializer loop;
+- permission checks that query once per result;
+- resolving the same tenant or configuration repeatedly;
+- fetching complete ORM models when the response uses four columns;
+- running count and data queries with different filters.
 
-- related records loaded inside a serializer loop
-- the same tenant and configuration resolved over and over
-- full ORM models hydrated for responses that used four columns
-- count and data queries running with different filters
-- **a permission check that queried once per row in the result set**
+The permission check was the expensive one here, and the fix ended up architectural rather than
+local. Authorization was scattered through the codebase as whatever check happened to be nearest,
+so a list endpoint paid for it once per row and there was no single place to make it cheaper.
+Centralizing permissions behind an authorization gateway turned the check into a bounded, cacheable
+answer computed once per request instead of a query multiplied by page size.
 
-That last one is why the fix ended up architectural rather than local. Authorisation was
-scattered through the codebase as whatever check happened to be nearest, so a list endpoint
-paid for it per item and there was nowhere to go to make it cheaper. Centralising
-permissions behind an authorisation gateway turned it into a bounded, cacheable answer
-computed once per request instead of a query multiplied by page size.
+Remove duplication first. Batch related keys, preload bounded relations, and select the fields the
+contract needs. The best query optimization is often going from 400 round trips to four.
 
-The best query optimisation available was going from four hundred round trips to four.
+## Read the actual execution plan
 
-## Then, and only then, `EXPLAIN ANALYZE`
+For the remaining expensive statements, use `EXPLAIN ANALYZE` against realistic parameters.
 
-With the count under control, the statements that remained were worth reading properly,
-with realistic parameters rather than the tidy ones that make plans look good.
-
-What I read for: estimated rows diverging sharply from actual, sequential scans on
-predicates that should have been selective, sorts spilling to disk, nested loops multiplying
-two large inputs, and functions wrapped around columns quietly disqualifying an index.
+Look for estimates that diverge sharply from actual rows, sequential scans on selective predicates,
+sorts spilling to disk, nested loops multiplying large inputs, and functions that prevent index use.
+An index is useful when it supports the real filter and order, not because the column appears in a
+where clause.
 
 ```sql
 CREATE INDEX CONCURRENTLY payments_account_created_idx
@@ -73,99 +73,77 @@ CREATE INDEX CONCURRENTLY payments_account_created_idx
     INCLUDE (status, amount, currency);
 ```
 
-That one supports an account timeline in the order it is actually read, and carries the
-projected columns so the database does not go back to the heap for them. It is not a
-template. Write cost, cardinality, and retention all argue against indexes, and an index
-that exists because a column appeared in a `WHERE` clause is a maintenance bill with no
-matching benefit.
+That example supports a common account timeline without forcing the database back to the table for
+the projected fields. It is not a universal index: write cost, cardinality, and retention still
+matter.
 
-Pagination went the same way. Deep offsets ask the database to find and discard everything
-before the page you want, so page 200 is slow by design. A keyset cursor over
-`(created_at, id)` keeps the work per page constant no matter how far in the customer is.
+Pagination also needs a stable shape. Deep offset pagination asks the database to find and discard
+all earlier rows. Keyset pagination over a deterministic `(created_at, id)` cursor keeps the work
+bounded no matter how far in the customer pages.
 
-## Caching came last, and that ordering was the point
+## Cache a domain answer, not an accident
 
-Every earlier attempt at this problem had started with a cache, which is exactly why the
-problem was still there. A cache in front of an inefficient query hides the inefficiency,
-makes invalidation harder to reason about, and converts a latency bug into a correctness bug
-you find months later.
+Caching helped once the underlying query path was controlled. Before that, it only hid inefficient
+work and made invalidation harder to reason about. Earlier attempts at this problem had started
+with a cache, which is part of why the problem was still there.
 
-Once the access path was controlled, caching had something worth caching: reference data,
-computed permissions with a version, read models updated from durable events. Things with an
-owner and a tolerable staleness window.
+Choose entries with clear ownership and a tolerable freshness window: reference data, computed
+permissions with a version, or read models updated from durable events. Include tenant and relevant
+policy versions in the key. A cache key that omits authorization context is a data leak waiting for
+load.
 
-Two rules I would not bend on.
+Protect the miss path from a stampede. Use single-flight work, short randomized TTLs, or background
+refresh so one expired key does not send hundreds of identical queries to the database.
 
-**The key carries the tenant and the policy version.** A cache key that omits the
-authorisation context is not a performance optimisation, it is a data leak waiting for
-enough concurrency.
+Negative results need care. Caching "not found" for too long can hide a record created seconds later.
 
-**Protect the miss.** One expired hot key should not send four hundred identical queries at
-the database. Single-flight, jittered TTLs, or background refresh, but something.
+## Move the remaining work off the request path
 
-Caching "not found" needs its own thought. Hold it too long and you hide a record created
-seconds ago, which reads to a customer as the system losing their money.
+The heaviest database work still takes around 800 milliseconds in its worst shape, and the API
+answers in about 100. The gap is not a trick. The expensive aggregation still happens, but on a
+schedule or off an event, so what a customer waits for is a bounded read against a shape built for
+reading.
 
-## Where the missing 700ms went
+In parallel, a monolith-to-microservices migration halved the critical paths on its own, from
+roughly three seconds to 1.5, mostly by removing hops and contention that had nothing to do with
+SQL.
 
-Back to the arithmetic. The heaviest database work still takes around 800ms in its worst
-shape, and the API answers in about 100.
+## Keep response work bounded
 
-That gap is not a trick. It is the whole answer: **the work left the request path.** What a
-customer waits for is now a bounded read against a shape built for reading. The expensive
-aggregation still happens, but it happens on a schedule or off an event, and nobody sits
-with a spinner while it does.
+Database improvements can reveal application overhead that was previously invisible. Profile JSON
+serialization, large object mapping, compression, and repeated policy evaluation.
 
-Running alongside that, the monolith to microservices migration halved the critical paths on
-its own, 3s to 1.5s, mostly by removing hops and contention that had nothing to do with SQL.
+Put limits into the API contract: maximum page size, bounded date ranges, and explicit expansions.
+Returning every transaction because the endpoint technically can commits the system to an unbounded
+production cost.
 
-The framing that survived all of it: latency is a budget. Every request is allowed to create
-a certain amount of work, and the design either enforces that or it does not.
+## Turn the result into an SLO
 
-## Then hold it
+A one-off benchmark is easy to lose. Define a service-level objective for the route and alert on the
+error budget, not a single slow request.
 
-A one-off benchmark is a screenshot. It decays the moment somebody adds a join.
+For the transaction-list paths the objective was p95 under 200 milliseconds and p99 under 500
+milliseconds, measured at 99.9% over a rolling 28-day window. That leaves a 0.1% error budget,
+about forty minutes across the window. Burning it fast paged someone; burning it slow froze
+non-critical deploys until the budget recovered.
 
-So it became an SLO with an error budget, alerting on the budget rather than on individual
-slow requests, plus limits written into the API contract itself: a maximum page size,
-bounded date ranges, explicit expansions. Returning every transaction because the endpoint
-technically can is not flexibility. It is an unbounded cost you have agreed to pay forever.
+Query count and rows scanned are also guarded in integration tests on the critical paths, and
+tracing stays on in production. When a feature adds a join or reintroduces an N+1, the build says
+so, instead of a customer discovering it months later on the tenant with twenty million rows.
 
-The objective was p95 under 200ms and p99 under 500ms on the transaction-list paths,
-measured over a rolling 28-day window at 99.9%. That left a 0.1% error budget, on the order
-of forty minutes across the window. Burning it fast paged someone; burning it slow froze
-non-critical deploys until it recovered, which turned "the endpoint feels slow again" into a
-number with a consequence attached.
+## Performance is a property of the design
 
-The check that mattered most was the cheapest: query count and rows scanned, asserted in
-integration tests on the critical paths. When a feature reintroduces an N+1, the build says
-so, instead of a customer discovering it eight months later on the tenant with twenty
-million rows.
+The improvement came from making the request smaller and more predictable: fewer round trips,
+better access paths, bounded results, correctly scoped caching, and an operational target.
 
-## What I would take from this
-
-Nothing here was clever. That is the honest summary of a twentyfold improvement.
-
-- **Measure the whole path before touching anything.** The two-versus-three-seconds
-  contradiction was the most useful thing I found all week, and it came from arithmetic, not
-  tooling.
-- **Count queries before tuning queries.** Hundreds of fast statements ruin a request more
-  reliably than one slow one, and none of them appear in a slow query log.
-- **Cache last.** A cache in front of a bad access path is a bug you have agreed to pay
-  interest on.
-- **Move work off the request path rather than speeding it up.** The 800ms did not
-  disappear. It stopped being something a customer waits for.
-- **Put the budget in the contract and in the test suite.** Otherwise you will do this again
-  in two years, on the same endpoint, with a different team.
-
-The uncomfortable part is that the two seconds had been there long enough to feel like a
-property of the domain. Banking is slow, transaction lists are heavy, that is just how it
-is. None of that was true. It was a permission check in a loop.
+That is more durable than a collection of database tricks. The system knows how much work one
+request is allowed to create, and the team has evidence when that contract starts to drift. The two
+seconds had been in place long enough to look like a property of the domain, but most of it was a
+permission check running once per row.
 
 ---
 
-_Same instinct as [signed webhooks](/signed-webhooks) and
-[deleting a feature](/deleting-a-feature-is-a-graph-problem): the behaviour you get is a
-property of the design, not of the individual functions. I run [Oullin](https://oullin.io),
+_The same design-over-functions point comes up in [signed webhooks](/signed-webhooks) and
+[deleting a feature](/deleting-a-feature-is-a-graph-problem). I run [Oullin](https://oullin.io),
 where production hardening of this kind is most of the work. Find me on
 [X (@gocanto)](https://x.com/gocanto)._
