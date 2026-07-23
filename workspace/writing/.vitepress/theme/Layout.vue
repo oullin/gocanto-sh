@@ -241,6 +241,7 @@ const year = new Date().getFullYear();
                 </div>
 
                 <div class="wr-rail-bottom">
+                    <ThemeToggle />
                     <!-- Force native navigation; VitePress otherwise treats .rss as a page route. -->
                     <a
                         class="wr-subscribe"
@@ -276,7 +277,6 @@ const year = new Date().getFullYear();
                     <div class="wr-search wr-index-search">
                         <VPNavBarSearch />
                     </div>
-                    <ThemeToggle />
                 </div>
 
                 <article v-if="featured && !filtering" class="wr-essay wr-essay--featured">
