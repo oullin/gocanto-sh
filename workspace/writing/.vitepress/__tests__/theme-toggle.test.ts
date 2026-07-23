@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { ThemeMode } from "../theme/theme-mode";
 
@@ -15,60 +15,61 @@ class MemoryStorage implements Pick<Storage, "getItem" | "setItem"> {
 }
 
 describe("ThemeMode", () => {
-    it("persists and resolves dark mode", () => {
+    it("persists an explicit dark choice verbatim and notifies", () => {
         const storage = new MemoryStorage();
-        const themeMode = new ThemeMode(storage, () => false);
+        const notify = vi.fn();
+        const themeMode = new ThemeMode(storage, notify);
 
         themeMode.persist("dark");
 
         expect(
             storage.getItem(ThemeMode.storageKey),
         ).toBe("dark");
-        expect(
-            themeMode.isDark("dark"),
-        ).toBe(true);
+        expect(notify).toHaveBeenCalledWith(ThemeMode.storageKey, "dark");
     });
 
-    it("persists and resolves light mode", () => {
+    it("persists an explicit light choice verbatim and notifies", () => {
         const storage = new MemoryStorage();
-        const themeMode = new ThemeMode(storage, () => true);
+        const notify = vi.fn();
+        const themeMode = new ThemeMode(storage, notify);
 
         themeMode.persist("light");
 
         expect(
             storage.getItem(ThemeMode.storageKey),
         ).toBe("light");
-        expect(
-            themeMode.isDark("light"),
-        ).toBe(false);
+        expect(notify).toHaveBeenCalledWith(ThemeMode.storageKey, "light");
     });
 
-    it("persists system mode and follows the system preference", () => {
+    // The regression this guards: an explicit choice must reach storage as
+    // "light"/"dark", never a boolean routed through VitePress's isDark ref,
+    // which would rewrite a choice matching the OS to "auto".
+    it("persists system mode as auto and notifies", () => {
         const storage = new MemoryStorage();
-        const darkSystemMode = new ThemeMode(storage, () => true);
-        const lightSystemMode = new ThemeMode(storage, () => false);
+        const notify = vi.fn();
+        const themeMode = new ThemeMode(storage, notify);
 
-        darkSystemMode.persist("system");
+        themeMode.persist("system");
 
         expect(
             storage.getItem(ThemeMode.storageKey),
         ).toBe("auto");
-        expect(
-            darkSystemMode.isDark("system"),
-        ).toBe(true);
-        expect(
-            lightSystemMode.isDark("system"),
-        ).toBe(false);
+        expect(notify).toHaveBeenCalledWith(ThemeMode.storageKey, "auto");
     });
 
-    it("restores dark mode and treats other stored values as system mode", () => {
+    it("restores explicit choices and treats auto, missing, and unknown as system", () => {
         const storage = new MemoryStorage();
-        const themeMode = new ThemeMode(storage, () => false);
+        const themeMode = new ThemeMode(storage, () => {});
 
         storage.setItem(ThemeMode.storageKey, "dark");
         expect(
             themeMode.stored(),
         ).toBe("dark");
+
+        storage.setItem(ThemeMode.storageKey, "light");
+        expect(
+            themeMode.stored(),
+        ).toBe("light");
 
         storage.setItem(ThemeMode.storageKey, "auto");
         expect(
@@ -76,7 +77,7 @@ describe("ThemeMode", () => {
         ).toBe("system");
 
         expect(
-            new ThemeMode(new MemoryStorage(), () => false).stored(),
+            new ThemeMode(new MemoryStorage(), () => {}).stored(),
         ).toBe("system");
 
         storage.setItem(ThemeMode.storageKey, "garbage");

@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { useData } from "vitepress";
+import { onMounted, ref } from "vue";
 import { ThemeMode } from "#writing/theme/theme-mode";
 import type { ThemeChoice } from "#writing/theme/theme-mode";
 
-const { isDark } = useData();
-
 const mode = ref<ThemeChoice>("system");
 
-let mediaQuery: MediaQueryList | null = null;
 let themeMode: ThemeMode | null = null;
 
 function setMode(next: ThemeChoice): void {
@@ -17,29 +13,28 @@ function setMode(next: ThemeChoice): void {
     }
 
     mode.value = next;
-    isDark.value = themeMode.isDark(next);
     themeMode.persist(next);
 }
 
-function handleSystemChange(): void {
-    if (mode.value === "system" && themeMode) {
-        isDark.value = themeMode.isDark("system");
-    }
-}
-
 onMounted(() => {
-    mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    themeMode = new ThemeMode(window.localStorage, () => mediaQuery?.matches ?? false);
-    mediaQuery.addEventListener("change", handleSystemChange);
+    // Drive appearance through storage, not VitePress's boolean isDark ref: its
+    // VueUse `useDark` store listens for storage events, so writing the exact
+    // "auto"/"light"/"dark" value and emitting one lets it apply the class and
+    // follow the OS for "auto" — whereas the boolean setter collapses an
+    // explicit choice matching the OS back to "auto" and loses it. VitePress's
+    // boot script already applied the stored theme before paint, so mounting
+    // only needs to reflect the stored choice in the control.
+    themeMode = new ThemeMode(window.localStorage, (key, value) => {
+        window.dispatchEvent(
+            new StorageEvent("storage", {
+                key,
+                newValue: value,
+                storageArea: window.localStorage,
+            }),
+        );
+    });
 
     mode.value = themeMode.stored();
-    isDark.value = themeMode.isDark(mode.value);
-});
-
-onBeforeUnmount(() => {
-    if (mediaQuery) {
-        mediaQuery.removeEventListener("change", handleSystemChange);
-    }
 });
 </script>
 
