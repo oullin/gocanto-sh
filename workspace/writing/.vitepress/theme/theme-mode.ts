@@ -1,17 +1,33 @@
 /** A reader's selected appearance mode. */
 export type ThemeChoice = "system" | "light" | "dark";
 
-/** Wraps VitePress's appearance storage contract for the theme toggle. */
+/** The value persisted for VitePress; "auto" is its name for the system mode. */
+export type Appearance = "auto" | "light" | "dark";
+
+/**
+ * Reads and writes the appearance value that VitePress's boot script and its
+ * storage-backed `isDark` ref both consume under the same key.
+ *
+ * The value is written verbatim and a storage notification is emitted so
+ * VitePress's VueUse `useDark` store adopts it directly. Assigning through that
+ * boolean `isDark` ref instead would collapse an explicit "light"/"dark" that
+ * happens to match the current OS theme back to "auto" — VueUse's `useDark`
+ * setter normalizes a value equal to the system preference — silently
+ * discarding the reader's manual choice on the next reload or OS theme change.
+ */
 export class ThemeMode {
     /** The storage key read by VitePress's appearance boot script. */
     static readonly storageKey = "vitepress-theme-appearance";
 
     private readonly storage: Pick<Storage, "getItem" | "setItem">;
-    private readonly systemDark: () => boolean;
+    private readonly notify: (key: string, value: Appearance) => void;
 
-    constructor(storage: Pick<Storage, "getItem" | "setItem">, systemDark: () => boolean) {
+    constructor(
+        storage: Pick<Storage, "getItem" | "setItem">,
+        notify: (key: string, value: Appearance) => void,
+    ) {
         this.storage = storage;
-        this.systemDark = systemDark;
+        this.notify = notify;
     }
 
     /** Returns the reader's stored choice, defaulting to the system preference. */
@@ -21,17 +37,11 @@ export class ThemeMode {
         return value === "light" || value === "dark" ? value : "system";
     }
 
-    /** Resolves whether the supplied choice should render the dark theme. */
-    isDark(choice: ThemeChoice): boolean {
-        if (choice === "system") {
-            return this.systemDark();
-        }
-
-        return choice === "dark";
-    }
-
-    /** Persists a choice using the values expected by VitePress. */
+    /** Persists a choice verbatim and notifies VitePress's storage-backed ref. */
     persist(choice: ThemeChoice): void {
-        this.storage.setItem(ThemeMode.storageKey, choice === "system" ? "auto" : choice);
+        const value: Appearance = choice === "system" ? "auto" : choice;
+
+        this.storage.setItem(ThemeMode.storageKey, value);
+        this.notify(ThemeMode.storageKey, value);
     }
 }
