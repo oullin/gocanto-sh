@@ -7,7 +7,7 @@ import { WritingArticlePage } from "#writing/article";
 import type { Heading } from "#writing/article";
 import { WritingIndexSearch } from "#writing/search";
 import type { TopicSelection } from "#writing/search";
-import ThemeToggle from "./ThemeToggle.vue";
+import ThemeToggle from "#writing/theme/ThemeToggle.vue";
 
 // Implements the "Blog Home" design: a dark editorial index with a sticky
 // author rail (identity, topic counts, "Now" card) and a promoted latest post
