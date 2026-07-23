@@ -15,9 +15,6 @@ interface InlineScript {
 
 const INLINE_SCRIPT = /<script((?![^>]*\bsrc=)[^>]*)>([\s\S]*?)<\/script>/g;
 
-/** The body VitePress emits for `appearance: "force-dark"`. */
-const FORCE_DARK = 'document.documentElement.classList.add("dark");';
-
 /**
  * Moves VitePress's executable inline `<script>` blocks into files under `assets/`, so the
  * writing site can ship `script-src 'self'` instead of `'unsafe-inline'`.
@@ -74,25 +71,13 @@ class InlineScriptExternalizer {
 
         const replacements = await Promise.all(
             scripts.map(async (script) => {
-                // force-dark only ever adds a class; setting it on the element is
-                // equivalent and saves a render-blocking request before first paint.
-                if (script.body.trim() === FORCE_DARK) {
-                    return { script, isDark: true, name: "" };
-                }
-
                 const name = await this.writeAsset(script.body);
 
-                return { script, isDark: false, name };
+                return { script, name };
             }),
         );
 
-        for (const { script, isDark, name } of replacements) {
-            if (isDark) {
-                html = InlineScriptExternalizer.markDark(html).replace(script.tag, "");
-                count += 1;
-                continue;
-            }
-
+        for (const { script, name } of replacements) {
             html = html.replace(
                 script.tag,
                 `<script${script.attrs} src="/assets/${name}"></script>`,
@@ -125,14 +110,6 @@ class InlineScriptExternalizer {
         );
 
         return name;
-    }
-
-    private static markDark(html: string): string {
-        if (/<html[^>]*\bclass="[^"]*\bdark\b/.test(html)) {
-            return html;
-        }
-
-        return html.replace(/<html([^>]*)>/, '<html$1 class="dark">');
     }
 
     private static inlineScripts(html: string): InlineScript[] {
