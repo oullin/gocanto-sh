@@ -10,7 +10,7 @@ export const education = {
             degree: "Bachelor of Science",
             field: "Systems Engineering",
             description:
-                "As a computer scientist, I see computer science as the study of computers and computational processes, covering their underlying principles, design, real‑world applications, and even their impact on society.<br/><br/>My work spans both the theoretical side, think algorithms and data structures, and the hands‑on side, like building software and exploring artificial intelligence. At its core, computer science is about understanding how computers operate and using that insight to solve problems and develop new technologies.",
+                "As a computer scientist, I see computer science as the study of computers and computational processes, covering their underlying principles, design, real‑world applications, and even their impact on society.<br/><br/>My work spans both the theoretical side, think algorithms and data structures, and the hands‑on side, like building software and exploring artificial intelligence. Computer science is about understanding how computers operate and using that insight to solve problems and develop new technologies.",
             graduated_at: "2012",
             issuing_country: "Venezuela",
         },
@@ -21,7 +21,7 @@ export const education = {
             degree: "Associate's degree",
             field: "Computer Science",
             description:
-                "Having completed my Associate’s in Computer Science, I’ve built a strong foundation in how computers work, learning the basics of algorithm design and data organisation alongside hands‑on experience writing software and experimenting with entry‑level enterprise software.<br/><br/>For me, computer science means using both theory and practical skills to tackle real‑world challenges and bring new tech ideas to life.",
+                "Having completed my Associate’s in Computer Science, I’ve built a strong foundation in how computers work, learning the basics of algorithm design and data organisation alongside hands‑on experience writing software and experimenting with entry‑level enterprise software.<br/><br/>For me, computer science means using both theory and practical skills to solve real‑world problems.",
             graduated_at: "2007",
             issuing_country: "Venezuela",
         },

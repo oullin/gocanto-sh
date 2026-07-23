@@ -151,7 +151,7 @@ I got to watch it work. The production asset hash came out different from my loc
 because I had changed a page title in between and that altered the site data. Exactly
 the churn that would have broken a pinned hash, absorbed without anyone noticing.
 
-**Design out the failure mode. Do not schedule it for later.**
+Design out the failure mode. Do not schedule it for later.
 
 ## The trailing slash
 
@@ -193,9 +193,9 @@ the old one before adding it to the new one. In between, layer one answers and l
 has no answer to give. That gap is unavoidable, and knowing it exists is the difference
 between "expected, wait ten seconds" and "roll everything back."
 
-## What I would take from this
+## The shape every bug shared
 
-Every bug here shared a shape. The code was correct. The tests passed. The artifact on
+The code was correct. The tests passed. The artifact on
 disk was right. And what users received was wrong, because something between the build
 and the browser was not what I assumed.
 
@@ -210,6 +210,6 @@ Four habits fall out of that:
 - **A green pipeline proves your code is correct.** It does not prove your site works.
   Those are different claims, and only one of them is what you shipped.
 
-The uncomfortable part is that most of these had been live for days while every
+Most of these had been live for days while every
 dashboard I owned showed green. The site was up the whole time. It was just wrong, and
 nothing in my tooling had any opinion about it.

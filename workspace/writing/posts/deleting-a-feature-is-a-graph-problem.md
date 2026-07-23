@@ -73,7 +73,7 @@ shipped: four 404s in the sitemap I had just handed to Google, dead links in the
 every article, a machine-readable index advertising a page that no longer resolved, and a
 README describing a site that no longer existed.
 
-**A feature is its edges. The implementation is the part that shows up in the diff.**
+A feature is its edges. The implementation is the part that shows up in the diff.
 
 The compiler caught exactly one of these, the import of the deleted registry. Everything
 else was a string in a Markdown file, a JSON entry, a nav array, a line of prose. The
@@ -165,7 +165,7 @@ this works. That is a real cost and I would rather write it down than let it sli
 a commit named "add analytics". If the numbers turn out not to change a decision I make,
 the honest move is to take the hosts back out.
 
-## What I would take from this
+## What the second commit taught me
 
 The 92 minutes were not the mistake. Building the pages is how I found out they were
 furniture; I could have argued about it for a week instead and been less sure.
@@ -183,7 +183,7 @@ The lesson is in the second commit:
 - **One definition per identity.** Two files agreeing today is not one source of truth. It
   is a bug with a delay on it.
 
-The uncomfortable part is that the version with four extra pages would have deployed
+The version with four extra pages would have deployed
 perfectly. Green build, valid markup, clean Lighthouse, a sitemap full of URLs. It just
 would have been four more pages of me claiming to be good at things, in a repository whose
 whole premise is that the writing is the proof.

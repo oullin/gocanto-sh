@@ -56,7 +56,7 @@ paid for it per item and there was nowhere to go to make it cheaper. Centralisin
 permissions behind an authorisation gateway turned it into a bounded, cacheable answer
 computed once per request instead of a query multiplied by page size.
 
-**The best query optimisation available was going from four hundred round trips to four.**
+The best query optimisation available was going from four hundred round trips to four.
 
 ## Then, and only then, `EXPLAIN ANALYZE`
 

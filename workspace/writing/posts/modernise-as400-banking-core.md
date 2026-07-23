@@ -31,7 +31,7 @@ The instinct to replace it comes from the interface, not the domain. It is hard 
 integrate with, so it feels obsolete. Those are different problems, and confusing them is
 how a two-year rewrite starts.
 
-**The core did not need replacing. It needed a boundary.**
+The core did not need replacing. It needed a boundary.
 
 ## The boundary is the product, not a translation layer
 

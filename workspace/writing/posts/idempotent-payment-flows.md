@@ -69,8 +69,8 @@ safe to retry. The second is `unknown`. Provider adapters return typed errors th
 the distinction, because by the time it reaches the orchestration layer, that information is
 gone forever.
 
-**A retry policy that cannot tell those two apart is a duplicate-charge generator with a
-scheduler.**
+A retry policy that cannot tell those two apart is a duplicate-charge generator with a
+scheduler.
 
 ## Webhooks confirm. They do not get a free pass
 
@@ -121,8 +121,8 @@ budgets, with retries stacking on top of the original load in exactly the wrong 
 
 The fix was a prioritisation queue in front of the payment flow, which lifted throughput and
 cut contention during peaks. It only worked because the operations underneath it were
-idempotent. **You cannot safely reorder, delay, or shed work whose effects are not
-idempotent.** Queueing, prioritisation, back-pressure, and SLA-driven retries are all
+idempotent. You cannot safely reorder, delay, or shed work whose effects are not
+idempotent. Queueing, prioritisation, back-pressure, and SLA-driven retries are all
 downstream of that property. Without it, every one of them is a way to charge someone twice
 under load.
 

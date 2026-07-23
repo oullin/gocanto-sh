@@ -26,7 +26,7 @@ const { proofAvatars, proofLoaded, proofSkeletons, testimonialCount } = useTesti
                 </h1>
 
                 <p class="wf-hero__lede">
-                    I build production-grade systems for fintech, banking, and e-commerce: payment
+                    I build production systems for fintech, banking, and e-commerce: payment
                     platforms, event pipelines, legacy modernisation, and practical AI agents that
                     remain reviewable under load and under audit.
                 </p>
