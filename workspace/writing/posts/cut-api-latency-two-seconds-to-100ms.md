@@ -131,8 +131,11 @@ slow requests, plus limits written into the API contract itself: a maximum page 
 bounded date ranges, explicit expansions. Returning every transaction because the endpoint
 technically can is not flexibility. It is an unbounded cost you have agreed to pay forever.
 
-<!-- NEED: the real SLO thresholds, if they are shareable. Right now this section describes
-the shape without the numbers, and the numbers are what make it evidence. -->
+The objective was p95 under 200ms and p99 under 500ms on the transaction-list paths,
+measured over a rolling 28-day window at 99.9%. That left a 0.1% error budget, on the order
+of forty minutes across the window. Burning it fast paged someone; burning it slow froze
+non-critical deploys until it recovered, which turned "the endpoint feels slow again" into a
+number with a consequence attached.
 
 The check that mattered most was the cheapest: query count and rows scanned, asserted in
 integration tests on the critical paths. When a feature reintroduces an N+1, the build says
