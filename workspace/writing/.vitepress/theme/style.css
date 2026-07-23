@@ -7,7 +7,61 @@
  * palette while retaining their existing layout.
  */
 
-:root,
+:root {
+    --wr-bg: #fbfbf9;
+    --wr-ink: #1d1d1a;
+    --wr-muted: #50504b;
+    --wr-dim: #6c6c66;
+    --wr-faint: #9c9c96;
+    --wr-legal: #8c8c86;
+    --wr-accent: #c9312a;
+    --wr-accent-hover: #a82620;
+    --wr-accent-soft: rgba(201, 49, 42, 0.35);
+    --wr-accent-wash: rgba(201, 49, 42, 0.06);
+    --wr-line: #e9e9e4;
+    --wr-line-2: #dededa;
+    --wr-line-3: #d2d2cc;
+    --wr-line-4: #b9b9b2;
+    --wr-code-bg: #f5f5f2;
+    --wr-code-head: #eeeeea;
+    --wr-header-bg: #fbfbf9;
+    --wr-surface: #f3f3f0;
+    --wr-inline-code: #b3362e;
+
+    --wr-raised: #ffffff;
+    --wr-raised-hover: #f0f0ec;
+    --wr-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --wr-shadow-header: 0 6px 20px rgba(0, 0, 0, 0.1);
+    --wr-now-border: #e4e4de;
+    --wr-now-grad-1: #f7f7f4;
+    --wr-now-grad-2: #f1f1ed;
+    --wr-legal-dim: #b2b2ac;
+    --wr-site-link: #3a3a36;
+    --wr-selection-ink: #1d1d1a;
+
+    --wr-sans: "IBM Plex Sans", system-ui, sans-serif;
+    --wr-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    /* VitePress bridge (mode-independent: all references) */
+    --vp-font-family-base: var(--wr-sans);
+    --vp-font-family-mono: var(--wr-mono);
+    --vp-c-bg: var(--wr-bg);
+    --vp-c-bg-alt: var(--wr-bg);
+    --vp-c-bg-soft: var(--wr-code-head);
+    --vp-c-text-1: var(--wr-ink);
+    --vp-c-text-2: var(--wr-muted);
+    --vp-c-text-3: var(--wr-faint);
+    --vp-c-divider: var(--wr-line);
+    --vp-c-border: var(--wr-line-2);
+    --vp-c-brand-1: var(--wr-accent);
+    --vp-c-brand-2: var(--wr-accent-hover);
+    --vp-c-brand-3: var(--wr-accent);
+    --vp-c-brand-soft: rgba(201, 49, 42, 0.12);
+    --vp-code-bg: var(--wr-line);
+    --vp-code-block-bg: var(--wr-code-bg);
+    color-scheme: light;
+}
+
 .dark {
     --wr-bg: #0a0a0a;
     --wr-ink: #e8e8e6;
@@ -29,26 +83,18 @@
     --wr-surface: #111110;
     --wr-inline-code: #ff9a94;
 
-    --wr-sans: "IBM Plex Sans", system-ui, sans-serif;
-    --wr-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --wr-raised: #141412;
+    --wr-raised-hover: #1a1a18;
+    --wr-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --wr-shadow-header: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --wr-now-border: #1e1e1b;
+    --wr-now-grad-1: #101010;
+    --wr-now-grad-2: #0c0c0c;
+    --wr-legal-dim: #4a4a46;
+    --wr-site-link: #c8c8c4;
+    --wr-selection-ink: #ffffff;
 
-    /* VitePress bridge */
-    --vp-font-family-base: var(--wr-sans);
-    --vp-font-family-mono: var(--wr-mono);
-    --vp-c-bg: var(--wr-bg);
-    --vp-c-bg-alt: var(--wr-bg);
-    --vp-c-bg-soft: var(--wr-code-head);
-    --vp-c-text-1: var(--wr-ink);
-    --vp-c-text-2: var(--wr-muted);
-    --vp-c-text-3: var(--wr-faint);
-    --vp-c-divider: var(--wr-line);
-    --vp-c-border: var(--wr-line-2);
-    --vp-c-brand-1: var(--wr-accent);
-    --vp-c-brand-2: var(--wr-accent-hover);
-    --vp-c-brand-3: var(--wr-accent);
     --vp-c-brand-soft: rgba(244, 67, 60, 0.14);
-    --vp-code-bg: var(--wr-line);
-    --vp-code-block-bg: var(--wr-code-bg);
     color-scheme: dark;
 }
 
@@ -79,8 +125,8 @@ body {
 }
 
 ::selection {
-    background: rgba(244, 67, 60, 0.25);
-    color: #fff;
+    background: var(--wr-accent-soft);
+    color: var(--wr-selection-ink);
 }
 
 ::placeholder {
@@ -137,8 +183,8 @@ body {
     justify-content: center;
     border: 1px solid var(--wr-line-3);
     border-radius: 50%;
-    background: #141412;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    background: var(--wr-raised);
+    box-shadow: var(--wr-shadow);
     color: var(--wr-accent);
     font-family: var(--wr-mono);
     font-size: 16px;
@@ -162,7 +208,7 @@ body {
 }
 
 .wr-top:hover {
-    background: #1a1a18;
+    background: var(--wr-raised-hover);
     border-color: var(--wr-accent);
 }
 
@@ -212,7 +258,7 @@ body {
 /* Once the page leaves the top the bar overlaps the article, so give it a shadow
    to sit above rather than blend into the text sliding beneath it. */
 .wr-header.is-elevated {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    box-shadow: var(--wr-shadow-header);
 }
 
 /* Declared after .wr-header so it wins the cascade at equal specificity. */
@@ -526,9 +572,9 @@ body {
 .wr-now {
     margin-top: 40px;
     padding: 16px 18px;
-    border: 1px solid #1e1e1b;
+    border: 1px solid var(--wr-now-border);
     border-radius: 6px;
-    background: linear-gradient(180deg, #101010, #0c0c0c);
+    background: linear-gradient(180deg, var(--wr-now-grad-1), var(--wr-now-grad-2));
 }
 
 .wr-now__label {
@@ -589,7 +635,7 @@ body {
 }
 
 .wr-rail-legal > div:last-child {
-    color: #4a4a46;
+    color: var(--wr-legal-dim);
 }
 
 .wr-subscribe {
@@ -604,7 +650,7 @@ body {
 }
 
 .wr-site-link {
-    color: #c8c8c4 !important;
+    color: var(--wr-site-link) !important;
 }
 
 .wr-site-link:hover {
