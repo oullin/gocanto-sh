@@ -2,7 +2,7 @@
 title: Deleting a feature is a graph problem
 date: 2026-07-23
 updated: 2026-07-23
-description: "I built four SEO landing pages and deleted them 92 minutes later. Removing the pages was one commit. Removing everything that believed in them was the afternoon."
+description: "I built four SEO landing pages and deleted them 92 minutes later. Removing the pages was one commit; removing every reference to them took the rest of the afternoon."
 tags: [seo, refactoring, vercel, deploys]
 ---
 
@@ -13,10 +13,9 @@ The feature my branch is named after lived for 92 minutes.
 15:31  refactor: drop the authority pages, split page metadata, and prune docs
 ```
 
-That is not a story about wasted work. Deleting the pages was easy and I do not regret
-building them. What I did not expect was the second commit being four times the size of
-the first, because a feature is not the files that implement it. It is every other place
-in the system that has been told it exists.
+Deleting the pages was easy and I do not regret building them. What I did not expect was the second
+commit being four times the size of the first. A feature is more than the files that implement it;
+it also lives in every other place in the system that references it.
 
 ## The plan was more URLs
 
@@ -44,18 +43,17 @@ const routes = [
 ```
 
 Then I read them back as a stranger would. Four thin pages restating a CV I had already
-published, wrapped around links to articles that said the same thing better. They were not
-proof. They were furniture arranged to look like proof, and a reader would clock that
-faster than a crawler.
+published, wrapped around links to articles that made the same points better. They read as
+filler rather than evidence, and a reader would notice that faster than a crawler would.
 
-So they went.
+So I deleted them.
 
-## The pages were three files. The belief in them was everywhere
+## The references outnumbered the implementation
 
 Deleting the implementation took a minute: `AuthorityPage.vue` at 172 lines,
 `page-registry.ts` at 17, the store fixture at 188. Another 352 lines of `.authority-*`
-and `.resume-*` CSS went with them, since nothing else had ever used it. Call it 729 lines,
-gone, no argument.
+and `.resume-*` CSS went with them, since nothing else had ever used it. About 729 lines in
+total.
 
 Then I went looking for everything that still pointed at them.
 
@@ -71,9 +69,8 @@ Then I went looking for everything that still pointed at them.
 Not one of those lives in a file called `AuthorityPage.vue`. Every one of them would have
 shipped: four 404s in the sitemap I had just handed to Google, dead links in the byline of
 every article, a machine-readable index advertising a page that no longer resolved, and a
-README describing a site that no longer existed.
-
-A feature is its edges. The implementation is the part that shows up in the diff.
+README describing a site that no longer existed. The implementation is only the part of a
+feature that shows up in the diff.
 
 The compiler caught exactly one of these, the import of the deleted registry. Everything
 else was a string in a Markdown file, a JSON entry, a nav array, a line of prose. The
@@ -82,12 +79,12 @@ build, which mostly does not exist by default.
 
 ## The guard outlived the feature
 
-The one piece of that work I would build again on purpose is the build guard, and it is
-worth explaining why, because it survived the thing it was written for.
+The one piece of that work I would build again on purpose is the build guard, because it
+survived the feature it was written for.
 
 The public resume was generated from the same store as my private CV. Same file, one
-curated slice for the web. That is efficient and it is exactly how you accidentally publish
-your phone number. So the guard asserts absence:
+curated slice for the web. That is efficient, and it is also how private contact details
+end up on a public page. So the guard asserts absence:
 
 ```ts
 if (/@gmail\.com|\+65[\s-]*\d{4}[\s-]*\d{4}|>References?</i.test(html)) {
@@ -97,8 +94,8 @@ if (/@gmail\.com|\+65[\s-]*\d{4}[\s-]*\d{4}|>References?</i.test(html)) {
 
 The first version of that matched my actual phone number, which meant the check that existed
 to keep my number off a public page was carrying my number around in a public repository.
-Matching the shape instead is both less embarrassing and a stronger assertion: it fails on
-any phone number, not just the one I remembered to add.
+Matching the shape is a stronger assertion: it fails on any phone number, not just the one I
+remembered to add.
 
 Alongside the ordinary assertions: exactly one `<h1>`, exactly one canonical link, exactly
 one JSON-LD block, and the page canonicalising to itself rather than to whatever URL I last
@@ -132,15 +129,15 @@ still fetchable, with one header:
 nothing downstream loses credit for being cited. Anything that actually wants `llms.txt`
 already knows the convention and does not need a sitemap to find it.
 
-A sitemap is a request, not a description. Everything you put in it is something you are
-asking to have ranked, and asking for two versions of one page is not twice the coverage.
+A sitemap entry is a request to rank, not a description of what the server serves. Listing
+two versions of one page asks them to compete with each other.
 
-## Two files knew my name
+## The Person ID was defined twice
 
-Small one, same shape. The canonical `Person` identifier was declared in
-`structured-data.ts` and again in `page-metadata.ts`. Both were correct that afternoon.
-Nothing anywhere connected them, so the first time one changed I would have shipped two
-Persons with near-identical names and no way to tell a crawler which was me.
+The last change was smaller but had the same shape. The canonical `Person` identifier was
+declared in `structured-data.ts` and again in `page-metadata.ts`. Both were correct that
+afternoon. Nothing anywhere connected them, so the first time one changed I would have
+shipped two Persons with near-identical names and no way to tell a crawler which was me.
 
 ```ts
 export const SITE_URL = "https://gocanto.sh/";
@@ -152,8 +149,8 @@ you cannot resolve to one entity from two definitions that are only equal by coi
 
 ## What it cost
 
-Honesty about the trade, since I spent a whole post recently getting this policy to
-`script-src 'self'`: adding conversion tracking widened it again.
+One trade-off is worth recording. I recently spent a whole post getting this site's CSP down
+to `script-src 'self'`, and adding conversion tracking widened it again.
 
 ```
 script-src 'self' https://va.vercel-scripts.com
@@ -165,28 +162,28 @@ this works. That is a real cost and I would rather write it down than let it sli
 a commit named "add analytics". If the numbers turn out not to change a decision I make,
 the honest move is to take the hosts back out.
 
-## What the second commit taught me
+## What the second commit showed
 
 The 92 minutes were not the mistake. Building the pages is how I found out they were
-furniture; I could have argued about it for a week instead and been less sure.
+filler; I could have argued about it for a week instead and been less sure.
 
 The lesson is in the second commit:
 
-- **Deleting is a graph traversal.** Before removing a route, grep for its path, its slug,
+- Deleting is a graph traversal. Before removing a route, grep for its path, its slug,
   its label, and its title across content, config, navigation, sitemaps, machine-readable
   indexes, and docs. The implementation files are the smallest node.
-- **Write guards against outputs, not features.** "This page has one canonical" survives a
+- Write guards against outputs, not features. "This page has one canonical" survives a
   rewrite. "These four pages exist" is a check you delete alongside the thing it guarded.
-- **Ask what you are requesting, not what you are serving.** A sitemap entry is a request
+- Ask what you are requesting, not what you are serving. A sitemap entry is a request
   to rank. Serving a file and advertising it are separate decisions, and `noindex, follow`
-  is the one that keeps a resource useful without asking it to compete.
-- **One definition per identity.** Two files agreeing today is not one source of truth. It
-  is a bug with a delay on it.
+  keeps a resource useful without asking it to compete.
+- One definition per identity. Two definitions that happen to agree today will eventually
+  diverge, and nothing will tell you when they do.
 
-The version with four extra pages would have deployed
-perfectly. Green build, valid markup, clean Lighthouse, a sitemap full of URLs. It just
-would have been four more pages of me claiming to be good at things, in a repository whose
-whole premise is that the writing is the proof.
+The version with four extra pages would have deployed cleanly: green build, valid markup,
+clean Lighthouse, a sitemap full of URLs. It just would have been four more pages of me
+claiming to be good at things, in a repository whose whole premise is that the writing is
+the proof.
 
 ---
 
