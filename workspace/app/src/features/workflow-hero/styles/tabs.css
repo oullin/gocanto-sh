@@ -40,8 +40,8 @@
 
 .wf-tab.is-active {
     z-index: 1;
-    background: oklch(1 0 0 / 0.12);
-    border-color: oklch(1 0 0 / 0.32);
+    background: var(--wf-tab-active-bg);
+    border-color: var(--wf-tab-active-border);
     border-left-width: 1px;
     margin-left: -1px;
     color: var(--wf-ink);
@@ -52,6 +52,6 @@
 }
 
 .wf-tab:focus-visible {
-    outline: 3px solid oklch(1 0 0 / 0.2);
+    outline: 3px solid var(--wf-focus);
     outline-offset: -4px;
 }
