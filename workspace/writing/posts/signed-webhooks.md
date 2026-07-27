@@ -2,7 +2,7 @@
 title: Signed webhooks done right
 date: 2026-07-18
 updated: 2026-07-22
-description: 'Most webhook “security” is a shared secret and a prayer. Real signed webhooks are three parts: signature, timestamp window, idempotency. Everyone ships the first and forgets the other two. Code from sasu.sh, running on Cloudflare Workers.'
+description: "Most webhook “security” is a shared secret and a prayer. Real signed webhooks are three parts: signature, timestamp window, idempotency. Everyone ships the first and forgets the other two. Code from sasu.sh, running on Cloudflare Workers."
 tags: [webhooks, security, cloudflare, hmac]
 ---
 

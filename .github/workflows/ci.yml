@@ -35,7 +35,7 @@ jobs:
 
             - name: Install fmtkit
               run: |
-                  curl -fsSL "https://github.com/oullin/fmtkit/releases/download/v0.5.9/fmtkit_0.5.9_linux_amd64.tar.gz" | tar -xz fmtkit
+                  curl -fsSL "https://github.com/oullin/fmtkit/releases/download/v0.7.0/fmtkit_0.7.0_linux_amd64.tar.gz" | tar -xz fmtkit
                   sudo install -m 0755 fmtkit /usr/local/bin/fmtkit
                   rm fmtkit
                   fmtkit version
