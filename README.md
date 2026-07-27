@@ -24,12 +24,12 @@ Fork it as a template if useful — swap out my name, content, and likeness befo
 
 Related Oullin domains live in separate deployment targets:
 
-| Domain                                             | Deployment target                   | Purpose                                                                                      |
-| -------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
-| [`gocanto.sh`](https://gocanto.sh)                 | Vercel project `gocanto-sh`         | Gustavo Ocanto's personal profile site.                                                      |
-| [`writing.gocanto.sh`](https://writing.gocanto.sh) | Vercel project `gocanto-sh`         | Long-form engineering writing. Source in [`workspace/writing`](workspace/writing/README.md). |
-| [`ollin.sh`](https://ollin.sh)                     | Vercel project `ollin-sh`           | Short-domain redirect to [`oullin.io`](https://oullin.io).                                   |
-| [`oullin.io`](https://oullin.io)                   | External site `oullin.io`           | Boutique software engineering and architecture consultancy.                                  |
+| Domain                                             | Deployment target           | Purpose                                                                                      |
+| -------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------- |
+| [`gocanto.sh`](https://gocanto.sh)                 | Vercel project `gocanto-sh` | Gustavo Ocanto's personal profile site.                                                      |
+| [`writing.gocanto.sh`](https://writing.gocanto.sh) | Vercel project `gocanto-sh` | Long-form engineering writing. Source in [`workspace/writing`](workspace/writing/README.md). |
+| [`ollin.sh`](https://ollin.sh)                     | Vercel project `ollin-sh`   | Short-domain redirect to [`oullin.io`](https://oullin.io).                                   |
+| [`oullin.io`](https://oullin.io)                   | External site `oullin.io`   | Boutique software engineering and architecture consultancy.                                  |
 
 Keep these projects separate. A deployment from the `ollin-sh` redirect repo must never target `gocanto-sh`.
 
@@ -85,7 +85,7 @@ dist/
   writing/  <- workspace/writing/.vitepress/dist -> writing.gocanto.sh
 ```
 
-Neither site may sit at the `dist/` root. Vercel resolves the filesystem *before* rewrites, so a root-level `/index.html` or `/assets/*` would be served on both hosts and shadow whichever site did not own it. With the root empty, the host rewrites in `vercel.json` always decide. The build fails if anything else appears at the root.
+Neither site may sit at the `dist/` root. Vercel resolves the filesystem _before_ rewrites, so a root-level `/index.html` or `/assets/*` would be served on both hosts and shadow whichever site did not own it. With the root empty, the host rewrites in `vercel.json` always decide. The build fails if anything else appears at the root.
 
 `vercel.json` then routes by `Host`:
 
@@ -98,7 +98,7 @@ Neither site may sit at the `dist/` root. Vercel resolves the filesystem *before
 
 A PR's own `gocanto-sh-git-<branch>-oullin.vercel.app` URL always serves the **profile** site: the host is not `writing.gocanto.sh`, so the writing rewrite misses and the catch-all sends everything to `/app/$1`. Browsing that deployment's `/writing/` does not help either — the filesystem answers with the writing HTML, but VitePress builds with `base: "/"`, so its `/assets/*`, `/favicon.png`, and internal links all fall through to `/app/*` and 404.
 
-The writing side is therefore only viewable over a host that matches the writing rewrite. `writing-preview.gocanto.sh` is that host: in the Vercel project's Domains screen it must be set to **Connect to an environment → Preview → `<branch>`**, not *Redirect to Another Domain* (a redirect just bounces to production and shows none of the branch's changes). Repoint it at whichever branch you are reviewing.
+The writing side is therefore only viewable over a host that matches the writing rewrite. `writing-preview.gocanto.sh` is that host: in the Vercel project's Domains screen it must be set to **Connect to an environment → Preview → `<branch>`**, not _Redirect to Another Domain_ (a redirect just bounces to production and shows none of the branch's changes). Repoint it at whichever branch you are reviewing.
 
 For local checks, `pnpm --filter @gocanto/writing dev:site` on port 5175 needs no Vercel at all.
 

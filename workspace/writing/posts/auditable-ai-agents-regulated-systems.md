@@ -61,12 +61,12 @@ fresh generation that can change between review and execution.
 
 Approval policy is risk-based:
 
-| Action | Gate |
-| --- | --- |
-| Read-only retrieval and formatting | Automatic |
-| Code or configuration changes | Peer review |
-| Production or financial mutations | Named owner approval |
-| Especially sensitive operations | Two-person control |
+| Action                             | Gate                 |
+| ---------------------------------- | -------------------- |
+| Read-only retrieval and formatting | Automatic            |
+| Code or configuration changes      | Peer review          |
+| Production or financial mutations  | Named owner approval |
+| Especially sensitive operations    | Two-person control   |
 
 The orchestration layer enforces the policy; prompts only explain it.
 
@@ -77,15 +77,15 @@ the actions that matter:
 
 ```json
 {
-  "run_id": "run_01...",
-  "sequence": 17,
-  "type": "tool.completed",
-  "tool": "repository.apply_patch",
-  "input_digest": "sha256:...",
-  "output_digest": "sha256:...",
-  "actor": "gus@example",
-  "previous_digest": "sha256:...",
-  "signature": "..."
+    "run_id": "run_01...",
+    "sequence": 17,
+    "type": "tool.completed",
+    "tool": "repository.apply_patch",
+    "input_digest": "sha256:...",
+    "output_digest": "sha256:...",
+    "actor": "gus@example",
+    "previous_digest": "sha256:...",
+    "signature": "..."
 }
 ```
 

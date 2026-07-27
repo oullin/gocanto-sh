@@ -41,9 +41,9 @@ by hostname.
 
 ```json
 {
-  "source": "/(.*)",
-  "has": [{ "type": "host", "value": "writing.example.com" }],
-  "destination": "/writing/$1"
+    "source": "/(.*)",
+    "has": [{ "type": "host", "value": "writing.example.com" }],
+    "destination": "/writing/$1"
 }
 ```
 

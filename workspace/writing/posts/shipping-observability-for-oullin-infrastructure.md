@@ -58,16 +58,6 @@ make help
 
 and the current `infra/makefile/monitor.mk` as the command reference. Do not copy a production command from this historical article without reviewing its inputs.
 
-Prometheus target health gives a faster diagnosis than starting with a dashboard. In the captured deployment, all configured targets were reachable:
-
-![Prometheus target health showing the configured Oullin jobs](/images/posts/shipping-observability-for-oullin-infrastructure/prometheus-target-health.jpg)
-
-The overview dashboard then combined application, proxy, database, and host signals:
-
-![Grafana overview dashboard for the Oullin deployment](/images/posts/shipping-observability-for-oullin-infrastructure/grafana-overview.jpg)
-
-These screenshots have been retained because they show the working configuration. Hostnames are internal Docker service names; no credentials, tokens, customer records, or public host addresses are visible.
-
 ## Access through a tunnel
 
 When the services bind only inside the deployment, an operator can forward them temporarily:

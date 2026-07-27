@@ -14,12 +14,12 @@ This pnpm/Turborepo monorepo contains five packages:
 
 Run repository-wide checks from the root. `pnpm test` (Turbo) is the canonical test entry point.
 
-| Purpose | Command | Expected result |
-| --- | --- | --- |
-| Lint | `pnpm lint` | Exit 0 |
-| Typecheck | `pnpm typecheck` | Exit 0 |
-| Tests | `pnpm test` | All tests pass |
-| Format only | `make format-all` | Exit 0 |
+| Purpose     | Command           | Expected result |
+| ----------- | ----------------- | --------------- |
+| Lint        | `pnpm lint`       | Exit 0          |
+| Typecheck   | `pnpm typecheck`  | Exit 0          |
+| Tests       | `pnpm test`       | All tests pass  |
+| Format only | `make format-all` | Exit 0          |
 
 Use filters for package-scoped work, for example `pnpm --filter @gocanto/app test` or `pnpm --filter @gocanto/domain typecheck`.
 

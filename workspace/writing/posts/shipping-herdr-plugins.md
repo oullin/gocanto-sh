@@ -95,11 +95,11 @@ buried in implementation notes.
 The READMEs now carry action tables checked directly against each
 `herdr-plugin.toml`:
 
-| Plugin                | Start     | Other controls      | Automatic afterwards           |
-| --------------------- | --------- | ------------------- | ------------------------------ |
+| Plugin                | Start     | Other controls      | Automatic afterwards            |
+| --------------------- | --------- | ------------------- | ------------------------------- |
 | Tab Numbers           | `sync`    | —                   | tab create, rename, move, close |
-| Tmux Keybindings      | `apply`   | `toggle`, `restore` | new workspace                  |
-| Pane Navigation Hints | `refresh` | `clear`             | new pane                       |
+| Tmux Keybindings      | `apply`   | `toggle`, `restore` | new workspace                   |
+| Pane Navigation Hints | `refresh` | `clear`             | new pane                        |
 
 The interesting actions are not only the ones that turn features on.
 
@@ -170,14 +170,14 @@ current rules in its [marketplace guide](https://herdr.dev/docs/marketplace/).
 No runtime code, manifests, plugin IDs, or versions changed. The release still became
 materially better.
 
-| User question                 | Answer now available                                      |
-| ----------------------------- | --------------------------------------------------------- |
-| What does this do?            | A real screenshot and one-sentence description            |
-| How do I start?               | Install and activation commands at the top                |
-| What controls do I have?      | An action table matching the manifest                     |
+| User question                 | Answer now available                                       |
+| ----------------------------- | ---------------------------------------------------------- |
+| What does this do?            | A real screenshot and one-sentence description             |
+| How do I start?               | Install and activation commands at the top                 |
+| What controls do I have?      | An action table matching the manifest                      |
 | Will it affect existing work? | The initial `sync`, `apply`, or `refresh` step is explicit |
-| Can I back out?               | `restore`, `clear`, and uninstall behaviour               |
-| Where do I find it?           | One searchable marketplace collection                    |
+| Can I back out?               | `restore`, `clear`, and uninstall behaviour                |
+| Where do I find it?           | One searchable marketplace collection                      |
 
 That is the practical value of this kind of work. It shortens the distance between
 interest and a working result, while making the trust boundary and exit path visible

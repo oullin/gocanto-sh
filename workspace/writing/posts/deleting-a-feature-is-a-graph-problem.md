@@ -57,14 +57,14 @@ total.
 
 Then I went looking for everything that still pointed at them.
 
-| Where | What it still claimed |
-| --- | --- |
-| Nine post frontmatters | `expertise` and `expertiseLabel` keys naming a dead page |
-| The writing author aside | Links to `/resume` and an expertise page, plus dead `.wr-author__links` rules |
-| The writing `llms.txt` | A resume entry, for machines that would fetch it |
-| Site nav and footer | `Resume` and `Payment systems` |
-| `sitemap.xml` | Four URLs asking to be crawled |
-| `README.md` | A link to `docs/seo-rollout.md`, and a sitemap description promising five canonical HTML URLs |
+| Where                    | What it still claimed                                                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------- |
+| Nine post frontmatters   | `expertise` and `expertiseLabel` keys naming a dead page                                      |
+| The writing author aside | Links to `/resume` and an expertise page, plus dead `.wr-author__links` rules                 |
+| The writing `llms.txt`   | A resume entry, for machines that would fetch it                                              |
+| Site nav and footer      | `Resume` and `Payment systems`                                                                |
+| `sitemap.xml`            | Four URLs asking to be crawled                                                                |
+| `README.md`              | A link to `docs/seo-rollout.md`, and a sitemap description promising five canonical HTML URLs |
 
 Not one of those lives in a file called `AuthorityPage.vue`. Every one of them would have
 shipped: four 404s in the sitemap I had just handed to Google, dead links in the byline of
@@ -141,6 +141,7 @@ shipped two Persons with near-identical names and no way to tell a crawler which
 
 ```ts
 export const SITE_URL = "https://gocanto.sh/";
+
 export const PERSON_ID = `${SITE_URL}#person`;
 ```
 
