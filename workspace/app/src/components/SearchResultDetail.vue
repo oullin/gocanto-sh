@@ -148,7 +148,9 @@ const kindIcon = computed(() => {
                             class="inline-flex items-center gap-1.5 text-foreground hover:underline"
                         >
                             <LinkIcon class="size-3.5" />
-                            <span>View repository</span>
+                            <span>{{
+                                DetailView.projectLinkLabel(payload.data.is_open_source)
+                            }}</span>
                         </a>
                     </div>
                 </template>
