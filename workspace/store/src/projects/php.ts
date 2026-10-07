@@ -11,7 +11,7 @@ export const phpProjects = [
         is_open_source: false,
         icon: "Sparkles",
         published_at: "2023-10-05",
-        sort: 16,
+        sort: 18,
     },
     {
         uuid: "32fd43ce-d957-4ad2-9d71-b57f71444f2a",
@@ -23,7 +23,7 @@ export const phpProjects = [
         is_open_source: true,
         icon: "FileText",
         published_at: "2020-12-26",
-        sort: 22,
+        sort: 24,
     },
     {
         uuid: "3ce8b01f-406a-474c-80f3-8426617b42fe",
@@ -35,7 +35,7 @@ export const phpProjects = [
         is_open_source: true,
         icon: "Network",
         published_at: "2022-12-22",
-        sort: 17,
+        sort: 19,
     },
     {
         uuid: "e517a966-f7d0-46a1-9ee4-494b38a116e5",
@@ -47,7 +47,7 @@ export const phpProjects = [
         is_open_source: true,
         icon: "RefreshCw",
         published_at: "2019-06-11",
-        sort: 23,
+        sort: 25,
     },
     {
         uuid: "928ac7e8-d0ba-4075-9c22-67050ab03755",
@@ -59,6 +59,6 @@ export const phpProjects = [
         is_open_source: true,
         icon: "GitPullRequest",
         published_at: "2022-09-15",
-        sort: 18,
+        sort: 20,
     },
 ] as const satisfies readonly ProjectRecord[];

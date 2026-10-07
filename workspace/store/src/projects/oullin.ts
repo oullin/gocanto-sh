@@ -11,7 +11,7 @@ export const oullinProjects = [
         is_open_source: true,
         icon: "Server",
         published_at: "2025-10-18",
-        sort: 10,
+        sort: 12,
     },
     {
         uuid: "94478a19-17a0-4be4-8a66-04c12bdfb554",
@@ -23,7 +23,7 @@ export const oullinProjects = [
         is_open_source: true,
         icon: "Globe",
         published_at: "2025-10-18",
-        sort: 11,
+        sort: 13,
     },
     {
         uuid: "e8ed4398-eb4e-4c72-a647-c862e0aae784",
@@ -35,7 +35,7 @@ export const oullinProjects = [
         is_open_source: true,
         icon: "Box",
         published_at: "2025-10-18",
-        sort: 12,
+        sort: 14,
     },
     {
         uuid: "e00a72b2-211d-4650-b22d-88dbdcd49cb9",
@@ -47,6 +47,6 @@ export const oullinProjects = [
         is_open_source: true,
         icon: "GitBranch",
         published_at: "2026-03-14",
-        sort: 2,
+        sort: 4,
     },
 ] as const satisfies readonly ProjectRecord[];
