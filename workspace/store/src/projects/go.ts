@@ -11,7 +11,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "Users",
         published_at: "2025-04-22",
-        sort: 13,
+        sort: 15,
     },
     {
         uuid: "98b5d71a-1c78-4639-a9ed-343a8ba8c328",
@@ -23,7 +23,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "ArrowLeftRight",
         published_at: "2021-10-11",
-        sort: 19,
+        sort: 21,
     },
     {
         uuid: "de33dc2a-a710-44a3-9413-e886c0498576",
@@ -35,7 +35,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "Coins",
         published_at: "2026-01-02",
-        sort: 7,
+        sort: 9,
     },
     {
         uuid: "03c3e74a-4ce4-4d86-8104-8f2a6f4f85d0",
@@ -47,7 +47,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "Bot",
         published_at: "2026-03-03",
-        sort: 3,
+        sort: 5,
     },
     {
         uuid: "031e58b1-726f-48f2-8eac-5659e0b9bd4d",
@@ -59,7 +59,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "Wand2",
         published_at: "2026-02-26",
-        sort: 5,
+        sort: 7,
     },
     {
         uuid: "1f9e6cdb-046f-4d2d-8e31-654e570efd6d",
@@ -71,7 +71,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "Sheet",
         published_at: "2025-02-26",
-        sort: 14,
+        sort: 16,
     },
     {
         uuid: "e7367891-db35-48e7-bc58-6fc4812434d2",
@@ -83,7 +83,7 @@ export const goProjects = [
         is_open_source: true,
         icon: "CreditCard",
         published_at: "2025-11-22",
-        sort: 8,
+        sort: 10,
     },
     {
         uuid: "02dbdd7d-12fe-4aa1-ba46-e5d250fa7a7d",
@@ -95,6 +95,18 @@ export const goProjects = [
         is_open_source: true,
         icon: "Wand2",
         published_at: "2026-03-18",
+        sort: 3,
+    },
+    {
+        uuid: "8397f56b-5865-435e-a18b-614973462c92",
+        language: "Go / Docker",
+        title: "hara.sh",
+        excerpt:
+            "Self-hosted AI infrastructure that puts every provider subscription behind one compatible API endpoint. Docker builds and runs the proxy, accounts connect through a local management panel, and credentials stay in a private state directory. Session stickiness preserves account-level prompt caches, while quota routing and failover move traffic to whichever account has capacity, so Claude Code, Codex, and other clients keep working unchanged.",
+        url: "https://hara.sh/",
+        is_open_source: false,
+        icon: "Waypoints",
+        published_at: "2026-10-07",
         sort: 1,
     },
 ] as const satisfies readonly ProjectRecord[];

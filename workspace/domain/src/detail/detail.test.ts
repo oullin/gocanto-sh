@@ -21,4 +21,13 @@ describe("detail domain", () => {
 
         expect(header?.title).toBe("Second");
     });
+
+    it("labels project links by repository availability", () => {
+        expect(
+            DetailView.projectLinkLabel(true),
+        ).toBe("View repository");
+        expect(
+            DetailView.projectLinkLabel(false),
+        ).toBe("View site");
+    });
 });

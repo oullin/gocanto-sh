@@ -11,7 +11,7 @@ export const vueProjects = [
         is_open_source: true,
         icon: "Briefcase",
         published_at: "2024-09-29",
-        sort: 15,
+        sort: 17,
     },
     {
         uuid: "b48d8098-962b-4ff9-884e-264ab33256c9",
@@ -23,7 +23,7 @@ export const vueProjects = [
         is_open_source: true,
         icon: "Zap",
         published_at: "2021-08-11",
-        sort: 20,
+        sort: 22,
     },
     {
         uuid: "19acd1d7-80ca-4828-88da-d3641f8d05e1",
@@ -35,7 +35,7 @@ export const vueProjects = [
         is_open_source: true,
         icon: "MapPin",
         published_at: "2021-08-11",
-        sort: 21,
+        sort: 23,
     },
     {
         uuid: "45399ac1-11a7-4678-b366-88690e41a991",
@@ -47,6 +47,6 @@ export const vueProjects = [
         is_open_source: true,
         icon: "Map",
         published_at: "2026-02-26",
-        sort: 4,
+        sort: 6,
     },
 ] as const satisfies readonly ProjectRecord[];

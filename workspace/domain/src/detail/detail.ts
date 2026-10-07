@@ -83,6 +83,16 @@ export class DetailView {
     }
 
     /**
+     * Picks the call-to-action label for a project link.
+     *
+     * @param isOpenSource - Whether the project URL points at a source repository.
+     * @returns "View repository" for repositories, otherwise "View site".
+     */
+    public static projectLinkLabel(isOpenSource: boolean): string {
+        return isOpenSource ? "View repository" : "View site";
+    }
+
+    /**
      * Converts HTML into non-empty detail paragraphs.
      *
      * @param html - HTML content to split.

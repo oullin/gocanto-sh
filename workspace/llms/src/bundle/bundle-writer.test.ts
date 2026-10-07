@@ -61,7 +61,7 @@ describe("MarkdownBundleWriter.generate", () => {
 
         expect(summary).toEqual({
             files: expectedFiles,
-            lastmod: "2026-07-22",
+            lastmod: "2026-10-07",
         });
     });
 });

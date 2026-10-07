@@ -30,6 +30,8 @@ const projectOrder = [
     "e7367891-db35-48e7-bc58-6fc4812434d2",
     "2049877b-c2e3-4fed-968f-9f17bb08e737",
     "02dbdd7d-12fe-4aa1-ba46-e5d250fa7a7d",
+    "8397f56b-5865-435e-a18b-614973462c92",
+    "fe76bd46-f48c-4380-a051-f1869bc76b45",
 ] as const;
 const projectsByUuid = new Map(
     [...oullinProjects, ...goProjects, ...phpProjects, ...vueProjects, ...otherProjects].map(
