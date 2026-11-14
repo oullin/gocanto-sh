@@ -1388,56 +1388,100 @@ body {
     border: 0;
 }
 
-/* ---------------- Search by meaning ---------------- */
+/* ---------------- Search box ---------------- */
 
+/* Matches the restyled local-search button it replaces in the same slot. */
 .wr-ask {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.wr-ask form {
+    position: relative;
     display: flex;
-    gap: 8px;
-    padding: 24px 0 0;
+    align-items: center;
+}
+
+.wr-ask__icon {
+    position: absolute;
+    left: 14px;
+    width: 15px;
+    height: 15px;
+    color: var(--wr-faint);
+    pointer-events: none;
 }
 
 .wr-ask__input {
-    flex: 1;
+    width: 100%;
     min-width: 0;
-    padding: 9px 12px;
+    padding: 9px 12px 9px 37px;
     background: var(--wr-code-head);
     border: 1px solid var(--wr-line-2);
     border-radius: 9px;
     color: var(--wr-ink);
     font: 400 13.5px var(--wr-mono);
+    transition: border-color 0.15s;
 }
 
+.wr-ask__input:hover,
 .wr-ask__input:focus-visible {
     outline: none;
-    border-color: var(--wr-accent-soft);
+    border-color: rgba(255, 77, 94, 0.5);
 }
 
-.wr-ask__go {
-    padding: 9px 14px;
+.wr-ask__panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 150;
+    width: max(100%, 320px);
+    max-width: calc(100vw - 32px);
+    padding: 6px;
+    background: var(--wr-raised);
     border: 1px solid var(--wr-line-2);
     border-radius: 9px;
-    background: transparent;
-    color: var(--wr-ink);
-    font: 500 13px var(--wr-mono);
-    cursor: pointer;
+    box-shadow: var(--wr-shadow);
 }
 
-.wr-ask__go:hover {
-    border-color: var(--wr-accent-soft);
+.wr-ask__hit {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: var(--wr-ink) !important;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.35;
 }
 
-.wr-ask__go:disabled {
-    cursor: progress;
-    opacity: 0.6;
-}
-
-.wr-ask__out {
-    padding: 16px 0 8px;
-    border-bottom: 1px solid var(--wr-line);
+.wr-ask__hit:hover,
+.wr-ask__hit:focus-visible {
+    background: var(--wr-raised-hover);
 }
 
 .wr-ask__note {
-    margin: 0 0 12px;
+    margin: 0;
+    padding: 8px 10px;
     color: var(--wr-dim);
     font: 400 12.5px var(--wr-mono);
+}
+
+.wr-ask__keyword {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 8px 10px;
+    border: 0;
+    border-top: 1px solid var(--wr-line);
+    background: transparent;
+    color: var(--wr-accent);
+    font: 400 12px var(--wr-mono);
+    text-align: left;
+    cursor: pointer;
+}
+
+/* Local search stays mounted for its hotkeys and as the fallback; only its
+   button is hidden. The modal is teleported to <body>, so it still shows. */
+.wr-ask__local {
+    display: none;
 }

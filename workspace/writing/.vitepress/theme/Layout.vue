@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "#writing/posts-data";
 import { WritingArticlePage } from "#writing/article";
 import type { Heading } from "#writing/article";
@@ -308,13 +307,11 @@ const year = new Date().getFullYear();
                 <div class="wr-index-head">
                     <h1>Writing</h1>
                     <span class="wr-index-head__count">{{ countLabel }} · {{ yearRange }}</span>
-                    <!-- Same VitePress local-search button the article header uses. -->
+                    <!-- Same search box the article header uses. -->
                     <div class="wr-search wr-index-search">
-                        <VPNavBarSearch />
+                        <SearchBox />
                     </div>
                 </div>
-
-                <SearchBox />
 
                 <article v-if="featured && !filtering" class="wr-essay wr-essay--featured">
                     <div class="wr-essay__lead">
@@ -383,7 +380,7 @@ const year = new Date().getFullYear();
                         <a href="/" class="wr-home">All writing</a>
                     </div>
                     <div class="wr-search">
-                        <VPNavBarSearch />
+                        <SearchBox />
                     </div>
                     <ThemeToggle />
                 </header>
