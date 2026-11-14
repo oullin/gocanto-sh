@@ -19,3 +19,7 @@ coverage.*
 # Editor/IDE
 .idea/
 .vscode/
+
+# Wrangler local state
+.wrangler/
+.dev.vars

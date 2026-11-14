@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Content, onContentUpdated, useData, useRoute } from "vitepress";
-import { VPNavBarSearch } from "vitepress/theme";
 import { data as posts } from "#writing/posts-data";
 import { WritingArticlePage } from "#writing/article";
 import type { Heading } from "#writing/article";
-import { WritingIndexSearch } from "#writing/search";
-import type { TopicSelection } from "#writing/search";
+import { SemanticSearch, WritingIndexSearch } from "#writing/search";
+import type { Nullable, TopicSelection } from "#writing/search";
+import type { Post } from "#writing/posts";
+import SearchBox from "#writing/theme/SearchBox.vue";
 import ThemeToggle from "#writing/theme/ThemeToggle.vue";
 
 // Implements the "Blog Home" design: a dark editorial index with a sticky
@@ -47,7 +48,40 @@ const currentPost = computed(() => WritingArticlePage.currentPost(posts, route.p
 
 const articleTags = computed<string[]>(() => WritingArticlePage.tags(frontmatter.value.tags));
 
-const related = computed(() => WritingArticlePage.relatedPosts(posts, currentPost.value));
+const semantic = new SemanticSearch();
+
+// Related posts by meaning, from the search Worker. Until it answers, or when
+// it fails, the block shows the newest-first list instead.
+const semanticRelated = ref<Nullable<Array<Post>>>(null);
+
+watch(
+    currentPost,
+    async (post) => {
+        semanticRelated.value = null;
+
+        if (!post || typeof window === "undefined") {
+            return;
+        }
+
+        const hits = await semantic.query(SemanticSearch.relatedQuery(post));
+
+        if (hits && currentPost.value?.url === post.url) {
+            const found = SemanticSearch.related(
+                hits,
+                posts,
+                post.url,
+                WritingArticlePage.relatedLimit,
+            );
+
+            semanticRelated.value = found.length ? found : null;
+        }
+    },
+    { immediate: true },
+);
+
+const related = computed(
+    () => semanticRelated.value ?? WritingArticlePage.relatedPosts(posts, currentPost.value),
+);
 
 const progressBar = ref<HTMLElement | null>(null);
 
@@ -273,9 +307,9 @@ const year = new Date().getFullYear();
                 <div class="wr-index-head">
                     <h1>Writing</h1>
                     <span class="wr-index-head__count">{{ countLabel }} · {{ yearRange }}</span>
-                    <!-- Same VitePress local-search button the article header uses. -->
+                    <!-- Same search box the article header uses. -->
                     <div class="wr-search wr-index-search">
-                        <VPNavBarSearch />
+                        <SearchBox />
                     </div>
                 </div>
 
@@ -346,7 +380,7 @@ const year = new Date().getFullYear();
                         <a href="/" class="wr-home">All writing</a>
                     </div>
                     <div class="wr-search">
-                        <VPNavBarSearch />
+                        <SearchBox />
                     </div>
                     <ThemeToggle />
                 </header>

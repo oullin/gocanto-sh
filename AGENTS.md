@@ -2,13 +2,14 @@
 
 ## What this is
 
-This pnpm/Turborepo monorepo contains five packages:
+This pnpm/Turborepo monorepo contains six packages:
 
 - `workspace/app`: Vue 3 profile SPA with SSR prerendering.
 - `workspace/domain`: shared text, sanitization, and search logic.
 - `workspace/store`: all identity and content fixtures.
 - `workspace/llms`: machine-readable bundle generator that writes into `workspace/app/dist`.
 - `workspace/writing`: VitePress site for `writing.gocanto.sh`.
+- `workspace/search`: Cloudflare Worker for semantic search over the writing posts (Workers AI and Vectorize).
 
 ## Commands
 

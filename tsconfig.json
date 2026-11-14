@@ -15,6 +15,9 @@
         },
         {
             "path": "./workspace/writing"
+        },
+        {
+            "path": "./workspace/search"
         }
     ]
 }
