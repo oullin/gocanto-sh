@@ -128,7 +128,7 @@ describe("App", () => {
 
         expect(vectorize.rows.size).toBe(34);
         expect(
-            [...vectorize.rows.keys()].every((id) => id.length <= 64),
+            [...vectorize.rows.keys()].every((id) => /^[0-9a-f]{32}-\d+$/.test(id)),
         ).toBe(true);
         expect(
             ai.calls.flat().every((text) => text.startsWith("title: ")),

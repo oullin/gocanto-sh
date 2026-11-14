@@ -72,8 +72,8 @@ export class Search {
     private static async id(url: string): Promise<string> {
         const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(url));
 
-        return [...new Uint8Array(digest).slice(0, 16)]
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("");
+        const bytes = new Uint8Array(digest, 0, 16);
+
+        return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
     }
 }
