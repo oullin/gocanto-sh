@@ -8,7 +8,8 @@ import type { Post, Source } from "#search/types";
 export class Site implements Source {
     constructor(
         private readonly origin: string,
-        private readonly get: typeof fetch = fetch,
+        // Wrapped so fetch is never called with `this` set to Site; workerd throws on that.
+        private readonly get: typeof fetch = (input, init) => fetch(input, init),
     ) {}
 
     async posts(): Promise<Array<Post>> {
