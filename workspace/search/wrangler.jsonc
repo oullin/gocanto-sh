@@ -1,0 +1,10 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "writing-search",
+    "main": "src/index.ts",
+    "compatibility_date": "2026-11-01",
+    "workers_dev": true,
+    "ai": { "binding": "AI" },
+    "vectorize": [{ "binding": "VECTORIZE", "index_name": "writing-search" }],
+    "vars": { "SITE_URL": "https://writing.gocanto.sh" }
+}

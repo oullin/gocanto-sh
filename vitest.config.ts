@@ -7,6 +7,7 @@ export default defineConfig(
                 "workspace/app",
                 "workspace/domain",
                 "workspace/llms",
+                "workspace/search",
                 "workspace/store",
                 "workspace/writing",
             ],

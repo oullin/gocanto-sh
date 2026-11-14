@@ -30,6 +30,7 @@
             "#writing/rss/feed": ["./.vitepress/rss/feed.ts"],
             "#writing/search": ["./.vitepress/search/index.ts"],
             "#writing/search/index-search": ["./.vitepress/search/index-search.ts"],
+            "#writing/search/semantic": ["./.vitepress/search/semantic.ts"],
             "#writing/seo": ["./.vitepress/seo/index.ts"],
             "#writing/seo/head": ["./.vitepress/seo/head.ts"],
             "#writing/*": ["./.vitepress/*"]
