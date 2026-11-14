@@ -53,7 +53,7 @@ const semantic = new SemanticSearch();
 
 // Related posts by meaning, from the search Worker. Until it answers, or when
 // it fails, the block shows the newest-first list instead.
-const semanticRelated = ref<Nullable<Post[]>>(null);
+const semanticRelated = ref<Nullable<Array<Post>>>(null);
 
 watch(
     currentPost,
